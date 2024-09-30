@@ -1,0 +1,16 @@
+<svg width='24px' height='24px' viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'>
+    <g stroke='none' stroke-width='1' fill='none' fill-rule='evenodd'>
+        <g transform='translate(-466.000000, -6323.000000)'>
+            <g transform='translate(82.000000, 6254.000000)'>
+                <g transform='translate(384.000000, 69.000000)'>
+                    <rect x='0' y='0' width='24' height='24'></rect>
+                    <g transform='translate(1.000000, 1.000000)' stroke='black'>
+                        <circle cx='8.72182541' cy='8.72182541' r='8.22182541' vector-effect='non-scaling-stroke'></circle>
+                        <line x1='14.4462426' y1='14.5480647' x2='22' y2='22' vector-effect='non-scaling-stroke'></line>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>
+

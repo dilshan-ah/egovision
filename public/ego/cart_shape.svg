@@ -1,0 +1,14 @@
+<svg width='24px' height='24px' viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'>
+    <g stroke='none' stroke-width='1' fill='none' fill-rule='evenodd'>
+        <g transform='translate(-1162.000000, -5922.000000)'>
+            <g transform='translate(1162.000000, 5922.000000)'>
+                <g>
+                    <rect x='0' y='0' width='24' height='24'></rect>
+                </g>
+                <path d='M0,1 L3.33478346,1 L4.56493949,5.80795793 L7.68437485,18 L19.3293098,18 L23,5.7019384 L4.46901448,5.7019384' stroke='white' vector-effect='non-scaling-stroke'></path>
+                <circle fill='white' cx='8.5' cy='22.5' r='1.5' vector-effect='non-scaling-stroke'></circle>
+                <circle fill='white' cx='18.5' cy='22.5' r='1.5' vector-effect='non-scaling-stroke'></circle>
+            </g>
+        </g>
+    </g>
+</svg>

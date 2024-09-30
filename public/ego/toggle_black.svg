@@ -1,0 +1,13 @@
+<svg width='24px' height='24px' viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'>
+  <g stroke='none' stroke-width='1' fill='none' fill-rule='evenodd'>
+    <g>
+      <rect x='0' y='0' width='24' height='24'></rect>
+    </g>
+    <g transform='translate(1.000000, 5.000000)' stroke='black' stroke-width='1.1'>
+      <line x1='9.14823772e-14' y1='1.5' x2='6.52099055' y2='1.5' stroke-linecap='square'></line>
+      <line x1='0' y1='7.5' x2='8.05534127' y2='7.5' stroke-linecap='square'></line>
+      <line x1='0' y1='13.5' x2='13.8091565' y2='13.5' stroke-linecap='square'></line>
+      <path d='M15.8170275,10.1419027 C18.5886007,10.1419027 20.8354047,7.87156046 20.8354047,5.07095136 C20.8354047,2.27034225 18.5886007,0 15.8170275,0 C13.0454544,0 10.7986504,2.27034225 10.7986504,5.07095136 C10.7986504,7.87156046 13.0454544,10.1419027 15.8170275,10.1419027 Z M18.4723152,8.97869707 L22,14'></path>
+    </g>
+  </g>
+</svg>

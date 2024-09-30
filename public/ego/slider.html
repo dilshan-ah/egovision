@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bootstrap Right Sidebar Modal</title>
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <style>
+    /* Custom CSS for right sidebar modal */
+    .modal.right .modal-dialog {
+      position: fixed;
+      right: 0;
+      top: 0;
+      margin: 0;
+      height: 100%;
+      width: 320px; /* Adjust width as per your needs */
+      transform: translateX(100%);
+      transition: transform 0.3s ease-out;
+    }
+    .modal.right.show .modal-dialog {
+      transform: translateX(0);
+    }
+    .modal-content {
+      height: 100%;
+      overflow-y: auto;
+    }
+  </style>
+</head>
+<body>
+  
+  <!-- Button to trigger the modal -->
+  <butto type="button" class="btn btn-primary" data-toggle="modal" data-target="#sidebarModal">
+    Open Sidebar Modal
+  </butto>
+  
+  <!-- Right Sidebar Modal -->
+  <div class="modal right fade" id="sidebarModal" tabindex="-1" role="dialog" aria-labelledby="sidebarModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="sidebarModalLabel">Sidebar Modal Title</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <!-- Sidebar Modal Content -->
+          <p>This is the content of the sidebar modal.</p>
+          <p>You can place any content here, such as forms, images, etc.</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary">Save changes</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Bootstrap JS and dependencies -->
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
