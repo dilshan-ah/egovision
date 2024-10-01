@@ -440,12 +440,14 @@
                             <form id="add-to-wishlist-{{ $product->id }}" action="{{ route('wishlist.add', $product->id) }}" method="post">
                                 @csrf
                             </form>
-                            <a href="#" onclick="event.preventDefault(); document.getElementById('add-to-wishlist-{{ $product->id }}').submit();" class="add-to-wishlist" aria-label="Add to Wishlist">
-                                @if($product->wishlist)
-                                    <i class="fas fa-heart" style="background-color: white; color: red;"></i>
+                            <a href="#" onclick="event.preventDefault(); document.getElementById('add-to-wishlist-{{ $product->id }}').submit();" class="add-to-wishlist" style="z-index: 9999;">
+                                @if($product->wishlist && $product->wishlist->user_id == auth()->id())
+                                <i class="fas fa-heart" style="background-color: white; color: black; display: flex;"></i>
                                 @else
-                                    <i class="fi fi-rr-heart" style="background-color: white; color: black;"></i>
+                                <i class="fi fi-rr-heart" style="background-color: white; color: black; display: flex;"></i>
+
                                 @endif
+
                             </a>
                             <a href="https://www.instagram.com/?url={{ route('addToCart.index', $product->id) }}" aria-label="Share on Instagram">
                                 <i class="fas fa-share" style="background-color: white; color: black;"></i>

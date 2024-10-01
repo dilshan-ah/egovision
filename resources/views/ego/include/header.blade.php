@@ -909,8 +909,29 @@
                 style="width: 80px; height: 100%; position: relative; flex-shrink: 0;">
                 <img src="{{ asset($cart->product->image_path) }}" alt="Random Image"
                     style="width: 100%; height: 100%; object-fit: cover;">
-                <span class="close-icon" data-cart-id="{{ $cart->id }}"
-                    style="position: absolute; top: -10px; right: -10px; color: black; padding: 2px 6px; cursor: pointer; font-size: 18px;">&times;</span>
+                <span class="close-icon"
+                    style="position: absolute; top: -10px; right: -10px; color: black; padding: 2px 6px; cursor: pointer; font-size: 18px;" type="button" data-bs-toggle="modal" data-bs-target="#deleteCart{{$cart->id}}">&times;</span>
+
+                <div class="modal fade" id="deleteCart{{$cart->id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Delete Cart Item</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                <form action="{{route('cart.delete',$cart->id)}}" method="post">
+                                    @csrf
+                                    @method('delete')
+                                    <button type="submit" data-cart-id="{{ $cart->id }}" class="btn btn-dark delete-item">Delete</button>
+                                </form>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
             </div>
 
             <div class="cart-details"
@@ -1062,6 +1083,10 @@
         align-items: center;
         border: 1px solid black;
     }
+
+    .modal-backdrop {
+        display: none;
+    }
 </style>
 <div class="overlay-sidebar" id="overlay-sidebar"></div>
 
@@ -1187,8 +1212,8 @@
     document.addEventListener('DOMContentLoaded', fetchCartTotalPrice);
 </script>
 
-<script>
-    document.querySelectorAll('.close-icon').forEach(function(icon) {
+<!-- <script>
+    document.querySelectorAll('.delete-item').forEach(function(icon) {
         icon.addEventListener('click', function() {
             var cartId = this.getAttribute('data-cart-id');
             var csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
@@ -1206,10 +1231,11 @@
                         icon.closest('.cart-item').remove(); // Remove the item from the DOM
                         fetchCartTotalPrice(); // Update cart total
                         fetchCartCount(); // Update cart count
-                        window.location.reload();
+                        
                     } else {
                         console.error('Failed to delete cart item: ', response.message);
                     }
+                    window.location.reload();
                 }
             };
 
@@ -1217,4 +1243,4 @@
             xhr.send();
         });
     });
-</script>
+</script> -->
