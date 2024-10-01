@@ -1,7 +1,6 @@
 @extends('layouts.ego-app')
 @section('content')
 @include('ego.include.banner', ['banners' => $banners])
-<link rel='stylesheet' href='https://cdn-uicons.flaticon.com/2.6.0/uicons-regular-rounded/css/uicons-regular-rounded.css'>
 
 <style>
     /* Background overlay */
@@ -120,7 +119,7 @@
         <div class="col">
             <h3 class="text-center">Welcome to Ego Vision Color Contact Lenses Official Store!</h3>
             <p>
-                Ego Vision, a sister company of Fashion Group, is a leading distributor of colored and powered contact lenses in Bangladesh. Since our establishment, we have prioritized offering top-quality products and services sourced globally. Our brand, “Ego Vision,” provides a wide selection of certified color contact lenses. These lenses are crafted to seamlessly complement your natural eye color, resulting in a subtle and realistic appearance. The effect of the colored lenses may differ depending on the natural hue of your iris. Additionally, our lenses can lighten darker eyes and enhance brighter ones for a striking visual transformation. We provide Premium shipping with an average delivery time of 24 to 48 hours, depending on the location within the country. Our lenses are available in our 18 exclusive optical stores and are also distributed through over 1,500 small and medium retail outlets nationwide.
+            Ego Vision, a sister company of Fashion Group, is a leading distributor of colored and powered contact lenses in Bangladesh. Since our establishment, we have prioritized offering top-quality products and services sourced globally. Our brand, “Ego Vision,” provides a wide selection of certified color contact lenses. These lenses are crafted to seamlessly complement your natural eye color, resulting in a subtle and realistic appearance. The effect of the colored lenses may differ depending on the natural hue of your iris. Additionally, our lenses can lighten darker eyes and enhance brighter ones for a striking visual transformation. We provide Premium shipping with an average delivery time of 24 to 48 hours, depending on the location within the country. Our lenses are available in our 18 exclusive optical stores and are also distributed through over 1,500 small and medium retail outlets nationwide.
             </p>
 
         </div>
@@ -150,8 +149,8 @@
     
     <!-- Welcome section END-->
     <!-- Attitude collection  -->
-    @foreach($collectionSets as $collectionSet)
-    <div class="container text-center my-5">
+     @foreach($collectionSets as $collectionSet)
+     <div class="container text-center my-5">
 
         <div class="row">
             <div class="col">
@@ -170,7 +169,10 @@
                 <a href="{{ route('addToCart.index', $product->id) }}" class="card-link d-block ">
                     <div class="card border-0 text-center ">
                         <div class="card-video-top overflow-hidden position-relative">
-
+                            <!-- <video src="{{ asset('ego/video/motion.mp4') }}" class="card-video img-fluid" alt="Video 1"
+                                autoplay loop muted playsinline>
+                                Your browser does not support the video tag.
+                            </video> -->
                             <img src="{{asset($product->image_path)}}" style="width: 100%; height: 100%; object-fit: cover" alt="">
                         </div>
                         <div class="card-body">
@@ -185,8 +187,8 @@
 
         </div>
     </div>
-    @endforeach
-
+     @endforeach
+    
     <!-- ------------------------------------------------------------------- -->
 
 
@@ -206,21 +208,8 @@
                             <img src="{{asset($moreProduct->image_path)}}" class="card-product-slider-img-top" alt="...">
                             <a href="{{ route('addToCart.index', $moreProduct->id) }}" class="stretched-link"></a>
                             <div class="card-product-slider-icons">
-                                <form id="add-to-wishlist-{{ $product->id }}" action="{{ route('wishlist.add', $product->id) }}" method="post">
-                                    @csrf
-                                </form>
-
-                                <a href="#" onclick="event.preventDefault(); document.getElementById('add-to-wishlist-{{ $product->id }}').submit();" class="add-to-wishlist" style="z-index: 9999;">
-                                    @if($moreProduct->wishlist && $moreProduct->wishlist->user_id == auth()->id())
-                                    <i class="fas fa-heart" style="background-color: white; color: black; display: flex;"></i>
-                                    @else
-                                    <i class="fi fi-rr-heart" style="background-color: white; color: black; display: flex;"></i>
-                                    @endif
-
-                                </a>
-                                <a href="https://www.instagram.com/?url={{route('addToCart.index', $product->id)}}" style="z-index: 9999;">
-                                    <i class="fas fa-share" style="background-color: white; color: black"></i>
-                                </a>
+                                <i class="fas fa-heart"></i>
+                                <i class="fas fa-share"></i>
                             </div>
                         </div>
                         <div class="card-product-slider-body">

@@ -1167,7 +1167,7 @@
     document.addEventListener('DOMContentLoaded', fetchCartTotalPrice);
 </script>
 
-<!-- <script>
+<script>
     document.querySelectorAll('.close-icon').forEach(function(icon) {
         icon.addEventListener('click', function() {
             var cartId = this.getAttribute('data-cart-id');
