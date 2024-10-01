@@ -129,7 +129,7 @@
         <div class="m-1">
             <div class="row">
                 @foreach($colors as $color)
-                <div class="col-12 col-md-6 col-lg-4 mb-4"> <!-- Adjusted classes -->
+                <div class="col-4 col-md-6 col-lg-4 mb-4"> 
                     <a href="{{route('color.single.color',$color->id)}}" class="card-link">
                         <div class="card border-0 text-center">
                             <div class="overflow-hidden">
