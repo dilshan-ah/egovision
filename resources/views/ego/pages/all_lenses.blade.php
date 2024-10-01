@@ -433,11 +433,12 @@
                             </form>
 
                             <a href="#" onclick="event.preventDefault(); document.getElementById('add-to-wishlist-{{ $product->id }}').submit();" class="add-to-wishlist" style="z-index: 9999;">
-                                @if($product->wishlist)
-                                <i class="fas fa-heart" style="background-color: white; color: black;display: flex"></i>
+                                @if($product->wishlist && $product->wishlist->user_id == auth()->id())
+                                <i class="fas fa-heart" style="background-color: white; color: black; display: flex;"></i>
                                 @else
-                                <i class="fi fi-rr-heart" style="background-color: white; color: black;display: flex"></i>
+                                <i class="fi fi-rr-heart" style="background-color: white; color: black; display: flex;"></i>
                                 @endif
+
                             </a>
                             <a href="https://www.instagram.com/?url={{route('addToCart.index', $product->id)}}" style="z-index: 9999;">
                                 <i class="fas fa-share" style="background-color: white; color: black"></i>

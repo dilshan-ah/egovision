@@ -77,7 +77,7 @@
     }
 
     /* Modal Content */
-    .modal-content {
+    .navbar .modal-content {
         background-color: #fefefe;
         margin: 15% auto;
         /* 15% from the top and centered */
@@ -88,6 +88,10 @@
         border-radius: 5px;
         position: relative;
         /* Relative positioning for close button */
+    }
+
+    .sidebar .modal-content{
+        width: 100%;
     }
 
     /* Close Button */
@@ -370,14 +374,14 @@
         </div>
         <div class="carousel-inner">
             @foreach ($banners as $banner)
-                <div class="carousel-item active" style="background-image: url('{{ asset($banner->banner_path) }}')">
-                    <a href="{{ route('addToCart.index', $banner->product_id) }}" class="stretched-link">
-                        <div class="carousel-caption d-md-block">
-                            <h1 class=" hd" style="font-size:45px">{{ $banner->title }}</h1>
-                            <p class="hd">{{ $banner->btn_text }} <i class="fa-solid fa-arrow-right mx-2"></i> </p>
-                        </div>
-                    </a>
-                </div>
+            <div class="carousel-item active" style="background-image: url('{{ asset($banner->banner_path) }}')">
+                <a href="{{ route('addToCart.index', $banner->product_id) }}" class="stretched-link">
+                    <div class="carousel-caption d-md-block">
+                        <h1 class=" hd" style="font-size:45px">{{ $banner->title }}</h1>
+                        <p class="hd">{{ $banner->btn_text }} <i class="fa-solid fa-arrow-right mx-2"></i> </p>
+                    </div>
+                </a>
+            </div>
             @endforeach
 
         </div>
@@ -462,7 +466,8 @@
                                     break;
                             }
                             // Redirect to the new URL
-                            window.location.href = '{{ url('lang') }}/' + selectedLanguage;
+                            window.location.href = '{{ url('
+                            lang ') }}/' + selectedLanguage;
                         });
                     });
                 </script>
@@ -594,13 +599,13 @@
                 <!-- Right side: Account link -->
                 <div class="d-flex">
                     @if (!Auth::user())
-                        <a class="navbar-brand d-sm-block" href="{{ route('ego.login') }}"
-                            style="font-size: 14px; color: white">ACCOUNT</a>
+                    <a class="navbar-brand d-sm-block" href="{{ route('ego.login') }}"
+                        style="font-size: 14px; color: white">ACCOUNT</a>
                     @else
-                        <a class="navbar-brand d-none d-sm-block" href="{{ route('user.home') }}"
-                            style="display: flex; align-items: center; font-size: 14px; color: white;">
-                            {{ Auth::user()->fullname }}
-                        </a>
+                    <a class="navbar-brand d-none d-sm-block" href="{{ route('user.home') }}"
+                        style="display: flex; align-items: center; font-size: 14px; color: white;">
+                        {{ Auth::user()->fullname }}
+                    </a>
                     @endif
 
                     <!-- Search Icon -->
@@ -618,11 +623,11 @@
                                     @csrf
                                     <input type="text" name="query" id="search-input" placeholder="Search..." />
                                     <button type="submit" style="border: 0; background: transparent"><img src="{{ asset('ego/search-icon_black.svg') }}" alt="Search"
-                                    class="search-icon" /></button>
-                                    
+                                            class="search-icon" /></button>
+
                                 </form>
-                                
-                                
+
+
                             </div>
                         </div>
                     </div>
@@ -656,7 +661,7 @@
                         style="display: flex; align-items: center; font-size: 14px;">
                         <img src="{{ asset('ego/love_shape.svg') }}" alt="Love"
                             style="height: 14px; width: 14px; margin-right: 5px;" />
-                            <span class="badge"
+                        <span class="badge"
                             style="font-size: 10px; position: absolute; top: 5px;">{{@$wishlists->count()}}</span>
                     </a>
 
@@ -683,70 +688,90 @@
                         </div>
                         <div class="sidebar-content" style="padding: 15px;">
                             @if ($carts->count() > 0)
-                                @foreach ($carts as $cart)
-                                    <div class="cart-item"
-                                        style="display: flex; align-items: stretch; margin-bottom: 20px; height: 150px; border: 1px solid #e0e0e0; border-radius: 8px; padding: 10px;">
-                                        <div class="image-container"
-                                            style="width: 80px; height: 100%; position: relative; flex-shrink: 0;">
-                                            <img src="{{ asset($cart->product->image_path) }}" alt="Random Image"
-                                                style="width: 100%; height: 100%; object-fit: cover;">
-                                            <span class="close-icon" data-cart-id="{{ $cart->id }}"
-                                                style="position: absolute; top: -10px; right: -10px; color: black; padding: 2px 6px; cursor: pointer; font-size: 18px;">&times;</span>
-                                        </div>
+                            @foreach ($carts as $cart)
+                            <div class="cart-item"
+                                style="display: flex; align-items: stretch; margin-bottom: 20px; height: 150px; border: 1px solid #e0e0e0; border-radius: 8px; padding: 10px;">
+                                <div class="image-container"
+                                    style="width: 80px; height: 100%; position: relative; flex-shrink: 0;">
+                                    <img src="{{ asset($cart->product->image_path) }}" alt="Random Image"
+                                        style="width: 100%; height: 100%; object-fit: cover;">
+                                    <span class="close-icon"
+                                        style="position: absolute; top: -10px; right: -10px; color: black; padding: 2px 6px; cursor: pointer; font-size: 18px;" type="button" data-bs-toggle="modal" data-bs-target="#deleteCart{{$cart->id}}">&times;</span>
 
-                                        <div class="cart-details"
-                                            style="flex-grow: 1; padding-left: 15px; display: flex; flex-direction: column; justify-content: space-between;">
-                                            <div>
-                                                <h5 style="font-size: 14px; font-weight: 600; margin: 0 0 6px 0;">
-                                                    {{ $cart->product->name }} {{ $cart->power }}</h5>
-                                            </div>
-
-                                            <!-- Price and Quantity Section -->
-                                            <div
-                                                style="margin-top: 10px; display: flex; align-items: center; justify-content: space-between;">
-                                                <!-- Quantity Selector -->
-                                                <div class="quantity-selector"
-                                                    style="display: inline-flex; align-items: center; border: 1px solid black; padding: 1px; font-size: 12px;">
-                                                    <button class="quantity-btn decreaseQuantity"
-                                                        data-cart-id="{{ $cart->id }}"
-                                                        style="padding: 4px 8px; background-color: transparent; border: none; cursor: pointer; font-size: 14px; font-weight: 600; color: black;"
-                                                        >-</button>
-                                                    <span class="quantity-number"
-                                                        id="quantityValue{{ $cart->id }}"
-                                                        style="padding: 4px 8px; font-size: 12px; color: black;">{{ $cart->pair }}</span>
-                                                    <button class="quantity-btn increaseQuantity"
-                                                        data-cart-id="{{ $cart->id }}"
-                                                        style="padding: 4px 8px; background-color: transparent; border: none; cursor: pointer; font-size: 14px; font-weight: 600; color: black;">+</button>
+                                    <div class="modal fade" id="deleteCart{{$cart->id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog modal-dialog-centered">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="exampleModalLabel">Delete Cart Item</h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                 </div>
-                                                <!-- Price -->
-                                                <span
-                                                    style="font-size: 14px; font-weight: 600; margin-left: 10px;">{{ $cart->product->price }}
-                                                    ৳</span>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                    <form action="{{route('cart.delete',$cart->id)}}" method="post">
+                                                        @csrf
+                                                        @method('delete')
+                                                        <button type="submit" data-cart-id="{{ $cart->id }}" class="btn btn-dark delete-item">Delete</button>
+                                                    </form>
+
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                @endforeach
-
-                                <div class="buttons d-flex justify-content-between my-3" style="margin-top: 25px;">
-                                    <button class="add-to-cart-button-more" style="width: 45%;">Bag</button>
-                                    <a href="{{route('addToCart.checkout')}}" class="add-to-cart-button" style="width: 45%;">Checkout</a>
                                 </div>
 
-                                <div class="cart-subtotal my-4"
-                                    style="border-top: 1px solid #e0e0e0; padding-top: 20px; text-align: center;">
-                                    <h4 style="font-size: 18px; font-weight: 600;">CART SUBTOTAL:
+                                <div class="cart-details"
+                                    style="flex-grow: 1; padding-left: 15px; display: flex; flex-direction: column; justify-content: space-between;">
+                                    <div>
+                                        <h5 style="font-size: 14px; font-weight: 600; margin: 0 0 6px 0;">
+                                            {{ $cart->product->name }} {{ $cart->power }}
+                                        </h5>
+                                    </div>
+
+                                    <!-- Price and Quantity Section -->
+                                    <div
+                                        style="margin-top: 10px; display: flex; align-items: center; justify-content: space-between;">
+                                        <!-- Quantity Selector -->
+                                        <div class="quantity-selector"
+                                            style="display: inline-flex; align-items: center; border: 1px solid black; padding: 1px; font-size: 12px;">
+                                            <button class="quantity-btn decreaseQuantity"
+                                                data-cart-id="{{ $cart->id }}"
+                                                style="padding: 4px 8px; background-color: transparent; border: none; cursor: pointer; font-size: 14px; font-weight: 600; color: black;">-</button>
+                                            <span class="quantity-number"
+                                                id="quantityValue{{ $cart->id }}"
+                                                style="padding: 4px 8px; font-size: 12px; color: black;">{{ $cart->pair }}</span>
+                                            <button class="quantity-btn increaseQuantity"
+                                                data-cart-id="{{ $cart->id }}"
+                                                style="padding: 4px 8px; background-color: transparent; border: none; cursor: pointer; font-size: 14px; font-weight: 600; color: black;">+</button>
+                                        </div>
+                                        <!-- Price -->
                                         <span
-                                            id="cartSubtotal">{{ $carts->sum(function ($cart) {
+                                            style="font-size: 14px; font-weight: 600; margin-left: 10px;">{{ $cart->product->price }}
+                                            ৳</span>
+                                    </div>
+                                </div>
+                            </div>
+                            @endforeach
+
+                            <div class="buttons d-flex justify-content-between my-3" style="margin-top: 25px;">
+                                <button class="add-to-cart-button-more" style="width: 45%;">Bag</button>
+                                <a href="{{route('addToCart.checkout')}}" class="add-to-cart-button" style="width: 45%;">Checkout</a>
+                            </div>
+
+                            <div class="cart-subtotal my-4"
+                                style="border-top: 1px solid #e0e0e0; padding-top: 20px; text-align: center;">
+                                <h4 style="font-size: 18px; font-weight: 600;">CART SUBTOTAL:
+                                    <span
+                                        id="cartSubtotal">{{ $carts->sum(function ($cart) {
                                                 return $cart->pair * $cart->product->price;
                                             }) }}</span>
-                                        ৳
-                                    </h4>
-                                </div>
-                            @else
-                                <h4 style="font-size: 16px; font-weight: 600;">You have no items in your shopping cart.
+                                    ৳
                                 </h4>
+                            </div>
+                            @else
+                            <h4 style="font-size: 16px; font-weight: 600;">You have no items in your shopping cart.
+                            </h4>
                             @endif
-                            
+
                             <div class="footer-text mt-5 text-center" style="color: white;">
                                 <p style="margin-bottom: 5px; font-size: 14px; font-weight: 600;">FREE SAMPLES</p>
                                 <p style="font-size: 13px; margin-bottom: 5px;">Go to your SHOPPING BAG to pick your
@@ -870,22 +895,22 @@
                             <div class="mega-box">
                                 <div class="content">
                                     @foreach ($collectionSets as $collectionSet)
-                                        <div class="row" style="border-bottom: 1px solid  #8362a9; height: 100%">
-                                            <a style="margin-bottom: 10px !important; font-size: 16px"
-                                                href="{{ route('collectionSet.single.collection', $collectionSet->id) }}">{{ $collectionSet->category->name ?? 'No Category' }}
-                                                {{ $collectionSet->tone->name ? '-' . $collectionSet->tone->name : '' }}
-                                                {{ $collectionSet->duration ? '-' . $collectionSet->duration->months . ' months' : '' }}</a>
+                                    <div class="row" style="border-bottom: 1px solid  #8362a9; height: 100%">
+                                        <a style="margin-bottom: 10px !important; font-size: 16px"
+                                            href="{{ route('collectionSet.single.collection', $collectionSet->id) }}">{{ $collectionSet->category->name ?? 'No Category' }}
+                                            {{ $collectionSet->tone->name ? '-' . $collectionSet->tone->name : '' }}
+                                            {{ $collectionSet->duration ? '-' . $collectionSet->duration->months . ' months' : '' }}</a>
 
-                                            <ul class="mega-links text-black">
-                                                @foreach ($collectionSet->products as $product)
-                                                    <li>
-                                                        <a style="font-size: 12px"
-                                                            href="{{ route('addToCart.index', $product->id) }}"
-                                                            class="text-Black">{{ $product->name }}</a>
-                                                    </li>
-                                                @endforeach
-                                            </ul>
-                                        </div>
+                                        <ul class="mega-links text-black">
+                                            @foreach ($collectionSet->products as $product)
+                                            <li>
+                                                <a style="font-size: 12px"
+                                                    href="{{ route('addToCart.index', $product->id) }}"
+                                                    class="text-Black">{{ $product->name }}</a>
+                                            </li>
+                                            @endforeach
+                                        </ul>
+                                    </div>
                                     @endforeach
                                 </div>
                             </div>
@@ -897,14 +922,14 @@
                                 <div class="d-flex justify-content-center align-items-center">
                                     <div class="row text-center mt-3">
                                         @foreach ($colors as $color)
-                                            <div class="col-md-2 mb-3 position-relative">
-                                                <a href="{{ route('color.single.color', $color->id) }}"
-                                                    target="_blank">
-                                                    <img class="card-img-top" style="width: 100%;"
-                                                        src="{{ asset($color->image_path) }}" alt="Card image cap">
-                                                    <div class="image-text">{{ $color->name }}</div>
-                                                </a>
-                                            </div>
+                                        <div class="col-md-2 mb-3 position-relative">
+                                            <a href="{{ route('color.single.color', $color->id) }}"
+                                                target="_blank">
+                                                <img class="card-img-top" style="width: 100%;"
+                                                    src="{{ asset($color->image_path) }}" alt="Card image cap">
+                                                <div class="image-text">{{ $color->name }}</div>
+                                            </a>
+                                        </div>
                                         @endforeach
                                     </div>
                                 </div>
@@ -918,12 +943,12 @@
                                     <div class="row">
                                         <ul class="mega-links text-black">
                                             @foreach ($durations as $duration)
-                                                <a href="{{ route('duration.single.duration', $duration->id) }}">
-                                                    <span style="text-align: left">{{ $duration->name }} -
-                                                        {{ $duration->months }}
-                                                        MONTHS</span>
-                                                </a>
-                                                <br />
+                                            <a href="{{ route('duration.single.duration', $duration->id) }}">
+                                                <span style="text-align: left">{{ $duration->name }} -
+                                                    {{ $duration->months }}
+                                                    MONTHS</span>
+                                            </a>
+                                            <br />
                                             @endforeach
                                         </ul>
                                     </div>
@@ -1036,6 +1061,10 @@
             .card-link {
                 color: inherit;
                 text-decoration: none;
+            }
+
+            .modal-backdrop {
+                display: none;
             }
         </style>
     </div>
@@ -1187,7 +1216,7 @@
     document.addEventListener('DOMContentLoaded', fetchCartTotalPrice);
 </script>
 
-<script>
+<!-- <script>
     document.querySelectorAll('.close-icon').forEach(function(icon) {
         icon.addEventListener('click', function() {
             var cartId = this.getAttribute('data-cart-id');
@@ -1217,4 +1246,4 @@
             xhr.send();
         });
     });
-</script>
+</script> -->

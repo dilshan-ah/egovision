@@ -20,9 +20,11 @@
                         <tr>
                             <td>{{$order->transaction_id}}</td>
                             <td>
+                                @if($order->orderItems)
                                 @foreach($order->orderItems as $item)
                                 <a href="{{route('addToCart.index', $item->product_id)}}">{{$loop->iteration}}/ {{$item->product->name}}</a><br>
                                 @endforeach
+                                @endif
                             </td>
                             <td>{{$order->amount}}</td>
                             <td>{{$order->status}}</td>
