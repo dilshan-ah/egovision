@@ -223,7 +223,7 @@
 
     @media (max-width: 768px) {
         .navbar-brand-logo img {
-            margin-left: 27px;
+            margin-left: 60px;
         }
 
         .navbar-brand-logo img {
@@ -652,21 +652,26 @@
                 </div>
                 <!-- Middle: Logo -->
                 <div class="navbar-brand-container-logo">
-                    <a class="navbar-brand-logo" href="#">
+                    <a class="navbar-brand-logo" href="{{ route('ego.index') }}">
                         <img src="{{ asset('ego/ego_logo_black.png') }}" alt="Logo" />
                     </a>
                 </div>
                 <!-- Right side: Account link -->
                 <div class="d-flex">
                     @if (!Auth::user())
-                    <a class="navbar-brand d-sm-block" href="{{ route('ego.login') }}"
-                        style="font-size: 14px; color: white">ACCOUNT</a>
-                    @else
-                    <a class="navbar-brand d-none d-sm-block" href="{{ route('user.home') }}"
+                    <a class="navbar-brand d-none d-md-block" href="{{ route('ego.login') }}"
+                        style="font-size: 14px; color: black; display: flex; align-items: center;">
+                        <img src="{{ asset('ego/black_account.svg') }}" alt="Account"
+                            style="height: 14px; width: 14px; margin-right: 5px;" />
+                    </a>
+                @else
+                    <a class="navbar-brand d-none d-md-block" href="{{ route('user.home') }}"
                         style="display: flex; align-items: center; font-size: 14px; color: black;">
+                        <img src="{{ asset('ego/black_account.svg') }}" alt="Account"
+                            style="height: 14px; width: 14px; margin-right: 5px;" />
                         {{ Auth::user()->fullname }}
                     </a>
-                    @endif
+                @endif
                     <a class="navbar-brand mx-2" href="#" id="search-icon"
                         style="display: flex; align-items: center; font-size: 14px;">
                         <img src="{{ asset('ego/search-icon_black.svg') }}" alt="Search"
@@ -747,6 +752,35 @@
                 <div class="collapse navbar-collapse" id="navbarNavDropdown">
                     <ul class="navbar-nav mx-auto p-2">
                         <!-- mx-auto will center the items -->
+                        
+                        <li class="nav-item">
+                            @if (!Auth::user())
+                            <a class="navbar-brand d-block d-lg-none responsive-link " href="{{ route('ego.login') }}"
+                                style="font-size: 14px; display: flex; align-items: center;">
+                                <img class="responsive-img" src="{{ asset('ego/white_account.svg') }}" alt="Account"
+                                    style="height: 14px; width: 14px; margin-right: 5px;" />ACCOUNT
+                            </a>
+                            @else
+                            <a class="navbar-brand d-block d-lg-none responsive-link " href="{{ route('user.home') }}"
+                                style="display: flex; align-items: center; font-size: 14px;">
+                                <img class="responsive-img" src="{{ asset('ego/white_account.svg') }}" alt="Account"
+                                    style="height: 14px; width: 14px; margin-right: 5px;" />
+                                {{ Auth::user()->fullname }}
+                            </a>
+                            @endif
+                        </li>
+                        
+                        <style>
+                            @media (max-width: 991.98px) {
+                                .responsive-link {
+                                    color: black !important; /* Changes text color to black */
+                                }
+                                .responsive-img {
+                                    content: url('{{ asset('ego/black_account.svg') }}'); /* Changes image to black_account.svg */
+                                }
+                            }
+                        </style>
+                        
                         <li class="nav-item">
                             <a class="nav-link hover-line {{ Route::is('ego.index') ? 'active' : '' }}"
                                 href="{{ route('ego.index') }}">@lang('messages.home')</a>
@@ -798,6 +832,18 @@
                                 </div>
                             </div>
                         </li>
+<style>
+.duration-link {
+    display: block; 
+    margin-top: 20px; 
+}
+.duration-text {
+    text-align: left;
+    padding: 10px; 
+    gap: 10px; 
+}
+</style>
+
                         <li class="nav-item">
                             <a class="nav-link hover-line {{ Route::is('ego.pages.duration.lense') ? 'active' : '' }}"
                                 href="{{ route('ego.pages.duration.lense') }}">@lang('messages.duration')</a>
@@ -806,10 +852,8 @@
                                     <div class="row">
                                         <ul class="mega-links text-Black">
                                             @foreach ($durations as $duration)
-                                            <a href="{{ route('duration.single.duration', $duration->id) }}">
-                                                <span style="text-align: left">{{ $duration->name }} -
-                                                    {{ $duration->months }}
-                                                    MONTHS</span>
+                                            <a href="{{ route('duration.single.duration', $duration->id) }}" class="duration-link">
+                                                <span class="duration-text">{{ $duration->name }} - {{ $duration->months }} MONTHS</span>
                                             </a>
                                             <br />
                                             @endforeach

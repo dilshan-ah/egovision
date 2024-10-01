@@ -119,7 +119,6 @@
     <div class="row">
         <div class="col">
             <h3 class="text-center">Welcome to Ego Vision Color Contact Lenses Official Store!</h3>
-
             <p>
                 Ego Vision, a sister company of Fashion Group, is a leading distributor of colored and powered contact lenses in Bangladesh. Since our establishment, we have prioritized offering top-quality products and services sourced globally. Our brand, “Ego Vision,” provides a wide selection of certified color contact lenses. These lenses are crafted to seamlessly complement your natural eye color, resulting in a subtle and realistic appearance. The effect of the colored lenses may differ depending on the natural hue of your iris. Additionally, our lenses can lighten darker eyes and enhance brighter ones for a striking visual transformation. We provide Premium shipping with an average delivery time of 24 to 48 hours, depending on the location within the country. Our lenses are available in our 18 exclusive optical stores and are also distributed through over 1,500 small and medium retail outlets nationwide.
             </p>
@@ -128,14 +127,15 @@
     </div>
     <div class="mt-5 container">
         <div class="m-1">
-            <div class="row ">
+            <div class="row">
                 @foreach($colors as $color)
-                <div class="col mb-4">
+                <div class="col-12 col-md-6 col-lg-4 mb-4"> <!-- Adjusted classes -->
                     <a href="{{route('color.single.color',$color->id)}}" class="card-link">
                         <div class="card border-0 text-center">
-                            <div class=" overflow-hidden">
+                            <div class="overflow-hidden">
                                 <a href="{{route('color.single.color',$color->id)}}">
-                                    <img src="{{asset($color->image_path)}}" class="img-fluid" alt="Image 1" /></a>
+                                    <img src="{{asset($color->image_path)}}" class="img-fluid" alt="Image 1" />
+                                </a>
                             </div>
                             <div class="card-body">
                                 <h5 class="text-capitalize"> {{$color->name}}</h5>
@@ -144,10 +144,10 @@
                     </a>
                 </div>
                 @endforeach
-
             </div>
         </div>
     </div>
+    
     <!-- Welcome section END-->
     <!-- Attitude collection  -->
     @foreach($collectionSets as $collectionSet)

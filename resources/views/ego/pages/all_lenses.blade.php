@@ -113,6 +113,12 @@
         background: white;
         border: none;
     }
+    <style>
+ .cursor-pointer {
+    cursor: pointer;
+}
+
+</style>
 </style>
 <br>
 <br>
@@ -120,7 +126,7 @@
 <br>
 <br>
 <div class="row mt-5">
-    <div class="col-4" style="background: #f5f5f5">
+    <div class="col-md-4 col-12" style="background: #f5f5f5">
         <div class="mt-5 p-4">
             <h1>All Lenses</h1>
             <small>{{$products->count()}} PRODUCTS</small>
@@ -146,14 +152,17 @@
                                                     Colors
                                                 </button>
                                             </h2>
-                                            <div id="collapseColor" class="accordion-collapse collapse show" data-bs-parent="#accordionExample">
+
+                                            
+                                            <div id="collapseColor" class="accordion-collapse collapse show" 
+                                            data-bs-parent="#accordionExample">
                                                 <div class="accordion-body">
                                                     @foreach($colors as $color)
                                                     <div class="form-check">
-                                                        <div class="color-box form-check-input" data-color="{{ $color->color_code }}" style="width: 15px; height: 15px;  @if(in_array($color->id, $colorArray)) border: 2px solid black @endif"></div>
+                                                        <label for="color{{$color->id}}" class="color-box form-check-input" data-color="{{ $color->color_code }}" style="width: 15px; height: 15px; cursor: pointer;  @if(in_array($color->id, $colorArray)) border: 2px solid black @endif"></label>
 
                                                         <input style="visibility: hidden;" class="form-check-input" type="checkbox" id="color{{$color->id}}" value="{{$color->id}}" onchange="filterProducts()" @if(in_array($color->id, $colorArray)) checked @endif>
-                                                        <label class="form-check-label" for="color{{$color->id}}">{{$color->name}}</label>
+                                                        <label class="form-check-label cursor-pointer" for="color{{$color->id}}">{{$color->name}}</label>
                                                     </div>
                                                     @endforeach
                                                     <script>
@@ -420,40 +429,44 @@
 
     <!-- ------------------------------------------------------------- -->
     <div class="col-8">
-        <div class="row ">
+        <div class="row mt-4">
             @foreach ($products as $product)
-            <div class="col-6">
-                <div class="card-product-slider mx-2">
-                    <div class="card-product-slider-img-wrapper">
-                        <img src="{{ asset($product->image_path) }}" class="card-product-slider-img-top">
+            <div class="col-12 col-sm-6 col-md-4 mb-4"> 
+                <div class="card-product-slider mx-2 border rounded shadow-sm overflow-hidden">
+                    <div class="card-product-slider-img-wrapper position-relative">
+                        <img src="{{ asset($product->image_path) }}" class="card-product-slider-img-top img-fluid" alt="{{ $product->name }}"> <!-- Responsive image -->
                         <a href="{{ route('addToCart.index', $product->id) }}" class="stretched-link"></a>
-                        <div class="card-product-slider-icons">
+                        <div class="card-product-slider-icons position-absolute top-0 end-0 p-2">
                             <form id="add-to-wishlist-{{ $product->id }}" action="{{ route('wishlist.add', $product->id) }}" method="post">
                                 @csrf
                             </form>
-
                             <a href="#" onclick="event.preventDefault(); document.getElementById('add-to-wishlist-{{ $product->id }}').submit();" class="add-to-wishlist" style="z-index: 9999;">
                                 @if($product->wishlist && $product->wishlist->user_id == auth()->id())
                                 <i class="fas fa-heart" style="background-color: white; color: black; display: flex;"></i>
                                 @else
                                 <i class="fi fi-rr-heart" style="background-color: white; color: black; display: flex;"></i>
+
                                 @endif
 
                             </a>
-                            <a href="https://www.instagram.com/?url={{route('addToCart.index', $product->id)}}" style="z-index: 9999;">
-                                <i class="fas fa-share" style="background-color: white; color: black"></i>
+                            <a href="https://www.instagram.com/?url={{ route('addToCart.index', $product->id) }}" aria-label="Share on Instagram">
+                                <i class="fas fa-share" style="background-color: white; color: black;"></i>
                             </a>
-
                         </div>
                     </div>
-                    <div class="card-product-slider-body">
-                        <h5 class="card-product-slider-title">{{ $product->name }}</h5>
-                        <small class="price">STARTING AT : {{ $product->price }} {{ 'BDT' }}</small>
+                    <div class="card-product-slider-body p-3 text-center">
+                        <h5 class="card-product-slider-title mb-1">{{ $product->name }}</h5>
+                        <small class="price text-muted">STARTING AT: <strong>{{ $product->price }} BDT</strong></small>
+                        <div class="mt-2">
+                            <a href="{{ route('addToCart.index', $product->id) }}" class="btn btn-primary w-100">Add to Cart</a>
+                        </div>
                     </div>
                 </div>
             </div>
+            
             @endforeach
         </div>
+        
     </div>
 </div>
 
