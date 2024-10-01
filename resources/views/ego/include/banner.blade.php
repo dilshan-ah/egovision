@@ -940,6 +940,21 @@
                                 </div>
                             </div>
                         </li>
+
+                        <style>
+                            .duration-link {
+    display: block; /* Makes the link behave like a block element */
+    margin-top: 20px; /* Adjust the value as needed for margin-top */
+}
+
+.duration-text {
+    text-align: left;
+    padding: 10px; /* Adjust padding for spacing */
+    gap: 10px; /* Adjust gap between text and other elements as needed */
+    /* You can add more styling as needed */
+}
+
+                        </style>
                         <li class="nav-item">
                             <a class="nav-link hover-line"
                                 href="{{ route('ego.pages.duration.lense') }} ">@lang('messages.duration')</a>
@@ -948,11 +963,10 @@
                                     <div class="row">
                                         <ul class="mega-links text-black">
                                             @foreach ($durations as $duration)
-                                                <a href="{{ route('duration.single.duration', $duration->id) }}">
-                                                    <span style="text-align: left">{{ $duration->name }} -
-                                                        {{ $duration->months }}
-                                                        MONTHS</span>
-                                                </a>
+                                            <a href="{{ route('duration.single.duration', $duration->id) }}" class="duration-link">
+                                                <span class="duration-text">{{ $duration->name }} - {{ $duration->months }} MONTHS</span>
+                                            </a>
+                                            
                                                 <br />
                                             @endforeach
                                         </ul>

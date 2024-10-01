@@ -250,7 +250,7 @@
         width: 100%;
         /* Adjust width as needed */
         line-height: 20px;
-        text-align: center;
+        /* text-align: center; */
         margin-left: 20px;
 
         padding: 20px 0;

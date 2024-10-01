@@ -223,7 +223,7 @@
 
     @media (max-width: 768px) {
         .navbar-brand-logo img {
-            margin-left: 27px;
+            margin-left: 60px;
         }
 
         .navbar-brand-logo img {
@@ -832,6 +832,18 @@
                                 </div>
                             </div>
                         </li>
+<style>
+.duration-link {
+    display: block; 
+    margin-top: 20px; 
+}
+.duration-text {
+    text-align: left;
+    padding: 10px; 
+    gap: 10px; 
+}
+</style>
+
                         <li class="nav-item">
                             <a class="nav-link hover-line {{ Route::is('ego.pages.duration.lense') ? 'active' : '' }}"
                                 href="{{ route('ego.pages.duration.lense') }}">@lang('messages.duration')</a>
@@ -840,10 +852,8 @@
                                     <div class="row">
                                         <ul class="mega-links text-Black">
                                             @foreach ($durations as $duration)
-                                            <a href="{{ route('duration.single.duration', $duration->id) }}">
-                                                <span style="text-align: left">{{ $duration->name }} -
-                                                    {{ $duration->months }}
-                                                    MONTHS</span>
+                                            <a href="{{ route('duration.single.duration', $duration->id) }}" class="duration-link">
+                                                <span class="duration-text">{{ $duration->name }} - {{ $duration->months }} MONTHS</span>
                                             </a>
                                             <br />
                                             @endforeach
