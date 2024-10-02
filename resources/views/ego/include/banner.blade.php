@@ -939,55 +939,41 @@
                             <a class="nav-link hover-line" href="{{ route('ego.index') }}">@lang('messages.home')</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link hover-line"
-                                href="{{ route('ego.pages.collection.lense') }}">@lang('messages.collections')</a>
+                            <a class="nav-link hover-line" href="{{ route('ego.pages.collection.lense') }}">
+                                @lang('messages.collections')
+                            </a>
                             <div class="mega-box">
                                 <div class="content">
-                                    @foreach ($collectionSets as $collectionSet)
-                                    <div class="row" style="height: 100%">
-                                        <a style="margin-bottom: 10px !important; font-size: 16px"
-                                            href="{{ route('collectionSet.single.collection', $collectionSet->id) }}">{{ $collectionSet->category->name ?? 'No Category' }}
-                                            {{ $collectionSet->tone->name ? '-' . $collectionSet->tone->name : '' }}
-                                            {{ $collectionSet->duration ? '-' . $collectionSet->duration->months . ' months' : '' }}</a>
-                                        <ul class="mega-links text-black">
-                                            @foreach ($collectionSet->products as $product)
-                                            <li>
-                                                <a style="font-size: 12px"
-                                                    href="{{ route('addToCart.index', $product->id) }}"
-                                                    class="text-Black">{{ $product->name }}</a>
-                                            </li>
-                                            @endforeach
-                                        </ul>
+                                    <div class="row">
+                                        @foreach ($collectionSets as $collectionSet)
+                                        <div class="col-12 col-md-3 mb-3"> <!-- Adjust column size for responsiveness -->
+                                            <a class="d-block mb-2 text-dark hover-link" 
+                                               href="{{ route('collectionSet.single.collection', $collectionSet->id) }}" 
+                                               style="font-size: 16px; font-weight: 600;">
+                                                {{ $collectionSet->category->name ?? 'No Category' }} 
+                                                {{ $collectionSet->tone->name ? '-' . $collectionSet->tone->name : '' }} 
+                                                {{ $collectionSet->duration ? '-' . $collectionSet->duration->months . ' months' : '' }}
+                                            </a>
+                        
+                                            <ul class="mega-links text-black">
+                                                @foreach ($collectionSet->products as $product)
+                                                <li>
+                                                    <a href="{{ route('addToCart.index', $product->id) }}" 
+                                                       class="text-black" 
+                                                       style="font-size: 12px;">
+                                                       {{ $product->name }}
+                                                    </a>
+                                                </li>
+                                                @endforeach
+                                            </ul>
+                                        </div>
+                                        @endforeach
                                     </div>
-                                    @endforeach
                                 </div>
                             </div>
                         </li>
+                        
 
-                        <script>
-                            // Check screen width and apply dropdown functionality only for mobile
-function handleMenuToggle() {
-    if (window.innerWidth <= 768) {
-        document.querySelectorAll('.nav-item .nav-link').forEach(link => {
-            link.addEventListener('click', function (e) {
-                e.preventDefault(); // Prevent default link behavior
-                this.parentElement.classList.toggle('active');
-                const megaBox = this.nextElementSibling;
-                if (megaBox.style.maxHeight) {
-                    megaBox.style.maxHeight = null; // Close the submenu
-                } else {
-                    megaBox.style.maxHeight = megaBox.scrollHeight + "px"; // Open the submenu
-                }
-            });
-        });
-    }
-}
-
-// Call the function on page load and window resize
-window.addEventListener('resize', handleMenuToggle);
-document.addEventListener('DOMContentLoaded', handleMenuToggle);
-
-                        </script>
                         <li class="nav-item">
                             <a class="nav-link hover-line"
                                 href="{{ route('ego.pages.color.lense') }}">@lang('messages.colors')</a>
