@@ -227,7 +227,7 @@
         }
 
         .navbar-brand-logo img {
-            width: 170px;
+            width: 140px;
         }
     }
 

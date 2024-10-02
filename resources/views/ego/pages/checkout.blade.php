@@ -8,7 +8,7 @@
             <a class="flex-sm-fill text-sm-center nav-link text-black" href="#">Payment</a>
         </nav>
         <div class="row justify-content-between">
-            <div class="col-7">
+            <div class="col-lg-7 col-md-12">
                 <div class="card p-4 mb-4">
                     <h2>Shipping Address</h2>
                 </div>
@@ -114,7 +114,7 @@
                 </div>
             </div>
 
-            <div class="col-4">
+            <div class="col-lg-4 col-md-12">
                 <div class="card p-4">
                     <h2>Order Summary</h2>
                     <h6>{{ $carts->count() }} items in cart</h6>
@@ -156,7 +156,7 @@
             <a class="flex-sm-fill text-sm-center nav-link active" href="#">Payment</a>
         </nav>
         <div class="row justify-content-between">
-            <div class="col-7">
+            <div class="col-12">
                 <div class="card p-4 mb-4">
                     <h2>Payment Method</h2>
                     <div class="form-check d-flex align-items-center gap-4 py-3 mt-3 border-top border-bottom">

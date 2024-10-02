@@ -9,7 +9,7 @@
 <br>
 <br>
 <div class="container">
-    <a href="index.html">Home</a>
+    <a href="{{ route('ego.index') }}">Home</a>
     <h1 class="text-center" style="font-size: 5rem">@lang('messages.Collections')</h1>
     <p class="text-center">Discover Ego Vision's exquisite collection of colored contact lenses, renowned for being the top choice for dark eyes and thoughtfully crafted to enhance your natural eye beauty. Explore our range to find unique designs that suit your style. Whether you're looking for hazel, grey, blue, or green lenses, we have something for everyone. We also offer prescription colored contact lenses, with select collections designed for individuals with astigmatism.</p>
 </div>

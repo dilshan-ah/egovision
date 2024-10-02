@@ -9,7 +9,7 @@
 <br>
 <br>
 <div class="container">
-    <a href="index.html">Home</a>
+    <a href="{{ route('ego.index') }}">Home</a>
     <h1 class="text-center" style="font-size: 5rem">Lens Duration</h1>
     <h4 class="text-center">Choosing between Monthly and Quarterly colored contact Lenses: What's best for you?</h4>
     <p>Deciding between monthly and quarterly colored contact lenses depends on several factors, including lifestyle, budget, and specific eye health needs. Monthly color contact lenses are ideal for those seeking maximum comfort and hydration, while quarterly lenses (three months) appeal to those valuing convenience and less frequent maintenance. When enhancing your vision with colored contact lenses, selecting the right type and material is crucial for finding the most comfortable contact lenses and ensuring your eye safety. We provide detailed comparisons and expert advice on both monthly and quarterly lenses, as well as prescription color contact lenses and colored contacts for astigmatism, catering to diverse lifestyles. Let's delve into understanding the materials, Hioxifilcon D and Polymacon, in the sections below.

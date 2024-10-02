@@ -377,6 +377,12 @@
         transition: background-color 0.3s, border-color 0.3s, color 0.3s;
     }
 
+    @media (max-width: 768px){
+        .add-to-cart-button{
+            font-size: 14px;
+        }
+    }
+
     .add-to-cart-button:hover {
         background-color: white;
         color: black;
@@ -643,6 +649,12 @@
         position: relative;
     }
 
+    @media (max-width: 768px) {
+      .card-video-top {
+        height: 300px;
+        }
+      }
+
     .card-video {
         position: absolute;
         top: 50%;
@@ -892,7 +904,7 @@
                             <a class="navbar-brand d-block d-lg-none responsive-link" href="{{ route('ego.login') }}"
                                 style="font-size: 14px; display: flex; align-items: center;">
                                 <img class="responsive-img" src="{{ asset('ego/white_account.svg') }}" alt="Account"
-                                    style="height: 14px; width: 14px; margin-right: 5px;" />ACCOUNT
+                                    style="height: 14px; width: 14px; margin-right: 5px; marign-top:-10px" />ACCOUNT
                             </a>
                             @else
                             <a class="navbar-brand d-block d-lg-none responsive-link" href="{{ route('user.home') }}"
@@ -913,8 +925,6 @@
                                 }
                             }
                         </style>
-                        
-                        
                         <li class="nav-item">
                             <a class="nav-link hover-line" href="{{ route('ego.index') }}">@lang('messages.home')</a>
                         </li>

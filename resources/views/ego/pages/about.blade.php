@@ -9,7 +9,7 @@
 <br>
 <br>
 <div class="container">
-    <a href="index.html">Home</a>
+    <a href="{{ route('ego.index') }}">Home</a>
     <h1 class="text-center" style="font-size: 5rem">About</h1>
     <p class="text-center">Explore Desio's range of colored contact lens collections, known for being the best contacts for dark eyes, carefully designed to enhance your natural eye beauty. Dive into our collections to discover the uniqueness of each design. Whether you're seeking hazel, grey, blue, or green lenses, you'll find them here. Our offerings also include prescription colored contact lenses, with some collections catering to those with astigmatism.</p>
 

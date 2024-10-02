@@ -4,22 +4,55 @@
 @endpush
 @section('content')
 <style>
-    
+    .imageAlbum {
+    margin-bottom: 10px; /* Default spacing */
+}
+
+.vertical-slider {
+    padding: 10px; /* Default padding */
+}
+
+/* Mobile Styles */
+@media (max-width: 768px) { /* Adjust the max-width as needed */
+    .imageAlbum {
+        margin-bottom: 5px; /* Reduce spacing for mobile */
+    }
+
+    .vertical-slider {
+        padding: 5px; /* Reduce padding for mobile */
+    }
+}
+
+.tab-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    margin: -126px;
+    margin-top: 10px;
+}
+
+
+
 </style>
+<br>
+
 <div class="row" style="margin-top:150px">
     <div class="col-md-2">
-        <div class="vertical-slider" style="cursor: pointer">
+        <div class="vertical-slider" style="cursor: pointer; padding: 10px;">
             <div>
-                <img src="{{ asset($product->image_path) }}" class="img-fluid imageAlbum">
+                <img src="{{ asset($product->image_path) }}" class="img-fluid imageAlbum" style="margin-bottom: 10px;">
             </div>
             @foreach ($product->images as $image)
             <div>
-                <img src="{{ asset($image->image_path) }}" class="img-fluid imageAlbum">
+                <img src="{{ asset($image->image_path) }}" class="img-fluid imageAlbum" style="margin-bottom: 10px;">
             </div>
             @endforeach
         </div>
     </div>
-
     <!-- Middle Column - Vertical Images -->
     <div class="col-md-5">
         <div class="main-image-container">
@@ -28,7 +61,7 @@
         </div>
     </div>
     <!-- Right Column - Add to Cart Section -->
-    <div class="col-md-5 right-column p-5">
+    <div class="col-md-5 right-column p-5" >
         <div class="add-to-cart-section">
             <h1>
                 <span>{{ $product->name }}</span>
@@ -36,35 +69,36 @@
             <div>
                 {!! $product->product_intro !!}
             </div>
-
             <input type="hidden" name="product_id" value="{{ $product->id }}">
-            <div class="tab-container">
+            <div class="tab-container mx-auto" >
                 @if ($product->product_type == 'normal')
                 <div class="tab p-4" id="tab1" onclick="selectTab('tab1-radio')">
                     <div class="tab-content">
                         <input type="radio" id="tab1-radio" name="power_type" value="no_power" checked
-                            style="width: 20px; height: 20px; margin: 10px" />
-                        <label for="tab1-radio">No Power</label>
+                            style="width: 20px; height: 15px;" />
+                        <label for="tab1-radio" style="font-size: 14px">No Power</label>
                     </div>
                 </div>
-
+            
                 <div class="tab p-4 mx-2" id="tab2" onclick="selectTab('tab2-radio')">
                     <div class="tab-content">
                         <input type="radio" id="tab2-radio" name="power_type" value="with_power"
-                            style="width: 20px; height: 20px; margin: 10px" />
-                        <label for="tab2-radio">With Power</label>
+                            style="width: 20px; height: 15px;" />
+                        <label for="tab2-radio" style="font-size: 14px">With Power</label>
                     </div>
                 </div>
                 @endif
-                <div class="tab p-4" id="tab1" style="visibility: hidden;">
+            
+                <div class="tab p-4" id="tab3" style="visibility: hidden;">
                     <div class="tab-content">
-                        <input type="radio" id="tab1-radio" name="power_type" value="no_power" checked
+                        <input type="radio" id="tab3-radio" name="power_type" value="no_power" checked
                             style="width: 20px; height: 20px; margin: 10px" />
-                        <label for="tab1-radio">Accessories</label>
+                        <label for="tab3-radio">Accessories</label>
                     </div>
                 </div>
             </div>
-            <div id="pair-state" style="background-color: #f5f5f5">
+            
+            <div class="mt-2" id="pair-state" style="background-color: #f5f5f5">
                 <div class="p-3">
                     <fieldset class="pair-fieldset">
                         <legend class="float-none w-auto">Pair</legend>
@@ -80,7 +114,7 @@
                     </fieldset>
                 </div>
             </div>
-            <div class="with-power-state" id="with-power-state">
+            <div class="with-power-state mt-2" id="with-power-state">
                 <div class="container">
                     <div class="d-flex align-items-center">
                         <button type="button" class="toggle-btn big-btn" data-target="#home" aria-controls="home">
@@ -112,7 +146,7 @@
                                         <span class="power-value">0.50</span>
                                         <div class="adjustment-btns text-center">
                                             <fieldset class="pair-fieldset-main">
-                                                <legend class="float-none w-auto p-2">pair</legend>
+                                                <legend class="float-none w-auto p-2">Pair</legend>
                                                 <div class="product-count">
                                                     <button class="btn decrease-btn">-</button>
                                                     <span class="quantity-btn" data-quantity="0"
@@ -609,8 +643,6 @@
                 },
             }, ],
         });
-
-        // Change main image on click
         $(".vertical-slider img").click(function() {
             var imgSrc = $(this).attr("data-src");
             $(".main-image").attr("src", imgSrc);
