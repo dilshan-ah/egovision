@@ -64,7 +64,6 @@ class CartController extends Controller
                 ->where('session_id', $sessionId)
                 ->where('power', $cartDataFirst['power']);
         })->first();
-
         // If an existing cart entry is found, update the pair quantity
         if ($existingCartEntryFirst) {
             $existingCartEntryFirst->pair += $pairQuantity; // Increment the pair quantity
@@ -72,7 +71,6 @@ class CartController extends Controller
 
             // Check if we need to handle the second eye power
             $powerSecond = $request->input('secondEyePower');
-
             if ($powerSecond != '' && $powerSecond !== $cartDataFirst['power']) {
                 // Prepare cart data for the second entry
                 $cartDataSecond = [
@@ -92,7 +90,6 @@ class CartController extends Controller
             if ($product->product_type == 'normal') {
                 $this->addAccessoryToCart($sessionId, $product, $totalBag, Auth::check() ? Auth::user()->id : null);
             }
-
             return response()->json([
                 'success' => true,
                 'message' => 'Quantity updated in cart.',
@@ -108,7 +105,6 @@ class CartController extends Controller
 
             // Check if we need to create a second entry for power
             $powerSecond = $request->input('secondEyePower');
-
             if ($powerSecond != '' && $powerSecond !== $cartDataFirst['power']) {
                 // Prepare cart data for the second entry
                 $cartDataSecond = [
@@ -128,16 +124,16 @@ class CartController extends Controller
             if ($product->product_type == 'normal') {
                 $this->addAccessoryToCart($sessionId, $product, $totalBag, Auth::check() ? Auth::user()->id : null);
             }
-
+    
             $cartCount = Cart::where('session_id', $sessionId)
                 ->orWhere('user_id', Auth::id())
                 ->count();
-
             return response()->json([
                 'success' => true,
                 'message' => 'Product added to cart.',
                 'cartCount' => $cartCount
             ]);
+
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
@@ -182,7 +178,7 @@ class CartController extends Controller
             }
         }
     }
-
+    
     public function cartItems()
     {
         $carts = Cart::with('product')->where('user_id', auth()->id())->get(); // Adjust as necessary
@@ -381,7 +377,6 @@ class CartController extends Controller
 
         // Delete the selected cart item (normal product or accessory)
         $cart->delete();
-
         return redirect()->back()->with('success', 'Item removed from cart.');
     }
 }

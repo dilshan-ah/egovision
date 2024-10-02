@@ -671,7 +671,7 @@
                             style="height: 14px; width: 14px; margin-right: 5px;" />
                         {{ Auth::user()->fullname }}
                     </a>
-                    @endif
+                @endif
                     <a class="navbar-brand mx-2" href="#" id="search-icon"
                         style="display: flex; align-items: center; font-size: 14px;">
                         <img src="{{ asset('ego/search-icon_black.svg') }}" alt="Search"
@@ -752,7 +752,6 @@
                 <div class="collapse navbar-collapse" id="navbarNavDropdown">
                     <ul class="navbar-nav mx-auto p-2">
                         <!-- mx-auto will center the items -->
-
                         <li class="nav-item">
                             @if (!Auth::user())
                             <a class="navbar-brand d-block d-lg-none responsive-link " href="{{ route('ego.login') }}"
@@ -783,7 +782,6 @@
                                 }
                             }
                         </style>
-
                         <li class="nav-item">
                             <a class="nav-link hover-line {{ Route::is('ego.index') ? 'active' : '' }}"
                                 href="{{ route('ego.index') }}">@lang('messages.home')</a>
@@ -918,7 +916,6 @@
                     style="width: 100%; height: 100%; object-fit: cover;">
                 <span class="close-icon"
                     style="position: absolute; top: -10px; right: -10px; color: black; padding: 2px 6px; cursor: pointer; font-size: 18px;" type="button" data-bs-toggle="modal" data-bs-target="#deleteCart{{$cart->id}}">&times;</span>
-
 
                 <div class="modal fade" id="deleteCart{{$cart->id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                     <div class="modal-dialog modal-dialog-centered">

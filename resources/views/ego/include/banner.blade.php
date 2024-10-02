@@ -89,8 +89,7 @@
         position: relative;
         /* Relative positioning for close button */
     }
-
-    .sidebar .modal-content {
+    .sidebar .modal-content{
         width: 100%;
     }
 
@@ -724,14 +723,14 @@
                         <img src="{{ asset('ego/white_account.svg') }}" alt="Account"
                             style="height: 14px; width: 14px; margin-right: 5px;" />
                     </a>
-                    @else
+                @else
                     <a class="navbar-brand d-none d-md-block" href="{{ route('user.home') }}"
                         style="display: flex; align-items: center; font-size: 14px; color: white;">
                         <img src="{{ asset('ego/white_account.svg') }}" alt="Account"
                             style="height: 14px; width: 14px; margin-right: 5px;" />
                         {{ Auth::user()->fullname }}
                     </a>
-                    @endif
+                @endif
                     <!-- Search Icon -->
                     <a class="navbar-brand mx-2" href="#" id="search-icon"
                         style="display: flex; align-items: center; font-size: 14px;">
@@ -753,7 +752,6 @@
                             </div>
                         </div>
                     </div>
-
                     <!-- Wishlist Icon -->
                     <a class="navbar-brand mx-2 position-relative" href="{{route('ego.wishlist')}}"
                         style="display: flex; align-items: center; font-size: 14px;">
@@ -763,7 +761,6 @@
                             {{@$wishlists->count()}}
                         </span>
                     </a>
-
                     <!-- Cart Icon -->
                     <a class="navbar-brand" href="#" id="openSidebar"
                         style="display: flex; align-items: center; font-size: 14px; position: relative;">
@@ -771,7 +768,6 @@
                             style="height: 14px; width: 14px; margin-right: 5px;" />
                         <span class="badge" id="cart-count" style="font-size: 10px; position: absolute; top: 5px;"></span>
                     </a>
-
                     <!-- Sidebar Content -->
                     <div class="sidebar" id="sidebar"
                         style="background-color: #fff; box-shadow: 0 4px 10px rgba(0,0,0,0.1); color: #000;">
@@ -799,8 +795,6 @@
                                         style="width: 100%; height: 100%; object-fit: cover;">
                                     <span class="close-icon"
                                         style="position: absolute; top: -10px; right: -10px; color: black; padding: 2px 6px; cursor: pointer; font-size: 18px;" type="button" data-bs-toggle="modal" data-bs-target="#deleteCart{{$cart->id}}">&times;</span>
-
-
                                     <div class="modal fade" id="deleteCart{{$cart->id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                         <div class="modal-dialog modal-dialog-centered">
                                             <div class="modal-content">
@@ -845,7 +839,6 @@
                                             <span class="quantity-number @if($cart->product->product_type == 'accessories') acc-count @endif"
                                                 id="quantityValue{{ $cart->id }}"
                                                 style="padding: 4px 8px; font-size: 12px; color: black;">{{ $cart->pair }}</span>
-
                                             <button class="quantity-btn increaseQuantity"
                                                 data-cart-id="{{ $cart->id }}"
                                                 style="padding: 4px 8px; background-color: transparent; border: none; cursor: pointer; font-size: 14px; font-weight: 600; color: black;">+</button>
@@ -978,7 +971,6 @@
                     </style>
                     <div class="overlay-sidebar" id="overlay-sidebar"></div>
                 </div>
-
             </div>
         </nav>
         <!-- Secondary Navbar -->
@@ -1018,8 +1010,6 @@
                                 }
                             }
                         </style>
-
-
                         <li class="nav-item">
                             <a class="nav-link hover-line" href="{{ route('ego.index') }}">@lang('messages.home')</a>
                         </li>

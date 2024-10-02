@@ -113,7 +113,6 @@
                     <button type="button" id="next" class="btn btn-dark mt-4">Next</button>
                 </div>
             </div>
-
             <div class="col-lg-4 col-12">
                 <div class="card p-4">
                     <h2>Order Summary</h2>
