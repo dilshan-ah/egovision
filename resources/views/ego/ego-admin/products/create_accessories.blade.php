@@ -79,6 +79,35 @@
                         <span class="text-danger">{{ $message }}</span>
                         @enderror
                     </div>
+
+                    <div class="form-group col-6">
+                        <label for="">Choose Duration</label>
+                        <select name="duration_id" class="form-control">
+                            <option value="" selected>Pick Duration</option>
+                            @foreach ($durations as $duration)
+                            <option value="{{ $duration->id }}">{{ $duration->name }}-( {{$duration->months}} {{$duration->months == 1 ? 'month':'months'}} )</option>
+                            @endforeach
+                        </select>
+                        @error('duration_id')
+                        <span class="text-danger">{{ $message }}</span>
+                        @enderror
+                    </div>
+                    <div class="form-group col-3">
+                        <label for="">Is Free?</label>
+                        <select name="is_free" class="form-control">
+                            <option value="1">Yes</option>
+                            <option value="0" selected>No</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group col-3">
+                        <label for="">Is Default? (you can only keep one default)</label>
+                        <select name="is_default" class="form-control">
+                            <option value="">set yes if you want it default</option>
+                            <option value="1">Yes</option>
+                            <option value="0">No</option>
+                        </select>
+                    </div>
                     <div class="form-group col-6">
                         <label for="">Product Introduction</label>
                         <textarea name="product_intro" class="form-control" id="editor1"></textarea>

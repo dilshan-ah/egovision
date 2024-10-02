@@ -176,6 +176,13 @@ class ProductController extends Controller
         DB::beginTransaction();
 
         try {
+
+            if ($request['is_default'] == 1) {
+                Product::where('is_default_bag', 1)
+                    ->where('product_type', 'accessories')
+                    ->update(['is_default_bag' => 0]);
+            }
+
             $product = new Product;
             $product->name = $request['name'];
             $product->product_intro = $request['product_intro'];
@@ -187,6 +194,8 @@ class ProductController extends Controller
             $product->price = $request['price'];
             $product->duration_id = $request['duration_id'];
             $product->product_type = 'accessories';
+            $product->is_default_bag = $request['is_default'];
+            $product->is_free = $request['is_free'];
 
             if ($request->hasFile('product_image')) {
                 $validated['product_image'] = $this->handleFileUpload($request->file('product_image'), 'ego-assets/images/products', 'Product');

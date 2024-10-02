@@ -103,36 +103,6 @@
             "modal": false
         }
     },
-    "terms_and_conditions": {
-        "builder": true,
-        "no_selection":true,
-        "name": "Terms & Conditions",
-        "element": {
-            "title": "text",
-            "details": "textarea-nic",
-            "modal": false
-        }
-    },
-    "returns-exchanges-refund-policy": {
-        "builder": true,
-        "no_selection":true,
-        "name": "Returns, Exchanges, or Refund Policy",
-        "element": {
-            "title": "text",
-            "details": "textarea-nic",
-            "modal": false
-        }
-    },
-    "shipping-and-delivery": {
-        "builder": true,
-        "no_selection":true,
-        "name": "Shipping and Delivery",
-        "element": {
-            "title": "text",
-            "details": "textarea-nic",
-            "modal": false
-        }
-    },
     "faq": {
         "builder": true,
         "name": "FAQ Section",

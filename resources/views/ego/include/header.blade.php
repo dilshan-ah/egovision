@@ -664,7 +664,7 @@
                         <img src="{{ asset('ego/black_account.svg') }}" alt="Account"
                             style="height: 14px; width: 14px; margin-right: 5px;" />
                     </a>
-                @else
+                    @else
                     <a class="navbar-brand d-none d-md-block" href="{{ route('user.home') }}"
                         style="display: flex; align-items: center; font-size: 14px; color: black;">
                         <img src="{{ asset('ego/black_account.svg') }}" alt="Account"
@@ -752,7 +752,6 @@
                 <div class="collapse navbar-collapse" id="navbarNavDropdown">
                     <ul class="navbar-nav mx-auto p-2">
                         <!-- mx-auto will center the items -->
-                        
                         <li class="nav-item">
                             @if (!Auth::user())
                             <a class="navbar-brand d-block d-lg-none responsive-link " href="{{ route('ego.login') }}"
@@ -769,18 +768,20 @@
                             </a>
                             @endif
                         </li>
-                        
+
                         <style>
                             @media (max-width: 991.98px) {
                                 .responsive-link {
-                                    color: black !important; /* Changes text color to black */
+                                    color: black !important;
+                                    /* Changes text color to black */
                                 }
+
                                 .responsive-img {
-                                    content: url('{{ asset('ego/black_account.svg') }}'); /* Changes image to black_account.svg */
+                                    content: url('{{ asset(' ego/black_account.svg') }}');
+                                    /* Changes image to black_account.svg */
                                 }
                             }
                         </style>
-                        
                         <li class="nav-item">
                             <a class="nav-link hover-line {{ Route::is('ego.index') ? 'active' : '' }}"
                                 href="{{ route('ego.index') }}">@lang('messages.home')</a>
@@ -832,17 +833,18 @@
                                 </div>
                             </div>
                         </li>
-<style>
-.duration-link {
-    display: block; 
-    margin-top: 20px; 
-}
-.duration-text {
-    text-align: left;
-    padding: 10px; 
-    gap: 10px; 
-}
-</style>
+                        <style>
+                            .duration-link {
+                                display: block;
+                                margin-top: 20px;
+                            }
+
+                            .duration-text {
+                                text-align: left;
+                                padding: 10px;
+                                gap: 10px;
+                            }
+                        </style>
 
                         <li class="nav-item">
                             <a class="nav-link hover-line {{ Route::is('ego.pages.duration.lense') ? 'active' : '' }}"
@@ -903,9 +905,12 @@
     <div class="sidebar-content" style="padding: 15px;">
         @if ($carts->count() > 0)
         @foreach ($carts as $cart)
-        <div class="cart-item"
+        <div class="cart-item position-relative"
             style="display: flex; align-items: stretch; margin-bottom: 20px; height: 150px; border: 1px solid #e0e0e0; border-radius: 8px; padding: 10px;">
-            <div class="image-container"
+            @if($cart->product->is_free == true)
+            <span class="badge bg-dark text-white" style="position: absolute;top: 40px;width: max-content; left: -15px; z-index: 9; color: black; padding: 2px 6px; cursor: pointer; font-size: 12px; border-radius: 0">Free</span>
+            @endif
+            <div class="image-container position-relative"
                 style="width: 80px; height: 100%; position: relative; flex-shrink: 0;">
                 <img src="{{ asset($cart->product->image_path) }}" alt="Random Image"
                     style="width: 100%; height: 100%; object-fit: cover;">
@@ -913,7 +918,7 @@
                     style="position: absolute; top: -10px; right: -10px; color: black; padding: 2px 6px; cursor: pointer; font-size: 18px;" type="button" data-bs-toggle="modal" data-bs-target="#deleteCart{{$cart->id}}">&times;</span>
 
                 <div class="modal fade" id="deleteCart{{$cart->id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                    <div class="modal-dialog">
+                    <div class="modal-dialog modal-dialog-centered">
                         <div class="modal-content">
                             <div class="modal-header">
                                 <h5 class="modal-title" id="exampleModalLabel">Delete Cart Item</h5>
@@ -930,10 +935,12 @@
                             </div>
                         </div>
                     </div>
+                    <!-- Price -->
+                    <span style="font-size: 14px; font-weight: 600; margin-left: 10px;">
+                        {{ $cart->product->price }} ৳
+                    </span>
                 </div>
-
             </div>
-
             <div class="cart-details"
                 style="flex-grow: 1; padding-left: 15px; display: flex; flex-direction: column; justify-content: space-between;">
                 <div>
@@ -948,11 +955,15 @@
                     <!-- Quantity Selector -->
                     <div class="quantity-selector"
                         style="display: inline-flex; align-items: center; border: 1px solid black; padding: 1px; font-size: 12px;">
-                        <button class="quantity-btn decreaseQuantity" data-cart-id="{{ $cart->id }}"
+                        <button class="quantity-btn decreaseQuantity"
+                            data-cart-id="{{ $cart->id }}"
                             style="padding: 4px 8px; background-color: transparent; border: none; cursor: pointer; font-size: 14px; font-weight: 600; color: black;">-</button>
-                        <span class="quantity-number" id="quantityValue{{ $cart->id }}"
+                        <span class="quantity-number @if($cart->product->product_type == 'accessories') acc-count @endif"
+                            id="quantityValue{{ $cart->id }}"
                             style="padding: 4px 8px; font-size: 12px; color: black;">{{ $cart->pair }}</span>
-                        <button class="quantity-btn increaseQuantity" data-cart-id="{{ $cart->id }}"
+
+                        <button class="quantity-btn increaseQuantity"
+                            data-cart-id="{{ $cart->id }}"
                             style="padding: 4px 8px; background-color: transparent; border: none; cursor: pointer; font-size: 14px; font-weight: 600; color: black;">+</button>
                     </div>
                     <!-- Price -->
@@ -1108,7 +1119,7 @@
                 // Update the quantity and total price for this item in the UI
                 document.getElementById('quantityValue' + id).innerText = response.pair;
                 document.getElementById('totalPrice' + id).innerText = response.totalPrice + ' ৳';
-
+                fetchAccCount()
 
             } else if (xhr.readyState == 4) {
                 console.error('Failed to update cart quantity.');
@@ -1128,6 +1139,7 @@
             updateCart(cartId, 'increment');
             fetchCartTotalPrice();
             fetchCartCount();
+            fetchAccCount()
         });
     });
 
@@ -1142,6 +1154,7 @@
                 updateCart(cartId, 'decrement');
                 fetchCartTotalPrice();
                 fetchCartCount();
+                fetchAccCount()
             }
         });
     });
@@ -1159,6 +1172,28 @@
 
         xhr.send();
     }
+</script>
+
+<script>
+    function fetchAccCount() {
+        var xhr = new XMLHttpRequest();
+        xhr.open('GET', '/cart/get-accessories/count', true); // No need for cart ID
+        xhr.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState == 4 && xhr.status == 200) {
+                // Parse the JSON response
+                var response = JSON.parse(xhr.responseText);
+                document.querySelector('.acc-count').innerText = response.accessoryQuantity; // Assuming you want the accessory quantity
+            } else if (xhr.readyState == 4) {
+                console.error('Failed to fetch accessory quantity.', xhr.status, xhr.responseText);
+            }
+        };
+        xhr.send();
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        fetchAccCount(); // Call it directly
+    });
 </script>
 
 <script>

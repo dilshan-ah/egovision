@@ -68,8 +68,8 @@ Route::controller('SiteController')->group(function () {
 
     Route::get('all/lenses', 'allLenses')->name('ego.pages.all.lenses');
     //auth
-    Route::get('site/user/login', 'egoLogin')->name('ego.login');
-    Route::get('site/user/register', 'egoRegister')->name('ego.register');
+    Route::get('site/user/login', 'egoLogin')->name('ego.login')->middleware('guest');
+    Route::get('site/user/register', 'egoRegister')->name('ego.register')->middleware('guest');
     Route::get('test/user', 'testUser')->name('ego.user.test');
 
     Route::get('user/wishlist','wishlist')->name('ego.wishlist')->middleware('auth');

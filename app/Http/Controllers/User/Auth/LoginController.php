@@ -49,7 +49,7 @@ class LoginController extends Controller
     public function showLoginForm()
     {
         $pageTitle = "User Login";
-        return view('user.auth.login', compact('pageTitle'));
+        return view('ego.auth.login', compact('pageTitle'));
     }
 
     public function login(Request $request)
