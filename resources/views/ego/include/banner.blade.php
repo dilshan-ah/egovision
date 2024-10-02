@@ -12,7 +12,19 @@
         }
     }
 </style>
-
+<style>
+    .duration-link {
+        display: block; 
+        margin-top: 20px; 
+    }
+    
+    .duration-text {
+        text-align: left;
+        padding: 10px; 
+        gap: 10px; 
+    
+    }
+    </style>
 <style>
     .position-relative {
         position: relative;
@@ -669,6 +681,17 @@
         text-decoration: none;
     }
 </style>
+
+<style>
+    @media (max-width: 991.98px) {
+        .responsive-link {
+            color: black !important; /* Changes text color to black */
+        }
+        .responsive-img {
+            content: url('{{ asset('ego/black_account.svg') }}'); /* Changes image to black_account.svg */
+        }
+    }
+</style>
 <header>
     <div id="carouselExampleIndicators" class="carousel slide carousel-fade" data-bs-ride="carousel">
         <div class="carousel-indicators">
@@ -896,9 +919,6 @@
             <div class="container-fluid" style="border-bottom: .25px solid rgba(230, 230, 230, 0.3)">
                 <div class="collapse navbar-collapse" id="navbarNavDropdown">
                     <ul class="navbar-nav mx-auto p-2">
-
-
-
                         <li class="nav-item">
                             @if (!Auth::user())
                             <a class="navbar-brand d-block d-lg-none responsive-link" href="{{ route('ego.login') }}"
@@ -915,16 +935,6 @@
                             </a>
                             @endif
                         </li>
-                        <style>
-                            @media (max-width: 991.98px) {
-                                .responsive-link {
-                                    color: black !important; /* Changes text color to black */
-                                }
-                                .responsive-img {
-                                    content: url('{{ asset('ego/black_account.svg') }}'); /* Changes image to black_account.svg */
-                                }
-                            }
-                        </style>
                         <li class="nav-item">
                             <a class="nav-link hover-line" href="{{ route('ego.index') }}">@lang('messages.home')</a>
                         </li>
@@ -934,12 +944,11 @@
                             <div class="mega-box">
                                 <div class="content">
                                     @foreach ($collectionSets as $collectionSet)
-                                    <div class="row" style="border-bottom: 1px solid  #8362a9; height: 100%">
+                                    <div class="row" style="height: 100%">
                                         <a style="margin-bottom: 10px !important; font-size: 16px"
                                             href="{{ route('collectionSet.single.collection', $collectionSet->id) }}">{{ $collectionSet->category->name ?? 'No Category' }}
                                             {{ $collectionSet->tone->name ? '-' . $collectionSet->tone->name : '' }}
                                             {{ $collectionSet->duration ? '-' . $collectionSet->duration->months . ' months' : '' }}</a>
-
                                         <ul class="mega-links text-black">
                                             @foreach ($collectionSet->products as $product)
                                             <li>
@@ -954,6 +963,31 @@
                                 </div>
                             </div>
                         </li>
+
+                        <script>
+                            // Check screen width and apply dropdown functionality only for mobile
+function handleMenuToggle() {
+    if (window.innerWidth <= 768) {
+        document.querySelectorAll('.nav-item .nav-link').forEach(link => {
+            link.addEventListener('click', function (e) {
+                e.preventDefault(); // Prevent default link behavior
+                this.parentElement.classList.toggle('active');
+                const megaBox = this.nextElementSibling;
+                if (megaBox.style.maxHeight) {
+                    megaBox.style.maxHeight = null; // Close the submenu
+                } else {
+                    megaBox.style.maxHeight = megaBox.scrollHeight + "px"; // Open the submenu
+                }
+            });
+        });
+    }
+}
+
+// Call the function on page load and window resize
+window.addEventListener('resize', handleMenuToggle);
+document.addEventListener('DOMContentLoaded', handleMenuToggle);
+
+                        </script>
                         <li class="nav-item">
                             <a class="nav-link hover-line"
                                 href="{{ route('ego.pages.color.lense') }}">@lang('messages.colors')</a>
@@ -975,20 +1009,7 @@
                             </div>
                         </li>
 
-                        <style>
-                            .duration-link {
-    display: block; /* Makes the link behave like a block element */
-    margin-top: 20px; /* Adjust the value as needed for margin-top */
-}
 
-.duration-text {
-    text-align: left;
-    padding: 10px; /* Adjust padding for spacing */
-    gap: 10px; /* Adjust gap between text and other elements as needed */
-    /* You can add more styling as needed */
-}
-
-                        </style>
                         <li class="nav-item">
                             <a class="nav-link hover-line"
                                 href="{{ route('ego.pages.duration.lense') }} ">@lang('messages.duration')</a>
@@ -1024,6 +1045,12 @@
                             <a class="nav-link hover-line"
                                 href="{{ route('ego.pages.about.lense') }}">@lang('messages.about_us')</a>
                         </li>
+                   <hr>
+                   <a class="navbar-brand d-block d-lg-none mb-5" href="#" id="language-selector"
+                   style="font-size: 14px; color: black">
+                   <i class="fas fa-globe"></i> <span id="language-text">Select Language</span>
+                </a>
+                
                     </ul>
                 </div>
             </div>
