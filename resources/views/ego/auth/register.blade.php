@@ -137,6 +137,14 @@
                                 <input type="tel" class="form-control" name="mobile" id="telephone" placeholder="+008">
                             </div>
                             <div class="mb-3 text-start">
+                                <label for="location" class="form-label">Location</label>
+                                <select name="location" class="form-control" id="location">
+                                    @foreach($states['states'] as $state)
+                                    <option value="{{$state['name']}}">{{$state['name']}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="mb-3 text-start">
                                 <label for="registerEmail" class="form-label">Email</label>
                                 <input type="email" class="form-control" name="email" id="registerEmail"
                                     placeholder="Enter your email">
@@ -172,7 +180,7 @@
 
                         <div class="row">
                             <div class="col-md-12">
-                                <a href="{{route('google.auth')}}" class="btn btn-lg btn-google btn-block text-uppercase btn-outline text-black" style="font-size: 16px">
+                                <a href="{{route('google.auth')}}" class="btn btn-lg btn-google btn-block text-uppercase btn-outline text-black w-100" style="font-size: 16px">
                                     <img src="https://img.icons8.com/color/16/000000/google-logo.png"> Signup Using Google
                                 </a>
                             </div>

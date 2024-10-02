@@ -9,5 +9,6 @@ Route::controller(CartController::class)->group(function () {
     Route::get('/get-cart-count', 'getCartCount')->name('count');
     Route::get('/total-price', 'getCartTotalPrice')->name('total');
     Route::post('/update-quantity', 'updateCartQuantity')->name('updateQuantity');
-    Route::delete('/delete-cart/{id}', 'delectCart')->name('delete');
+    Route::delete('/delete-cart/{id}', 'deleteCart')->name('delete');
+    Route::get('/get-accessories/count/', 'getAccessoryQuantity')->name('accessories.count');
 });

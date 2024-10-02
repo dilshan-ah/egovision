@@ -28,6 +28,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cookie;
+use Illuminate\Support\Facades\Http;
 
 class SiteController extends Controller
 {
@@ -310,7 +311,13 @@ class SiteController extends Controller
     public function egoRegister()
     {
         $pageTitle = "Ego Vision User Register";
-        return view('ego.auth.register', compact('pageTitle'));
+        $response = Http::withOptions([
+            'verify' => realpath('C:\\xampp\\php\\extras\\ssl\\cacert.pem')
+        ])->get('https://countriesnow.space/api/v0.1/countries/states');       
+
+        $data = $response->json();
+        $states = $data['data'][18];
+        return view('ego.auth.register', compact('pageTitle','states'));
     }
 
     public function testUser()
