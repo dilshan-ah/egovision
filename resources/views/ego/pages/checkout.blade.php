@@ -1,5 +1,6 @@
 @extends('layouts.ego-app')
 @section('content')
+
 <form action="{{ url('/pay') }}" method="POST" class="needs-validation">
     @csrf
     <div class="container" id="shipping">
@@ -167,18 +168,143 @@
                     </div>
                     <div class="form-check d-flex align-items-center gap-4 py-3 mt-3 border-bottom">
                         <input class="form-check-input" type="radio" name="payment_method" id="bkash" value="ssl" required>
-                        <label class="form-check-label" for="bkash" >
+                        <label class="form-check-label" for="bkash">
                             Online Payment
                         </label>
                         <div class="invalid-feedback">Please select a payment method.</div>
                     </div>
-                    
+
                     <button type="submit" class="btn btn-dark mt-4">Confirm Order</button>
+                </div>
+            </div>
+            <div class="col-lg-4 col-12">
+                <div class="card p-4">
+                    <h2>Order Summary</h2>
+                    <h6>{{ $carts->count() }} items in cart</h6>
+                    @foreach ($carts as $cart)
+                    <div class="cart-item"
+                        style="display: flex; align-items: stretch; margin-bottom: 20px; height: 100%; border: 1px solid #e0e0e0; border-radius: 8px; padding: 10px;">
+                        <div class="image-container"
+                            style="width: 90px; height: 90px; position: relative; flex-shrink: 0;">
+                            <img src="{{ asset($cart->product->image_path) }}" alt="Random Image"
+                                style="width: 100%; height: 100%; object-fit: cover;">
+                        </div>
+
+                        <div class="cart-details"
+                            style="flex-grow: 1; padding-left: 15px; display: flex; flex-direction: column; justify-content: left;">
+                            <div>
+                                <h5 style="font-size: 16px; font-weight: 600; margin: 0 0 6px 0;">
+                                    {{ $cart->product->name }}
+                                </h5>
+                                <h5>{{ $cart->power }}</h5>
+                            </div>
+
+                            <div
+                                style="margin-top: 10px; display: flex; align-items: center; justify-content: space-between;">
+                                <span style="font-size: 14px; margin-left: 10px;">{{ $cart->pair }} QTY <span
+                                        style="width: 20px; display: inline-block"></span>
+                                    {{ $cart->product->price * $cart->pair }} ৳</span>
+                            </div>
+                        </div>
+                    </div>
+                    @endforeach
+
+                    <div class="d-flex justify-content-between">
+                        <h4>Subtotal</h4>
+                        <b>{{ $carts->sum(function($cart) {
+                                return $cart->product->price * $cart->pair;
+                            }) }}৳</b>
+                    </div>
+                    <div class="d-flex justify-content-between">
+                        <h4>Discount</h4>
+                        <b>-{{ $carts->filter(function($cart) {
+    return $cart->product->is_free == 1; // Filter products where is_free == 1
+})->sum(function($cart) {
+    return $cart->product->price * $cart->pair;
+}) }}৳</b>
+                    </div>
+                    <div class="d-flex justify-content-between">
+                        <h4>Delivery Free</h4>
+                        <b>60৳</b>
+                    </div>
+                    <div class="d-flex justify-content-between">
+                        <h4>Total</h4>
+                        <b>{{ $carts->sum(function($cart) {
+                                return $cart->product->price * $cart->pair;
+                            }) + 60 -$carts->filter(function($cart) {
+    return $cart->product->is_free == 1; // Filter products where is_free == 1
+})->sum(function($cart) {
+    return $cart->product->price * $cart->pair;
+}) }}৳</b>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </form>
+
+@if($hasAccessory == false)
+<!-- Custom Backdrop -->
+<div id="custom-backdrop" class="custom-backdrop"></div>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body d-flex justify-content-center">
+                <div class="shadow-none d-flex flex-column align-items-center">
+                    <h2 class="modal-title text-center" id="exampleModalLabel">Select your free bag</h2>
+                    <img src="{{ asset($freeGift->image_path) }}" class="img-fluid mb-4" alt="Free Gift Image">
+                    <h4 class="text-center">{{ $freeGift->name }}</h4>
+                    <form action="{{route('cart.add.gift.bag')}}" method="post">
+                        @csrf
+                        <button type="submit" class="btn btn-dark">ADD TO CART</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Custom Styles for Backdrop -->
+<style>
+    .custom-backdrop {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.7);
+        /* Semi-transparent background */
+        z-index: 1040;
+        /* Ensure it appears below the modal but above other content */
+        display: none;
+        /* Hidden by default */
+    }
+</style>
+
+<!-- jQuery to trigger the modal and backdrop on page load -->
+<script>
+    $(document).ready(function() {
+        // Show modal
+        $('#exampleModal').modal('show');
+
+        // Show custom backdrop when modal opens
+        $('#exampleModal').on('shown.bs.modal', function() {
+            $('#custom-backdrop').fadeIn(); // Fade in the custom backdrop
+        });
+
+        // Hide custom backdrop when modal closes
+        $('#exampleModal').on('hidden.bs.modal', function() {
+            $('#custom-backdrop').fadeOut(); // Fade out the custom backdrop
+        });
+    });
+</script>
+@endif
+
 
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

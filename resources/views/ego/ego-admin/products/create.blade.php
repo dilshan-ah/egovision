@@ -106,13 +106,6 @@
                         @enderror
                     </div>
                     <div class="form-group col-3">
-                        <label for="">Stock Quantity</label>
-                        <input type="number" class="form-control" name="stock_quantity">
-                        @error('stock_quantity')
-                        <span class="text-danger">{{ $message }}</span>
-                        @enderror
-                    </div>
-                    <div class="form-group col-3">
                         <label for="">Choose Color</label>
                         <select name="color_id" class="form-control">
                             <option value="" selected>Pick Color</option>
@@ -136,7 +129,7 @@
                         <span class="text-danger">{{ $message }}</span>
                         @enderror
                     </div>
-                    <div class="form-group col-12">
+                    <div class="form-group col-3">
                         <label for="">Product Category</label>
                         <select name="category_id" class="form-control">
                             <option value="" selected>Select Category</option>
@@ -207,7 +200,7 @@
                                     </select>
                                 </div>
                                 <div class="col-5 form-group">
-                                    <input type="text" class="form-control stock" placeholder="Stock for this variation">
+                                    <input type="number" min="1" class="form-control stock" placeholder="Stock for this variation">
                                 </div>
                                 <div class="col-2">
                                     <button type="button" class="btn btn-danger btn-block remove-variation">Remove</button>

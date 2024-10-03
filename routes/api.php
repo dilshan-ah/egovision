@@ -10,6 +10,7 @@ use App\Http\Controllers\Api\EgoVisionControllers\DurationController;
 use App\Http\Controllers\Api\EgoVisionControllers\FilterController;
 use App\Http\Controllers\Api\EgoVisionControllers\OrderController;
 use App\Http\Controllers\Api\EgoVisionControllers\ProductController;
+use App\Http\Controllers\Api\EgoVisionControllers\WishlistController;
 use App\Models\GeneralSetting;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
@@ -39,6 +40,7 @@ Route::controller(AuthController::class)->group(function () {
 Route::controller(ProductController::class)->group(function () {
     Route::get('ego/products', 'getProducts');
     Route::get('ego/app/singleProduct/{id}', 'singleProduct');
+    Route::get('ego/accessories', 'getAccessories');
 });
 
 
@@ -83,10 +85,17 @@ Route::controller(FilterController::class)->group(function () {
 
 Route::controller(CartController::class)->group(function () {
     Route::post('app/addToCart', 'addToCart');
+    Route::get('app/getCart/{id}', 'userCartList');
 });
 
 Route::controller(OrderController::class)->group(function () {
     Route::post('app/placeOrder', 'store');
+});
+
+Route::controller(WishlistController::class)->group(function(){
+    Route::get('app/user/wishlists/{id}','userWishList');
+    Route::post('app/user/add-wishlists/{productid}/{userId}','store');
+    Route::delete('app/user/delete-wishlists/{userId}','delete');
 });
 
 Route::namespace('Api')->name('api.')->group(function () {

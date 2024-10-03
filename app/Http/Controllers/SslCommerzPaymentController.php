@@ -25,10 +25,10 @@ class SslCommerzPaymentController extends Controller
     public function index(Request $request)
     {
         $carts = Cart::with('product')->where('user_id', auth()->id())->get();
-    
+
         $userId = Auth::check() ? Auth::id() : null;
         $sessionId = $request->session()->getId();
-    
+
         // Calculate total price for cart items
         $cartTotal = Cart::where(function ($query) use ($userId, $sessionId) {
             if ($userId) {
@@ -37,18 +37,18 @@ class SslCommerzPaymentController extends Controller
                 $query->where('session_id', $sessionId);
             }
         })
-        ->with('product')
-        ->get()
-        ->sum(function ($cart) {
-            return $cart->pair * $cart->product->price;
-        });
-    
+            ->with('product')
+            ->get()
+            ->sum(function ($cart) {
+                return $cart->pair * $cart->product->price;
+            });
+
         // Prepare data for payment
         $post_data = array();
         $post_data['total_amount'] = $cartTotal;
         $post_data['currency'] = "BDT";
         $post_data['tran_id'] = uniqid();
-    
+
         // CUSTOMER INFORMATION
         $post_data['cus_name'] = $request->first_name . ' ' . $request->last_name;
         $post_data['cus_email'] = $request->email;
@@ -63,7 +63,7 @@ class SslCommerzPaymentController extends Controller
         $post_data['cus_fax'] = "";
         $post_data['delivery'] = $request->delivery;
         $post_data['payment_method'] = $request->payment_method;
-    
+
         // SHIPMENT INFORMATION
         $post_data['ship_name'] = "Store Test";
         $post_data['ship_add1'] = "Dhaka";
@@ -73,18 +73,27 @@ class SslCommerzPaymentController extends Controller
         $post_data['ship_postcode'] = "1000";
         $post_data['ship_phone'] = "";
         $post_data['ship_country'] = "Bangladesh";
-    
+
         $post_data['shipping_method'] = "NO";
         $post_data['product_name'] = "Computer";
         $post_data['product_category'] = "Goods";
         $post_data['product_profile'] = "physical-goods";
-    
+
         // OPTIONAL PARAMETERS
         $post_data['value_a'] = "ref001";
         $post_data['value_b'] = "ref002";
         $post_data['value_c'] = "ref003";
         $post_data['value_d'] = "ref004";
-    
+
+        $carts = Cart::where('user_id', Auth::id())->get();
+
+        // Filter and sum the prices where product->is_free == 1
+        $freeProductsTotal = $carts->filter(function ($cart) {
+            return $cart->product->is_free == 1; // Filter products where is_free == 1
+        })->sum(function ($cart) {
+            return $cart->product->price * $cart->pair;
+        });
+
         // Before initiating the payment, insert or update order status as Pending
         DB::table('orders')->updateOrInsert([
             'transaction_id' => $post_data['tran_id'],
@@ -105,16 +114,17 @@ class SslCommerzPaymentController extends Controller
             'delivery_charge' => $post_data['delivery'],
             'subtotal' => $cartTotal,
             'payment_method' => $post_data['payment_method'],
-            'amount' => $post_data['delivery'] + $cartTotal,
+            'discount' => $freeProductsTotal,
+            'amount' => $post_data['delivery'] + $cartTotal - $freeProductsTotal,
         ]);
-    
+
         // Fetch the inserted/updated order to get the order ID
         $order = DB::table('orders')->where('transaction_id', $post_data['tran_id'])->first();
-    
+
         // Save order items
         foreach ($carts as $cart) {
             $orderItem = new OrderItems();
-    
+
             $orderItem->order_id = $order->id;  // Use the fetched order ID
             $orderItem->product_id = $cart->product_id;
             $orderItem->power = $cart->power;
@@ -122,22 +132,22 @@ class SslCommerzPaymentController extends Controller
             $orderItem->price = $cart->product->price * $cart->pair;
 
 
-            if($orderItem->save()){
+            if ($orderItem->save()) {
                 $cart->delete();
             }
         }
-    
+
         // Check if payment method is COD
         if ($request->payment_method == 'cod') {
             // If payment method is COD, redirect to success page
             return redirect('/')->with('success', 'Order placed successfully!');
         }
-    
+
         // For SSLCommerz payment method
         if ($request->payment_method == 'ssl') {
             $sslc = new SslCommerzNotification();
             $payment_options = $sslc->makePayment($post_data, 'hosted');
-    
+
             if (!is_array($payment_options)) {
                 print_r($payment_options);
                 $payment_options = array();
@@ -145,7 +155,6 @@ class SslCommerzPaymentController extends Controller
                 return redirect('/')->with('message', 'Order placed successfully!');
             }
         }
-    
     }
 
     public function payViaAjax(Request $request)
@@ -212,7 +221,6 @@ class SslCommerzPaymentController extends Controller
             print_r($payment_options);
             $payment_options = array();
         }
-
     }
 
     public function success(Request $request)
@@ -237,21 +245,18 @@ class SslCommerzPaymentController extends Controller
                     ->where('transaction_id', $tran_id)
                     ->update(['status' => 'Processing']);
 
-                    return redirect('/')->with('success','Order made successfully');
+                return redirect('/')->with('success', 'Order made successfully');
                 echo "<br >Transaction is successfully Completed";
             }
         } else if ($order_details->status == 'Processing' || $order_details->status == 'Complete') {
             /*
              That means through IPN Order status already updated. Now you can just show the customer that transaction is completed. No need to udate database.
              */
-            return redirect('/')->with('success','Order made successfully');
+            return redirect('/')->with('success', 'Order made successfully');
             echo "Transaction is successfully Completed";
         } else {
             echo "Invalid Transaction";
-            
         }
-
-
     }
 
     public function fail(Request $request)
@@ -272,7 +277,6 @@ class SslCommerzPaymentController extends Controller
         } else {
             echo "Transaction is Invalid";
         }
-
     }
 
     public function cancel(Request $request)
@@ -287,15 +291,13 @@ class SslCommerzPaymentController extends Controller
             $update_product = DB::table('orders')
                 ->where('transaction_id', $tran_id)
                 ->update(['status' => 'Canceled']);
-                
+
             echo "Transaction is Cancel";
         } else if ($order_details->status == 'Processing' || $order_details->status == 'Complete') {
             echo "Transaction is already Successful";
         } else {
             echo "Transaction is Invalid";
         }
-
-
     }
 
     public function ipn(Request $request)
@@ -340,5 +342,4 @@ class SslCommerzPaymentController extends Controller
             echo "Invalid Data";
         }
     }
-
 }

@@ -171,7 +171,7 @@ class CollectionSetController extends Controller
             $products = $productsQuery->paginate($productsPerPage);
         
             // Add prefix to image_path for each product
-            $prefix = 'http://127.0.0.1:8000/'; // Set your desired prefix here
+            $prefix = 'https://egovision.shop/'; // Set your desired prefix here
             foreach ($products as $product) {
                 $product->image_path = $prefix . $product->image_path; // Add the prefix
             }
@@ -239,7 +239,7 @@ class CollectionSetController extends Controller
                 $products = $productsQuery->get();
     
                 // Add prefix to image_path for each product
-                $prefix = 'http://127.0.0.1:8000/'; // Set your desired prefix here
+                $prefix = 'https://egovision.shop/'; // Set your desired prefix here
                 foreach ($products as $product) {
                     $product->image_path = $prefix . $product->image_path; // Add the prefix
                 }
@@ -299,7 +299,7 @@ class CollectionSetController extends Controller
                 return [
                     'id' => $product->id,
                     'name' => $product->name,
-                    'image_path' => $product->image_path ? 'http://127.0.0.1:8000/' . $product->image_path : null, // Add prefix to image_path
+                    'image_path' => $product->image_path ? 'https://egovision.shop/' . $product->image_path : null, // Add prefix to image_path
                     'price' => $product->price,
                 ];
             });

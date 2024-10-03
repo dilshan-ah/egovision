@@ -298,8 +298,8 @@
         data-parent="#accordionSidebar">
         <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header">Reports:</h6>
-            <a class="collapse-item" href="{{ route('admin.report.transaction') }}">
-                <i class="menu-icon fa fa-dot-circle">@lang('Transaction Log')</i></a>
+            <a class="collapse-item" href="{{ route('addToCart.admin.index') }}">
+                <i class="menu-icon fa fa-dot-circle">@lang('Order History')</i></a>
             <a class="collapse-item" href="{{ route('admin.report.login.history') }}">
                 <i class="menu-icon fa fa-dot-circle">@lang('Login History')</i></a>
             <a class="collapse-item" href="{{ route('admin.report.notification.history') }}">
