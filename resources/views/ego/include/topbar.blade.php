@@ -67,8 +67,8 @@
 
 
 <div class="rotating-text">
-    <div class="sentence">FREE STANDARD EXPRESS SHIPPING ON ORDERS CONTAINING AT LEAST</div>
-    <div class="sentence">FREE SAMPLES: PICK YOURS IN THE SHOPPING BAG BEFORE CHECKOUT</div>
-    <div class="sentence">EUROPE: DELIVERY WITHIN 1 to 2 WORKING DAYS
+    <div class="sentence">FREE STANDARD EXPRESS SHIPPING ON ORDERS</div>
+    <div class="sentence">FREE SAMPLES: PICK YOURS IN THE SHOPPING </div>
+    <div class="sentence">EUROPE: DELIVERY WITHIN 1 Days
     </div>
 </div>

@@ -41,7 +41,6 @@ class ValidateProductRequest extends FormRequest
             'product_image' => 'required|image|mimes:jpeg,png,jpg',
             'product_image_album.*' => 'image|mimes:jpeg,png,jpg',
             'product_image_album' => 'required',
-            'product_type' => 'required',
         ];
     }
 }
