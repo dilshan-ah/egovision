@@ -7,7 +7,6 @@
 <style>
     @media (max-width: 768px) {
         .row {
-
             --bs-gutter-x: rebeccapurple;
             --bs-gutter-y: 0;
             display: flex;
@@ -17,8 +16,6 @@
             margin-left: calc(-.5* var(--bs-gutter-x));
         }
     }
-
-
     .sidebarButton {
         height: 100%;
         width: 0;
@@ -118,7 +115,7 @@
 <br>
 <br>
 <div class="row mt-5">
-    <div class="col-4" style="background: #f5f5f5">
+    <div class="col-12 col-md-6 col-lg-4" style="background: #f5f5f5">
         <div class="mt-5 p-4">
             <h1>{{$duration->name}}</h1>
             <small>{{$duration->products->count()}} PRODUCTS</small>
@@ -134,9 +131,8 @@
                     <!-- Accordion 6 - Bootstrap Brain Component -->
                     <section class="bsb-accordion-6 py-3 py-md-5 py-xl-8">
                         <div class="container">
-                            <div class="row">
+                            <div class="row ">
                                 <div class="col-12">
-
                                     <div class="accordion" id="accordionExample">
                                         <div class="accordion-item">
                                             <h2 class="accordion-header">
@@ -388,10 +384,10 @@
     </div>
 
     <!-- ------------------------------------------------------------- -->
-    <div class="col-8">
-        <div class="row ">
+    <div class="col-12 col-md-8">
+        <div class="row mt-3">
             @foreach ($products as $product)
-            <div class="col-6">
+            <div class="col-12 col-sm-6 col-md-6">
                 <div class="card-product-slider mx-2">
                     <div class="card-product-slider-img-wrapper">
                         <img src="{{ asset($product->image_path) }}" class="card-product-slider-img-top">
@@ -400,7 +396,6 @@
                             <form id="add-to-wishlist-{{ $product->id }}" action="{{ route('wishlist.add', $product->id) }}" method="post">
                                 @csrf
                             </form>
-
                             <a href="#" onclick="event.preventDefault(); document.getElementById('add-to-wishlist-{{ $product->id }}').submit();" class="add-to-wishlist" style="z-index: 9999;">
                                 @if($product->wishlist && $product->wishlist->user_id == @auth()->id())
                                 <i class="fas fa-heart" style="background-color: white; color: black; display: flex;"></i>

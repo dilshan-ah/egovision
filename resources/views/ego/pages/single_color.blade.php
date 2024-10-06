@@ -387,12 +387,11 @@
             </script>
         </div>
     </div>
-
     <!-- ------------------------------------------------------------- -->
-    <div class="col-8">
+    <div class="col-12 col-md-8">
         <div class="row ">
             @foreach ($products as $product)
-            <div class="col-lg-6 col-mb-6 col-sm-12 mt-4">
+            <div class="col-12 col-sm-6 col-md-6 mt-4">
                 <div class="card-product-slider mx-2">
                     <div class="card-product-slider-img-wrapper">
                         <img src="{{ asset($product->image_path) }}" class="card-product-slider-img-top">
@@ -401,7 +400,6 @@
                             <form id="add-to-wishlist-{{ $product->id }}" action="{{ route('wishlist.add', $product->id) }}" method="post">
                                 @csrf
                             </form>
-
                             <a href="#" onclick="event.preventDefault(); document.getElementById('add-to-wishlist-{{ $product->id }}').submit();" class="add-to-wishlist" style="z-index: 9999;">
                                 @if($product->wishlist && $product->wishlist->user_id == @auth()->id())
                                 <i class="fas fa-heart" style="background-color: white; color: black; display: flex;"></i>

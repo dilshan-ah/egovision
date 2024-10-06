@@ -766,8 +766,9 @@
                 @else
                     <a class="navbar-brand d-none d-md-block" href="{{ route('user.home') }}"
                         style="display: flex; align-items: center; font-size: 14px; color: white;">
-                        <img src="{{ asset('ego/white_account.svg') }}" alt="Account"
+                        <img src="{{ asset('ego/white_account.svg')}}" alt="Account"
                             style="height: 18px; width: 18px; margin-right: 5px; margin-top:-2px" />
+
                         {{ Auth::user()->fullname }}
                     </a>
                 @endif
@@ -963,8 +964,6 @@
                         <li class="nav-item">
                             <a class="nav-link hover-line" href="{{ route('ego.index') }}">@lang('messages.home')</a>
                         </li>
-
-
     <style>
 @media (max-width: 768px) {
     .collection, .colors, .durations-none {
