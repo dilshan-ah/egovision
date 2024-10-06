@@ -1,26 +1,10 @@
-@extends('admin.layouts.app')
+@extends('layouts.app')
+
 @section('content')
 <div class="container-fluid">
     <div class="row">
-        <div class="col-12 mb-4">
-            <div class="card d-flex align-items-end">
-                <form id="orderStatusForm" action="{{route('addToCart.admin.change.status',$order->id)}}" method="post" class="p-3" style="width: max-content;">
-                    @csrf
-                    <label for="orderStatus">Change Status</label>
-                    <select name="status" id="orderStatus" class="form-control">
-                        <option value="Pending" @if($order->status == 'Pending') selected @endif>Pending</option>
-                        <option value="Processing" @if($order->status == 'Processing') selected @endif>Processing</option>
-                        <option value="Shipped" @if($order->status == 'Shipped') selected @endif>Shipped</option>
-                        <option value="Complete" @if($order->status == 'Complete') selected @endif>Complete</option>
-                        <option value="Failed" @if($order->status == 'Failed') selected @endif>Failed</option>
-                        <option value="Canceled" @if($order->status == 'Canceled') selected @endif>Canceled</option>
-                        <option value="Returned" @if($order->status == 'Returned') selected @endif>Returned</option>
-                    </select>
-                </form>
-            </div>
-        </div>
 
-        <div class="col-8 mb-4">
+        <div class="col-lg-8 col-12 mb-4">
             <div class="card mb-4">
                 <div class="card-header">
                     <h6 class="m-0 font-weight-bold text-primary">Ordered Items</h6>
@@ -141,7 +125,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-4 mb-4">
+        <div class="col-lg-4 col-12 mb-4">
             <div class="card mb-4">
                 <div class="card-header">
                     <h6 class="m-0 font-weight-bold text-primary">User Details</h6>
@@ -186,45 +170,4 @@
     </div>
 </div>
 
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script>
-    $(document).ready(function() {
-        // Detect changes in the status dropdown
-        $('#orderStatus').change(function() {
-            var selectedStatus = $(this).val();
-            var formAction = $('#orderStatusForm').attr('action');
-            var csrfToken = $('meta[name="csrf-token"]').attr('content'); // Get the CSRF token
-
-            $.ajax({
-                url: formAction, // The URL from the form action
-                type: 'POST',
-                data: {
-                    _token: csrfToken, // Include CSRF token
-                    status: selectedStatus // Send the selected status
-                },
-                success: function(response) {
-                    // Show a success message with iziToast
-                    iziToast.success({
-                        message: response.message,
-                        position: 'topRight'
-                    });
-                },
-                error: function(xhr, status, error) {
-                    // Handle validation or other errors
-                    if (xhr.status == 400 || xhr.status == 422) {
-                        iziToast.warning({
-                            message: xhr.responseJSON.errors,
-                            position: 'topRight'
-                        });
-                    } else {
-                        iziToast.error({
-                            message: 'An error occurred while updating the order status.',
-                            position: 'topRight'
-                        });
-                    }
-                }
-            });
-        });
-    });
-</script>
 @endsection

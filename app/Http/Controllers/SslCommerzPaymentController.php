@@ -249,9 +249,7 @@ class SslCommerzPaymentController extends Controller
                 echo "<br >Transaction is successfully Completed";
             }
         } else if ($order_details->status == 'Processing' || $order_details->status == 'Complete') {
-            /*
-             That means through IPN Order status already updated. Now you can just show the customer that transaction is completed. No need to udate database.
-             */
+            
             return redirect('/')->with('success', 'Order made successfully');
             echo "Transaction is successfully Completed";
         } else {

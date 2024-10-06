@@ -356,4 +356,12 @@ class SiteController extends Controller
 
         return view('user.order.index', compact('pageTitle','orders'));
     }
+
+    public function singleOrder(string $id)
+    {
+        $pageTitle = 'Order Details | Order';
+        $order = Order::find($id)->first();
+
+        return view('user.order.view',compact('order','pageTitle'));
+    }
 }

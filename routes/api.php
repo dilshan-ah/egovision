@@ -34,6 +34,7 @@ Route::controller(AuthController::class)->group(function () {
     Route::post('ego/register', 'register');
     Route::post('ego/login', 'login');
     Route::post('ego/logout', 'logout')->middleware('auth:sanctum');
+    Route::get('ego/get/districts', 'getDistricts');
 });
 
 // Product
@@ -90,6 +91,8 @@ Route::controller(CartController::class)->group(function () {
 
 Route::controller(OrderController::class)->group(function () {
     Route::post('app/placeOrder', 'store');
+    Route::get('app/user/oreders/{userid}', 'userOrder');
+    Route::get('app/user/orederDetails/{productid}', 'singleOrder');
 });
 
 Route::controller(WishlistController::class)->group(function(){
