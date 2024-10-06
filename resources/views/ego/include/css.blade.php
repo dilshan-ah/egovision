@@ -25,6 +25,10 @@
     rel="stylesheet"
     href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick-theme.min.css" />
 <style>
+
+body {
+    overflow-x: hidden; /* Disable horizontal scroll */
+}
     .dropdown-menu {
         --bs-dropdown-zindex: 1000;
         --bs-dropdown-min-width: 10rem;

@@ -219,6 +219,8 @@
     .navbar-brand-logo img {
         width: 200px;
         transition: transform 0.3s ease-in-out;
+        transition: transform 0.3s ease-in-out;
+        margin-left: 122px;
     }
 
     @media (max-width: 768px) {
@@ -652,7 +654,7 @@
                     </div>
                 </div>
                 <!-- Middle: Logo -->
-                <div class="navbar-brand-container-logo">
+                <div class="navbar-brand-container-logo ">
                     <a class="navbar-brand-logo" href="{{ route('ego.index') }}">
                         <img src="{{ asset('ego/ego_logo_black.png') }}" alt="Logo" />
                     </a>
@@ -695,31 +697,7 @@
                             </div>
                         </div>
                     </div>
-                    <script>
-                        document.getElementById("search-icon").addEventListener("click", function() {
-                            document.getElementById("search-popup").style.display = "flex";
-                        });
-
-                        document.getElementById("close-popup").addEventListener("click", function() {
-                            document.getElementById("search-popup").style.display = "none";
-                        });
-
-                        // Optional: Close popup when clicking outside the search bar content
-                        document.getElementById("search-popup").addEventListener("click", function(e) {
-                            if (e.target == this) {
-
-                                document.getElementById("search-popup").style.display = "none";
-                            }
-                        });
-
-                        // Optional: Close popup when clicking outside the search bar content
-                        document.getElementById("search-popup").addEventListener("click", function(e) {
-                            if (e.target == this) {
-                                document.getElementById("search-popup").style.display = "none";
-                            }
-                        });
-                    </script>
-
+                    
                         <!-- Wishlist Icon -->
                         <a class="navbar-brand mx-3 position-relative" href="{{route('ego.wishlist')}}"
                         style="display: flex; align-items: center; font-size: 14px;">
@@ -729,18 +707,16 @@
                                 {{@$wishlists->count()}}
                             </span>
                         </a>
-
-
-<!-- Cart Icon -->
-                        <a class="navbar-brand" href="#" id="openSidebar"
-    style="display: flex; align-items: center; font-size: 14px; position: relative;">
-        <img src="{{ asset('ego/cart_shape_black.svg') }}" alt="Cart"
-            style="height: 18px; width: 18px; margin-right: 5px;" />
-        <span class="badge" id="cart-count" 
-            style="font-size: 10px; position: absolute; top: 5px; right: 0px; background-color: black; color: white; border-radius: 50%; width: 16px; height: 16px; display: flex; align-items: center; justify-content: center;">
-            <!-- Cart count will be dynamically added here -->
-        </span>
-    </a>
+                        <!-- Cart Icon -->
+                                                <a class="navbar-brand" href="#" id="openSidebar"
+                            style="display: flex; align-items: center; font-size: 14px; position: relative;">
+                                <img src="{{ asset('ego/cart_shape_black.svg') }}" alt="Cart"
+                                    style="height: 18px; width: 18px; margin-right: 5px;" />
+                                <span class="badge" id="cart-count" 
+                                    style="font-size: 10px; position: absolute; top: 5px; right: 0px; background-color: black; color: white; border-radius: 50%; width: 16px; height: 16px; display: flex; align-items: center; justify-content: center;">
+                                    <!-- Cart count will be dynamically added here -->
+                                </span>
+                            </a>
 
                     <!-- Search Bar Popup -->
                     <div id="search-popup" class="search-popup">
@@ -756,6 +732,7 @@
                 </div>
             </div>
         </nav>
+        
         <!-- Secondary Navbar -->
         <nav class="navbar navbar-expand-lg navbar-dark">
             <div class="container-fluid" style="border-bottom: 1px solid #eee">
@@ -1502,3 +1479,29 @@ function toggleSubmenu(event, sectionId, toggleElement) {
     });
     
     </script>
+
+
+<script>
+    document.getElementById("search-icon").addEventListener("click", function() {
+        document.getElementById("search-popup").style.display = "flex";
+    });
+
+    document.getElementById("close-popup").addEventListener("click", function() {
+        document.getElementById("search-popup").style.display = "none";
+    });
+
+    // Optional: Close popup when clicking outside the search bar content
+    document.getElementById("search-popup").addEventListener("click", function(e) {
+        if (e.target == this) {
+
+            document.getElementById("search-popup").style.display = "none";
+        }
+    });
+
+    // Optional: Close popup when clicking outside the search bar content
+    document.getElementById("search-popup").addEventListener("click", function(e) {
+        if (e.target == this) {
+            document.getElementById("search-popup").style.display = "none";
+        }
+    });
+</script>

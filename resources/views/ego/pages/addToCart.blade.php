@@ -756,13 +756,13 @@ window.onload = function() {
     var error = sessionStorage.getItem('cartError');
 
     if (message) {
-        alert(message); // You can replace this with a more sophisticated message display
-        sessionStorage.removeItem('cartMessage'); // Clear the message after displaying
+        alert(message); 
+        sessionStorage.removeItem('cartMessage'); 
     }
 
     if (error) {
-        alert(error); // You can replace this with a more sophisticated error display
-        sessionStorage.removeItem('cartError'); // Clear the error after displaying
+        alert(error);
+        sessionStorage.removeItem('cartError');
     }
 };
 
