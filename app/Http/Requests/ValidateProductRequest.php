@@ -31,7 +31,6 @@ class ValidateProductRequest extends FormRequest
             'tone_id' => 'required',
             'lens_design_id' => 'required',
             'water_content_id' => 'required',
-            'stock_quantity' => 'required',
             'color_id' => 'required',
             'duration_id' => 'required',
             'product_intro' => 'required',
@@ -41,7 +40,6 @@ class ValidateProductRequest extends FormRequest
             'product_image' => 'required|image|mimes:jpeg,png,jpg',
             'product_image_album.*' => 'image|mimes:jpeg,png,jpg',
             'product_image_album' => 'required',
-            'product_type' => 'required',
         ];
     }
 }

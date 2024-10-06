@@ -2,6 +2,7 @@
 
 namespace App\Models\EgoModels;
 
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -11,6 +12,10 @@ class Order extends Model
 
     public function orderItems(){
         return $this->hasMany(OrderItems::class,'order_id');
+    }
+
+    public function user(){
+        return $this->belongsTo(User::class,'user_id');
     }
 
     protected $fillable = [
@@ -32,5 +37,14 @@ class Order extends Model
         'payment_method',
         'amount',
         'transaction_id',
+    ];
+
+    protected $casts = [
+        'processing_time' => 'datetime',
+        'shipping_time' => 'datetime',
+        'completing_time' => 'datetime',
+        'failing_time' => 'datetime',
+        'cancelling_time' => 'datetime',
+        'returning_time' => 'datetime',
     ];
 }

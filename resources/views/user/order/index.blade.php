@@ -18,15 +18,15 @@
                     <tbody>
                         @foreach($orders as $order)
                         <tr>
-                            <td>{{$order->transaction_id}}</td>
+                            <td><a href="{{route('ego.single.orders',$order->id)}}">{{$order->transaction_id}}</a></td>
                             <td>
                                 @if($order->orderItems)
                                 @foreach($order->orderItems as $item)
-                                <a href="{{route('addToCart.index', $item->product_id)}}">{{$loop->iteration}}/ {{$item->product->name}}</a><br>
+                                <a href="{{route('addToCart.index', $item->product_id)}}">{{$loop->iteration}}/ {{$item->product->name ?? ''}} {{$item->power}}</a> ({{$item->pair}}items)<br>
                                 @endforeach
                                 @endif
                             </td>
-                            <td>{{$order->amount}}</td>
+                            <td>{{$order->amount}}৳</td>
                             <td>{{$order->status}}</td>
                             <td>{{ $order->created_at ? $order->created_at->format('d, M y') : 'N/A' }}</td>
                         </tr>

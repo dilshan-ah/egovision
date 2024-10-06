@@ -379,4 +379,21 @@ class CartController extends Controller
         $cart->delete();
         return redirect()->back()->with('success', 'Item removed from cart.');
     }
+
+
+    public function addGiftToCart(){
+        $existingCart = Cart::where('user_id',Auth::user()->id)->sum('pair');
+        $product = Product::where('is_default_bag','1')->first();
+        $userId = auth()->id();
+        $cartAccessoryData = [
+            'product_id' => $product->id,
+            'power_status' => 'no_power',
+            'pair' => $existingCart, // Use secondEyeQuantity for the second entry
+            'user_id' => Auth::check() ? Auth::user()->id : null
+        ];
+
+        Cart::create($cartAccessoryData);
+
+        return redirect()->back();
+    }
 }

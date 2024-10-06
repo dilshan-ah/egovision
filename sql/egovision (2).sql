@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 02, 2024 at 11:08 AM
+-- Generation Time: Oct 03, 2024 at 12:06 PM
 -- Server version: 10.4.22-MariaDB
 -- PHP Version: 8.2.6
 
@@ -68,10 +68,11 @@ CREATE TABLE `admin_notifications` (
 --
 
 INSERT INTO `admin_notifications` (`id`, `user_id`, `title`, `is_read`, `click_url`, `created_at`, `updated_at`) VALUES
-(1, 0, 'SMS Error: unexpected response from API', 0, '#', '2023-01-18 03:59:33', '2023-01-18 03:59:33'),
+(1, 0, 'SMS Error: unexpected response from API', 1, '#', '2023-01-18 03:59:33', '2024-10-03 05:35:58'),
 (2, 8, 'Deposit successful via Mollie - USD', 0, '/admin/deposit/successful', '2023-02-13 07:57:29', '2023-02-13 07:57:29'),
-(3, 0, 'SMS Error: unexpected response from API', 0, '#', '2023-02-13 07:57:31', '2023-02-13 07:57:31'),
-(4, 0, 'SMS Error: Bad Credentials', 0, '#', '2024-09-22 06:27:58', '2024-09-22 06:27:58');
+(3, 0, 'SMS Error: unexpected response from API', 1, '#', '2023-02-13 07:57:31', '2024-10-03 05:36:08'),
+(4, 0, 'SMS Error: Bad Credentials', 1, '#', '2024-09-22 06:27:58', '2024-10-03 05:35:52'),
+(5, 55, 'New support ticket has opened', 0, 'http://127.0.0.1:8000/admin/ticket/view/2', '2024-10-03 08:24:25', '2024-10-03 08:24:25');
 
 -- --------------------------------------------------------
 
@@ -156,8 +157,9 @@ CREATE TABLE `carts` (
 --
 
 INSERT INTO `carts` (`id`, `product_id`, `session_id`, `power_status`, `created_at`, `updated_at`, `user_id`, `power`, `pair`) VALUES
-(271, '6', 'H90bOoudETVwJTleJt5SznJ5wIMw6wYTe6RuI9M8', 'no_power', '2024-10-02 09:00:10', '2024-10-02 09:12:27', '42', NULL, '1'),
-(272, '18', 'H90bOoudETVwJTleJt5SznJ5wIMw6wYTe6RuI9M8', 'no_power', '2024-10-02 09:00:10', '2024-10-02 09:12:27', '42', NULL, '1');
+(303, '10', NULL, 'with_power', '2024-10-03 10:57:54', '2024-10-03 10:57:54', '42', '+0.50', '1'),
+(304, '10', NULL, 'with_power', '2024-10-03 10:57:54', '2024-10-03 10:57:54', '42', '+0.75', '1'),
+(305, '18', NULL, 'no_power', '2024-10-03 10:57:54', '2024-10-03 10:57:54', '42', NULL, '2');
 
 -- --------------------------------------------------------
 
@@ -986,24 +988,22 @@ CREATE TABLE `orders` (
   `subtotal` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `payment_method` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT current_timestamp(),
-  `updated_at` timestamp NULL DEFAULT current_timestamp()
+  `updated_at` timestamp NULL DEFAULT current_timestamp(),
+  `processing_time` timestamp NULL DEFAULT NULL,
+  `shipping_time` timestamp NULL DEFAULT NULL,
+  `completing_time` timestamp NULL DEFAULT NULL,
+  `failing_time` timestamp NULL DEFAULT NULL,
+  `cancelling_time` timestamp NULL DEFAULT NULL,
+  `returning_time` timestamp NULL DEFAULT NULL,
+  `discount` float DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Dumping data for table `orders`
 --
 
-INSERT INTO `orders` (`id`, `name`, `email`, `phone`, `amount`, `address_one`, `status`, `transaction_id`, `currency`, `user_id`, `address_two`, `company`, `city`, `state`, `country`, `zip_code`, `delivery_charge`, `subtotal`, `payment_method`, `created_at`, `updated_at`) VALUES
-(85, 'Dilshan Ahmed', 'dilshaneffendi1123@gmail.com', '+88001984603367', 1030, 'Indira road', 'Pending', '66fbbac872ced', 'BDT', 42, NULL, NULL, 'Dhaka', 'Dhaka District', 'Bangladesh', '1215', '60', '970', 'ssl', '2024-10-01 09:03:04', '2024-10-01 09:03:04'),
-(87, 'Dilshan Ahmed', 'dilshaneffendi1123@gmail.com', '+9301984603367', 5880, 'Indira road', 'Pending', '66fbc4829177b', 'BDT', 42, NULL, NULL, 'Dhaka', 'Dhaka District', 'Bangladesh', '1215', '60', '5820', 'cod', '2024-10-01 09:44:34', '2024-10-01 09:44:34'),
-(88, 'Dilshan Ahmed', 'dilshaneffendi1123@gmail.com', '+9301984603367', 2970, 'Indira road', 'Pending', '66fbc4df01300', 'BDT', 42, NULL, NULL, 'Dhaka', 'Dhaka District', 'Bangladesh', '1215', '60', '2910', 'cod', '2024-10-01 09:46:07', '2024-10-01 09:46:07'),
-(89, 'Hamish Hubbard', 'kedihybu@mailinator.com', '+1284+1 (973) 136-9431', 914, '39 Hague Lane', 'Pending', '66fbc68d7f5fe', 'BDT', 42, 'Quo nostrum sed eum', 'Martin Wolf Plc', 'Quia incidunt omnis', 'Ondo State', 'Nigeria', '54271', '60', '854', 'cod', '2024-10-01 09:53:17', '2024-10-01 09:53:17'),
-(90, 'Shah Razi Siddiqui', 'devilsmack.anik@gmail.com', '+8801710070606', 871, 'Flat B9, House 52, Ranavola Main Road, Sector 10, Uttara, Dhaka-1230, Bangladesh.', 'Pending', '66fbe06ba970a', 'BDT', 42, NULL, 'CODETREE', 'Dhaka', 'Dhaka District', 'Bangladesh', '1230', '60', '811', 'ssl', '2024-10-01 11:43:39', '2024-10-01 11:43:39'),
-(91, 'Najmus Sakib', 'najmussakib173@gmail.com', '+8801726920703', 1659130, 'Dhaka', 'Pending', '66fbf1d7eaaae', 'BDT', 51, 'Ramoura', 'codetree', 'Dhaka', 'Sylhet District', 'Bangladesh', '1230', '60', '1659070', 'ssl', '2024-10-01 12:57:59', '2024-10-01 12:57:59'),
-(92, 'Tasha Hahn', 'temuv@mailinator.com', '+966+1 (965) 498-6839', 7560, '76 Green Hague Court', 'Pending', '66fbfecb2688b', 'BDT', 53, 'Asperiores eum fugia', 'Obrien and Britt Co', 'Sunt omnis corrupti', 'Žilina Region', 'Slovakia', '45615', '60', '7500', 'cod', '2024-10-01 13:53:15', '2024-10-01 13:53:15'),
-(93, 'John Doe', 'john@example.com', '123456789', 1050, '123 Main St', 'Pending', '66fc2e181ebb2', 'BDT', 42, 'Apt 4B', 'Example Co.', 'Dhaka', 'Dhaka', 'Bangladesh', '1212', '50', '1000', 'cod', '2024-10-01 23:15:04', '2024-10-01 23:15:04'),
-(94, 'Dilshan Ahmed', 'dilshaneffendi1123@gmail.com', '+9301984603367', 12260, 'Indira road', 'Pending', '66fcfcdd8adef', 'BDT', 42, NULL, NULL, 'Dhaka', 'Dhaka District', 'Bangladesh', '1215', '60', '12200', 'ssl', '2024-10-02 07:57:17', '2024-10-02 07:57:17'),
-(95, 'Dilshan Ahmed', 'dilshaneffendi1123@gmail.com', '+88001984603367', 260, 'Indira road', 'Pending', '66fcfcf2c4a8b', 'BDT', 42, NULL, NULL, 'Dhaka', 'Dhaka District', 'Bangladesh', '1215', '60', '200', 'ssl', '2024-10-02 07:57:38', '2024-10-02 07:57:38');
+INSERT INTO `orders` (`id`, `name`, `email`, `phone`, `amount`, `address_one`, `status`, `transaction_id`, `currency`, `user_id`, `address_two`, `company`, `city`, `state`, `country`, `zip_code`, `delivery_charge`, `subtotal`, `payment_method`, `created_at`, `updated_at`, `processing_time`, `shipping_time`, `completing_time`, `failing_time`, `cancelling_time`, `returning_time`, `discount`) VALUES
+(98, 'John Doe', 'john@example.com', '123456789', 1050, '123 Main St', 'Pending', '66fe73e669607', 'BDT', 42, 'Apt 4B', 'Example Co.', 'Dhaka', 'Dhaka', 'Bangladesh', '1212', '50', '1000', 'cod', '2024-10-03 10:37:26', '2024-10-03 10:37:26', NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -1019,7 +1019,7 @@ CREATE TABLE `order_items` (
   `price` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NULL DEFAULT current_timestamp(),
-  `order_id` bigint(20) UNSIGNED DEFAULT 0
+  `order_id` bigint(20) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
@@ -1027,16 +1027,8 @@ CREATE TABLE `order_items` (
 --
 
 INSERT INTO `order_items` (`id`, `product_id`, `power`, `pair`, `price`, `created_at`, `updated_at`, `order_id`) VALUES
-(21, '10', NULL, '1', '970', '2024-10-01 09:03:04', '2024-10-01 09:03:04', 85),
-(22, '10', '+0.50', '3', '2910', '2024-10-01 09:44:34', '2024-10-01 09:44:34', 87),
-(24, '10', '+0.75', '3', '2910', '2024-10-01 09:46:07', '2024-10-01 09:46:07', 88),
-(25, '14', NULL, '1', '854', '2024-10-01 09:53:17', '2024-10-01 09:53:17', 89),
-(26, '13', NULL, '1', '811', '2024-10-01 17:43:39', '2024-10-01 17:43:39', 90),
-(27, '15', NULL, '2', '1659070', '2024-10-01 18:57:59', '2024-10-01 18:57:59', 91),
-(28, '7', NULL, '1', '7500', '2024-10-01 19:53:15', '2024-10-01 19:53:15', 92),
-(29, '1', 'Power 1', '2', '500', '2024-10-01 23:15:04', '2024-10-01 23:15:04', 93),
-(31, '6', NULL, '2', '12000', '2024-10-02 07:57:17', '2024-10-02 07:57:17', 94),
-(33, '18', NULL, '2', '200', '2024-10-02 07:57:38', '2024-10-02 07:57:38', 95);
+(38, '1', 'Power 1', '2', '500', '2024-10-03 10:37:26', '2024-10-03 10:37:26', 98),
+(39, '2', 'Power 2', '1', '500', '2024-10-03 10:37:26', '2024-10-03 10:37:26', 98);
 
 -- --------------------------------------------------------
 
@@ -1346,6 +1338,13 @@ CREATE TABLE `support_attachments` (
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+--
+-- Dumping data for table `support_attachments`
+--
+
+INSERT INTO `support_attachments` (`id`, `support_message_id`, `attachment`, `created_at`, `updated_at`) VALUES
+(1, 2, '66fe54b97668b1727943865.jpg', '2024-10-03 08:24:25', '2024-10-03 08:24:25');
+
 -- --------------------------------------------------------
 
 --
@@ -1360,6 +1359,14 @@ CREATE TABLE `support_messages` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `support_messages`
+--
+
+INSERT INTO `support_messages` (`id`, `support_ticket_id`, `admin_id`, `message`, `created_at`, `updated_at`) VALUES
+(1, 1, 0, 'Testing purpose', '2024-10-03 08:21:18', '2024-10-03 08:21:18'),
+(2, 2, 0, 'Testing purpose', '2024-10-03 08:24:25', '2024-10-03 08:24:25');
 
 -- --------------------------------------------------------
 
@@ -1380,6 +1387,14 @@ CREATE TABLE `support_tickets` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `support_tickets`
+--
+
+INSERT INTO `support_tickets` (`id`, `user_id`, `name`, `email`, `ticket`, `subject`, `status`, `priority`, `last_reply`, `created_at`, `updated_at`) VALUES
+(1, 55, 'Dilshan Ahmed', 'dilshanahmed2025@gmail.com', '378952', 'Test Ticket', 3, 3, '2024-10-03 14:21:18', '2024-10-03 08:21:18', '2024-10-03 08:21:55'),
+(2, 55, 'Dilshan Ahmed', 'dilshanahmed2025@gmail.com', '874155', 'Test Ticket', 3, 3, '2024-10-03 14:24:25', '2024-10-03 08:24:25', '2024-10-03 08:24:46');
 
 -- --------------------------------------------------------
 
@@ -1478,7 +1493,7 @@ INSERT INTO `users` (`id`, `firstname`, `lastname`, `username`, `email`, `countr
 (51, 'Najmus', 'Sakib', NULL, 'najmussakib173@gmail.com', NULL, '01726920703', NULL, '2024-10-17', 0, '0.00000000', '$2y$10$uiHOnGsFjzZCClt/B1ycHewMyloIliSc6IS/34gAzw5.Zk2PXzIW2', NULL, 1, NULL, 0, 0, 0, 0, '595645', '2024-10-02 09:42:28', 0, 1, NULL, NULL, 'qHGLgvKJvzMSQbVt9LvC7GdTdzgjEx9es3WZAHybbvKWrBlKrwkLWP79TQhg', '2024-10-01 18:51:55', '2024-10-02 09:42:28', NULL),
 (52, 'Shakil', 'Ahmed', NULL, 'sa27289@gmail.com', NULL, NULL, NULL, NULL, 0, '0.00000000', NULL, NULL, 1, NULL, 0, 1, 0, 0, NULL, NULL, 0, 1, NULL, NULL, NULL, '2024-10-01 18:58:16', '2024-10-01 18:58:16', '115623450220741677333'),
 (53, 'CODETREE', 'Bangladesh', NULL, 'codetree.developers@gmail.com', NULL, NULL, NULL, NULL, 0, '0.00000000', NULL, NULL, 1, NULL, 1, 1, 1, 0, '110074', '2024-10-01 20:59:04', 0, 1, NULL, NULL, NULL, '2024-10-01 19:51:05', '2024-10-01 20:59:04', '110153188054168687234'),
-(55, 'Dilshan', 'Ahmed', NULL, 'dilshanahmed2025@gmail.com', NULL, '01984603367', 'Comilla District', '2024-10-25', 0, '0.00000000', '$2y$10$/GFTmjoHpYJV9kYBJY/euudGZ7VoSoik9/yB170cLKIXs8TWZx7pm', '{\"country\":null,\"address\":\"Indira road\",\"state\":\"Dhaka\",\"zip\":\"1215\",\"city\":\"Dhaka\"}', 1, NULL, 1, 1, 1, 1, '894396', '2024-10-02 15:47:18', 0, 1, NULL, NULL, 'GbspBcmqIwXlh2Us2aBSaTBhBROJmT5eGxsL1YsnfKe0QpMrvZ8BvzpWb4Rk', '2024-10-02 09:47:00', '2024-10-02 09:50:00', NULL);
+(55, 'Dilshan', 'Ahmed', NULL, 'dilshanahmed2025@gmail.com', NULL, '01984603367', 'Comilla District', '2024-10-25', 0, '0.00000000', '$2y$10$/GFTmjoHpYJV9kYBJY/euudGZ7VoSoik9/yB170cLKIXs8TWZx7pm', '{\"country\":null,\"address\":\"Indira road\",\"state\":\"Dhaka\",\"zip\":\"1215\",\"city\":\"Dhaka\"}', 1, NULL, 1, 1, 1, 1, '894396', '2024-10-02 15:47:18', 0, 1, NULL, NULL, '2liD8xnddqYLRRHmG2KnM77ghVsTc4Xj8h16TYl7PfEKH52P0el9WcgjUus2', '2024-10-02 09:47:00', '2024-10-02 09:50:00', NULL);
 
 -- --------------------------------------------------------
 
@@ -1755,7 +1770,8 @@ INSERT INTO `user_logins` (`id`, `user_id`, `user_ip`, `city`, `country`, `count
 (264, 42, '127.0.0.1', NULL, '', '', '', '', 'Chrome', 'Windows 10', '2024-10-02 04:05:54', '2024-10-02 04:05:54'),
 (265, 42, '127.0.0.1', NULL, '', '', '', '', 'Chrome', 'Windows 10', '2024-10-02 04:06:17', '2024-10-02 04:06:17'),
 (266, 42, '127.0.0.1', NULL, '', '', '', '', 'Chrome', 'Windows 10', '2024-10-02 04:14:53', '2024-10-02 04:14:53'),
-(267, 55, '127.0.0.1', NULL, '', '', '', '', 'Chrome', 'Windows 10', '2024-10-02 10:06:01', '2024-10-02 10:06:01');
+(267, 55, '127.0.0.1', NULL, '', '', '', '', 'Chrome', 'Windows 10', '2024-10-02 10:06:01', '2024-10-02 10:06:01'),
+(268, 42, '127.0.0.1', NULL, '', '', '', '', 'Chrome', 'Windows 10', '2024-10-03 09:37:31', '2024-10-03 09:37:31');
 
 -- --------------------------------------------------------
 
@@ -1776,7 +1792,7 @@ CREATE TABLE `wishlists` (
 --
 
 INSERT INTO `wishlists` (`id`, `user_id`, `product_id`, `created_at`, `updated_at`) VALUES
-(21, 55, '15', '2024-10-02 10:24:19', '2024-10-02 10:24:19');
+(22, 42, '5', '2024-10-03 11:12:37', '2024-10-03 11:12:37');
 
 -- --------------------------------------------------------
 
@@ -2009,8 +2025,7 @@ ALTER TABLE `orders`
 -- Indexes for table `order_items`
 --
 ALTER TABLE `order_items`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `order_id` (`order_id`);
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `pages`
@@ -2149,7 +2164,7 @@ ALTER TABLE `admins`
 -- AUTO_INCREMENT for table `admin_notifications`
 --
 ALTER TABLE `admin_notifications`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `admin_password_resets`
@@ -2173,7 +2188,7 @@ ALTER TABLE `base_curves`
 -- AUTO_INCREMENT for table `carts`
 --
 ALTER TABLE `carts`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=273;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=306;
 
 --
 -- AUTO_INCREMENT for table `collection_sets`
@@ -2293,13 +2308,13 @@ ALTER TABLE `notification_templates`
 -- AUTO_INCREMENT for table `orders`
 --
 ALTER TABLE `orders`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=96;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=99;
 
 --
 -- AUTO_INCREMENT for table `order_items`
 --
 ALTER TABLE `order_items`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=40;
 
 --
 -- AUTO_INCREMENT for table `pages`
@@ -2359,19 +2374,19 @@ ALTER TABLE `subscribers`
 -- AUTO_INCREMENT for table `support_attachments`
 --
 ALTER TABLE `support_attachments`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `support_messages`
 --
 ALTER TABLE `support_messages`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `support_tickets`
 --
 ALTER TABLE `support_tickets`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `tones`
@@ -2395,13 +2410,13 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `user_logins`
 --
 ALTER TABLE `user_logins`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=268;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=269;
 
 --
 -- AUTO_INCREMENT for table `wishlists`
 --
 ALTER TABLE `wishlists`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
 
 --
 -- AUTO_INCREMENT for table `withdrawals`

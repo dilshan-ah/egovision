@@ -63,22 +63,19 @@ class ProductController extends Controller
         }
     }
 
-
-
-
     public function singleProduct(string $id)
     {
         try {
             // Fetch product by ID along with its related images and variations
             $product = Product::with(['images:id,product_id,image_path', 'variations:id,product_id,power,stock'])->findOrFail($id);
-    
+
             // Remove HTML tags from 'product_intro' and 'description'
             $product->product_intro = strip_tags($product->product_intro);
             $product->description = strip_tags($product->description);
-    
+
             // Format the main image path
             $product->image_path = $product->image_path ? 'https://egovision.shop/' . $product->image_path : null;
-    
+
             // Filter the images to include only 'id' and 'image_path' with the correct prefix
             $product->images = $product->images->map(function ($image) {
                 return [
@@ -86,7 +83,7 @@ class ProductController extends Controller
                     'image_path' => !empty($image->image_path) ? 'https://egovision.shop/' . $image->image_path : null,
                 ];
             });
-    
+
             // Filter the variations to include only 'id', 'power', and 'stock'
             $product->variations = $product->variations->map(function ($variation) {
                 return [
@@ -95,7 +92,7 @@ class ProductController extends Controller
                     'stock' => $variation->stock,
                 ];
             });
-    
+
             // Return success response with the formatted product data
             return response()->json([
                 'status' => true,
@@ -113,8 +110,35 @@ class ProductController extends Controller
             ]);
         }
     }
-    
-    
-    
 
+    public function getAccessories(Request $request)
+    {
+        // Define the number of items per page
+        $perPage = $request->input('per_page', 10); // Default to 10 if not provided
+    
+        // Fetch the accessories with pagination, selecting specific fields
+        $products = Product::where('product_type', 'accessories')
+            ->select('id', 'image_path', 'name', 'price') // Select specific fields
+            ->paginate($perPage);
+    
+        // Customize the pagination response
+        $customResponse = [
+            'success' => true,
+            'message' => 'Accessories retrieved successfully.',
+            'data' => $products->getCollection()->map(function ($item) {
+                // Add the base URL prefix to the image path
+                $item->image_path = 'https://egovision.shop/' . $item->image_path;
+                return $item;
+            }),
+            'current_page' => $products->currentPage(),
+            'last_page' => $products->lastPage(),
+            'total' => $products->total(),
+            'per_page' => $products->perPage(),
+        ];
+    
+        return response()->json($customResponse, 200); // OK
+    }
+    
+    
+    
 }
