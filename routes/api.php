@@ -9,7 +9,9 @@ use App\Http\Controllers\Api\EgoVisionControllers\ColorController;
 use App\Http\Controllers\Api\EgoVisionControllers\DurationController;
 use App\Http\Controllers\Api\EgoVisionControllers\FilterController;
 use App\Http\Controllers\Api\EgoVisionControllers\OrderController;
+use App\Http\Controllers\Api\EgoVisionControllers\PrescriptionController;
 use App\Http\Controllers\Api\EgoVisionControllers\ProductController;
+use App\Http\Controllers\Api\EgoVisionControllers\TicketController;
 use App\Http\Controllers\Api\EgoVisionControllers\WishlistController;
 use App\Models\GeneralSetting;
 use Illuminate\Support\Facades\Route;
@@ -99,6 +101,17 @@ Route::controller(WishlistController::class)->group(function(){
     Route::get('app/user/wishlists/{id}','userWishList');
     Route::post('app/user/add-wishlists/{productid}/{userId}','store');
     Route::delete('app/user/delete-wishlists/{userId}','delete');
+});
+
+Route::controller(TicketController::class)->group(function(){
+    Route::get('app/user/tickets/{id}','userTickets');
+    Route::get('app/user/ticket/view/{ticketId}','singleTicket');
+    Route::post('app/user/ticket/store/{userId}','contactSubmit');
+});
+
+Route::controller(PrescriptionController::class)->group(function(){
+    Route::get('app/user/prescription/{id}','showPrescription');
+    Route::post('app/user/prescription/upload/{id}','uploadPrescriptionSubmit');
 });
 
 Route::namespace('Api')->name('api.')->group(function () {

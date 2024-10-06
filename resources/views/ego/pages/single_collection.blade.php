@@ -120,9 +120,9 @@
 <div class="row mt-5">
     <div class="col-4" style="background: #f5f5f5">
         <div class="mt-5 p-4">
-            <h1>{{$collectionSet->category->name}}</h1>
-            <p> {{$collectionSet->tone->name ? $collectionSet->tone->name : ''}} {{ $collectionSet->duration ? '- ' . $collectionSet->duration->months. ' months' : '' }}</p>
-            <small>{{$productsforCollection->count()}} PRODUCTS</small>
+            <h1>{{@$collectionSet->category->name}}</h1>
+            <p> {{@$collectionSet->tone->name ? $collectionSet->tone->name : ''}} {{ @$collectionSet->duration ? '- ' . $collectionSet->duration->months. ' months' : '' }}</p>
+            <small>{{@$productsforCollection->count()}} PRODUCTS</small>
             <br />
             <a href="#" class="add-to-cart-button w-50 mt-4 text-nowrap" id="filterBtnSide">FILTER <i class="fas fa-plus mx-5"></i></a>
 
