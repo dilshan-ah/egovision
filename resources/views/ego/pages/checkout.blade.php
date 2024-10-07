@@ -257,8 +257,8 @@
             <div class="modal-body d-flex justify-content-center">
                 <div class="shadow-none d-flex flex-column align-items-center">
                     <h2 class="modal-title text-center" id="exampleModalLabel">Select your free bag</h2>
-                    <img src="{{ asset($freeGift->image_path) }}" class="img-fluid mb-4" alt="Free Gift Image">
-                    <h4 class="text-center">{{ $freeGift->name }}</h4>
+                    <img src="{{ asset(@$freeGift->image_path) }}" class="img-fluid mb-4" alt="Free Gift Image">
+                    <h4 class="text-center">{{ @$freeGift->name }}</h4>
                     <form action="{{route('cart.add.gift.bag')}}" method="post">
                         @csrf
                         <button type="submit" class="btn btn-dark">ADD TO CART</button>
