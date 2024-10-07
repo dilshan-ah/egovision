@@ -31,7 +31,6 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    margin: -126px;
     margin-top: 10px;
 }
 
@@ -205,28 +204,6 @@
 
             <button class="add-to-cart-button w-100 mt-4" id="add-to-cart">Add to Cart - <span
                     id="total-price">{{ $product->price }}</span> ৳</button>
-
-
-            <form class="mt-5">
-                <label for="country">CHECK WHAT IS OUT OF STOCK</label>
-                <select id="country" name="country" class="form-control">
-                    <option value="">Please Choose an option</option>
-                    <option value="">+0.50</option>
-                    <option value="">+0.50</option>
-                    <option value="">+0.50</option>
-                    <option value="">+0.50</option>
-                    <option value="">+0.50</option>
-                    <option value="">+0.50</option>
-                    <option value="">+0.50</option>
-                    <option value="">+0.50</option>
-                    <option value="">+0.50</option>
-                    <option value="">+0.50</option>
-                    <option value="">+0.50</option>
-                    <option value="">+0.50</option>
-                </select>
-                <input type="submit" style="border: 1px solid black; background-color: white; color: black;"
-                    value="NOTIFY ME" />
-            </form>
         </div>
         <!-- description -->
         <div
@@ -313,7 +290,42 @@
                 </div>
                 <div class="custom-accordion">
                     <!-- Content for More Information -->
-                    <p>More Information content goes here.</p>
+                    <table class="table mt-2">
+                        <tbody>
+                            <tr>
+                                <td class="table-secondary">Pack Content</td>
+                                <td>{{$product->pack_content}}</td>
+                            </tr>
+                            <tr>
+                                <td class="table-secondary">Diameter</td>
+                                <td>{{@$product->diameter->name}}</td>
+                            </tr>
+                            <tr>
+                                <td class="table-secondary">Base curve</td>
+                                <td>{{@$product->baseCurve->name}}</td>
+                            </tr>
+                            <tr>
+                                <td class="table-secondary">Material</td>
+                                <td>{{@$product->material->name}}</td>
+                            </tr>
+                            <tr>
+                                <td class="table-secondary">Water content</td>
+                                <td>{{@$product->water_content}}</td>
+                            </tr>
+                            <tr>
+                                <td class="table-secondary">Replacement</td>
+                                <td>{{@$product->duration->name}}</td>
+                            </tr>
+                            <tr>
+                                <td class="table-secondary">Tones</td>
+                                <td>{{@$product->tone->name}}</td>
+                            </tr>
+                            <tr>
+                                <td class="table-secondary">Lens Design</td>
+                                <td>{{@$product->lensDesign->name}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
 
@@ -362,7 +374,9 @@
                 </div>
                 <div class="custom-accordion">
                     <!-- Content for Power Range -->
-                    <p>Power Range content goes here.</p>
+                    <h4>Monthly Spherical Lenses</h4>
+
+                    
                 </div>
             </div>
 
@@ -387,7 +401,7 @@
 <div class="lightbox" id="lightbox">
     <img src="" alt="Lightbox Image" id="lightbox-img" />
 </div>
-
+<!-- <div class="overlay-sidebar" style="z-index: 1;" id="overlay-sidebar"></div> -->
 @endsection
 @push('script')
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -647,15 +661,24 @@
     const closeSidebarBtns = document.querySelectorAll('.custom-closebtn');
     const sidebars = document.querySelectorAll('.custom-sidebar');
 
+    const overlay = document.getElementById('overlay-sidebar');
+
     openSidebarBtns.forEach((btn, index) => {
         btn.addEventListener('click', function(event) {
             event.preventDefault();
             sidebars[index].classList.add('show');
+            overlay.classList.add('show');
         });
     });
 
     closeSidebarBtns.forEach((btn, index) => {
         btn.addEventListener('click', function(event) {
+            event.preventDefault();
+            sidebars[index].classList.remove('show');
+            overlay.classList.remove('show');
+        });
+
+        overlay.addEventListener('click', function(event) {
             event.preventDefault();
             sidebars[index].classList.remove('show');
         });

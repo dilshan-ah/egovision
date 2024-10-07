@@ -5,17 +5,17 @@
     <div class="card shadow mb-4">
         <div class="card-header py-3 d-flex justify-content-between align-items-center">
             <h6 class="m-0 font-weight-bold text-primary">{{ $pageTitle }}</h6>
-            <h6 class="m-0"><a href="{{ route('product.index') }}" class="text-decoration-none btn btn-primary">Product
+            <h6 class="m-0"><a href="{{ route('product.accessories') }}" class="text-decoration-none btn btn-primary">Accessory
                     List</a>
             </h6>
         </div>
         <div class="card-body">
-            <form action="{{ route('product.update',$product->id) }}" method="post" enctype="multipart/form-data">
+            <form action="{{ route('product.update.accessory',$product->id) }}" method="post" enctype="multipart/form-data">
                 @csrf
                 <div class="row">
                     <div class="form-group col-3">
                         <label for="">Product Name</label>
-                        <input type="text" class="form-control" name="name" value="{{ old('name', $product->name) }}">
+                        <input type="text" class="form-control" name="name" value="{{ old('name', $product->name)}}">
                         @error('name')
                         <span class="text-danger">{{ $message }}</span>
                         @enderror
@@ -52,71 +52,9 @@
                         @enderror
                     </div>
                     <div class="form-group col-3">
-                        <label for="">Material</label>
-                        <select name="material_id" class="form-control">
-                            <option value="" selected>Select Material</option>
-                            @foreach ($materials as $material)
-                            <option value="{{ $material->id }}" {{ old('material_id', $product->material_id) == $material->id ? 'selected' : '' }}>{{ $material->name }}</option>
-                            @endforeach
-                        </select>
-                        @error('material_id')
-                        <span class="text-danger">{{ $message }}</span>
-                        @enderror
-                    </div>
-                    <div class="form-group col-3">
-                        <label for="">Water Content</label>
-                        <select name="water_content_id" class="form-control">
-                            <option value="" selected>Select Water Content</option>
-                            <option value="water content" {{ old('water_content_id', $product->water_content_id) == 'water content' ? 'selected' : '' }}>water content</option>
-                        </select>
-                    </div>
-                    <div class="form-group col-3">
-                        <label for="">Tones</label>
-                        <select name="tone_id" class="form-control">
-                            <option value="" selected>Select Tones</option>
-                            @foreach ($tones as $tone)
-                            <option value="{{ $tone->id }}" {{ old('tone_id', $product->tone_id) == $tone->id ? 'selected' : '' }}>{{ $tone->name }}</option>
-                            @endforeach
-                        </select>
-                        @error('tone_id')
-                        <span class="text-danger">{{ $message }}</span>
-                        @enderror
-                    </div>
-                    <div class="form-group col-3">
-                        <label for="">Lens Design</label>
-                        <select name="lens_design_id" class="form-control">
-                            <option value="" selected>Select Lens Design</option>
-                            @foreach ($lDesigns as $lDesign)
-                            <option value="{{ $lDesign->id }}" {{ old('lens_design_id', $product->lens_design_id) == $lDesign->id ? 'selected' : '' }}>{{ $lDesign->name }}</option>
-                            @endforeach
-                        </select>
-                        @error('lens_design_id')
-                        <span class="text-danger">{{ $message }}</span>
-                        @enderror
-                    </div>
-                    <div class="form-group col-3">
-                        <label for="">No Power Price</label>
-                        <input type="number" class="form-control" name="no_power_price" value="{{ old('no_power_price', $product->no_power_price) }}" min=1>
-                        @error('no_power_price')
-                        <span class="text-danger">{{ $message }}</span>
-                        @enderror
-                    </div>
-                    <div class="form-group col-3">
-                        <label for="">With Power Price</label>
+                        <label for="">Price</label>
                         <input type="number" class="form-control" name="price" min=1 value="{{ old('price', $product->price) }}">
                         @error('price')
-                        <span class="text-danger">{{ $message }}</span>
-                        @enderror
-                    </div>
-                    <div class="form-group col-3">
-                        <label for="">Choose Color</label>
-                        <select name="color_id" class="form-control">
-                            <option value="" selected>Pick Color</option>
-                            @foreach ($colors as $color)
-                            <option value="{{ $color->id }}" {{ old('color_id', $product->color_id) == $color->id ? 'selected' : '' }}>{{ $color->name }}</option>
-                            @endforeach
-                        </select>
-                        @error('color_id')
                         <span class="text-danger">{{ $message }}</span>
                         @enderror
                     </div>
@@ -132,17 +70,20 @@
                         <span class="text-danger">{{ $message }}</span>
                         @enderror
                     </div>
-                    <div class="form-group col-12">
-                        <label for="">Product Category</label>
-                        <select name="category_id" class="form-control">
-                            <option value="" selected>Select Category</option>
-                            @foreach ($categories as $category)
-                            <option value="{{ $category->id }}" {{ old('category_id', $product->category_id) == $category->id ? 'selected' : '' }}>{{ $category->name }}</option>
-                            @endforeach
+                    <div class="form-group col-3">
+                        <label for="">Is Free?</label>
+                        <select name="is_free" class="form-control">
+                            <option value="1" {{ old('is_free') == '1' ? 'selected' : '' }}>Yes</option>
+                            <option value="0" {{ old('is_free') == '0' ? 'selected' : '' }}>No</option>
                         </select>
-                        @error('category_id')
-                        <span class="text-danger">{{ $message }}</span>
-                        @enderror
+                    </div>
+                    <div class="form-group col-3">
+                        <label for="">Is Default? (you can only keep one default)</label>
+                        <select name="is_default" class="form-control">
+                            <option value="" {{ old('is_default', $product->is_default) === null ? 'selected' : '' }}>set yes if you want it default</option>
+                            <option value="1" {{ old('is_default', $product->is_default) == '1' ? 'selected' : '' }}>Yes</option>
+                            <option value="0" {{ old('is_default', $product->is_default) == '0' ? 'selected' : '' }}>No</option>
+                        </select>
                     </div>
                     <div class="form-group col-6">
                         <label for="">Product Introduction</label>
@@ -191,46 +132,12 @@
                             @endforeach
                         </div>
                     </div>
-
-                    <div class="col-12 mb-2">
-                        <h4>Choose Available powers</h4>
-                    </div>
-
-                    <div class="col-12 mb-5">
-                        <div class="row ml-2">
-                            <div class="form-group col-6 d-flex">
-                                <label for="available_power_1">-0.25 to -6.00</label>
-                                <input type="checkbox" class="form-check-input" value="(-0.25-6.00)" id="available_power_1"
-                                    name="available_powers[]"
-                                    {{ in_array('(-0.25-6.00)', json_decode($product->available_powers) ?? []) ? 'checked' : '' }}>
-                            </div>
-                            <div class="form-group col-6 d-flex">
-                                <label for="available_power_2">-6.50 to -10.00</label>
-                                <input type="checkbox" class="form-check-input" value="(-6.50-10.00)" id="available_power_2"
-                                    name="available_powers[]"
-                                    {{ in_array('(-6.50-10.00)', json_decode($product->available_powers) ?? []) ? 'checked' : '' }}>
-                            </div>
-                            <div class="form-group col-6 d-flex">
-                                <label for="available_power_3">+0.25 to +6.00</label>
-                                <input type="checkbox" class="form-check-input" value="(+0.25+6.00)" id="available_power_3"
-                                    name="available_powers[]"
-                                    {{ in_array('(+0.25+6.00)', json_decode($product->available_powers) ?? []) ? 'checked' : '' }}>
-                            </div>
-                            <div class="form-group col-6 d-flex">
-                                <label for="available_power_4">+6.50 to +10.00</label>
-                                <input type="checkbox" class="form-check-input" value="(+6.50+10.00)" id="available_power_4"
-                                    name="available_powers[]"
-                                    {{ in_array('(+6.50+10.00)', json_decode($product->available_powers) ?? []) ? 'checked' : '' }}>
-                            </div>
-                        </div>
-                    </div>
-
-
                     <div class="form-group col-12">
                         <button type="submit" class="btn btn-primary btn-block">Update</button>
                     </div>
                 </div>
             </form>
+
         </div>
     </div>
 </div>
@@ -291,64 +198,6 @@
     });
 </script>
 
-<script>
-    $(document).ready(function() {
-        // Function to update JSON field
-        function updateJSON() {
-            var variations = [];
 
-            // Iterate over each variation-group
-            $('#variation-container .variation-group').each(function() {
-                var power = $(this).find('.power').val();
-                var stock = $(this).find('.stock').val();
-
-                // Only add to JSON if both fields are filled
-                if (power && stock) {
-                    variations.push({
-                        power: power,
-                        stock: stock
-                    });
-                }
-            });
-
-            // Update the hidden input with the JSON string
-            $('#variations_json').val(JSON.stringify(variations));
-        }
-
-        // Handle adding new variation-group
-        $('#add-more').click(function() {
-            var newGroup = $('.variation-group:first').clone();
-
-            // Clear the values in the cloned group
-            newGroup.find('select').val('');
-            newGroup.find('input').val('');
-
-            // Append the new group to the container
-            newGroup.appendTo('#variation-container');
-
-            // Attach remove event to new remove button
-            newGroup.find('.remove-variation').click(function() {
-                $(this).closest('.variation-group').remove();
-                updateJSON();
-            });
-
-            updateJSON();
-        });
-
-        // Attach remove event to initial remove button
-        $('.remove-variation').click(function() {
-            $(this).closest('.variation-group').remove();
-            updateJSON();
-        });
-
-        // Update JSON on input change
-        $('#variation-container').on('change', '.power, .stock', function() {
-            updateJSON();
-        });
-
-        // Initialize JSON field on page load
-        updateJSON();
-    });
-</script>
 
 @endpush

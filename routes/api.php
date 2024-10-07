@@ -107,6 +107,7 @@ Route::controller(TicketController::class)->group(function(){
     Route::get('app/user/tickets/{id}','userTickets');
     Route::get('app/user/ticket/view/{ticketId}','singleTicket');
     Route::post('app/user/ticket/store/{userId}','contactSubmit');
+    Route::post('app/user/ticket/reply/{ticketId}/{userId}','replyTicketApi');
 });
 
 Route::controller(PrescriptionController::class)->group(function(){
@@ -160,6 +161,10 @@ Route::namespace('Api')->name('api.')->group(function () {
         });
     });
 
+    Route::controller('UserController')->group(function () {
+        Route::post('user-data-submit/{userId}', 'userDataSubmit');
+    });
+
     Route::middleware('auth:sanctum')->group(function () {
 
         //authorization
@@ -171,8 +176,10 @@ Route::namespace('Api')->name('api.')->group(function () {
             Route::post('verify-g2fa', 'g2faVerification')->name('go2fa.verify');
         });
 
+        
+
         Route::middleware(['check.status'])->group(function () {
-            Route::post('user-data-submit', 'UserController@userDataSubmit')->name('data.submit');
+            // Route::post('user-data-submit/{userId}', 'UserController@userDataSubmit')->name('data.submit');
 
             Route::middleware('registration.complete')->group(function () {
                 Route::get('dashboard', function () {
@@ -192,7 +199,8 @@ Route::namespace('Api')->name('api.')->group(function () {
                 });
 
                 Route::controller('UserController')->group(function () {
-
+                    // User data
+                    // Route::post('user-data-submit/{userId}', 'userDataSubmit');
                     //KYC
                     Route::get('kyc-form', 'kycForm')->name('kyc.form');
                     Route::post('kyc-submit', 'kycSubmit')->name('kyc.submit');
