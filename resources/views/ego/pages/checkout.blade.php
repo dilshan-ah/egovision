@@ -1,15 +1,22 @@
 @extends('layouts.ego-app')
 @section('content')
+<style>
+    .nav-pills .nav-link.active, .nav-pills .show>.nav-link {
+    color: white;
+    background-color:black;
+}
+</style>
 
 <form action="{{ url('/pay') }}" method="POST" class="needs-validation">
     @csrf
     <div class="container" id="shipping">
         <nav class="nav nav-pills flex-column flex-sm-row" style="margin-top: 180px; margin-bottom: 50px">
             <a class="flex-sm-fill text-sm-center nav-link active" aria-current="page" href="#">Shipping</a>
-            <a class="flex-sm-fill text-sm-center nav-link text-black" href="#">Payment</a>
+            <a class="flex-sm-fill text-sm-center nav-link text-black ms-3" href="#">Payment</a> <!-- Added margin using Bootstrap -->
         </nav>
+        
         <div class="row justify-content-between">
-            <div class="col-lg-7 col-12">
+            <div class="col-lg-7 col-md-12">
                 <div class="card p-4 mb-4">
                     <h2>Shipping Address</h2>
                 </div>
@@ -114,7 +121,7 @@
                     <button type="button" id="next" class="btn btn-dark mt-4">Next</button>
                 </div>
             </div>
-            <div class="col-lg-4 col-12">
+            <div class="col-lg-4 col-md-12">
                 <div class="card p-4">
                     <h2>Order Summary</h2>
                     <h6>{{ $carts->count() }} items in cart</h6>
@@ -149,7 +156,6 @@
             </div>
         </div>
     </div>
-
     <div class="container" id="payment">
         <nav class="nav nav-pills flex-column flex-sm-row" style="margin-top: 180px; margin-bottom: 50px">
             <a id="back" class="flex-sm-fill text-sm-center nav-link active" aria-current="page" href="#">Shipping</a>
@@ -172,9 +178,8 @@
                             Online Payment
                         </label>
                         <div class="invalid-feedback">Please select a payment method.</div>
-                    </div>
-
-                    <button type="submit" class="btn btn-dark mt-4">Confirm Order</button>
+                    </div>                  
+                    <button type="submit" class="btn  mt-4" style="background: black;color:white">Confirm Order</button>
                 </div>
             </div>
             <div class="col-lg-4 col-12">

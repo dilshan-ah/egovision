@@ -9,7 +9,7 @@
 <br>
 <br>
 <div class="container">
-    <a href="index.html">Home</a>
+    <a href="{{ route('ego.index') }}">Home</a>
     <h1 class="text-center" style="font-size: 5rem">Color</h1>
     <p class="text-center">Looking for top-quality colored contact lenses to enhance your natural eye color or completely revamp your look? Explore the incredible range at egovision.shop
 Our website features a stunning collection of premium color contact lenses in a wide variety of shades and styles. Whether you prefer a subtle enhancement or a bold, standout appearance, we have the perfect lenses to match your desired look. Crafted from the highest quality materials, our lenses are designed for maximum comfort and safety. With various shades available, you can choose the level of color intensity that suits you best.

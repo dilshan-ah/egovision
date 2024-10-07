@@ -118,12 +118,12 @@
 <br>
 <br>
 <div class="row mt-5">
-    <div class="col-4" style="background: #f5f5f5">
+    <div class="col-lg-4 col-sm-12 col-mb-4" style="background: #f5f5f5">
         <div class="mt-5 p-4">
             <h1>{{$color->name}}</h1>
             <small>{{$color->products->count()}} PRODUCTS</small>
             <br />
-            <a href="#" class="add-to-cart-button w-50 mt-4 text-nowrap" id="filterBtnSide">FILTER <i class="fas fa-plus mx-5"></i></a>
+            <a href="#" class="add-to-cart-button w-50 mt-2 text-nowrap" id="filterBtnSide">FILTER <i class="fas fa-plus mx-5"></i></a>
             <div id="sidebarButton" class="sidebarButton">
                 <div class="sidebar-header">
                     <h3 class="sidebar-title">Filter</h3>
@@ -387,12 +387,11 @@
             </script>
         </div>
     </div>
-
     <!-- ------------------------------------------------------------- -->
-    <div class="col-8">
+    <div class="col-12 col-md-8">
         <div class="row ">
             @foreach ($products as $product)
-            <div class="col-6">
+            <div class="col-12 col-sm-6 col-md-6 mt-4">
                 <div class="card-product-slider mx-2">
                     <div class="card-product-slider-img-wrapper">
                         <img src="{{ asset($product->image_path) }}" class="card-product-slider-img-top">
@@ -401,7 +400,6 @@
                             <form id="add-to-wishlist-{{ $product->id }}" action="{{ route('wishlist.add', $product->id) }}" method="post">
                                 @csrf
                             </form>
-
                             <a href="#" onclick="event.preventDefault(); document.getElementById('add-to-wishlist-{{ $product->id }}').submit();" class="add-to-wishlist" style="z-index: 9999;">
                                 @if($product->wishlist && $product->wishlist->user_id == @auth()->id())
                                 <i class="fas fa-heart" style="background-color: white; color: black; display: flex;"></i>

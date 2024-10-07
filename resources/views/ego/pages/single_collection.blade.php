@@ -118,7 +118,7 @@
 <br>
 <br>
 <div class="row mt-5">
-    <div class="col-4" style="background: #f5f5f5">
+    <div class="col-12 col-md-6 col-lg-4" style="background: #f5f5f5">
         <div class="mt-5 p-4">
             <h1>{{@$collectionSet->category->name}}</h1>
             <p> {{@$collectionSet->tone->name ? $collectionSet->tone->name : ''}} {{ @$collectionSet->duration ? '- ' . $collectionSet->duration->months. ' months' : '' }}</p>
@@ -419,24 +419,24 @@
     </div>
 
     <!-- ------------------------------------------------------------- -->
-    <div class="col-8">
-        <div class="row ">
+    <div class="col-12 col-md-8">
+        <div class="row">
             @foreach ($productsforCollection as $product)
-            <div class="col-6">
+            <div class="col-12 col-sm-6 col-md-6">
                 <div class="card-product-slider mx-2">
                     <div class="card-product-slider-img-wrapper">
-                        <img src="{{ asset($product->image_path) }}" class="card-product-slider-img-top">
+                        <img src="{{ asset($product->image_path) }}" class="card-product-slider-img-top img-fluid">
                         <a href="{{ route('addToCart.index', $product->id) }}" class="stretched-link"></a>
                         <div class="card-product-slider-icons">
                             <form id="add-to-wishlist-{{ $product->id }}" action="{{ route('wishlist.add', $product->id) }}" method="post">
                                 @csrf
                             </form>
-
+    
                             <a href="#" onclick="event.preventDefault(); document.getElementById('add-to-wishlist-{{ $product->id }}').submit();" class="add-to-wishlist" style="z-index: 9999;">
                                 @if($product->wishlist)
-                                <i class="fas fa-heart" style="background-color: white; color: black;display: flex"></i>
+                                <i class="fas fa-heart" style="background-color: white; color: black; display: flex"></i>
                                 @else
-                                <i class="fi fi-rr-heart" style="background-color: white; color: black;display: flex"></i>
+                                <i class="fi fi-rr-heart" style="background-color: white; color: black; display: flex"></i>
                                 @endif
                             </a>
                             <a href="https://www.instagram.com/?url={{route('addToCart.index', $product->id)}}" style="z-index: 9999;">
@@ -446,12 +446,60 @@
                     </div>
                     <div class="card-product-slider-body">
                         <h5 class="card-product-slider-title">{{ $product->name }}</h5>
-                        <small class="price">STARTING AT : {{ $product->price }} {{ 'BDT' }}</small>
+                        <small class="price">STARTING AT: {{ $product->price }} BDT</small>
                     </div>
                 </div>
             </div>
             @endforeach
         </div>
     </div>
+    
+    <!-- CSS -->
+    <style>
+    .card-product-slider {
+        /* Ensure some padding and margin adjustments */
+        padding: 10px;
+    }
+    
+    .card-product-slider-img-top {
+        width: 100%;
+        height: auto;
+    }
+    
+    /* Responsive design */
+    @media (max-width: 768px) {
+        .card-product-slider-title {
+            font-size: 1.1rem;
+        }
+    
+        .price {
+            font-size: 0.9rem;
+        }
+    
+        .card-product-slider-body {
+            padding: 5px;
+        }
+    
+        .col-6 {
+            flex: 0 0 100%;
+            max-width: 100%;
+        }
+    }
+    
+    @media (max-width: 576px) {
+        .card-product-slider-title {
+            font-size: 1rem;
+        }
+    
+        .price {
+            font-size: 0.8rem;
+        }
+        
+        .card-product-slider-icons i {
+            font-size: 0.8rem;
+        }
+    }
+    </style>
+    
 </div>
 @endsection

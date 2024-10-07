@@ -126,8 +126,10 @@
 <br>
 <br>
 <div class="row mt-5">
-    <div class="col-md-4 col-12" style="background: #f5f5f5">
-        <div class="mt-5 p-4">
+
+    <div class="col-md-4 col-12 mt-1 "  style="background: #f5f5f5">
+
+        <div class="p-4">
             <h1>All Lenses</h1>
             <small>{{$products->count()}} PRODUCTS</small>
             <br />
@@ -428,11 +430,11 @@
     </div>
 
     <!-- ------------------------------------------------------------- -->
-    <div class="col-8">
-        <div class="row mt-4">
+    <div class="col-12 col-lg-8 p-2">
+        <div class="row">
             @foreach ($products as $product)
-            <div class="col-12 col-sm-6 col-md-4 mb-4"> 
-                <div class="card-product-slider mx-2 border rounded shadow-sm overflow-hidden">
+            <div class="col-12 col-sm-6 col-md-4 mb-4 "> 
+                <div class="card-product-slider border shadow-sm overflow-hidden">
                     <div class="card-product-slider-img-wrapper position-relative">
                         <img src="{{ asset($product->image_path) }}" class="card-product-slider-img-top img-fluid" alt="{{ $product->name }}"> <!-- Responsive image -->
                         <a href="{{ route('addToCart.index', $product->id) }}" class="stretched-link"></a>
@@ -445,9 +447,7 @@
                                 <i class="fas fa-heart" style="background-color: white; color: black; display: flex;"></i>
                                 @else
                                 <i class="fi fi-rr-heart" style="background-color: white; color: black; display: flex;"></i>
-
                                 @endif
-
                             </a>
                             <a href="https://www.instagram.com/?url={{ route('addToCart.index', $product->id) }}" aria-label="Share on Instagram">
                                 <i class="fas fa-share" style="background-color: white; color: black;"></i>
@@ -463,11 +463,10 @@
                     </div>
                 </div>
             </div>
-            
             @endforeach
         </div>
-        
     </div>
+    
 </div>
 
 @endsection
