@@ -39,7 +39,7 @@
                             <td>{{$product->price}} ৳</td>
                             <td>{{ $product->created_at->format('m/d/Y g:i A') }}</td>
                             <td>
-                                <a href="{{ route('product.edit', $product->id) }}"
+                                <a href="{{ route('product.edit.accessory', $product->id) }}"
                                     class="btn btn-secondary btn-xs">Edit</a>
                                 <a href="{{ route('product.delete', $product->id) }}"
                                     class="btn btn-danger btn-xs">Delete</a>

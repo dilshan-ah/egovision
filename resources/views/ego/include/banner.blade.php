@@ -845,7 +845,7 @@
                                     <span class="close-icon"
                                         style="position: absolute; top: -10px; right: -10px; color: black; padding: 2px 6px; cursor: pointer; font-size: 18px;" type="button" data-bs-toggle="modal" data-bs-target="#deleteCart{{$cart->id}}">&times;</span>
 
-                                    <div class="modal fade" id="deleteCart{{$cart->id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div class="modal fade" id="deleteCart{{$cart->id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" style="z-index: 99999;">
                                         <div class="modal-dialog modal-dialog-centered">
                                             <div class="modal-content">
                                                 <div class="modal-header">

@@ -201,37 +201,7 @@
                                 <hr>
                             </div>
                         </div>
-                        <div class="mb-3 text-start">
-                            <label for="telephone" class="form-label">Telephone</label>
-                            <input type="tel" class="form-control" name="mobile" id="telephone" placeholder="+008">
-                        </div>
-                        <div class="mb-3 text-start">
-                            <label for="registerEmail" class="form-label">Email</label>
-                            <input type="email" class="form-control" name="email" id="registerEmail"
-                                placeholder="Enter your email">
-                        </div>
-                        <div class="mb-3 text-start">
-                            <label for="registerPassword" class="form-label">Password</label>
-                            <input type="password" class="form-control" name="password" id="registerPassword"
-                                placeholder="Enter your password">
-                        </div>
-                        <p class="text-start">Password Strength: <span id="passwordStrength">No Password</span></p>
-                        <div class="mb-3 text-start">
-                            <label for="confirmPassword" class="form-label">Confirm Password</label>
-                            <input type="password" class="form-control" name="password_confirmation"
-                                id="confirmPassword" placeholder="Confirm your password">
-                        </div>
-                        <div class="form-check text-start mb-3">
-                            <input type="checkbox" class="form-check-input" id="privacyPolicy">
-                            <label class="form-check-label" for="privacyPolicy">I have read and accept 
-                                @foreach($policyPages as $policy) 
-                                    <a href="{{ route('policy.pages',[$policy->id, slug($policy->data_values->title)]) }}">{{ __($policy->data_values->title) }}</a> 
-                                    @if(!$loop->last), @endif 
-                                @endforeach
-                            </label>
-                        </div>
-                        <button type="submit" class="btn btn-primary w-100 mt-5">CREATE AN ACCOUNT</button>
-                    </form>
+                        
                         <div class="row my-5">
                             <div class="col-md-12">
                                 <a href="{{route('google.auth')}}" class="btn btn-lg btn-google btn-block text-uppercase btn-outline text-black w-100" style="font-size: 16px">
@@ -239,19 +209,10 @@
                                 </a>
                             </div>
                         </div>
-                        <div class="col-auto">OR</div>
-                        <div class="col">
-                            <hr>
-                        </div>
+                        
                     </div>
 
-                    <div class="row">
-                        <div class="col-md-12">
-                            <a href="{{route('google.auth')}}" class="btn btn-lg btn-google btn-block  btn-outline text-black" style="font-size: 16px">
-                                <img src="https://img.icons8.com/color/16/000000/google-logo.png"> Signup Using Google
-                            </a>
-                        </div>
-                    </div>
+                    
 
                 </div>
             </div>

@@ -7,6 +7,7 @@ use App\Lib\FormProcessor;
 use App\Models\Form;
 use App\Models\GeneralSetting;
 use App\Models\Transaction;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules\Password;
@@ -14,50 +15,60 @@ use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
 {
-    public function userDataSubmit(Request $request)
+    public function userDataSubmit(Request $request, $userId)
     {
-        $user = auth()->user();
-        if ($user->profile_complete == 1) {
-            $notify[] = 'You\'ve already completed your profile';
+        $user = User::find($userId);
+    
+        if (!$user) {
             return response()->json([
-                'remark'=>'already_completed',
-                'status'=>'error',
-                'message'=>['error'=>$notify],
+                'remark' => 'user_not_found',
+                'status' => 'error',
+                'message' => 'User not found',
+            ], 404);
+        }
+    
+        if ($user->profile_complete == 1) {
+            return response()->json([
+                'remark' => 'already_completed',
+                'status' => 'error',
+                'message' => 'Profile already completed',
             ]);
         }
+    
+        // Validate request data
         $validator = Validator::make($request->all(), [
-            'firstname'=>'required',
-            'lastname'=>'required',
+            'firstname' => 'required',
+            'lastname' => 'required',
         ]);
-
+    
         if ($validator->fails()) {
             return response()->json([
-                'remark'=>'validation_error',
-                'status'=>'error',
-                'message'=>['error'=>$validator->errors()->all()],
+                'remark' => 'validation_error',
+                'status' => 'error',
+                'message' => $validator->errors()->all(),
             ]);
         }
-
-
+    
+        // Update user data
         $user->firstname = $request->firstname;
         $user->lastname = $request->lastname;
         $user->address = [
-            'country'=>@$user->address->country,
-            'address'=>$request->address,
-            'state'=>$request->state,
-            'zip'=>$request->zip,
-            'city'=>$request->city,
+            'country' => @$user->address->country,
+            'address' => $request->address,
+            'state' => $request->state,
+            'zip' => $request->zip,
+            'city' => $request->city,
         ];
         $user->profile_complete = 1;
         $user->save();
-
-        $notify[] = 'Profile completed successfully';
+    
         return response()->json([
-            'remark'=>'profile_completed',
-            'status'=>'success',
-            'message'=>['success'=>$notify],
+            'remark' => 'profile_completed',
+            'status' => 'success',
+            'message' => 'Profile completed successfully',
         ]);
     }
+    
 
     public function kycForm()
     {

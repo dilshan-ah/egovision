@@ -14,6 +14,12 @@ use Illuminate\Support\Facades\DB;
 
 class TicketController extends Controller
 {
+    protected $files;
+    protected $allowedExtension = ['jpg', 'png', 'jpeg', 'pdf', 'doc', 'docx'];
+    protected $userType;
+    protected $user = null;
+    protected $column;
+
     public function userTickets(string $userId)
     {
         // Paginate tickets with 5 per page
@@ -123,10 +129,10 @@ class TicketController extends Controller
                 'message' => 'required',
                 'attachment' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048', // Adjust max size and allowed types as needed
             ]);
-    
+
             // Generate a new support ticket number
             $random = getNumber();
-    
+
             // Create a new support ticket
             $ticket = new SupportTicket();
             $ticket->user_id = $userId ?? 0;
@@ -138,33 +144,33 @@ class TicketController extends Controller
             $ticket->last_reply = Carbon::now();
             $ticket->status = Status::TICKET_OPEN;
             $ticket->save();
-    
+
             // Create an admin notification for the new ticket
             $adminNotification = new AdminNotification();
             $adminNotification->user_id = $userId ? $userId : 0;
             $adminNotification->title = 'A new support ticket has opened';
             $adminNotification->click_url = urlPath('admin.ticket.view', $ticket->id);
             $adminNotification->save();
-    
+
             // Create a new support message associated with the ticket
             $message = new SupportMessage();
             $message->support_ticket_id = $ticket->id;
             $message->message = $validatedData['message'];
             $message->save();
-    
+
             if ($request->hasFile('attachment')) {
 
                 $attachmentPath = 'assets/support';
                 $fileName = time() . '_' . $request->file('attachment')->getClientOriginalName();
                 $request->file('attachment')->move(public_path($attachmentPath), $fileName);
-                
+
 
                 $attachment = new SupportAttachment();
                 $attachment->support_message_id = $message->id;
                 $attachment->attachment = $fileName;
                 $attachment->save();
             }
-    
+
             // Return a JSON response indicating success
             return response()->json([
                 'success' => true,
@@ -176,7 +182,7 @@ class TicketController extends Controller
                     'priority' => $ticket->priority,
                 ]
             ], 201); // HTTP status 201 for created
-    
+
         } catch (\Illuminate\Validation\ValidationException $e) {
             // Return validation errors as JSON
             return response()->json([
@@ -184,7 +190,7 @@ class TicketController extends Controller
                 'message' => 'Validation errors occurred.',
                 'errors' => $e->validator->errors()
             ], 422); // HTTP status 422 for unprocessable entity
-    
+
         } catch (\Exception $e) {
             // Return a general error message
             return response()->json([
@@ -194,5 +200,67 @@ class TicketController extends Controller
             ], 500); // HTTP status 500 for server error
         }
     }
+
+    public function replyTicketApi(Request $request, $ticketId, $userId)
+    {
+        // dd($request->all());
+        if (!$userId) {
+            return response()->json(['error' => 'User not authenticated'], 401);
+        }
+    
+        // Find the ticket by ID and ensure it belongs to the user
+        $ticket = SupportTicket::where('id', $ticketId)->where('user_id', $userId)->first();
+        if (!$ticket) {
+            return response()->json(['error' => 'Ticket not found or access denied'], 404);
+        }
+    
+        // Validate the reply message and attachments
+        $validatedData = $request->validate([
+            'message' => 'required|string',
+            'attachments.*' => 'required|file|mimes:jpeg,png,jpg,gif,doc,docx,pdf,txt|max:2048' // Validate multiple attachments
+        ]);
+    
+        DB::beginTransaction();
+    
+        try {
+            // Update ticket status and last reply timestamp
+            $ticket->status = Status::TICKET_REPLY; // Only for user replies
+            $ticket->last_reply = Carbon::now();
+            $ticket->save();
+    
+            // Create the reply message
+            $message = new SupportMessage();
+            $message->support_ticket_id = $ticket->id;
+            $message->message = $validatedData['message'];
+            $message->save();
+    
+            // Handle file attachments (if any)
+            // dd($request->attachments);
+            if ($request->hasFile('attachments')) {
+                foreach ($request->file('attachments') as $file) {
+                    $attachmentPath = 'assets/support'; // Define the storage path for attachments
+                    $fileName = time() . '_' . $file->getClientOriginalName();
+                    $file->move(public_path($attachmentPath), $fileName);
+    
+                    $attachment = new SupportAttachment();
+                    $attachment->support_message_id = $message->id;
+                    $attachment->attachment = $fileName;
+                    $attachment->save();
+                }
+            }
+    
+            DB::commit();
+    
+            return response()->json([
+                'success' => true,
+                'message' => 'Support ticket replied successfully!'
+            ], 201); // 201 Created
+    
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response()->json(['error' => $e->getMessage()], 500); // Internal Server Error
+        }
+    }
+    
     
 }

@@ -2,6 +2,7 @@
 
 namespace App\Models\EgoModels;
 
+use App\Models\Duration;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -32,9 +33,9 @@ class Product extends Model
         return $this->belongsTo(ProductCategory::class);
     }
 
-    public function replacement()
+    public function duration()
     {
-        return $this->belongsTo(Replacement::class);
+        return $this->belongsTo(Duration::class,'duration_id');
     }
 
     public function tone()

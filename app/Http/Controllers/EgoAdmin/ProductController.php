@@ -21,6 +21,7 @@ use App\Models\EgoModels\ProductVariation;
 // use App\Models\EgoModels\WaterContent;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 
 class ProductController extends Controller
@@ -231,16 +232,37 @@ class ProductController extends Controller
     }
 
 
-    public function update(ValidateProductRequest $request, $id)
+    public function update(Request $request, $id)
     {
-        $validated = $request->validated();
+        // Validate the incoming request
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'product_intro' => 'nullable|string',
+            'description' => 'nullable|string',
+            'pack_content' => 'nullable|string',
+            'diameter_id' => 'nullable|exists:diameters,id',
+            'base_curve_id' => 'nullable|exists:base_curves,id',
+            'material_id' => 'nullable|exists:materials,id',
+            'water_content_id' => 'nullable|numeric',
+            'tone_id' => 'nullable|exists:tones,id',
+            'lens_design_id' => 'nullable|exists:lens_designs,id',
+            'price' => 'required|numeric',
+            'no_power_price' => 'required|numeric',
+            'color_id' => 'required|exists:colors,id',
+            'category_id' => 'required|exists:product_categories,id',
+            'duration_id' => 'nullable|exists:durations,id',
+            'available_powers' => 'nullable|array',
+            'available_powers.*' => 'string',
+            'product_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'product_image_album.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
+
         DB::beginTransaction();
 
         try {
-            // Find the product to update
             $product = Product::findOrFail($id);
 
-            // Update product details
+            // Update product attributes
             $product->name = $validated['name'];
             $product->product_intro = $validated['product_intro'];
             $product->description = $validated['description'];
@@ -251,19 +273,20 @@ class ProductController extends Controller
             $product->water_content = $validated['water_content_id'];
             $product->tone_id = $validated['tone_id'];
             $product->lens_design_id = $validated['lens_design_id'];
-            $product->stock_quantity = $validated['stock_quantity'];
             $product->price = $validated['price'];
+            $product->no_power_price = $validated['no_power_price'];
             $product->color_id = $validated['color_id'];
             $product->category_id = $validated['category_id'];
             $product->duration_id = $validated['duration_id'];
-            $product->product_type = $validated['product_type'];
+            $product->product_type = 'normal';
+            $product->available_powers = json_encode($validated['available_powers']);
 
-            // Handle product image replacement
+            // Handle product image upload if a new image is provided
             if ($request->hasFile('product_image')) {
-                // Delete the old image if exists
-                if ($product->image_path && File::exists(public_path($product->image_path))) {
-                    File::delete(public_path($product->image_path));
+                if ($product->image_path) {
+                    Storage::delete($product->image_path);
                 }
+
                 $validated['product_image'] = $this->handleFileUpload($request->file('product_image'), 'ego-assets/images/products', 'Product');
                 $product->image_path = $validated['product_image'];
             }
@@ -271,41 +294,19 @@ class ProductController extends Controller
             // Save the updated product
             $product->save();
 
-            // Handle product image album replacement
-            if ($request->hasFile('product_image_album')) {
-                // Delete old album images
-                ProductImage::where('product_id', $product->id)->get()->each(function ($image) {
-                    if (File::exists(public_path($image->image_path))) {
-                        File::delete(public_path($image->image_path));
-                    }
-                    $image->delete();
-                });
+            // Delete existing product images
+            ProductImage::where('product_id', $product->id)->delete();
 
-                // Add new album images
+            // Handle product image album upload
+            if ($request->hasFile('product_image_album')) {
                 $images = $request->file('product_image_album');
                 foreach ($images as $image) {
                     $imagePath = $this->handleFileUpload($image, 'ego-assets/images/product_images', 'ProductImage');
-                    $productImage = new ProductImage();
+                    $productImage = new ProductImage;
                     $productImage->product_id = $product->id;
                     $productImage->image_path = $imagePath;
                     $productImage->save();
                 }
-            }
-
-            // Handle variations update
-            $variationsJson = $request->input('variations_json');
-            $variations = json_decode($variationsJson, true);
-
-            // First, delete the existing variations
-            ProductVariation::where('product_id', $product->id)->delete();
-
-            // Now, add the new variations
-            foreach ($variations as $variation) {
-                $productVariation = new ProductVariation();
-                $productVariation->product_id = $product->id;
-                $productVariation->power = $variation['power'];
-                $productVariation->stock = $variation['stock'];
-                $productVariation->save();
             }
 
             DB::commit();
@@ -315,7 +316,91 @@ class ProductController extends Controller
         } catch (\Exception $e) {
             DB::rollBack();
             $notify[] = ['error', $e->getMessage()];
-            return back()->withNotify($notify);
+            return back()->withNotify($notify)->withInput();
+        }
+    }
+
+    public function updateAccessories(Request $request, $id)
+    {
+        // Add validation rules
+        $validatedData = $request->validate([
+            'name' => 'required|string|max:255',
+            'product_intro' => 'required|string',
+            'description' => 'required|string',
+            'pack_content' => 'nullable|string',
+            'diameter_id' => 'nullable|integer|exists:diameters,id',
+            'base_curve_id' => 'nullable|integer|exists:base_curves,id',
+            'price' => 'required|numeric|min:0',
+            'duration_id' => 'nullable|integer|exists:durations,id',
+            'is_default' => 'nullable|boolean',
+            'is_free' => 'nullable|boolean',
+            'product_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // Image validation is nullable for update
+            'product_image_album.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048' // Validate multiple images
+        ]);
+
+        DB::beginTransaction();
+
+        try {
+            // Check if default accessory is being updated
+            if ($request['is_default'] == 1) {
+                Product::where('is_default_bag', 1)
+                    ->where('product_type', 'accessories')
+                    ->update(['is_default_bag' => 0]);
+            }
+
+            // Find the existing product
+            $product = Product::findOrFail($id);
+
+            // Update the product fields
+            $product->name = $validatedData['name'];
+            $product->product_intro = $validatedData['product_intro'];
+            $product->description = $validatedData['description'];
+            $product->pack_content = $validatedData['pack_content'];
+            $product->diameter_id = $validatedData['diameter_id'];
+            $product->base_curve_id = $validatedData['base_curve_id'];
+            $product->price = $validatedData['price'];
+            $product->duration_id = $validatedData['duration_id'];
+            $product->product_type = 'accessories';
+            $product->is_default_bag = $validatedData['is_default'] ?? 0;
+            $product->is_free = $validatedData['is_free'] ?? 0;
+
+            // Handle product image update
+            if ($request->hasFile('product_image')) {
+                // Delete old image
+                if ($product->image_path) {
+                    Storage::delete($product->image_path);
+                }
+
+                // Upload new image
+                $imagePath = $this->handleFileUpload($request->file('product_image'), 'ego-assets/images/products', 'Product');
+                $product->image_path = $imagePath;
+            }
+
+            // Save the product
+            $product->save();
+
+            // Handle product image album update
+            ProductImage::where('product_id', $product->id)->delete(); // Delete old album images
+
+            if ($request->hasFile('product_image_album')) {
+                $images = $request->file('product_image_album');
+                foreach ($images as $image) {
+                    $imagePath = $this->handleFileUpload($image, 'ego-assets/images/product_images', 'ProductImage');
+                    $productImage = new ProductImage;
+                    $productImage->product_id = $product->id;
+                    $productImage->image_path = $imagePath;
+                    $productImage->save();
+                }
+            }
+
+            DB::commit();
+
+            $notify[] = ['success', 'Accessory updated successfully.'];
+            return to_route('product.accessories')->withNotify($notify);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            $notify[] = ['error', $e->getMessage()];
+            return back()->withNotify($notify)->withInput();
         }
     }
 
@@ -340,7 +425,7 @@ class ProductController extends Controller
 
     public function edit($id)
     {
-        $pageTitle = "Color Edit";
+        $pageTitle = "Lens Edit";
         $colors = Color::all();
         $categories = ProductCategory::all();
         $diameters = Diameter::all();
@@ -369,25 +454,36 @@ class ProductController extends Controller
         ));
     }
 
-    // public function update(Request $request, $id)
-    // {
-    //     $color = Color::findOrFail($id);
-    //     $request->validate([
-    //         'name' => [
-    //             'required',
-    //             'string',
-    //             'max:255',
-    //             Rule::unique('product_categories')->ignore($id),
-    //         ],
-    //     ], [
-    //         'name.required' => 'The color field is required.'
-    //     ]);
-    //     $color->name = $request->input('name');
-    //     $color->save();
+    public function editAccessory($id)
+    {
+        $pageTitle = "Accessory Edit";
+        $colors = Color::all();
+        $categories = ProductCategory::all();
+        $diameters = Diameter::all();
+        $replacements = Replacement::all();
+        $materials = Material::all();
+        $tones = Tone::all();
+        $bases = BaseCurve::all();
+        $lDesigns = LensDesign::all();
+        $durations = Duration::all();
+        $lensPowers = LensPower::all();
 
-    //     $notify[] = ['success', 'Color updated successfully.'];
-    //     return redirect()->route('color.index')->withNotify($notify);
-    // }
+        $product = Product::findOrFail($id);
+        return view('ego.ego-admin.products.edit_accessories', compact(
+            'pageTitle',
+            'product',
+            'colors',
+            'categories',
+            'diameters',
+            'replacements',
+            'materials',
+            'tones',
+            'bases',
+            'lDesigns',
+            'durations',
+            'lensPowers'
+        ));
+    }
 
     public function destroy($id)
     {

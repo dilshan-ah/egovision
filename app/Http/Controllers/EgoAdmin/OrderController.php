@@ -14,7 +14,7 @@ class OrderController extends Controller
 {
     public function index($id)
     {
-        $product = Product::with(['images', 'color', 'lensDesign', 'baseCurve', 'category', 'replacement', 'tone', 'material', 'variations'])
+        $product = Product::with(['images', 'color', 'lensDesign', 'baseCurve', 'category', 'duration', 'tone', 'material', 'variations'])
             ->findOrFail($id);
         $pageTitle = $product->name . ' | Ego Vision';
     
