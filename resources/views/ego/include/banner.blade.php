@@ -102,6 +102,7 @@
         position: relative;
         /* Relative positioning for close button */
     }
+
     .sidebar .modal-content{
         width: 100%;
     }
@@ -796,6 +797,7 @@
                             </div>
                         </div>
                     </div>
+                
                     <!-- Wishlist Icon -->
                                             <a class="navbar-brand mx-3 position-relative" href="{{route('ego.wishlist')}}"
                         style="display: flex; align-items: center; font-size: 14px;">
@@ -817,6 +819,7 @@
                                     <!-- Cart count will be dynamically added here -->
                                 </span>
                             </a>
+
                     <!-- Sidebar Content -->
                     <div class="sidebar" id="sidebar"
                         style="background-color: #fff; box-shadow: 0 4px 10px rgba(0,0,0,0.1); color: #000;">
@@ -829,21 +832,19 @@
                             </a>
                             <span class="close-btn" id="closeSidebar" style="font-size: 24px; cursor: pointer;">&times;</span>
                         </div>
-
+                
                         <div class="sidebar-content" style="padding: 15px;">
                             @if ($carts->count() > 0)
                             @foreach ($carts as $cart)
-                            <div class="cart-item position-relative"
+                            <div class="cart-item"
                                 style="display: flex; align-items: stretch; margin-bottom: 20px; height: 150px; border: 1px solid #e0e0e0; border-radius: 8px; padding: 10px;">
-                                @if($cart->product->is_free == true)
-                                <span class="badge bg-dark text-white" style="position: absolute;top: 40px;width: max-content; left: -15px; z-index: 9; color: black; padding: 2px 6px; cursor: pointer; font-size: 12px; border-radius: 0">Free</span>
-                                @endif
-                                <div class="image-container position-relative"
+                                <div class="image-container"
                                     style="width: 80px; height: 100%; position: relative; flex-shrink: 0;">
                                     <img src="{{ asset($cart->product->image_path) }}" alt="Random Image"
                                         style="width: 100%; height: 100%; object-fit: cover;">
                                     <span class="close-icon"
                                         style="position: absolute; top: -10px; right: -10px; color: black; padding: 2px 6px; cursor: pointer; font-size: 18px;" type="button" data-bs-toggle="modal" data-bs-target="#deleteCart{{$cart->id}}">&times;</span>
+
                                     <div class="modal fade" id="deleteCart{{$cart->id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                         <div class="modal-dialog modal-dialog-centered">
                                             <div class="modal-content">
@@ -885,7 +886,7 @@
                                             <button class="quantity-btn decreaseQuantity"
                                                 data-cart-id="{{ $cart->id }}"
                                                 style="padding: 4px 8px; background-color: transparent; border: none; cursor: pointer; font-size: 14px; font-weight: 600; color: black;">-</button>
-                                            <span class="quantity-number @if($cart->product->product_type == 'accessories') acc-count @endif"
+                                            <span class="quantity-number"
                                                 id="quantityValue{{ $cart->id }}"
                                                 style="padding: 4px 8px; font-size: 12px; color: black;">{{ $cart->pair }}</span>
                                             <button class="quantity-btn increaseQuantity"
@@ -903,7 +904,7 @@
                             <div class="buttons d-flex justify-content-between my-3" style="margin-top: 25px;">
                                 <button class="add-to-cart-button-more" style="width: 45%;">Bag</button>
                                 <a href="{{route('addToCart.checkout')}}" class="add-to-cart-button" style="width: 45%;">Checkout</a>
-                            </div>
+                            </div>              
                             <div class="cart-subtotal my-4"
                                 style="border-top: 1px solid #e0e0e0; padding-top: 20px; text-align: center;">
                                 <h4 style="font-size: 18px; font-weight: 600;">
@@ -922,104 +923,8 @@
                             </div>
                         </div>
                     </div>
-                    <style>
-                        .add-to-cart-button {
-                            padding: 10px 20px;
-                            background-color: black;
-                            color: white;
-                            border: none;
-                            text-align: center;
-                            text-decoration: none;
-                            display: inline-block;
-                            font-size: 16px;
-                            cursor: pointer;
-                            transition: background-color 0.3s, border-color 0.3s, color 0.3s;
-                        }
-
-                        .add-to-cart-button:hover {
-                            background-color: white;
-                            color: black;
-                            border: 1px solid black;
-                        }
-
-                        .add-to-cart-button-more {
-                            padding: 10px 20px;
-                            background-color: white;
-                            color: black;
-                            border: 1px solid black;
-                            text-align: center;
-                            text-decoration: none;
-                            display: inline-block;
-                            font-size: 16px;
-                            cursor: pointer;
-                            transition: background-color 0.3s, border-color 0.3s, color 0.3s;
-                        }
-
-                        .add-to-cart-button-more:hover {
-                            background-color: black;
-                            color: white;
-                            border: 1px solid black;
-                        }
-
-                        .close-icon {
-                            position: absolute;
-                            top: -5px;
-                            right: -5px;
-                            color: black;
-                            border-radius: 50%;
-                            padding: 2px 6px;
-                            cursor: pointer;
-                            font-size: 12px;
-                        }
-
-                        .cart-item {
-                            height: 150px;
-                            /* Ensure the same height across items */
-                        }
-
-                        /* Default width */
-                        .sidebar {
-                            width: 350px;
-                        }
-
-                        /* For screens smaller than 768px (e.g., tablets) */
-                        @media (max-width: 768px) {
-                            .sidebar {
-                                width: 300px;
-                            }
-                        }
-
-
-                        .quantity-btn {
-                            background-color: transparent;
-                            border: none;
-                            cursor: pointer;
-                            font-size: 18px;
-                            font-weight: bold;
-                            color: black;
-                        }
-
-                        .quantity-number {
-                            padding: 8px 16px;
-                            font-size: 16px;
-                            font-weight: bold;
-                            color: black;
-                            text-align: center;
-                            min-width: 30px;
-                        }
-
-                        .quantity-selector {
-                            display: inline-flex;
-                            align-items: center;
-                            border: 1px solid black;
-                        }
-
-                        .modal-backdrop {
-                            display: none;
-                        }
-                    </style>
-                    <div class="overlay-sidebar" id="overlay-sidebar"></div>
                 </div>
+                
             </div>
         </nav>
         <!-- Secondary Navbar -->
@@ -1289,18 +1194,22 @@ function toggleSubmenu(event, sectionId, toggleElement) {
                                         <div class="content">
                                             <div class="row">
                                                 @foreach ($collectionSets as $collectionSet)
-                                                <div class="row" style="border-bottom: 1px solid  #8362a9; height: 100%">
-                                                    <a style="margin-bottom: 10px !important; font-size: 16px"
-                                                        href="{{ route('collectionSet.single.collection', $collectionSet->id) }}">{{ @$collectionSet->category->name ?? 'No Category' }}
-                                                        {{ @$collectionSet->tone->name ? '-' . @$collectionSet->tone->name : '' }}
-                                                        {{ @$collectionSet->duration ? '-' . @$collectionSet->duration->months . ' months' : '' }}</a>
-
+                                                <div class="col-12 col-md-3 mb-3"> 
+                                                    <a class="d-block mb-2 text-dark hover-link" 
+                                                    href="{{route('collectionSet.single.collection',$collectionSet->id)}}" 
+                                                    style="font-size: 16px; font-weight: 600;">
+                                                        {{ @$collectionSet->category->name ?? 'No Category' }} 
+                                                        {{ @$collectionSet->tone->name ? '-' . $collectionSet->tone->name : '' }} 
+                                                        {{ @$collectionSet->duration ? '-' . $collectionSet->duration->months . ' months' : '' }}
+                                                    </a>
                                                     <ul class="mega-links text-black">
-                                                        @foreach (@$collectionSet->products as $product)
+                                                        @foreach ($collectionSet->products as $product)
                                                         <li>
-                                                            <a style="font-size: 12px"
-                                                                href="{{ route('addToCart.index', $product->id) }}"
-                                                                class="text-Black">{{ $product->name }}</a>
+                                                            <a href="{{ route('addToCart.index', $product->id) }}" 
+                                                            class="text-black" 
+                                                            style="font-size: 12px;">
+                                                            {{ $product->name }}
+                                                            </a>
                                                         </li>
                                                         @endforeach
                                                     </ul>
@@ -1427,7 +1336,7 @@ function toggleSubmenu(event, sectionId, toggleElement) {
                 // Update the quantity and total price for this item in the UI
                 document.getElementById('quantityValue' + id).innerText = response.pair;
                 document.getElementById('totalPrice' + id).innerText = response.totalPrice + ' ৳';
-                fetchAccCount()
+
 
             } else if (xhr.readyState == 4) {
                 console.error('Failed to update cart quantity.');
@@ -1447,7 +1356,6 @@ function toggleSubmenu(event, sectionId, toggleElement) {
             updateCart(cartId, 'increment');
             fetchCartTotalPrice();
             fetchCartCount();
-            fetchAccCount()
         });
     });
 
@@ -1462,7 +1370,6 @@ function toggleSubmenu(event, sectionId, toggleElement) {
                 updateCart(cartId, 'decrement');
                 fetchCartTotalPrice();
                 fetchCartCount();
-                fetchAccCount()
             }
         });
     });
@@ -1480,28 +1387,6 @@ function toggleSubmenu(event, sectionId, toggleElement) {
 
         xhr.send();
     }
-</script>
-
-<script>
-    function fetchAccCount() {
-        var xhr = new XMLHttpRequest();
-        xhr.open('GET', '/cart/get-accessories/count', true); // No need for cart ID
-        xhr.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
-        xhr.onreadystatechange = function() {
-            if (xhr.readyState == 4 && xhr.status == 200) {
-                // Parse the JSON response
-                var response = JSON.parse(xhr.responseText);
-                document.querySelector('.acc-count').innerText = response.accessoryQuantity; // Assuming you want the accessory quantity
-            } else if (xhr.readyState == 4) {
-                console.error('Failed to fetch accessory quantity.', xhr.status, xhr.responseText);
-            }
-        };
-        xhr.send();
-    }
-
-    document.addEventListener('DOMContentLoaded', function() {
-        fetchAccCount(); // Call it directly
-    });
 </script>
 
 <script>
@@ -1638,8 +1523,7 @@ function toggleSubmenu(event, sectionId, toggleElement) {
                     break;
             }
             // Redirect to the new URL
-            window.location.href = '{{ url('
-            lang ') }}/' + selectedLanguage;
+            window.location.href = '{{ url('lang') }}/' + selectedLanguage;
         });
     });
 </script>
