@@ -81,6 +81,22 @@ Route::middleware('auth')->name('user.')->group(function () {
                 });
                 Route::get('history', 'withdrawLog')->name('.history');
             });
+
+            //Newsletter
+            Route::controller('NewsletterController')->group(function () {
+                Route::post('subscribe', 'store')->name('subscribe.store');
+                Route::delete('delete-subscribe', 'delete')->name('subscribe.delete');
+            });
+
+            Route::controller('GiftCardController')->group(function () {
+                Route::get('/all-gifts', 'index')->name('gift.index');
+                Route::get('/create-gift', 'create')->name('gift.create');
+                Route::post('/store-gift', 'storeGiftCard')->name('gift.store');
+                Route::get('/edit-gift/{id}', 'edit')->name('gift.edit');
+                Route::put('/put-gift/{id}', 'updateGiftCard')->name('gift.update');
+                Route::delete('/delete-gift/{id}', 'delete')->name('gift.delete');
+                Route::get('search/giftcard','search')->name('ego.search.giftCard')->middleware('auth');
+            });
         });
         // Payment
         Route::middleware('registration.complete')->prefix('deposit')->name('deposit.')->controller('Gateway\PaymentController')->group(function () {

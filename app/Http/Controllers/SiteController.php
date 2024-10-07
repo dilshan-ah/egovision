@@ -21,6 +21,7 @@ use App\Models\EgoModels\Wishlist;
 use App\Models\Frontend;
 use App\Models\Language;
 use App\Models\Page;
+use App\Models\Subscriber;
 use App\Models\SupportMessage;
 use App\Models\SupportTicket;
 use App\Models\User;
@@ -28,6 +29,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cookie;
+use Illuminate\Support\Facades\Http;
 
 class SiteController extends Controller
 {
@@ -93,11 +95,6 @@ class SiteController extends Controller
             'subject' => 'required|string|max:255',
             'message' => 'required',
         ]);
-
-        // if(!verifyCaptcha()){
-        //     $notify[] = ['error','Invalid captcha provided'];
-        //     return back()->withNotify($notify);
-        // }
 
         $request->session()->regenerateToken();
 
@@ -310,7 +307,13 @@ class SiteController extends Controller
     public function egoRegister()
     {
         $pageTitle = "Ego Vision User Register";
-        return view('ego.auth.register', compact('pageTitle'));
+        $response = Http::withOptions([
+            'verify' => realpath('C:\\xampp\\php\\extras\\ssl\\cacert.pem')
+        ])->get('https://countriesnow.space/api/v0.1/countries/states');       
+
+        $data = $response->json();
+        $states = $data['data'][18];
+        return view('ego.auth.register', compact('pageTitle','states'));
     }
 
     public function testUser()
@@ -348,5 +351,26 @@ class SiteController extends Controller
         ->get();
 
         return view('user.order.index', compact('pageTitle','orders'));
+    }
+
+    public function singleOrder(string $id)
+    {
+        $pageTitle = 'Order Details | Order';
+        $order = Order::find($id)->first();
+
+        return view('user.order.view',compact('order','pageTitle'));
+    }
+
+    public function newsLetter()
+    {
+        $pageTitle = 'Newsletter Subscription';
+        $subscribed = Subscriber::where('email',Auth::user()->email)->first();
+        return view('user.news_letter',compact('pageTitle','subscribed'));
+    }
+
+    public function giftCard()
+    {
+        $pageTitle = 'Gift Card';
+        return view('user.gift_card',compact('pageTitle'));
     }
 }

@@ -7,6 +7,9 @@ use App\Http\Controllers\Controller;
 use App\Lib\CurlRequest;
 use App\Models\AdminNotification;
 use App\Models\Deposit;
+use App\Models\EgoModels\Order;
+use App\Models\EgoModels\Product;
+use App\Models\SupportTicket;
 use App\Models\Transaction;
 use App\Models\User;
 use App\Models\UserLogin;
@@ -22,16 +25,56 @@ class AdminController extends Controller
     public function dashboard()
     {
         $pageTitle = "Admin Dashboard";
+        
         // User Info
-        $widget['total_users']             = User::count();
-        $widget['verified_users']          = User::active()->count();
+        $widget['total_users'] = User::count();
+        $widget['verified_users'] = User::active()->count();
         $widget['email_unverified_users']  = User::emailUnverified()->count();
         $widget['mobile_unverified_users'] = User::mobileUnverified()->count();
-        if(auth()->guard('admin')->check()){
-            return view('admin.dashboard',compact('pageTitle','widget'));
+
+        // Revenue Calculation
+        $thisMonthRev = Order::whereMonth('created_at', Carbon::now()->month)
+            ->whereYear('created_at', Carbon::now()->year)
+            ->sum('amount');
+        $totalAnnualRev = Order::whereYear('created_at', Carbon::now()->year)
+            ->sum('amount');
+
+        // Format Revenue
+        $formattedMonthRev = $this->formatCurrency($thisMonthRev);
+        $formattedAnnualRev = $this->formatCurrency($totalAnnualRev);
+
+        // Order Count Calculation
+        $thisMonthOrder = Order::whereMonth('created_at', Carbon::now()->month)
+            ->whereYear('created_at', Carbon::now()->year)
+            ->count();
+        $totalAnnualOrder = Order::whereYear('created_at', Carbon::now()->year)
+            ->count();
+        $pendingOrders = Order::where('status','Pending')->count();
+        $completedOrders = Order::where('status','Complete')->count();
+
+        $lensCount = Product::where('product_type','normal')->count();
+        $accessoryCount = Product::where('product_type','accessories')->count();
+
+        $openTicketCount = SupportTicket::where('status','1')->count();
+        $closedTicketCount = SupportTicket::where('status','3')->count();
+
+        if (auth()->guard('admin')->check()) {
+            return view('admin.dashboard', compact('pageTitle', 'widget', 'formattedMonthRev', 'formattedAnnualRev', 'thisMonthOrder', 'totalAnnualOrder','lensCount','accessoryCount','pendingOrders','completedOrders','openTicketCount','closedTicketCount'));
         }
-        return redirect("admin")->with('message','You are not allowed to access, please Login');
+
+        return redirect("admin")->with('message', 'You are not allowed to access, please Login');
     }
+
+    private function formatCurrency($amount)
+    {
+        if ($amount >= 1000000) {
+            return number_format($amount / 1000000, 1) . 'M'; // Format for millions
+        } elseif ($amount >= 1000) {
+            return number_format($amount / 1000, 1) . 'k'; // Format for thousands
+        }
+        return number_format($amount); // Format as regular number
+    }
+
 
 
     public function profile()
@@ -46,7 +89,7 @@ class AdminController extends Controller
         $this->validate($request, [
             'name' => 'required',
             'email' => 'required|email',
-            'image' => ['nullable','image',new FileTypeValidate(['jpg','jpeg','png'])]
+            'image' => ['nullable', 'image', new FileTypeValidate(['jpg', 'jpeg', 'png'])]
         ]);
         $user = auth('admin')->user();
 
@@ -92,14 +135,16 @@ class AdminController extends Controller
         return to_route('admin.password')->withNotify($notify);
     }
 
-    public function notifications(){
-        $notifications = AdminNotification::orderBy('id','desc')->with('user')->paginate(getPaginate());
+    public function notifications()
+    {
+        $notifications = AdminNotification::orderBy('id', 'desc')->with('user')->paginate(getPaginate());
         $pageTitle = 'Notifications';
-        return view('admin.notifications',compact('pageTitle','notifications'));
+        return view('admin.notifications', compact('pageTitle', 'notifications'));
     }
 
 
-    public function notificationRead($id){
+    public function notificationRead($id)
+    {
         $notification = AdminNotification::findOrFail($id);
         $notification->is_read = Status::YES;
         $notification->save();
@@ -116,21 +161,21 @@ class AdminController extends Controller
         $arr['app_name'] = systemDetails()['name'];
         $arr['app_url'] = env('APP_URL');
         $arr['purchase_code'] = env('PURCHASE_CODE');
-        $url = "https://license.viserlab.com/issue/get?".http_build_query($arr);
+        $url = "https://license.viserlab.com/issue/get?" . http_build_query($arr);
         $response = CurlRequest::curlContent($url);
         $response = json_decode($response);
         if ($response->status == 'error') {
             return to_route('admin.dashboard')->withErrors($response->message);
         }
         $reports = $response->message[0];
-        return view('admin.reports',compact('reports','pageTitle'));
+        return view('admin.reports', compact('reports', 'pageTitle'));
     }
 
     public function reportSubmit(Request $request)
     {
         $request->validate([
-            'type'=>'required|in:bug,feature',
-            'message'=>'required',
+            'type' => 'required|in:bug,feature',
+            'message' => 'required',
         ]);
         $url = 'https://license.viserlab.com/issue/add';
 
@@ -139,20 +184,21 @@ class AdminController extends Controller
         $arr['purchase_code'] = env('PURCHASE_CODE');
         $arr['req_type'] = $request->type;
         $arr['message'] = $request->message;
-        $response = CurlRequest::curlPostContent($url,$arr);
+        $response = CurlRequest::curlPostContent($url, $arr);
         $response = json_decode($response);
         if ($response->status == 'error') {
             return back()->withErrors($response->message);
         }
-        $notify[] = ['success',$response->message];
+        $notify[] = ['success', $response->message];
         return back()->withNotify($notify);
     }
 
-    public function readAll(){
-        AdminNotification::where('is_read',Status::NO)->update([
-            'is_read'=>Status::YES
+    public function readAll()
+    {
+        AdminNotification::where('is_read', Status::NO)->update([
+            'is_read' => Status::YES
         ]);
-        $notify[] = ['success','Notifications read successfully'];
+        $notify[] = ['success', 'Notifications read successfully'];
         return back()->withNotify($notify);
     }
 
@@ -161,12 +207,10 @@ class AdminController extends Controller
         $filePath = decrypt($fileHash);
         $extension = pathinfo($filePath, PATHINFO_EXTENSION);
         $general = gs();
-        $title = slug($general->site_name).'- attachments.'.$extension;
+        $title = slug($general->site_name) . '- attachments.' . $extension;
         $mimetype = mime_content_type($filePath);
         header('Content-Disposition: attachment; filename="' . $title);
         header("Content-Type: " . $mimetype);
         return readfile($filePath);
     }
-
-
 }

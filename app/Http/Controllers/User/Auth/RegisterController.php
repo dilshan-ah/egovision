@@ -10,6 +10,7 @@ use App\Models\UserLogin;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rules\Password;
@@ -53,7 +54,7 @@ class RegisterController extends Controller
         $info = json_decode(json_encode(getIpInfo()), true);
         $mobileCode = @implode(',', $info['code']);
         $countries = json_decode(file_get_contents(resource_path('views/partials/country.json')));
-        return view('user.auth.register', compact('pageTitle', 'mobileCode', 'countries', 'general'));
+        return view('ego.auth.register', compact('pageTitle', 'mobileCode', 'countries', 'general'));
     }
 
     function hello()
@@ -239,6 +240,7 @@ class RegisterController extends Controller
             'mobile' => 'required|string|max:15',
             'email' => 'required|email|unique:users,email|max:255',
             'password' => 'required|string|min:8|confirmed',
+            'location' => 'nullable',
         ]);
 
         // Create a new user
@@ -247,11 +249,14 @@ class RegisterController extends Controller
         $user->lastname = $validatedData['lastname'];
         $user->dob = $validatedData['dob'];
         $user->mobile = $validatedData['mobile'];
+        $user->location = $validatedData['location'];
         $user->email = $validatedData['email'];
         $user->password = Hash::make($validatedData['password']);
 
         // Save the user to the database
         $user->save();
+
+        Auth::login($user);
 
         // Optionally handle the newsletter sign-up
         if ($request->has('newsletter')) {
@@ -259,6 +264,6 @@ class RegisterController extends Controller
         }
         $notify[] = ['success', 'Account created successfully!'];
         // Redirect to a success page or back to the form with a success message
-        return redirect()->route('ego.login')->withNotify($notify);
+        return redirect('/')->withNotify($notify);
     }
 }

@@ -24,23 +24,22 @@ class ValidateProductRequest extends FormRequest
         return [
             'name' => 'required|string|max:255',
             'pack_content' => 'required',
-            'diameter_id' => 'required',
-            'base_curve_id' => 'required',
-            'material_id' => 'required',
-            
-            'tone_id' => 'required',
-            'lens_design_id' => 'required',
-            'water_content_id' => 'required',
-            'stock_quantity' => 'required',
-            'color_id' => 'required',
-            'duration_id' => 'required',
+            'diameter_id' => 'nullable',
+            'base_curve_id' => 'nullable',
+            'material_id' => 'nullable',
+            'tone_id' => 'nullable',
+            'lens_design_id' => 'nullable',
+            'water_content_id' => 'nullable',
+            'color_id' => 'nullable',
+            'duration_id' => 'nullable',
             'product_intro' => 'required',
             'category_id' => 'required',
             'description' => 'required|string',
             'price' => 'required',
+            'no_power_price' => 'required',
             'product_image' => 'required|image|mimes:jpeg,png,jpg',
             'product_image_album.*' => 'image|mimes:jpeg,png,jpg',
-            'product_image_album' => 'required',
+            'product_image_album' => 'nullable',
         ];
     }
 }

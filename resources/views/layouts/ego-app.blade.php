@@ -28,11 +28,27 @@
 <body>
     <!-- @include('ego.include.loader') -->
     @if(session('success'))
-    <div class="alert alert-success alert-dismissible fade show position-fixed" style="top: 50px; right: 30px; z-index: 999" role="alert">
+    <div id="successAlert" class="alert alert-success alert-dismissible fade show position-fixed" style="top: 50px; right: 30px; z-index: 999" role="alert">
         {{ session('success') }}
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
     @endif
+
+    <script>
+        // Check if the alert exists
+        const successAlert = document.getElementById('successAlert');
+        if (successAlert) {
+            // Set a timeout to hide the alert after 5 seconds (5000 milliseconds)
+            setTimeout(() => {
+                successAlert.classList.remove('show');
+                successAlert.classList.add('fade');
+                setTimeout(() => {
+                    successAlert.remove();
+                }, 500);
+            }, 2500);
+        }
+    </script>
+
 
     @include('ego.include.topbar')
     @if (!Route::is('ego.index'))

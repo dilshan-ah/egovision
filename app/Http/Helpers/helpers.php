@@ -72,7 +72,7 @@ function urlPath($routeName, $routeParam = null)
     } else {
         $url = route($routeName, $routeParam);
     }
-    $basePath = route('home');
+    $basePath = route('ticket.index');
     $path = str_replace($basePath, '', $url);
     return $path;
 }

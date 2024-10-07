@@ -6,7 +6,6 @@
                 <div class="card ">
                     <div class="card-header bg-primary">
                         <h5 class="card-title text-white">@lang('Profile')</h5>
-                        <h5 class="bg-primary text-white">Your Refferel Link (' http://127.0.0.1:8000/user/register/{{auth()->user()->username}} ')</h5>
                     </div>
                     <div class="card-body">
                         <form class="register" action="" method="post" enctype="multipart/form-data">

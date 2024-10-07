@@ -68,14 +68,19 @@ Route::controller('SiteController')->group(function () {
 
     Route::get('all/lenses', 'allLenses')->name('ego.pages.all.lenses');
     //auth
-    Route::get('site/user/login', 'egoLogin')->name('ego.login');
-    Route::get('site/user/register', 'egoRegister')->name('ego.register');
+    Route::get('site/user/login', 'egoLogin')->name('ego.login')->middleware('guest');
+    Route::get('site/user/register', 'egoRegister')->name('ego.register')->middleware('guest');
     Route::get('test/user', 'testUser')->name('ego.user.test');
 
     Route::get('user/wishlist','wishlist')->name('ego.wishlist')->middleware('auth');
     Route::get('/products/search', 'search')->name('product.search');
 
     Route::get('user/orders','myOrders')->name('ego.orders')->middleware('auth');
+    Route::get('user/order/{id}','singleOrder')->name('ego.single.orders')->middleware('auth');
+
+    Route::get('user/newsletter','newsLetter')->name('ego.newsLetter')->middleware('auth');
+
+    Route::get('user/giftcard','giftCard')->name('ego.giftCard')->middleware('auth');
 });
 
 Route::get('/collection/lense/{id}', [CategoryController::class, 'singleCollection'])->name('single.category');

@@ -9,7 +9,10 @@ use App\Http\Controllers\Api\EgoVisionControllers\ColorController;
 use App\Http\Controllers\Api\EgoVisionControllers\DurationController;
 use App\Http\Controllers\Api\EgoVisionControllers\FilterController;
 use App\Http\Controllers\Api\EgoVisionControllers\OrderController;
+use App\Http\Controllers\Api\EgoVisionControllers\PrescriptionController;
 use App\Http\Controllers\Api\EgoVisionControllers\ProductController;
+use App\Http\Controllers\Api\EgoVisionControllers\TicketController;
+use App\Http\Controllers\Api\EgoVisionControllers\WishlistController;
 use App\Models\GeneralSetting;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
@@ -33,12 +36,14 @@ Route::controller(AuthController::class)->group(function () {
     Route::post('ego/register', 'register');
     Route::post('ego/login', 'login');
     Route::post('ego/logout', 'logout')->middleware('auth:sanctum');
+    Route::get('ego/get/districts', 'getDistricts');
 });
 
 // Product
 Route::controller(ProductController::class)->group(function () {
     Route::get('ego/products', 'getProducts');
     Route::get('ego/app/singleProduct/{id}', 'singleProduct');
+    Route::get('ego/accessories', 'getAccessories');
 });
 
 
@@ -83,10 +88,30 @@ Route::controller(FilterController::class)->group(function () {
 
 Route::controller(CartController::class)->group(function () {
     Route::post('app/addToCart', 'addToCart');
+    Route::get('app/getCart/{id}', 'userCartList');
 });
 
 Route::controller(OrderController::class)->group(function () {
     Route::post('app/placeOrder', 'store');
+    Route::get('app/user/oreders/{userid}', 'userOrder');
+    Route::get('app/user/orederDetails/{productid}', 'singleOrder');
+});
+
+Route::controller(WishlistController::class)->group(function(){
+    Route::get('app/user/wishlists/{id}','userWishList');
+    Route::post('app/user/add-wishlists/{productid}/{userId}','store');
+    Route::delete('app/user/delete-wishlists/{userId}','delete');
+});
+
+Route::controller(TicketController::class)->group(function(){
+    Route::get('app/user/tickets/{id}','userTickets');
+    Route::get('app/user/ticket/view/{ticketId}','singleTicket');
+    Route::post('app/user/ticket/store/{userId}','contactSubmit');
+});
+
+Route::controller(PrescriptionController::class)->group(function(){
+    Route::get('app/user/prescription/{id}','showPrescription');
+    Route::post('app/user/prescription/upload/{id}','uploadPrescriptionSubmit');
 });
 
 Route::namespace('Api')->name('api.')->group(function () {

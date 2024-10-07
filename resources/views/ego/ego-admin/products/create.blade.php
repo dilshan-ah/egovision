@@ -15,14 +15,14 @@
                 <div class="row">
                     <div class="form-group col-3">
                         <label for="">Product Name</label>
-                        <input type="text" class="form-control" name="name">
+                        <input type="text" class="form-control" name="name" value="{{ old('name') }}">
                         @error('name')
                         <span class="text-danger">{{ $message }}</span>
                         @enderror
                     </div>
                     <div class="form-group col-3">
                         <label for="">Pack Content</label>
-                        <input type="text" class="form-control" name="pack_content">
+                        <input type="text" class="form-control" name="pack_content" value="{{ old('pack_content') }}">
                         @error('pack_content')
                         <span class="text-danger">{{ $message }}</span>
                         @enderror
@@ -32,7 +32,7 @@
                         <select name="diameter_id" class="form-control">
                             <option value="" selected>Select Diameter</option>
                             @foreach ($diameters as $diameter)
-                            <option value="{{ $diameter->id }}">{{ $diameter->name }}</option>
+                            <option value="{{ $diameter->id }}" {{ old('diameter_id') == $diameter->id ? 'selected' : '' }}>{{ $diameter->name }}</option>
                             @endforeach
                         </select>
                         @error('diameter_id')
@@ -44,7 +44,7 @@
                         <select name="base_curve_id" class="form-control">
                             <option value="" selected>Select Base Curve</option>
                             @foreach ($bases as $base)
-                            <option value="{{ $base->id }}">{{ $base->name }}</option>
+                            <option value="{{ $base->id }}" {{ old('base_curve_id') == $base->id ? 'selected' : '' }}>{{ $base->name }}</option>
                             @endforeach
                         </select>
                         @error('base_curve_id')
@@ -56,7 +56,7 @@
                         <select name="material_id" class="form-control">
                             <option value="" selected>Select Material</option>
                             @foreach ($materials as $material)
-                            <option value="{{ $material->id }}">{{ $material->name }}</option>
+                            <option value="{{ $material->id }}" {{ old('material_id') == $material->id ? 'selected' : '' }}>{{ $material->name }}</option>
                             @endforeach
                         </select>
                         @error('material_id')
@@ -79,7 +79,7 @@
                         <select name="tone_id" class="form-control">
                             <option value="" selected>Select Tones</option>
                             @foreach ($tones as $tone)
-                            <option value="{{ $tone->id }}">{{ $tone->name }}</option>
+                            <option value="{{ $tone->id }}" {{ old('tone_id') == $tone->id ? 'selected' : '' }}>{{ $tone->name }}</option>
                             @endforeach
                         </select>
                         @error('tone_id')
@@ -91,7 +91,7 @@
                         <select name="lens_design_id" class="form-control">
                             <option value="" selected>Select Lens Design</option>
                             @foreach ($lDesigns as $lDesign)
-                            <option value="{{ $lDesign->id }}">{{ $lDesign->name }}</option>
+                            <option value="{{ $lDesign->id }}" {{ old('lens_design_id') == $lDesign->id ? 'selected' : '' }}>{{ $lDesign->name }}</option>
                             @endforeach
                         </select>
                         @error('lens_design_id')
@@ -99,16 +99,16 @@
                         @enderror
                     </div>
                     <div class="form-group col-3">
-                        <label for="">Price</label>
-                        <input type="number" class="form-control" name="price">
-                        @error('price')
+                        <label for="">No Power Price</label>
+                        <input type="number" class="form-control" name="no_power_price" value="{{old('no_power_price')}}" min=1>
+                        @error('no_power_price')
                         <span class="text-danger">{{ $message }}</span>
                         @enderror
                     </div>
                     <div class="form-group col-3">
-                        <label for="">Stock Quantity</label>
-                        <input type="number" class="form-control" name="stock_quantity">
-                        @error('stock_quantity')
+                        <label for="">With Power Price</label>
+                        <input type="number" class="form-control" name="price" min=1 value="{{old('price')}}">
+                        @error('price')
                         <span class="text-danger">{{ $message }}</span>
                         @enderror
                     </div>
@@ -117,7 +117,7 @@
                         <select name="color_id" class="form-control">
                             <option value="" selected>Pick Color</option>
                             @foreach ($colors as $color)
-                            <option value="{{ $color->id }}">{{ $color->name }}</option>
+                            <option value="{{ $color->id }}" {{ old('color_id') == $color->id ? 'selected' : '' }}>{{ $color->name }}</option>
                             @endforeach
                         </select>
                         @error('color_id')
@@ -129,7 +129,7 @@
                         <select name="duration_id" class="form-control">
                             <option value="" selected>Pick Duration</option>
                             @foreach ($durations as $duration)
-                            <option value="{{ $duration->id }}">{{ $duration->name }}-( {{$duration->months}} {{$duration->months == 1 ? 'month':'months'}} )</option>
+                            <option value="{{ $duration->id }}" {{ old('duration_id') == $duration->id ? 'selected' : '' }}>{{ $duration->name }}-( {{$duration->months}} {{$duration->months == 1 ? 'month':'months'}} )</option>
                             @endforeach
                         </select>
                         @error('duration_id')
@@ -141,7 +141,7 @@
                         <select name="category_id" class="form-control">
                             <option value="" selected>Select Category</option>
                             @foreach ($categories as $category)
-                            <option value="{{ $category->id }}">{{ $category->name }}</option>
+                            <option value="{{ $category->id }}" {{ old('category_id') == $category->id ? 'selected' : '' }}>{{ $category->name }}</option>
                             @endforeach
                         </select>
                         @error('category_id')
@@ -150,14 +150,14 @@
                     </div>
                     <div class="form-group col-6">
                         <label for="">Product Introduction</label>
-                        <textarea name="product_intro" class="form-control" id="editor1"></textarea>
+                        <textarea name="product_intro" class="form-control" id="editor1">{{ old('product_intro') }}</textarea>
                         @error('product_intro')
                         <span class="text-danger">{{ $message }}</span>
                         @enderror
                     </div>
                     <div class="form-group col-6">
                         <label for="">Product Description</label>
-                        <textarea name="description" class="form-control" id="editor2"></textarea>
+                        <textarea name="description" class="form-control" id="editor2">{{ old('description') }}</textarea>
                         @error('description')
                         <span class="text-danger">{{ $message }}</span>
                         @enderror
@@ -190,38 +190,39 @@
                         <div id="imagePreview2" style="margin-top: 10px;"></div>
                     </div>
 
+                    <div class="col-12 mb-2">
+                        <h4>Choose Available powers</h4>
+                    </div>
                     <div class="col-12 mb-5">
-                        <div class="row">
-                            <label for="" class="col-6">Add available powers</label>
-                            <label for="" class="col-6">Set stock quantity</label>
-                        </div>
-                        
-                        <div id="variation-container">
-                            <div class="row variation-group">
-                                <div class="col-5 form-group">
-                                    <select class="form-control power">
-                                        <option value="">--select power--</option>
-                                        @foreach($lensPowers as $lensPower)
-                                            <option value="{{ $lensPower->name }}">{{ $lensPower->name }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                <div class="col-5 form-group">
-                                    <input type="text" class="form-control stock" placeholder="Stock for this variation">
-                                </div>
-                                <div class="col-2">
-                                    <button type="button" class="btn btn-danger btn-block remove-variation">Remove</button>
-                                </div>
+                        <div class="row ml-2">
+                            <div class="form-group col-6 d-flex">
+                                <label for="available_power_1">-0.25 to -6.00</label>
+                                <input type="checkbox" class="form-check-input" value="(-0.25-6.00)" id="available_power_1"
+                                    name="available_powers[]"
+                                    {{ in_array('(-0.25-6.00)', old('available_powers', [])) ? 'checked' : '' }}>
+                            </div>
+                            <div class="form-group col-6 d-flex">
+                                <label for="available_power_2">-6.50 to -10.00</label>
+                                <input type="checkbox" class="form-check-input" value="(-6.50-10.00)" id="available_power_2"
+                                    name="available_powers[]"
+                                    {{ in_array('(-6.25-10.00)', old('available_powers', [])) ? 'checked' : '' }}>
+                            </div>
+                            <div class="form-group col-6 d-flex">
+                                <label for="available_power_3">+0.25 to +6.00</label>
+                                <input type="checkbox" class="form-check-input" value="(+0.25+6.00)" id="available_power_3"
+                                    name="available_powers[]"
+                                    {{ in_array('(+0.25+6.00)', old('available_powers', [])) ? 'checked' : '' }}>
+                            </div>
+                            <div class="form-group col-6 d-flex">
+                                <label for="available_power_4">+6.50 to +10.00</label>
+                                <input type="checkbox" class="form-check-input" value="(+6.50+10.00)" id="available_power_4"
+                                    name="available_powers[]"
+                                    {{ in_array('(+6.25+10.00)', old('available_powers', [])) ? 'checked' : '' }}>
                             </div>
                         </div>
-                        
-                        <button type="button" class="btn btn-info" id="add-more">Add more</button>
-                        
-                        <!-- Hidden input to store JSON -->
-                        <input type="hidden" name="variations_json" id="variations_json">
                     </div>
-                    
-                    
+
+
 
                     <div class="form-group col-12">
                         <button type="submit" class="btn btn-primary btn-block">Submit</button>
@@ -289,64 +290,63 @@
 </script>
 
 <script>
-    $(document).ready(function () {
-    // Function to update JSON field
-    function updateJSON() {
-        var variations = [];
+    $(document).ready(function() {
+        // Function to update JSON field
+        function updateJSON() {
+            var variations = [];
 
-        // Iterate over each variation-group
-        $('#variation-container .variation-group').each(function () {
-            var power = $(this).find('.power').val();
-            var stock = $(this).find('.stock').val();
+            // Iterate over each variation-group
+            $('#variation-container .variation-group').each(function() {
+                var power = $(this).find('.power').val();
+                var stock = $(this).find('.stock').val();
 
-            // Only add to JSON if both fields are filled
-            if (power && stock) {
-                variations.push({
-                    power: power,
-                    stock: stock
-                });
-            }
+                // Only add to JSON if both fields are filled
+                if (power && stock) {
+                    variations.push({
+                        power: power,
+                        stock: stock
+                    });
+                }
+            });
+
+            // Update the hidden input with the JSON string
+            $('#variations_json').val(JSON.stringify(variations));
+        }
+
+        // Handle adding new variation-group
+        $('#add-more').click(function() {
+            var newGroup = $('.variation-group:first').clone();
+
+            // Clear the values in the cloned group
+            newGroup.find('select').val('');
+            newGroup.find('input').val('');
+
+            // Append the new group to the container
+            newGroup.appendTo('#variation-container');
+
+            // Attach remove event to new remove button
+            newGroup.find('.remove-variation').click(function() {
+                $(this).closest('.variation-group').remove();
+                updateJSON();
+            });
+
+            updateJSON();
         });
 
-        // Update the hidden input with the JSON string
-        $('#variations_json').val(JSON.stringify(variations));
-    }
-
-    // Handle adding new variation-group
-    $('#add-more').click(function () {
-        var newGroup = $('.variation-group:first').clone();
-
-        // Clear the values in the cloned group
-        newGroup.find('select').val('');
-        newGroup.find('input').val('');
-
-        // Append the new group to the container
-        newGroup.appendTo('#variation-container');
-
-        // Attach remove event to new remove button
-        newGroup.find('.remove-variation').click(function () {
+        // Attach remove event to initial remove button
+        $('.remove-variation').click(function() {
             $(this).closest('.variation-group').remove();
             updateJSON();
         });
 
+        // Update JSON on input change
+        $('#variation-container').on('change', '.power, .stock', function() {
+            updateJSON();
+        });
+
+        // Initialize JSON field on page load
         updateJSON();
     });
-
-    // Attach remove event to initial remove button
-    $('.remove-variation').click(function () {
-        $(this).closest('.variation-group').remove();
-        updateJSON();
-    });
-
-    // Update JSON on input change
-    $('#variation-container').on('change', '.power, .stock', function () {
-        updateJSON();
-    });
-
-    // Initialize JSON field on page load
-    updateJSON();
-});
-
 </script>
 
 @endpush
