@@ -67,7 +67,7 @@ class CollectionSetController extends Controller
             return redirect()->route('collectionSet.view')->withNotify($notify);
         } catch (\Exception $e) {
             $notify[] = ['error', $e->getMessage()];
-            return redirect()->back()->withNotify($notify);
+            return redirect()->back()->withNotify($notify)->withInput();
         }
     }
 

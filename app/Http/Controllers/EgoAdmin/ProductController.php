@@ -28,14 +28,14 @@ class ProductController extends Controller
     public function index()
     {
         $pageTitle = "Product List";
-        $products = Product::where('product_type','normal')->with(['category', 'color', 'images'])->get();
+        $products = Product::where('product_type', 'normal')->with(['category', 'color', 'images'])->get();
         return view('ego.ego-admin.products.index', compact('pageTitle', 'products'));
     }
 
     public function allAccessories()
     {
         $pageTitle = "Accessory List";
-        $products = Product::where('product_type','accessories')->with(['category', 'color', 'images'])->get();
+        $products = Product::where('product_type', 'accessories')->with(['category', 'color', 'images'])->get();
         return view('ego.ego-admin.products.accessories', compact('pageTitle', 'products'));
     }
 
@@ -121,17 +121,19 @@ class ProductController extends Controller
             $product->water_content = $validated['water_content_id'];
             $product->tone_id = $validated['tone_id'];
             $product->lens_design_id = $validated['lens_design_id'];
-            $product->stock_quantity = $validated['stock_quantity'];
             $product->price = $validated['price'];
+            $product->no_power_price = $validated['no_power_price'];
             $product->color_id = $validated['color_id'];
             $product->category_id = $validated['category_id'];
             $product->duration_id = $validated['duration_id'];
             $product->product_type = 'normal';
+            $product->available_powers = json_encode($request->available_powers);
 
             if ($request->hasFile('product_image')) {
                 $validated['product_image'] = $this->handleFileUpload($request->file('product_image'), 'ego-assets/images/products', 'Product');
                 $product->image_path = $validated['product_image'];
             }
+
 
             $product->save();
 
@@ -146,20 +148,6 @@ class ProductController extends Controller
                 }
             }
 
-            $variationsJson = $request->input('variations_json');
-
-            $variations = json_decode($variationsJson, true);
-
-            foreach ($variations as $variation) {
-                $productVariation = new ProductVariation();
-
-                $productVariation->product_id = $product->id;
-                $productVariation->power = $variation['power'];
-                $productVariation->stock = $variation['stock'];
-
-                $productVariation->save();
-            }
-
             DB::commit();
 
             $notify[] = ['success', 'Product added successfully.'];
@@ -167,16 +155,32 @@ class ProductController extends Controller
         } catch (\Exception $e) {
             DB::rollBack();
             $notify[] = ['error', $e->getMessage()];
-            return back()->withNotify($notify);
+            return back()->withNotify($notify)->withInput();
         }
     }
 
     public function storeAccessories(Request $request)
     {
+        // Add validation rules
+        $validatedData = $request->validate([
+            'name' => 'required|string|max:255',
+            'product_intro' => 'required|string',
+            'description' => 'required|string',
+            'pack_content' => 'nullable|string',
+            'diameter_id' => 'nullable|integer|exists:diameters,id', // assuming diameter_id is a foreign key
+            'base_curve_id' => 'nullable|integer|exists:base_curves,id', // assuming base_curve_id is a foreign key
+            'stock_quantity' => 'nullable|integer|min:0',
+            'price' => 'required|numeric|min:0',
+            'duration_id' => 'nullable|integer|exists:durations,id', // assuming duration_id is a foreign key
+            'is_default' => 'nullable|boolean',
+            'is_free' => 'nullable|boolean',
+            'product_image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048', // Image validation
+            'product_image_album.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048' // Validate multiple images
+        ]);
+
         DB::beginTransaction();
 
         try {
-
             if ($request['is_default'] == 1) {
                 Product::where('is_default_bag', 1)
                     ->where('product_type', 'accessories')
@@ -184,22 +188,22 @@ class ProductController extends Controller
             }
 
             $product = new Product;
-            $product->name = $request['name'];
-            $product->product_intro = $request['product_intro'];
-            $product->description = $request['description'];
-            $product->pack_content = $request['pack_content'];
-            $product->diameter_id = $request['diameter_id'];
-            $product->base_curve_id = $request['base_curve_id'];
-            $product->stock_quantity = $request['stock_quantity'];
-            $product->price = $request['price'];
-            $product->duration_id = $request['duration_id'];
+            $product->name = $validatedData['name'];
+            $product->product_intro = $validatedData['product_intro'];
+            $product->description = $validatedData['description'];
+            $product->pack_content = $validatedData['pack_content'];
+            $product->diameter_id = $validatedData['diameter_id'];
+            $product->base_curve_id = $validatedData['base_curve_id'];
+            $product->stock_quantity = $validatedData['stock_quantity'];
+            $product->price = $validatedData['price'];
+            $product->duration_id = $validatedData['duration_id'];
             $product->product_type = 'accessories';
-            $product->is_default_bag = $request['is_default'];
-            $product->is_free = $request['is_free'];
+            $product->is_default_bag = $validatedData['is_default'] ?? 0;
+            $product->is_free = $validatedData['is_free'] ?? 0;
 
             if ($request->hasFile('product_image')) {
-                $validated['product_image'] = $this->handleFileUpload($request->file('product_image'), 'ego-assets/images/products', 'Product');
-                $product->image_path = $validated['product_image'];
+                $imagePath = $this->handleFileUpload($request->file('product_image'), 'ego-assets/images/products', 'Product');
+                $product->image_path = $imagePath;
             }
 
             $product->save();
@@ -218,13 +222,14 @@ class ProductController extends Controller
             DB::commit();
 
             $notify[] = ['success', 'Product added successfully.'];
-            return to_route('product.index')->withNotify($notify);
+            return to_route('product.accessories')->withNotify($notify);
         } catch (\Exception $e) {
             DB::rollBack();
             $notify[] = ['error', $e->getMessage()];
-            return back()->withNotify($notify);
+            return back()->withNotify($notify)->withInput();
         }
     }
+
 
     public function update(ValidateProductRequest $request, $id)
     {
@@ -348,16 +353,20 @@ class ProductController extends Controller
         $lensPowers = LensPower::all();
 
         $product = Product::findOrFail($id);
-        return view('ego.ego-admin.products.edit', compact('pageTitle', 'product','colors',
-                'categories',
-                'diameters',
-                'replacements',
-                'materials',
-                'tones',
-                'bases',
-                'lDesigns',
-                'durations',
-                'lensPowers'));
+        return view('ego.ego-admin.products.edit', compact(
+            'pageTitle',
+            'product',
+            'colors',
+            'categories',
+            'diameters',
+            'replacements',
+            'materials',
+            'tones',
+            'bases',
+            'lDesigns',
+            'durations',
+            'lensPowers'
+        ));
     }
 
     // public function update(Request $request, $id)

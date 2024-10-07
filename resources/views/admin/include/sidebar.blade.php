@@ -315,6 +315,13 @@
     </a>
 </li>
 
+<li class="nav-item">
+    <a class="nav-link collapsed" href="{{ route('user.gift.index') }}">
+        <i class="fa fa-thumbs-up"></i>
+        <span>@lang('Gift Card')</span>
+    </a>
+</li>
+
 <!-- Divider -->
 <hr class="sidebar-divider">
 

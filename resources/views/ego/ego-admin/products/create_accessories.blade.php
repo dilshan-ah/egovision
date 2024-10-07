@@ -15,14 +15,14 @@
                 <div class="row">
                     <div class="form-group col-3">
                         <label for="">Product Name</label>
-                        <input type="text" class="form-control" name="name">
+                        <input type="text" class="form-control" name="name" value="{{ old('name') }}">
                         @error('name')
                         <span class="text-danger">{{ $message }}</span>
                         @enderror
                     </div>
                     <div class="form-group col-3">
                         <label for="">Pack Content</label>
-                        <input type="text" class="form-control" name="pack_content">
+                        <input type="text" class="form-control" name="pack_content" value="{{ old('pack_content') }}">
                         @error('pack_content')
                         <span class="text-danger">{{ $message }}</span>
                         @enderror
@@ -32,7 +32,9 @@
                         <select name="diameter_id" class="form-control">
                             <option value="" selected>Select Diameter</option>
                             @foreach ($diameters as $diameter)
-                            <option value="{{ $diameter->id }}">{{ $diameter->name }}</option>
+                            <option value="{{ $diameter->id }}" {{ old('diameter_id') == $diameter->id ? 'selected' : '' }}>
+                                {{ $diameter->name }}
+                            </option>
                             @endforeach
                         </select>
                         @error('diameter_id')
@@ -44,25 +46,25 @@
                         <select name="base_curve_id" class="form-control">
                             <option value="" selected>Select Base Curve</option>
                             @foreach ($bases as $base)
-                            <option value="{{ $base->id }}">{{ $base->name }}</option>
+                            <option value="{{ $base->id }}" {{ old('base_curve_id') == $base->id ? 'selected' : '' }}>
+                                {{ $base->name }}
+                            </option>
                             @endforeach
                         </select>
                         @error('base_curve_id')
                         <span class="text-danger">{{ $message }}</span>
                         @enderror
                     </div>
-                    
-                    
                     <div class="form-group col-3">
                         <label for="">Price</label>
-                        <input type="number" class="form-control" name="price">
+                        <input type="number" class="form-control" name="price" value="{{ old('price') }}">
                         @error('price')
                         <span class="text-danger">{{ $message }}</span>
                         @enderror
                     </div>
                     <div class="form-group col-3">
                         <label for="">Stock Quantity</label>
-                        <input type="number" class="form-control" name="stock_quantity">
+                        <input type="number" class="form-control" name="stock_quantity" value="{{ old('stock_quantity') }}">
                         @error('stock_quantity')
                         <span class="text-danger">{{ $message }}</span>
                         @enderror
@@ -72,52 +74,40 @@
                         <select name="duration_id" class="form-control">
                             <option value="" selected>Pick Duration</option>
                             @foreach ($durations as $duration)
-                            <option value="{{ $duration->id }}">{{ $duration->name }}-( {{$duration->months}} {{$duration->months == 1 ? 'month':'months'}} )</option>
+                            <option value="{{ $duration->id }}" {{ old('duration_id') == $duration->id ? 'selected' : '' }}>
+                                {{ $duration->name }} - ({{ $duration->months }} {{ $duration->months == 1 ? 'month' : 'months' }})
+                            </option>
                             @endforeach
                         </select>
                         @error('duration_id')
                         <span class="text-danger">{{ $message }}</span>
                         @enderror
                     </div>
-
                     <div class="form-group col-6">
-                        <label for="">Choose Duration</label>
-                        <select name="duration_id" class="form-control">
-                            <option value="" selected>Pick Duration</option>
-                            @foreach ($durations as $duration)
-                            <option value="{{ $duration->id }}">{{ $duration->name }}-( {{$duration->months}} {{$duration->months == 1 ? 'month':'months'}} )</option>
-                            @endforeach
-                        </select>
-                        @error('duration_id')
-                        <span class="text-danger">{{ $message }}</span>
-                        @enderror
-                    </div>
-                    <div class="form-group col-3">
                         <label for="">Is Free?</label>
                         <select name="is_free" class="form-control">
-                            <option value="1">Yes</option>
-                            <option value="0" selected>No</option>
+                            <option value="1" {{ old('is_free') == '1' ? 'selected' : '' }}>Yes</option>
+                            <option value="0" {{ old('is_free') == '0' ? 'selected' : '' }}>No</option>
                         </select>
                     </div>
-
-                    <div class="form-group col-3">
+                    <div class="form-group col-6">
                         <label for="">Is Default? (you can only keep one default)</label>
                         <select name="is_default" class="form-control">
-                            <option value="">set yes if you want it default</option>
-                            <option value="1">Yes</option>
-                            <option value="0">No</option>
+                            <option value="" {{ old('is_default') === null ? 'selected' : '' }}>set yes if you want it default</option>
+                            <option value="1" {{ old('is_default') == '1' ? 'selected' : '' }}>Yes</option>
+                            <option value="0" {{ old('is_default') == '0' ? 'selected' : '' }}>No</option>
                         </select>
                     </div>
                     <div class="form-group col-6">
                         <label for="">Product Introduction</label>
-                        <textarea name="product_intro" class="form-control" id="editor1"></textarea>
+                        <textarea name="product_intro" class="form-control" id="editor1">{{ old('product_intro') }}</textarea>
                         @error('product_intro')
                         <span class="text-danger">{{ $message }}</span>
                         @enderror
                     </div>
                     <div class="form-group col-6">
                         <label for="">Product Description</label>
-                        <textarea name="description" class="form-control" id="editor2"></textarea>
+                        <textarea name="description" class="form-control" id="editor2">{{ old('description') }}</textarea>
                         @error('description')
                         <span class="text-danger">{{ $message }}</span>
                         @enderror
@@ -125,20 +115,17 @@
                     <div class="form-group col-6">
                         <label for="">Product Image</label>
                         <div class="custom-file">
-                            <input type="file" class="custom-file-input" id="inputGroupFile01"
-                                name="product_image">
+                            <input type="file" class="custom-file-input" id="inputGroupFile01" name="product_image">
                             <label class="custom-file-label" for="inputGroupFile01">Choose Image</label>
                             @error('product_image')
                             <span class="text-danger">{{ $message }}</span>
                             @enderror
                         </div>
-                        <div id="imagePreview" style="margin-top: 10px;"></div>
                     </div>
                     <div class="form-group col-6">
                         <label for="">Product Image Album</label>
                         <div class="custom-file">
-                            <input type="file" class="custom-file-input" id="inputGroupFile02"
-                                name="product_image_album[]" accept="image/*" multiple>
+                            <input type="file" class="custom-file-input" id="inputGroupFile02" name="product_image_album[]" accept="image/*" multiple>
                             <label class="custom-file-label fileLabel" for="inputGroupFile02">Choose Image</label>
                             @error('product_image_album')
                             <span class="text-danger">{{ $message }}</span>
@@ -147,15 +134,13 @@
                             <span class="text-danger">{{ $message }}</span>
                             @enderror
                         </div>
-                        <div id="imagePreview2" style="margin-top: 10px;"></div>
                     </div>
-                    
-
                     <div class="form-group col-12">
                         <button type="submit" class="btn btn-primary btn-block">Submit</button>
                     </div>
                 </div>
             </form>
+
         </div>
     </div>
 </div>

@@ -14,10 +14,53 @@ class OrderController extends Controller
 {
     public function index($id)
     {
-        $product = Product::with(['images','color','lensDesign','baseCurve','category','replacement','tone','material','variations'])
-        ->findOrFail($id);
-        $pageTitle = $product->name. ' | Ego Vision';
-        return view('ego.pages.addToCart', compact('pageTitle', 'product'));
+        $product = Product::with(['images', 'color', 'lensDesign', 'baseCurve', 'category', 'replacement', 'tone', 'material', 'variations'])
+            ->findOrFail($id);
+        $pageTitle = $product->name . ' | Ego Vision';
+    
+        $availablePowers = json_decode($product->available_powers) ?? [];
+        $powers = $this->generatePowerValues($availablePowers); // Use $this to call the method
+        
+        return view('ego.pages.addToCart', compact('pageTitle', 'product','powers'));
+    }
+
+    public function generatePowerValues($availablePowers) {
+        $values = [];
+    
+        foreach ($availablePowers as $range) {
+            // Extract the numbers from the range string
+            preg_match_all('/-?\d+\.?\d*/', $range, $matches);
+    
+            if (count($matches[0]) == 2) {
+                $start = floatval($matches[0][0]);
+                $end = floatval($matches[0][1]);
+
+                // dd($end);
+    
+                // Determine the interval based on the range
+                if ($range === '(-0.25-6.00)' || $range === '(+0.25+6.00)' ) {
+                    $interval = 0.25;
+                } elseif ($range === '(-6.50-10.00)' || $range === '(+6.50+10.00)') {
+                    $interval = 0.50;
+                } else {
+                    continue;
+                }
+    
+                if($start > 0)
+                {
+                    for ($value = $start; $value <= $end; $value += $interval) {
+                        $values[] = round($value, 2);
+                    }
+                }else{
+                    for ($value = $start; $value >= $end; $value -= $interval) {
+                        $values[] = round($value, 2);
+                    }
+                }
+
+            }
+        }
+    
+        return $values;
     }
 
     public function checkout()

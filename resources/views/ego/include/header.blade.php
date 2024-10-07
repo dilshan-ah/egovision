@@ -794,12 +794,12 @@
                                     @foreach ($collectionSets as $collectionSet)
                                     <div class="row" style="border-bottom: 1px solid  #8362a9; height: 100%">
                                         <a style="margin-bottom: 10px !important; font-size: 16px"
-                                            href="{{ route('collectionSet.single.collection', $collectionSet->id) }}">{{ $collectionSet->category->name ?? '' }}
-                                            {{ $collectionSet->tone->name ? '-' . $collectionSet->tone->name : '' }}
-                                            {{ $collectionSet->duration ? '-' . $collectionSet->duration->months . ' months' : '' }}</a>
+                                            href="{{ route('collectionSet.single.collection', $collectionSet->id) }}">{{ @$collectionSet->category->name ?? '' }}
+                                            {{ @$collectionSet->tone->name ? '-' . $collectionSet->tone->name : '' }}
+                                            {{ @$collectionSet->duration ? '-' . $collectionSet->duration->months . ' months' : '' }}</a>
                                         <ul class="mega-links text-black">
 
-                                            @foreach ($collectionSet->products as $product)
+                                            @foreach (@$collectionSet->products as $product)
                                             <li>
                                                 <a style="font-size: 12px"
                                                     href="{{ route('addToCart.index', $product->id) }}"
