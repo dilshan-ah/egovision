@@ -1167,9 +1167,9 @@
                         href="{{route('collectionSet.single.collection',$collectionSet->id)}}"
                         onclick="toggleSubmenu(event, 'web-dev-{{ $loop->index }}', this);" 
                         style="font-size: 14px; font-weight: 600;">
-                            {{ $collectionSet->category->name ?? 'No Category' }} 
-                            {{ $collectionSet->tone->name ? '-' . $collectionSet->tone->name : '' }} 
-                            {{ $collectionSet->duration ? '-' . $collectionSet->duration->months . ' months' : '' }}
+                            {{ @$collectionSet->category->name ?? 'No Category' }} 
+                            {{ @$collectionSet->tone->name ? '-' . $collectionSet->tone->name : '' }} 
+                            {{ @$collectionSet->duration ? '-' . $collectionSet->duration->months . ' months' : '' }}
                         </a>
                         <span class="toggle" onclick="toggleSection('web-dev-{{ $loop->index }}', this)">+</span>
                     </h3>
