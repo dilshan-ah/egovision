@@ -77,6 +77,10 @@ Route::controller('SiteController')->group(function () {
 
     Route::get('user/orders','myOrders')->name('ego.orders')->middleware('auth');
     Route::get('user/order/{id}','singleOrder')->name('ego.single.orders')->middleware('auth');
+
+    Route::get('user/newsletter','newsLetter')->name('ego.newsLetter')->middleware('auth');
+
+    Route::get('user/giftcard','giftCard')->name('ego.giftCard')->middleware('auth');
 });
 
 Route::get('/collection/lense/{id}', [CategoryController::class, 'singleCollection'])->name('single.category');

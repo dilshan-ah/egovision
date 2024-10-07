@@ -17,7 +17,9 @@
                         <label>Select Category</label>
                         <select name="category_id" class="form-control">
                             @foreach($categories as $category)
-                                <option value="{{$category->id}}">{{$category->name}}</option>
+                            <option value="{{ $category->id }}" {{ old('category_id') == $category->id ? 'selected' : '' }}>
+                                {{ $category->name }}
+                            </option>
                             @endforeach
                         </select>
                         @error('category_id')
@@ -27,11 +29,16 @@
                     <div class="form-group col-4">
                         <label>Select Tones</label>
                         <select name="tone_id" class="form-control">
-                        <option value="">--Select Duration--</option>
+                            <option value="">--Select Tone--</option>
                             @foreach($tones as $tone)
-                                <option value="{{$tone->id}}">{{$tone->name}}</option>
+                            <option value="{{ $tone->id }}" {{ old('tone_id') == $tone->id ? 'selected' : '' }}>
+                                {{ $tone->name }}
+                            </option>
                             @endforeach
                         </select>
+                        @error('tone_id')
+                        <span class="text-danger">{{ $message }}</span>
+                        @enderror
                     </div>
 
                     <div class="form-group col-4">
@@ -39,35 +46,43 @@
                         <select name="duration_id" class="form-control">
                             <option value="">--Select Duration--</option>
                             @foreach($durations as $duration)
-                                <option value="{{$duration->id}}">{{$duration->name}}</option>
+                            <option value="{{ $duration->id }}" {{ old('duration_id') == $duration->id ? 'selected' : '' }}>
+                                {{ $duration->name }}
+                            </option>
                             @endforeach
                         </select>
+                        @error('duration_id')
+                        <span class="text-danger">{{ $message }}</span>
+                        @enderror
                     </div>
 
                     <div class="form-group col-4">
                         <label>Show in dashboard ?</label>
                         <select name="featured" class="form-control">
-                            <option value="yes">yes</option>
-                            <option value="no">no</option>
+                            <option value="yes" {{ old('featured') == 'yes' ? 'selected' : '' }}>yes</option>
+                            <option value="no" {{ old('featured') == 'no' ? 'selected' : '' }}>no</option>
                         </select>
+                        @error('featured')
+                        <span class="text-danger">{{ $message }}</span>
+                        @enderror
                     </div>
 
                     <div class="form-group col-6">
                         <label for="">Collection Image</label>
                         <div class="custom-file">
-                            <input type="file" class="custom-file-input" id="inputGroupFile01"
-                                name="collection_image">
+                            <input type="file" class="custom-file-input" id="inputGroupFile01" name="collection_image">
                             <label class="custom-file-label" for="inputGroupFile01">Choose Image</label>
-                            @error('category_image')
+                            @error('collection_image')
                             <span class="text-danger">{{ $message }}</span>
                             @enderror
                         </div>
                         <div id="imagePreview" style="margin-top: 10px;"></div>
                     </div>
+
                     <div class="form-group col-12">
                         <label for="">Collection Description</label>
-                        <textarea name="collection_description" class="form-control" id="editor1"></textarea>
-                        @error('product_intro')
+                        <textarea name="collection_description" class="form-control" id="editor1">{{ old('collection_description') }}</textarea>
+                        @error('collection_description')
                         <span class="text-danger">{{ $message }}</span>
                         @enderror
                     </div>
@@ -77,6 +92,7 @@
                     </div>
                 </div>
             </form>
+
         </div>
     </div>
 </div>

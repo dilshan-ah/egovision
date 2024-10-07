@@ -32,7 +32,7 @@
                         <select name="diameter_id" class="form-control">
                             <option value="" selected>Select Diameter</option>
                             @foreach ($diameters as $diameter)
-                            <option value="{{ $diameter->id }}">{{ $diameter->name }}</option>
+                            <option value="{{ $diameter->id }}" {{ old('diameter_id') == $diameter->id ? 'selected' : '' }}>{{ $diameter->name }}</option>
                             @endforeach
                         </select>
                         @error('diameter_id')
@@ -44,7 +44,7 @@
                         <select name="base_curve_id" class="form-control">
                             <option value="" selected>Select Base Curve</option>
                             @foreach ($bases as $base)
-                            <option value="{{ $base->id }}">{{ $base->name }}</option>
+                            <option value="{{ $base->id }}" {{ old('base_curve_id') == $base->id ? 'selected' : '' }}>{{ $base->name }}</option>
                             @endforeach
                         </select>
                         @error('base_curve_id')
@@ -56,7 +56,7 @@
                         <select name="material_id" class="form-control">
                             <option value="" selected>Select Material</option>
                             @foreach ($materials as $material)
-                            <option value="{{ $material->id }}">{{ $material->name }}</option>
+                            <option value="{{ $material->id }}" {{ old('material_id') == $material->id ? 'selected' : '' }}>{{ $material->name }}</option>
                             @endforeach
                         </select>
                         @error('material_id')
@@ -79,7 +79,7 @@
                         <select name="tone_id" class="form-control">
                             <option value="" selected>Select Tones</option>
                             @foreach ($tones as $tone)
-                            <option value="{{ $tone->id }}">{{ $tone->name }}</option>
+                            <option value="{{ $tone->id }}" {{ old('tone_id') == $tone->id ? 'selected' : '' }}>{{ $tone->name }}</option>
                             @endforeach
                         </select>
                         @error('tone_id')
@@ -91,7 +91,7 @@
                         <select name="lens_design_id" class="form-control">
                             <option value="" selected>Select Lens Design</option>
                             @foreach ($lDesigns as $lDesign)
-                            <option value="{{ $lDesign->id }}">{{ $lDesign->name }}</option>
+                            <option value="{{ $lDesign->id }}" {{ old('lens_design_id') == $lDesign->id ? 'selected' : '' }}>{{ $lDesign->name }}</option>
                             @endforeach
                         </select>
                         @error('lens_design_id')
@@ -100,14 +100,14 @@
                     </div>
                     <div class="form-group col-3">
                         <label for="">No Power Price</label>
-                        <input type="number" class="form-control" name="no_power_price" min=1>
+                        <input type="number" class="form-control" name="no_power_price" value="{{old('no_power_price')}}" min=1>
                         @error('no_power_price')
                         <span class="text-danger">{{ $message }}</span>
                         @enderror
                     </div>
                     <div class="form-group col-3">
-                        <label for="">Wish Price</label>
-                        <input type="number" class="form-control" name="price" min=1>
+                        <label for="">With Power Price</label>
+                        <input type="number" class="form-control" name="price" min=1 value="{{old('price')}}">
                         @error('price')
                         <span class="text-danger">{{ $message }}</span>
                         @enderror
@@ -117,7 +117,7 @@
                         <select name="color_id" class="form-control">
                             <option value="" selected>Pick Color</option>
                             @foreach ($colors as $color)
-                            <option value="{{ $color->id }}">{{ $color->name }}</option>
+                            <option value="{{ $color->id }}" {{ old('color_id') == $color->id ? 'selected' : '' }}>{{ $color->name }}</option>
                             @endforeach
                         </select>
                         @error('color_id')
@@ -129,7 +129,7 @@
                         <select name="duration_id" class="form-control">
                             <option value="" selected>Pick Duration</option>
                             @foreach ($durations as $duration)
-                            <option value="{{ $duration->id }}">{{ $duration->name }}-( {{$duration->months}} {{$duration->months == 1 ? 'month':'months'}} )</option>
+                            <option value="{{ $duration->id }}" {{ old('duration_id') == $duration->id ? 'selected' : '' }}>{{ $duration->name }}-( {{$duration->months}} {{$duration->months == 1 ? 'month':'months'}} )</option>
                             @endforeach
                         </select>
                         @error('duration_id')
@@ -141,7 +141,7 @@
                         <select name="category_id" class="form-control">
                             <option value="" selected>Select Category</option>
                             @foreach ($categories as $category)
-                            <option value="{{ $category->id }}">{{ $category->name }}</option>
+                            <option value="{{ $category->id }}" {{ old('category_id') == $category->id ? 'selected' : '' }}>{{ $category->name }}</option>
                             @endforeach
                         </select>
                         @error('category_id')
@@ -198,22 +198,26 @@
                             <div class="form-group col-6 d-flex">
                                 <label for="available_power_1">-0.25 to -6.00</label>
                                 <input type="checkbox" class="form-check-input" value="(-0.25-6.00)" id="available_power_1"
-                                    name="available_powers[]">
+                                    name="available_powers[]"
+                                    {{ in_array('(-0.25-6.00)', old('available_powers', [])) ? 'checked' : '' }}>
                             </div>
                             <div class="form-group col-6 d-flex">
-                                <label for="available_power_2">-6.00 to -10.00</label>
-                                <input type="checkbox" class="form-check-input" value="(-6.00-10.00)" id="available_power_2"
-                                    name="available_powers[]">
+                                <label for="available_power_2">-6.50 to -10.00</label>
+                                <input type="checkbox" class="form-check-input" value="(-6.50-10.00)" id="available_power_2"
+                                    name="available_powers[]"
+                                    {{ in_array('(-6.25-10.00)', old('available_powers', [])) ? 'checked' : '' }}>
                             </div>
                             <div class="form-group col-6 d-flex">
                                 <label for="available_power_3">+0.25 to +6.00</label>
                                 <input type="checkbox" class="form-check-input" value="(+0.25+6.00)" id="available_power_3"
-                                    name="available_powers[]">
+                                    name="available_powers[]"
+                                    {{ in_array('(+0.25+6.00)', old('available_powers', [])) ? 'checked' : '' }}>
                             </div>
                             <div class="form-group col-6 d-flex">
-                                <label for="available_power_4">+6.00 to +10.00</label>
-                                <input type="checkbox" class="form-check-input" value="(+6.00+10.00)" id="available_power_4"
-                                    name="available_powers[]">
+                                <label for="available_power_4">+6.50 to +10.00</label>
+                                <input type="checkbox" class="form-check-input" value="(+6.50+10.00)" id="available_power_4"
+                                    name="available_powers[]"
+                                    {{ in_array('(+6.25+10.00)', old('available_powers', [])) ? 'checked' : '' }}>
                             </div>
                         </div>
                     </div>

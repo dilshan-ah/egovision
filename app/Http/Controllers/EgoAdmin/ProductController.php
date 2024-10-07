@@ -134,6 +134,7 @@ class ProductController extends Controller
                 $product->image_path = $validated['product_image'];
             }
 
+
             $product->save();
 
             if ($request->hasFile('product_image_album')) {
@@ -173,7 +174,7 @@ class ProductController extends Controller
             'duration_id' => 'nullable|integer|exists:durations,id', // assuming duration_id is a foreign key
             'is_default' => 'nullable|boolean',
             'is_free' => 'nullable|boolean',
-            'product_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // Image validation
+            'product_image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048', // Image validation
             'product_image_album.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048' // Validate multiple images
         ]);
 
@@ -225,7 +226,7 @@ class ProductController extends Controller
         } catch (\Exception $e) {
             DB::rollBack();
             $notify[] = ['error', $e->getMessage()];
-            return back()->withNotify($notify);
+            return back()->withNotify($notify)->withInput();
         }
     }
 

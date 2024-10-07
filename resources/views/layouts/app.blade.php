@@ -79,10 +79,10 @@
                                 <a class="nav-link" href="#">Privacy Settings</a>
                             </li> -->
                             <li class="nav-item">
-                                <a class="nav-link" href="#">Gift Card</a>
+                                <a class="nav-link" href="{{route('ego.giftCard')}}">Gift Card</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="#">Newsletter Subscriptions</a>
+                                <a class="nav-link" href="{{route('ego.newsLetter')}}">Newsletter Subscriptions</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" href="#" onclick="event.preventDefault();

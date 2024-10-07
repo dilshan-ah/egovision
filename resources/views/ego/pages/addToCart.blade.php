@@ -42,7 +42,7 @@
                 @if ($product->product_type == 'normal')
                 <div class="tab p-4" id="tab1" onclick="selectTab('tab1-radio')">
                     <div class="tab-content">
-                        <input type="radio" id="tab1-radio" name="power_type" value="no_power" checked
+                        <input type="radio" id="tab1-radio" name="power_type" value="no_power" @if($product->product_type == 'normal') checked @endif
                             style="width: 20px; height: 20px; margin: 10px" />
                         <label for="tab1-radio">No Power</label>
                     </div>
@@ -56,10 +56,10 @@
                     </div>
                 </div>
                 @endif
-                <div class="tab p-4" id="tab1" style="visibility: hidden;">
+                <div class="tab p-4" id="tab1" style="visibility: hidden; height: 0; margin-bottom: 0">
                     <div class="tab-content">
-                        <input type="radio" id="tab1-radio" name="power_type" value="no_power" checked
-                            style="width: 20px; height: 20px; margin: 10px" />
+                        <input type="radio" id="tab1-radio" name="power_type" value="no_power"
+                            style="width: 20px; height: 20px; margin: 10px" @if($product->product_type == 'accessories') checked @endif/>
                         <label for="tab1-radio">Accessories</label>
                     </div>
                 </div>
@@ -98,12 +98,9 @@
                                     <form>
                                         <select class="power-select" id="firstPower">
                                             <option value="">Select power</option>
-                                            @foreach ($product->variations as $variation)
-                                            <option value="{{ $variation->power }}"
-                                                @if ($variation->stock == 0) disabled @endif>
-                                                {{ $variation->power }} @if ($variation->stock == '0')
-                                                Sold out
-                                                @endif
+                                            @foreach ($powers as $power)
+                                            <option value="{{ $power }}">
+                                                {{ $power }}
                                             </option>
                                             @endforeach
                                         </select>
@@ -130,12 +127,9 @@
                                     <form>
                                         <select class="power-select" id="secondPower">
                                             <option value="">Select power</option>
-                                            @foreach ($product->variations as $variation)
-                                            <option value="{{ $variation->power }}"
-                                                @if ($variation->stock == 0) disabled @endif>
-                                                {{ $variation->power }} @if ($variation->stock == '0')
-                                                Sold out
-                                                @endif
+                                            @foreach ($powers as $power)
+                                            <option value="{{ $power }}">
+                                                {{ $power }}
                                             </option>
                                             @endforeach
                                         </select>
@@ -160,40 +154,6 @@
                             </div>
                         </div>
 
-                        <!-- {{-- <div class="closed-content">
-                                <div class="eye-section">
-                                    <h6 class="text-center">First eye</h6>
-                                    <form>
-                                        <select class="power-select" id="singlePower">
-                                            <option value="">Select power</option>
-                                            @foreach ($product->variations as $variation)
-                                                <option value="{{ $variation->power }}"
-                                                    @if ($variation->stock == 0) disabled @endif>
-                                                    {{ $variation->power }} @if ($variation->stock == '0')
-                                                        Sold out
-                                                    @endif
-                                                </option>
-                                            @endforeach
-                                        </select>
-                                    </form>
-                                    <div class="power-section">
-                                        <span class="power-value">0.50</span>
-                                        <div class="adjustment-btns text-center">
-                                            <fieldset class="pair-fieldset-main">
-                                                <legend class="float-none w-auto p-2">Pair</legend>
-                                                <div class="product-count">
-                                                    <button class="btn decrease-btn">-</button>
-                                                    <span class="quantity-btn" id="singleFirstPair"
-                                                        data-quantity="0">1</span>
-                                                    <button class="btn increase-btn">+</button>
-                                                </div>
-                                            </fieldset>
-                                            <h6 class="text-center mt-3 total-price-section">Taka: {{ $product->price }} ৳
-                                            </h6>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div> --}} -->
                     </div>
                 </div>
             </div>

@@ -21,6 +21,7 @@ use App\Models\EgoModels\Wishlist;
 use App\Models\Frontend;
 use App\Models\Language;
 use App\Models\Page;
+use App\Models\Subscriber;
 use App\Models\SupportMessage;
 use App\Models\SupportTicket;
 use App\Models\User;
@@ -358,5 +359,18 @@ class SiteController extends Controller
         $order = Order::find($id)->first();
 
         return view('user.order.view',compact('order','pageTitle'));
+    }
+
+    public function newsLetter()
+    {
+        $pageTitle = 'Newsletter Subscription';
+        $subscribed = Subscriber::where('email',Auth::user()->email)->first();
+        return view('user.news_letter',compact('pageTitle','subscribed'));
+    }
+
+    public function giftCard()
+    {
+        $pageTitle = 'Gift Card';
+        return view('user.gift_card',compact('pageTitle'));
     }
 }
