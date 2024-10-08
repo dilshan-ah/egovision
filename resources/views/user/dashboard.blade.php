@@ -46,14 +46,14 @@
       </a>
     </div>
   </div>
-  <div class="col-md-4">
+  <!-- <div class="col-md-4">
     <div class="card">
       <a href="#">
         <i class="fas fa-address-book"></i>
         <h3 class="card-title">Address Book</h3>
       </a>
     </div>
-  </div>
+  </div> -->
   <div class="col-md-4">
     <div class="card">
       <a href="{{ route('user.profile.setting') }}">
@@ -70,13 +70,13 @@
             </a>
           </div>
         </div> -->
-  <div class="col-md-4">
+  <!-- <div class="col-md-4">
     <div class="card">
       <a href="#">
         <i class="fas fa-sliders-h"></i>
         <h3 class="card-title">Compare Products</h3>
       </a>
     </div>
-  </div>
+  </div> -->
 </div>
 @endsection

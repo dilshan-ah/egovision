@@ -16,6 +16,15 @@
     <link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Prata&display=swap" rel="stylesheet">
     @stack('style')
     @include('ego.include.css')
+    <style>
+        .card{
+            box-shadow: unset;
+        }
+
+        .card:hover{
+            box-shadow: unset;
+        }
+    </style>
 </head>
 
 <body>
@@ -69,20 +78,21 @@
                             <!-- <li class="nav-item">
                                 <a class="nav-link" href="#">Compare Products</a>
                             </li> -->
-                            <li class="nav-item">
+                            <!-- <li class="nav-item">
                                 <a class="nav-link" href="#">Address Book</a>
-                            </li>
+                            </li> -->
                             <li class="nav-item">
                                 <a class="nav-link" href="{{ route('user.profile.setting') }}">Account Information</a>
                             </li>
                             <!-- <li class="nav-item">
                                 <a class="nav-link" href="#">Privacy Settings</a>
                             </li> -->
-                            <li class="nav-item">
-                                <a class="nav-link" href="{{route('ego.giftCard')}}">Gift Card</a>
-                            </li>
+                            
                             <li class="nav-item">
                                 <a class="nav-link" href="{{route('ego.newsLetter')}}">Newsletter Subscriptions</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{route('return.show')}}">Returned Products</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" href="#" onclick="event.preventDefault();

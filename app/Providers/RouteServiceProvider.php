@@ -135,7 +135,12 @@ class RouteServiceProvider extends ServiceProvider
                     ->namespace('EgoAdmin')
                     ->prefix('wishlist')
                     ->name('wishlist.')
-                    ->group(base_path('routes/wishlist.php'));   
+                    ->group(base_path('routes/wishlist.php'));
+                Route::middleware('web')
+                    ->namespace('EgoAdmin')
+                    ->prefix('return')
+                    ->name('return.')
+                    ->group(base_path('routes/return.php'));       
             });
         });
     }

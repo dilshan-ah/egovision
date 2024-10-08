@@ -3,6 +3,9 @@
 @section('content')
 <div class="container">
     <div class="row justify-content-center mt-4">
+        <div class="col-12 mb-5">
+            <h1>{{$pageTitle}}</h1>
+        </div>
         <div class="col-md-12">
             <div class="table-responsive">
                 <table class="table bg-light">

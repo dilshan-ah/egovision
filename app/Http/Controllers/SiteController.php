@@ -356,7 +356,7 @@ class SiteController extends Controller
     public function singleOrder(string $id)
     {
         $pageTitle = 'Order Details | Order';
-        $order = Order::find($id)->first();
+        $order = Order::where('id',$id)->with('orderItems.product','user')->first();
 
         return view('user.order.view',compact('order','pageTitle'));
     }

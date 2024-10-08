@@ -1,9 +1,105 @@
 @extends('layouts.app')
 
 @section('content')
+
+@php
+    $policyPages = getContent('policy_pages.element',false,null,true);
+@endphp
 <div class="container-fluid">
     <div class="row">
 
+        @if(@$order->status == "Complete")
+        <div class="col-12 mb-4">
+            <div class="card d-flex justify-content-end align-items-center flex-row p-3">
+                @php
+                $disableButton = false;
+                if ($order->completing_time) {
+                $completingDate = \Carbon\Carbon::parse($order->completing_time);
+                $currentDate = \Carbon\Carbon::now();
+                if ($completingDate->diffInDays($currentDate) > 7) {
+                $disableButton = true;
+                }
+                }
+                @endphp
+                @if($disableButton)<p class="text-danger me-2 mb-0">7 days are over</p> @endif
+
+                <button class="btn btn-outline-dark" @if($disableButton) disabled @endif data-bs-toggle="modal" data-bs-target="#returnModal">Return product</button>
+
+                <form action="{{route('return.make')}}" method="post">
+                    @csrf
+                    <div class="modal fade" id="returnModal" aria-hidden="true" aria-labelledby="exampleModalToggleLabel" tabindex="-1">
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h1 class="modal-title fs-5" id="exampleModalToggleLabel">Select Items to return</h1>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    @php
+                                    $hasItemsToReturn = false;
+                                    foreach(@$order->orderItems as $item) {
+                                    if(!$item->return_quantity) {
+                                    $hasItemsToReturn = true;
+                                    break;
+                                    }
+                                    }
+                                    @endphp
+
+                                    @if($hasItemsToReturn)
+                                    @foreach(@$order->orderItems as $item)
+                                    @if(!$item->return_quantity)
+                                    <div class="form-check justify-content-between d-flex mb-3">
+                                        <div>
+                                            <input class="form-check-input" type="checkbox" value="{{$item->id}}" id="flexCheckDefault{{$item->id}}" name="items[{{ $loop->index }}][item]">
+                                            <label class="form-check-label" for="flexCheckDefault{{$item->id}}">
+                                                {{@$item->product->name}} x {{@$item->pair}}
+                                            </label>
+                                        </div>
+                                        <input type="number" name="items[{{ $loop->index }}][quantity]" min="1" max="{{ $item->pair }}" required/>
+                                    </div>
+                                    @endif
+                                    @endforeach
+                                    @else
+                                    <p>No items available for return.</p>
+                                    @endif
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-dark" data-bs-target="#exampleModalToggle2" data-bs-toggle="modal" @if(!$hasItemsToReturn) disabled @endif>Next</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal fade" id="exampleModalToggle2" aria-hidden="true" aria-labelledby="exampleModalToggleLabel2" tabindex="-1">
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h1 class="modal-title fs-5" id="exampleModalToggleLabel2">Reason to return</h1>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="mb-3">
+                                        <label for="exampleFormControlTextarea1" class="form-label">Write a proper reason</label>
+                                        <textarea name="reason" class="form-control mb-3" id="exampleFormControlTextarea1" rows="3"></textarea>
+
+                                        <div class="form-check text-start mb-3">
+                                            <input type="checkbox" class="form-check-input" id="privacyPolicy" required>
+                                            <label class="form-check-label" for="privacyPolicy">I have read and accept <span>@foreach($policyPages as $policy) <a href="{{ route('policy.pages',[$policy->id, slug($policy->data_values->title)]) }}">{{ __($policy->data_values->title) }}</a> @if(!$loop->last), @endif @endforeach</span></label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-dark" data-bs-target="#returnModal" data-bs-toggle="modal">Back</button>
+                                    <button type="submit" class="btn btn-dark">Return</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+        @endif
         <div class="col-lg-8 col-12 mb-4">
             <div class="card mb-4">
                 <div class="card-header">
@@ -21,15 +117,24 @@
                             </tr>
                         </thead>
                         <tbody>
+                            @if(@$order->orderItems)
                             @foreach($order->orderItems as $item)
                             <tr>
-                                <td>{{$loop->iteration}}</td>
-                                <td>{{$item->product->name ?? ''}}</td>
-                                <td>{{$item->product->price ?? ''}}৳</td>
-                                <td>{{$item->pair}}</td>
-                                <td>{{$item->pair*($item->product->price ?? 0)}}৳</td>
+                                <td>{{@$loop->iteration}}</td>
+                                <td>
+                                    {{ @$item->product->name ?? '' }}
+                                    @if($item->return)
+                                    <span class="text-danger">(Return {{ $item->return->status }})</span>
+                                    <span class="text-danger">({{ $item->return->quantity }} products)</span>
+                                    @endif
+                                </td>
+
+                                <td>{{@$item->product->price ?? ''}}৳</td>
+                                <td>{{@$item->pair}}</td>
+                                <td>{{@$item->pair*(@$item->product->price ?? 0)}}৳</td>
                             </tr>
                             @endforeach
+                            @endif
                         </tbody>
                         <tfoot>
                             <tr>
@@ -37,28 +142,28 @@
                                 <th></th>
                                 <th></th>
                                 <th>Subtotal</th>
-                                <th>{{$order->subtotal}}৳</th>
+                                <th>{{@$order->subtotal}}৳</th>
                             </tr>
                             <tr>
                                 <th></th>
                                 <th></th>
                                 <th></th>
                                 <th>Discount</th>
-                                <th>-{{$order->discount}}৳</th>
+                                <th>-{{@$order->discount}}৳</th>
                             </tr>
                             <tr>
                                 <th></th>
                                 <th></th>
                                 <th></th>
                                 <th>Delivery Charge</th>
-                                <th>{{$order->delivery_charge}}৳</th>
+                                <th>{{@$order->delivery_charge}}৳</th>
                             </tr>
                             <tr>
                                 <th></th>
                                 <th></th>
                                 <th></th>
                                 <th>Total</th>
-                                <th>{{$order->amount}}৳</th>
+                                <th>{{@$order->amount}}৳</th>
                             </tr>
                         </tfoot>
                     </table>
@@ -72,51 +177,51 @@
                 <div class="card-body">
                     <table class="table">
                         <tbody>
-                            @if($order->created_at)
+                            @if(@$order->created_at)
                             <tr>
                                 <td class="text-info">Order has been placed and pending</td>
-                                <td>{{ diffForHumans($order->created_at) }}</td>
+                                <td>{{ diffForHumans(@$order->created_at) }}</td>
                             </tr>
                             @endif
-                            @if($order->processing_time)
+                            @if(@$order->processing_time)
                             <tr>
                                 <td class="text-primary">Order is being processed</td>
-                                <td>{{ diffForHumans($order->processing_time) }}</td>
+                                <td>{{ diffForHumans(@$order->processing_time) }}</td>
                             </tr>
                             @endif
 
-                            @if($order->shipping_time)
+                            @if(@$order->shipping_time)
                             <tr>
                                 <td class="text-warning">Order has been shipped</td>
-                                <td>{{ diffForHumans($order->shipping_time) }}</td>
+                                <td>{{ diffForHumans(@$order->shipping_time) }}</td>
                             </tr>
                             @endif
 
-                            @if($order->completing_time)
+                            @if(@$order->completing_time)
                             <tr>
                                 <td class="text-success">Order is completed</td>
-                                <td>{{ diffForHumans($order->completing_time) }}</td>
+                                <td>{{ diffForHumans(@$order->completing_time) }}</td>
                             </tr>
                             @endif
 
-                            @if($order->failing_time)
+                            @if(@$order->failing_time)
                             <tr>
                                 <td class="text-danger">Order has failed</td>
-                                <td>{{ diffForHumans($order->failing_time) }}</td>
+                                <td>{{ diffForHumans(@$order->failing_time) }}</td>
                             </tr>
                             @endif
 
-                            @if($order->cancelling_time)
+                            @if(@$order->cancelling_time)
                             <tr>
                                 <td class="text-danger">Order has been canceled</td>
-                                <td>{{ diffForHumans($order->cancelling_time) }}</td>
+                                <td>{{ diffForHumans(@$order->cancelling_time) }}</td>
                             </tr>
                             @endif
 
-                            @if($order->returning_time)
+                            @if(@$order->returning_time)
                             <tr>
                                 <td class="text-secondary">Order has been returned</td>
-                                <td>{{ diffForHumans($order->returning_time) }}</td>
+                                <td>{{ diffForHumans(@$order->returning_time) }}</td>
                             </tr>
                             @endif
                         </tbody>
@@ -131,9 +236,9 @@
                     <h6 class="m-0 font-weight-bold text-primary">User Details</h6>
                 </div>
                 <div class="card-body">
-                    <h4>{{$order->user->firstname}} {{$order->user->lastname}}</h4>
-                    <h4>{{$order->user->email}}</h4>
-                    <h4>{{$order->user->mobile}}</h4>
+                    <h4>{{@$order->user->firstname}} {{@$order->user->lastname}}</h4>
+                    <h4>{{@$order->user->email}}</h4>
+                    <h4>{{@$order->user->mobile}}</h4>
                 </div>
             </div>
 
@@ -142,15 +247,15 @@
                     <h6 class="m-0 font-weight-bold text-primary">Billing Address</h6>
                 </div>
                 <div class="card-body">
-                    <h4>{{$order->name}}</h4>
-                    <h4>{{$order->email}}</h4>
-                    <h4>{{$order->phone}}</h4>
-                    <h4>{{$order->address_one}}</h4>
-                    <h4>{{$order->address_two}}</h4>
-                    <h4>{{$order->company}}</h4>
-                    <h4>{{$order->city}},{{$order->zip_code}}</h4>
-                    <h4>{{$order->state}}</h4>
-                    <h4>{{$order->country}}</h4>
+                    <h4>{{@$order->name}}</h4>
+                    <h4>{{@$order->email}}</h4>
+                    <h4>{{@$order->phone}}</h4>
+                    <h4>{{@$order->address_one}}</h4>
+                    <h4>{{@$order->address_two}}</h4>
+                    <h4>{{@$order->company}}</h4>
+                    <h4>{{@$order->city}},{{@$order->zip_code}}</h4>
+                    <h4>{{@$order->state}}</h4>
+                    <h4>{{@$order->country}}</h4>
                 </div>
             </div>
 
@@ -159,10 +264,10 @@
                     <h4>Payment Method</h4>
                 </div>
                 <div class="card-body">
-                    @if($order->payment_method == 'cod')
+                    @if(@$order->payment_method == 'cod')
                     <h4>Cash on delivery</h4>
                     @else
-                    <h4>SSL Commerze</h4>
+                    <h4>Online Payment</h4>
                     @endif
                 </div>
             </div>
