@@ -1,10 +1,11 @@
 @extends('layouts.ego-app')
 @section('content')
 <style>
-    .nav-pills .nav-link.active, .nav-pills .show>.nav-link {
-    color: white;
-    background-color:black;
-}
+    .nav-pills .nav-link.active,
+    .nav-pills .show>.nav-link {
+        color: white;
+        background-color: black;
+    }
 </style>
 
 <form action="{{ url('/pay') }}" method="POST" class="needs-validation">
@@ -14,7 +15,7 @@
             <a class="flex-sm-fill text-sm-center nav-link active" aria-current="page" href="#">Shipping</a>
             <a class="flex-sm-fill text-sm-center nav-link text-black ms-3" href="#">Payment</a> <!-- Added margin using Bootstrap -->
         </nav>
-        
+
         <div class="row justify-content-between">
             <div class="col-lg-7 col-md-12">
                 <div class="card p-4 mb-4">
@@ -178,8 +179,22 @@
                             Online Payment
                         </label>
                         <div class="invalid-feedback">Please select a payment method.</div>
-                    </div>                  
-                    <button type="submit" class="btn  mt-4" style="background: black;color:white">Confirm Order</button>
+                    </div>
+                </div>
+
+                <div class="card p-4 mb-4">
+                    <div class="form-floating">
+                        <input type="text" class="form-control w-100" id="promo_code" placeholder="Promo code"
+                            name="promo_code">
+                        <div id="promoMessage"></div>    
+                        <button type="button" id="applyPromo" class="btn mt-2" style="background: black;color:white">Apply</button>
+                        <label for="promo_code">Promo code</label>
+                    </div>
+                </div>
+
+
+                <div class="card p-4 mb-4">
+                    <button type="submit" class="btn" style="background: black;color:white">Confirm Order</button>
                 </div>
             </div>
             <div class="col-lg-4 col-12">
@@ -227,6 +242,7 @@
 })->sum(function($cart) {
     return $cart->product->price * $cart->pair;
 }) }}৳</b>
+                        <b id="discount"></b>
                     </div>
                     <div class="d-flex justify-content-between">
                         <h4>Delivery Free</h4>
@@ -375,7 +391,42 @@
         document.getElementById('shipping').style.display = 'block';
     });
 </script>
+<script>
+    $(document).ready(function() {
+        $('#applyPromo').on('click', function() {
+            var promoCode = $('#promo_code').val();
+            var subtotal = {{ $carts->sum(function($cart) { return $cart->product->price * $cart->pair; }) }};
 
+            if (promoCode) {
+                $.ajax({
+                    url: "{{ route('promo.verify') }}", // Replace with your promo verification route
+                    type: 'POST',
+                    data: {
+                        _token: '{{ csrf_token() }}',
+                        promo_code: promoCode,
+                        subtotal: subtotal
+                    },
+                    success: function(response) {
+                        if (response.success) {
+                            // Update the discount and total in the order summary
+                            $('#promoMessage').text(response.message).removeClass('text-danger').addClass('text-success');
+                            $('#discount').text('-' + response.discount + '৳');
+                            $('#total').text(response.new_total + '৳');
+                            console.log($('#promoMessage').text());
+                        } else {
+                            $('#promoMessage').text(response.message).removeClass('text-success').addClass('text-danger');
+                        }
+                    },
+                    error: function() {
+                        $('#promoMessage').text('Error applying promo code. Please try again.').addClass('text-danger');
+                    }
+                });
+            } else {
+                $('#promoMessage').text('Please enter a promo code.').addClass('text-danger');
+            }
+        });
+    });
+</script>
 
 
 

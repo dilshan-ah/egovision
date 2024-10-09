@@ -14,8 +14,8 @@ class ReturnProductController extends Controller
     public function makeReturn(Request $request)
     {
         foreach ($request->items as $itemData) {
-            $itemId = $itemData['item'];
-            $quantity = $itemData['quantity'];
+            $itemId = $itemData['item'] ?? null;
+            $quantity = $itemData['quantity'] ?? null;
 
             $orderItem = OrderItems::where('id', $itemId)->first();
 

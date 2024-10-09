@@ -23,7 +23,7 @@
                         <tr>
                             <td>{{$returnProduct->return_id}}</td>
                             <td>{{$returnProduct->item->product->name}} x {{$returnProduct->quantity}}</td>
-                            <td>{{$returnProduct->item->price}}৳</td>
+                            <td>{{$returnProduct->item->product->price * $returnProduct->quantity}}৳</td>
                             <td>{{$returnProduct->status}}</td>
                             <td>{{ $returnProduct->created_at ? $returnProduct->created_at->format('d, M y') : 'N/A' }}</td>
                         </tr>

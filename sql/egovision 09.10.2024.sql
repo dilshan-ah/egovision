@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 08, 2024 at 11:07 AM
+-- Generation Time: Oct 09, 2024 at 11:49 AM
 -- Server version: 10.4.22-MariaDB
 -- PHP Version: 8.2.6
 
@@ -159,13 +159,11 @@ CREATE TABLE `carts` (
 --
 
 INSERT INTO `carts` (`id`, `product_id`, `session_id`, `power_status`, `created_at`, `updated_at`, `user_id`, `power`, `pair`) VALUES
-(303, '10', NULL, 'with_power', '2024-10-03 10:57:54', '2024-10-03 10:57:54', '42', '+0.50', '1'),
-(304, '10', NULL, 'with_power', '2024-10-03 10:57:54', '2024-10-03 10:57:54', '42', '+0.75', '1'),
-(305, '18', NULL, 'no_power', '2024-10-03 10:57:54', '2024-10-03 10:57:54', '42', NULL, '2'),
-(311, '18', NULL, 'no_power', '2024-10-04 12:15:46', '2024-10-04 12:15:46', '53', NULL, '0'),
-(312, '17', 'wOsc4OnRsDW8ybZwBa00UP16n1kUiHgEclkE2r5Z', 'no_power', '2024-10-06 01:40:12', '2024-10-06 01:40:12', '57', NULL, '1'),
-(321, '9', 'Z1GdYGHNaE0WXt1og9LZHo65uFku7735O38KYJtv', 'no_power', '2024-10-07 09:17:42', '2024-10-07 09:17:42', '55', NULL, '1'),
-(322, '18', 'Z1GdYGHNaE0WXt1og9LZHo65uFku7735O38KYJtv', 'no_power', '2024-10-07 09:17:42', '2024-10-07 09:17:42', '55', NULL, '1');
+(359, '25', 'sZ1xRgN0UHKNSUyO56GB5SH7uOjZD9IGb1dGmqF9', 'no_power', '2024-10-09 05:48:22', '2024-10-09 05:48:22', NULL, NULL, '4'),
+(360, '25', 'sZ1xRgN0UHKNSUyO56GB5SH7uOjZD9IGb1dGmqF9', 'no_power', '2024-10-09 05:48:22', '2024-10-09 05:48:22', NULL, '-4.5', '0'),
+(361, '18', 'sZ1xRgN0UHKNSUyO56GB5SH7uOjZD9IGb1dGmqF9', 'no_power', '2024-10-09 05:48:22', '2024-10-09 05:48:22', NULL, NULL, '4'),
+(364, '25', 'XiQJTZQxrGOo0C7s5Q5lQU0B1wLw9fiyMB2nIicG', 'no_power', '2024-10-09 10:01:24', '2024-10-09 10:01:24', '59', NULL, '3'),
+(365, '18', 'XiQJTZQxrGOo0C7s5Q5lQU0B1wLw9fiyMB2nIicG', 'no_power', '2024-10-09 10:01:24', '2024-10-09 10:01:24', '59', NULL, '3');
 
 -- --------------------------------------------------------
 
@@ -925,7 +923,9 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (51, '2024_09_29_170717_add_timestamps_to_orders_table', 37),
 (52, '2024_09_30_110531_create_wishlists_table', 38),
 (53, '2024_10_05_024213_create_gift_cards_table', 39),
-(54, '2024_10_08_113351_create_return_products_table', 40);
+(54, '2024_10_08_113351_create_return_products_table', 40),
+(55, '2024_10_09_133826_create_promo_codes_table', 41),
+(56, '2024_10_09_143350_add_status_to_promo', 42);
 
 -- --------------------------------------------------------
 
@@ -1045,8 +1045,7 @@ CREATE TABLE `orders` (
 --
 
 INSERT INTO `orders` (`id`, `name`, `email`, `phone`, `amount`, `address_one`, `status`, `transaction_id`, `currency`, `user_id`, `address_two`, `company`, `city`, `state`, `country`, `zip_code`, `delivery_charge`, `subtotal`, `payment_method`, `created_at`, `updated_at`, `processing_time`, `shipping_time`, `completing_time`, `failing_time`, `cancelling_time`, `returning_time`, `discount`) VALUES
-(103, 'Dilshan Ahmed', 'dilshaneffendi1123@gmail.com', '+88001984603367', 709, 'Indira road', 'Complete', '6705075c0d29a', 'BDT', 59, NULL, NULL, 'Dhaka', 'Dhaka District', 'Bangladesh', '1215', '60', '649', 'cod', '2024-10-08 10:20:12', '2024-10-08 10:21:12', '2024-10-08 10:21:04', '2024-10-08 10:21:11', '2024-10-08 10:21:12', NULL, NULL, NULL, 0),
-(104, 'Dilshan Ahmed', 'dilshaneffendi1123@gmail.com', '+9301984603367', 1358, 'Indira road', 'Complete', '67050d66425e2', 'BDT', 59, NULL, NULL, 'Dhaka', 'Dhaka District', 'Bangladesh', '1215', '60', '1298', 'cod', '2024-10-08 10:45:58', '2024-10-08 10:47:34', NULL, NULL, '2024-10-08 10:47:34', NULL, NULL, NULL, 0);
+(107, 'Dilshan Ahmed', 'dilshaneffendi1123@gmail.com', '+88001984603367', 831, 'Indira road', 'Complete', '67061990b5287', 'BDT', 59, NULL, 'ssl', 'Dhaka', 'Dhaka District', 'Bangladesh', '1215', '60', '1071', 'cod', '2024-10-09 05:50:08', '2024-10-09 05:51:28', NULL, NULL, '2024-10-09 05:51:28', NULL, NULL, NULL, 300);
 
 -- --------------------------------------------------------
 
@@ -1071,8 +1070,14 @@ CREATE TABLE `order_items` (
 --
 
 INSERT INTO `order_items` (`id`, `product_id`, `power`, `pair`, `price`, `created_at`, `updated_at`, `order_id`, `return_quantity`) VALUES
-(48, '16', NULL, '3', '649', '2024-10-08 10:20:12', '2024-10-08 10:38:13', 103, 2),
-(49, '16', NULL, '2', '1298', '2024-10-08 10:45:58', '2024-10-08 10:45:58', 104, NULL);
+(48, '16', NULL, '3', '649', '2024-10-08 10:20:12', '2024-10-09 07:09:22', 103, 2),
+(49, '16', NULL, '2', '1298', '2024-10-08 10:45:58', '2024-10-09 07:09:22', 104, 1),
+(50, '1', 'Power 1', '2', '500', '2024-10-09 04:09:01', '2024-10-09 04:09:01', 105, NULL),
+(51, '2', 'Power 2', '1', '500', '2024-10-09 04:09:01', '2024-10-09 04:09:01', 105, NULL),
+(52, '1', 'Power 1', '2', '500', '2024-10-09 04:52:32', '2024-10-09 04:52:32', 106, NULL),
+(53, '2', 'Power 2', '1', '500', '2024-10-09 04:52:32', '2024-10-09 04:52:32', 106, NULL),
+(54, '25', NULL, '3', '771', '2024-10-09 05:50:08', '2024-10-09 06:47:40', 107, 3),
+(55, '18', NULL, '3', '300', '2024-10-09 05:50:08', '2024-10-09 06:47:40', 107, 3);
 
 -- --------------------------------------------------------
 
@@ -1237,7 +1242,8 @@ CREATE TABLE `products` (
 INSERT INTO `products` (`id`, `name`, `product_intro`, `description`, `pack_content`, `diameter_id`, `base_curve_id`, `material_id`, `water_content`, `tone_id`, `lens_design_id`, `price`, `stock_quantity`, `color_id`, `category_id`, `image_path`, `duration_id`, `product_type`, `available_powers`, `is_default_bag`, `is_free`, `created_at`, `updated_at`, `no_power_price`) VALUES
 (16, 'Odette Sharpe', '<p>Magna officia enim h.</p>', '<p>Aliquam dolore a qui.</p>', 'Brody Boyer', 3, 1, NULL, NULL, NULL, NULL, '649.00', 124, NULL, NULL, 'ego-assets/images/products/260283.jpg', '6', 'accessories', NULL, 0, 0, '2024-09-30 09:34:34', '2024-09-30 09:34:34', NULL),
 (17, 'Desio Black Pochette', '<div class=\"product attribute overview\" style=\"box-sizing: inherit; order: 3; color: rgb(0, 0, 0); font-family: Lato, sans-serif; font-size: 15px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: normal; background-color: rgb(255, 255, 255); text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;\"><div class=\"value\" itemprop=\"description\" style=\"box-sizing: inherit;\"><p style=\"box-sizing: inherit; margin-top: 0px; margin-bottom: 1rem;\">Desio black patent pochette closed with a one-handled silver zipper.</p></div></div><div class=\"product-info-tabs\" style=\"box-sizing: inherit; display: flex; flex-wrap: wrap; border-top: 1px solid rgb(230, 230, 230); order: 5; color: rgb(0, 0, 0); font-family: Lato, sans-serif; font-size: 15px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: normal; background-color: rgb(255, 255, 255); text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;\"><div class=\"product-info-tab\" style=\"box-sizing: inherit; flex: 0 0 50%; max-width: 50%; border-bottom: 1px solid rgb(230, 230, 230); padding: 0.9375rem; border-right: 1px solid rgb(230, 230, 230);\"><br class=\"Apple-interchange-newline\"></div></div>', '<p><span style=\"color: rgb(0, 0, 0); font-family: Lato, sans-serif; font-size: 14px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: normal; background-color: rgb(255, 255, 255); text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial; display: inline !important; float: none;\">Desio black patent pochette closed with a one-handled silver zipper. The style of this product is the perfect combination of Italian design and a specialized manufacturing process. The ideal solution for keeping all the essential accessories in one safe place. Make sure you find the most important things in your bag right when you need them with this small purse. Dimensions: 215 x 165 x 42 mm</span></p>', '2 lenses (1 pair)', 3, 2, NULL, NULL, NULL, NULL, '1700.00', 20, NULL, NULL, 'ego-assets/images/products/677163.jpg', '6', 'accessories', NULL, 0, 0, '2024-10-02 04:35:55', '2024-10-02 04:42:28', NULL),
-(18, 'Desio Brush Set', '<div class=\"product attribute overview\" style=\"box-sizing: inherit; order: 3; color: rgb(0, 0, 0); font-family: Lato, sans-serif; font-size: 15px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: normal; background-color: rgb(255, 255, 255); text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;\"><div class=\"value\" itemprop=\"description\" style=\"box-sizing: inherit;\">Desio Luxury Brush Set (5 pcs)</div></div><div class=\"product-info-tabs\" style=\"box-sizing: inherit; display: flex; flex-wrap: wrap; border-top: 1px solid rgb(230, 230, 230); order: 5; color: rgb(0, 0, 0); font-family: Lato, sans-serif; font-size: 15px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: normal; background-color: rgb(255, 255, 255); text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;\"><div class=\"product-info-tab\" style=\"box-sizing: inherit; flex: 0 0 50%; max-width: 50%; border-bottom: 1px solid rgb(230, 230, 230); padding: 0.9375rem; border-right: 1px solid rgb(230, 230, 230);\"><br class=\"Apple-interchange-newline\"></div></div>', '<p style=\"box-sizing: inherit; margin-top: 0px; margin-bottom: 1rem; color: rgb(0, 0, 0); font-family: Lato, sans-serif; font-size: 14px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: normal; background-color: rgb(255, 255, 255); text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;\">Desio Makeup Brushes, stored in a Desio pochette.</p><p style=\"box-sizing: inherit; margin-top: 0px; margin-bottom: 1rem; color: rgb(0, 0, 0); font-family: Lato, sans-serif; font-size: 14px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: normal; background-color: rgb(255, 255, 255); text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;\">The set contains:</p><ul style=\"box-sizing: inherit; margin-top: 0px; margin-bottom: 1rem; color: rgb(0, 0, 0); font-family: Lato, sans-serif; font-size: 14px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: normal; background-color: rgb(255, 255, 255); text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;\"><li style=\"box-sizing: inherit;\">1 foundation brush</li><li style=\"box-sizing: inherit;\">1 blush brush</li><li style=\"box-sizing: inherit;\">1 Blending brush</li><li style=\"box-sizing: inherit;\">1 shader brush</li><li style=\"box-sizing: inherit;\">1 concealer brush</li></ul>', NULL, 3, 1, NULL, NULL, NULL, NULL, '100.00', 11, NULL, NULL, 'ego-assets/images/products/790562.jpg', NULL, 'accessories', NULL, 1, 1, '2024-10-02 04:42:28', '2024-10-07 05:00:51', NULL);
+(18, 'Desio Brush Set', '<div class=\"product attribute overview\" style=\"box-sizing: inherit; order: 3; color: rgb(0, 0, 0); font-family: Lato, sans-serif; font-size: 15px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: normal; background-color: rgb(255, 255, 255); text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;\"><div class=\"value\" itemprop=\"description\" style=\"box-sizing: inherit;\">Desio Luxury Brush Set (5 pcs)</div></div><div class=\"product-info-tabs\" style=\"box-sizing: inherit; display: flex; flex-wrap: wrap; border-top: 1px solid rgb(230, 230, 230); order: 5; color: rgb(0, 0, 0); font-family: Lato, sans-serif; font-size: 15px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: normal; background-color: rgb(255, 255, 255); text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;\"><div class=\"product-info-tab\" style=\"box-sizing: inherit; flex: 0 0 50%; max-width: 50%; border-bottom: 1px solid rgb(230, 230, 230); padding: 0.9375rem; border-right: 1px solid rgb(230, 230, 230);\"><br class=\"Apple-interchange-newline\"></div></div>', '<p style=\"box-sizing: inherit; margin-top: 0px; margin-bottom: 1rem; color: rgb(0, 0, 0); font-family: Lato, sans-serif; font-size: 14px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: normal; background-color: rgb(255, 255, 255); text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;\">Desio Makeup Brushes, stored in a Desio pochette.</p><p style=\"box-sizing: inherit; margin-top: 0px; margin-bottom: 1rem; color: rgb(0, 0, 0); font-family: Lato, sans-serif; font-size: 14px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: normal; background-color: rgb(255, 255, 255); text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;\">The set contains:</p><ul style=\"box-sizing: inherit; margin-top: 0px; margin-bottom: 1rem; color: rgb(0, 0, 0); font-family: Lato, sans-serif; font-size: 14px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: normal; background-color: rgb(255, 255, 255); text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;\"><li style=\"box-sizing: inherit;\">1 foundation brush</li><li style=\"box-sizing: inherit;\">1 blush brush</li><li style=\"box-sizing: inherit;\">1 Blending brush</li><li style=\"box-sizing: inherit;\">1 shader brush</li><li style=\"box-sizing: inherit;\">1 concealer brush</li></ul>', NULL, 3, 1, NULL, NULL, NULL, NULL, '100.00', 11, NULL, NULL, 'ego-assets/images/products/790562.jpg', NULL, 'accessories', NULL, 1, 1, '2024-10-02 04:42:28', '2024-10-07 05:00:51', NULL),
+(25, 'Ross Hansen', '<p>Voluptatem fugit, nu.</p>', '<p>Incididunt consequat.</p>', 'Mercedes Rush', 5, 2, 2, 'water content', 3, 1, '257.00', NULL, 12, 14, 'ego-assets/images/products/515887.jpg', '9', 'normal', '[\"(-0.25-6.00)\",\"(+0.25+6.00)\"]', NULL, NULL, '2024-10-09 04:42:43', '2024-10-09 04:42:43', '40');
 
 -- --------------------------------------------------------
 
@@ -1296,6 +1302,32 @@ CREATE TABLE `product_variations` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `promo_codes`
+--
+
+CREATE TABLE `promo_codes` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `note` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `reedem_code` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `offer_type` enum('deliver-offer','product-offer') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'product-offer',
+  `free_delivery` enum('yes','no') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'no',
+  `offer_amount` int(11) DEFAULT NULL,
+  `min_amount` int(11) DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  `status` enum('active','inactive') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'active'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `promo_codes`
+--
+
+INSERT INTO `promo_codes` (`id`, `note`, `reedem_code`, `offer_type`, `free_delivery`, `offer_amount`, `min_amount`, `created_at`, `updated_at`, `status`) VALUES
+(3, '50% off on every product', 'lens50', 'product-offer', 'yes', 50, 500, '2024-10-09 09:10:56', '2024-10-09 11:47:51', 'active');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `replacements`
 --
 
@@ -1338,7 +1370,8 @@ CREATE TABLE `return_products` (
 --
 
 INSERT INTO `return_products` (`id`, `return_id`, `order_item_id`, `quantity`, `reason`, `status`, `created_at`, `updated_at`, `user_id`) VALUES
-(9, '4sSbfK', 48, 2, 'faltu product', 'requested', '2024-10-08 10:38:13', '2024-10-08 10:38:13', 59);
+(29, 'ewrMVL', 48, 2, 'Defective product', 'requested', '2024-10-09 07:17:09', '2024-10-09 07:17:09', 59),
+(30, 'CMKRL0', 49, 1, 'Defective product', 'requested', '2024-10-09 07:17:09', '2024-10-09 07:17:09', 59);
 
 -- --------------------------------------------------------
 
@@ -1820,7 +1853,9 @@ INSERT INTO `user_logins` (`id`, `user_id`, `user_ip`, `city`, `country`, `count
 (268, 42, '127.0.0.1', NULL, '', '', '', '', 'Chrome', 'Windows 10', '2024-10-03 09:37:31', '2024-10-03 09:37:31'),
 (269, 42, '103.146.92.249', '', 'Bangladesh', 'BD', '90.3742', '23.7018', 'Chrome', 'Windows 10', '2024-10-05 00:09:53', '2024-10-05 00:09:53'),
 (270, 55, '127.0.0.1', NULL, '', '', '', '', 'Chrome', 'Windows 10', '2024-10-07 09:40:27', '2024-10-07 09:40:27'),
-(271, 59, '127.0.0.1', NULL, '', '', '', '', 'Chrome', 'Windows 10', '2024-10-08 04:02:44', '2024-10-08 04:02:44');
+(271, 59, '127.0.0.1', NULL, '', '', '', '', 'Chrome', 'Windows 10', '2024-10-08 04:02:44', '2024-10-08 04:02:44'),
+(272, 59, '127.0.0.1', NULL, '', '', '', '', 'Chrome', 'Windows 10', '2024-10-09 05:17:42', '2024-10-09 05:17:42'),
+(273, 59, '127.0.0.1', NULL, '', '', '', '', 'Chrome', 'Windows 10', '2024-10-09 05:48:48', '2024-10-09 05:48:48');
 
 -- --------------------------------------------------------
 
@@ -2138,6 +2173,12 @@ ALTER TABLE `product_variations`
   ADD KEY `product_variations_product_id_foreign` (`product_id`);
 
 --
+-- Indexes for table `promo_codes`
+--
+ALTER TABLE `promo_codes`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `replacements`
 --
 ALTER TABLE `replacements`
@@ -2259,7 +2300,7 @@ ALTER TABLE `base_curves`
 -- AUTO_INCREMENT for table `carts`
 --
 ALTER TABLE `carts`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=329;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=366;
 
 --
 -- AUTO_INCREMENT for table `collection_sets`
@@ -2367,7 +2408,7 @@ ALTER TABLE `materials`
 -- AUTO_INCREMENT for table `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=55;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=57;
 
 --
 -- AUTO_INCREMENT for table `notification_logs`
@@ -2385,13 +2426,13 @@ ALTER TABLE `notification_templates`
 -- AUTO_INCREMENT for table `orders`
 --
 ALTER TABLE `orders`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=105;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=108;
 
 --
 -- AUTO_INCREMENT for table `order_items`
 --
 ALTER TABLE `order_items`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=50;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=56;
 
 --
 -- AUTO_INCREMENT for table `pages`
@@ -2415,7 +2456,7 @@ ALTER TABLE `prescriptions`
 -- AUTO_INCREMENT for table `products`
 --
 ALTER TABLE `products`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
 
 --
 -- AUTO_INCREMENT for table `product_categories`
@@ -2436,6 +2477,12 @@ ALTER TABLE `product_variations`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
 
 --
+-- AUTO_INCREMENT for table `promo_codes`
+--
+ALTER TABLE `promo_codes`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
 -- AUTO_INCREMENT for table `replacements`
 --
 ALTER TABLE `replacements`
@@ -2445,7 +2492,7 @@ ALTER TABLE `replacements`
 -- AUTO_INCREMENT for table `return_products`
 --
 ALTER TABLE `return_products`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
 
 --
 -- AUTO_INCREMENT for table `subscribers`
@@ -2493,7 +2540,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `user_logins`
 --
 ALTER TABLE `user_logins`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=272;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=274;
 
 --
 -- AUTO_INCREMENT for table `wishlists`

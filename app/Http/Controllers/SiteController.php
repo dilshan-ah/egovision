@@ -282,7 +282,7 @@ class SiteController extends Controller
             $products->whereIn('lens_design_id', $lensArray);
         }
 
-        $products = $products->get();
+        $products = $products->where('product_type','normal')->get();
 
         $colors = Color::all();
         $baseCurves = BaseCurve::all();
