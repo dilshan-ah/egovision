@@ -12,10 +12,10 @@ class ProductController extends Controller
     {
         try {
             // Set default items per page, you can also pass this as a query parameter
-            $perPage = $request->query('per_page', 5); // Default to 10 items per page
+            $perPage = $request->query('per_page', 12); // Default to 10 items per page
 
             // Fetch products with pagination
-            $products = Product::with(['color', 'lensDesign', 'baseCurve', 'category', 'replacement', 'tone', 'material', 'diameter', 'images'])
+            $products = Product::with(['color', 'lensDesign', 'baseCurve', 'category', 'tone', 'material', 'diameter', 'images'])->where('product_type','normal')
                 ->select('id', 'name', 'price', 'image_path')
                 ->paginate($perPage); // Use pagination instead of get()
 

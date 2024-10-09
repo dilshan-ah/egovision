@@ -7,6 +7,7 @@ use App\Models\EgoModels\Product;
 use Illuminate\Http\Request;
 use App\Models\EgoModels\Cart;
 use App\Models\EgoModels\Order;
+use App\Models\PromoCode;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Http;
 
@@ -84,7 +85,10 @@ class OrderController extends Controller
             'verify' => realpath('C:\\xampp\\php\\extras\\ssl\\cacert.pem')
         ])->get('https://gist.githubusercontent.com/devhammed/78cfbee0c36dfdaa4fce7e79c0d39208/raw/494967e8ae71c9fed70650b35dd96e9273fa3344/countries.json');
         $dialdatas = $dial->json();
-        return view('ego.pages.checkout',compact('carts','pageTitle','countries','dialdatas','hasAccessory','freeGift'));
+
+        $promoCodes = PromoCode::where('status','active')->get();
+
+        return view('ego.pages.checkout',compact('carts','pageTitle','countries','dialdatas','hasAccessory','freeGift','promoCodes'));
     }
 
 

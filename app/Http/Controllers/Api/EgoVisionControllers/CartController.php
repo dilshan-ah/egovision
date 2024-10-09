@@ -13,9 +13,11 @@ use Illuminate\Support\Facades\Validator;
 
 class CartController extends Controller
 {
+
     public function addToCart(Request $request)
     {
-        // Validate request data
+        Log::info('Request Data:', $request->all());
+        
         $request->validate([
             'powerType' => 'required|string',
             'productId' => 'required|integer|exists:products,id',
@@ -24,7 +26,10 @@ class CartController extends Controller
             'secondEyeQuantity' => 'nullable|integer|min:0',
             'firstEyePower' => 'nullable|string',
             'secondEyePower' => 'nullable|string',
+            'userId' => 'required|integer|exists:users,id',
         ]);
+    
+        Log::info('Validation passed.');
     
         $powerStatus = $request->input('powerType');
         $pairQuantity = 0;
@@ -35,102 +40,97 @@ class CartController extends Controller
         if ($powerStatus === "no_power") {
             $pairQuantity = (int) $request->input('nopairQuantity');
             $totalBag = $pairQuantity;
+            Log::info('Power status: no_power, Pair quantity: ' . $pairQuantity);
         } else {
             $pairQuantity = (int) $request->input('firstEyeQuantity');
             $pairQuantitySecond = (int) $request->input('secondEyeQuantity');
             $totalBag = $pairQuantity + $pairQuantitySecond;
+            Log::info('Power status: power, First pair quantity: ' . $pairQuantity . ', Second pair quantity: ' . $pairQuantitySecond);
         }
     
-        // Check for valid quantities
         if ($pairQuantity === 0 && $pairQuantitySecond === 0) {
+            Log::warning('Both quantities are zero.');
             return response()->json([
                 'success' => false,
                 'error' => 'Cannot add to cart: Both quantities cannot be zero.'
-            ], 400); // Bad Request
+            ], 400);
         }
     
-        // Fetch the product being added
         $product = Product::find($request->input('productId'));
+        Log::info('Product found:', ['product_id' => $product->id]);
     
-        // Prepare cart data for the first entry
         $cartDataFirst = [
             'product_id' => $request->input('productId'),
             'power_status' => $powerStatus,
             'power' => $powerStatus === 'no_power' ? null : $request->input('firstEyePower'),
             'pair' => $pairQuantity,
-            'user_id' => $request->userId
+            'user_id' => $request->input('userId')
         ];
     
-        // Check for existing cart entry based on user_id, product_id, and power
+        Log::info('Cart data for first eye prepared:', $cartDataFirst);
+    
         $existingCartEntryFirst = Cart::where(function ($query) use ($cartDataFirst) {
             $query->where('product_id', $cartDataFirst['product_id'])
                 ->where('user_id', $cartDataFirst['user_id'])
                 ->where('power', $cartDataFirst['power']);
-        })->orWhere(function ($query) use ($cartDataFirst) {
-            $query->where('product_id', $cartDataFirst['product_id'])
-                ->where('power', $cartDataFirst['power']);
         })->first();
     
-        // If an existing cart entry is found, update the pair quantity
         if ($existingCartEntryFirst) {
-            $existingCartEntryFirst->pair += $pairQuantity; // Increment the pair quantity
+            Log::info('Existing cart entry found:', $existingCartEntryFirst->toArray());
+            $existingCartEntryFirst->pair += $pairQuantity;
             $existingCartEntryFirst->save();
     
-            // Check if we need to handle the second eye power
             $powerSecond = $request->input('secondEyePower');
             if ($powerSecond != '' && $powerSecond !== $cartDataFirst['power']) {
-                // Prepare cart data for the second entry
                 $cartDataSecond = [
                     'product_id' => $request->input('productId'),
                     'power_status' => $powerStatus,
                     'power' => $powerSecond,
                     'pair' => $pairQuantitySecond,
-                    'user_id' => $request->userId
+                    'user_id' => $request->input('userId')
                 ];
     
-                // Create the second cart instance
+                Log::info('Cart data for second eye prepared:', $cartDataSecond);
                 Cart::create($cartDataSecond);
             }
     
-            // Add accessories if the product is a normal product
             if ($product->product_type == 'normal') {
-                $this->addAccessoryToCart($product, $totalBag, $request->userId);
+                Log::info('Adding accessory to cart for normal product.');
+                $this->addAccessoryToCart($product, $totalBag, $request->input('userId'));
             }
+    
             return response()->json([
                 'success' => true,
                 'message' => 'Quantity updated in cart.',
-                'cartCount' => Cart::where('user_id', Auth::id())
-                    ->count()
+                'cartCount' => Cart::where('user_id', $request->input('userId'))->sum('pair')
             ]);
         }
     
-        // If no existing entry, create a new cart instance for the first entry
+        // No existing entry, create a new cart instance
         try {
+            Log::info('Creating new cart entry for first eye.');
             Cart::create($cartDataFirst);
     
-            // Check if we need to create a second entry for power
             $powerSecond = $request->input('secondEyePower');
             if ($powerSecond != '' && $powerSecond !== $cartDataFirst['power']) {
-                // Prepare cart data for the second entry
                 $cartDataSecond = [
                     'product_id' => $request->input('productId'),
                     'power_status' => $powerStatus,
                     'power' => $powerSecond,
                     'pair' => $pairQuantitySecond,
-                    'user_id' => $request->userId
+                    'user_id' => $request->input('userId')
                 ];
     
-                // Create the second cart instance
+                Log::info('Creating new cart entry for second eye:', $cartDataSecond);
                 Cart::create($cartDataSecond);
             }
     
-            // Add accessories if the product is a normal product
             if ($product->product_type == 'normal') {
-                $this->addAccessoryToCart($product, $totalBag, $request->userId);
+                Log::info('Adding accessory to cart for normal product.');
+                $this->addAccessoryToCart($product, $totalBag, $request->input('userId'));
             }
     
-            $cartCount = Cart::where('user_id', $request->userId)
-                ->sum('pair');
+            $cartCount = Cart::where('user_id', $request->input('userId'))->sum('pair');
             return response()->json([
                 'success' => true,
                 'message' => 'Product added to cart.',
@@ -138,13 +138,14 @@ class CartController extends Controller
             ]);
     
         } catch (\Exception $e) {
-            Log::error('Failed to add to cart: ' . $e->getMessage());
+            Log::error('Failed to add to cart:', ['error' => $e->getMessage()]);
             return response()->json([
                 'success' => false,
                 'error' => 'Unable to add to cart.'
-            ], 500); // Server Error
+            ], 500);
         }
     }
+    
     
     protected function addAccessoryToCart($product, $totalBag, $userId)
     {
@@ -180,7 +181,6 @@ class CartController extends Controller
             }
         }
     }
-    
 
     public function userCartList(string $id)
     {

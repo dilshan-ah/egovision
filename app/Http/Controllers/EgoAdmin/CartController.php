@@ -14,26 +14,35 @@ class CartController extends Controller
 {
     public function addToCart(Request $request)
     {
+        Log::error($request->all());
+        $request->validate([
+            'powerType' => 'required|string',
+            'productId' => 'required|integer|exists:products,id',
+            'nopairQuantity' => 'nullable|integer|min:0',
+            'firstEyeQuantity' => 'nullable|integer|min:0',
+            'secondEyeQuantity' => 'nullable|integer|min:0',
+            'firstEyePower' => 'nullable|string',
+            'secondEyePower' => 'nullable|string',
+        ]);
 
         $sessionId = $request->session()->getId();
+        $userId = Auth::user()->id ?? null; // assuming user_id is passed in the request
 
         $powerStatus = $request->input('powerType');
         $pairQuantity = '0';
         $pairQuantitySecond = '0';
         $totalBag = '0';
 
-        if ($powerStatus == "no_power") {
-            $pairQuantity = $request->input('nopairQuantity');
-            $totalBag = $request->input('nopairQuantity');
+        if ($powerStatus === "no_power") {
+            $pairQuantity = $request->input('nopairQuantity', 0);
+            $totalBag = $pairQuantity;
         } else {
-            $pairQuantity = $request->input('firstEyeQuantity');
-
-            $pairQuantitySecond = $request->input('secondEyeQuantity');
-
+            $pairQuantity = $request->input('firstEyeQuantity', 0);
+            $pairQuantitySecond = $request->input('secondEyeQuantity', 0);
             $totalBag = $pairQuantity + $pairQuantitySecond;
         }
 
-        // If pairQuantity is 0 for first or second, return a message
+        // If pairQuantity is 0 for both first or second, return an error
         if ($pairQuantity == '0' && $pairQuantitySecond == '0') {
             return response()->json([
                 'success' => false,
@@ -41,20 +50,18 @@ class CartController extends Controller
             ], 400); // Bad Request
         }
 
-        // Fetch the product being added
         $product = Product::find($request->input('productId'));
 
-        // Prepare cart data for the first entry
         $cartDataFirst = [
             'session_id' => $sessionId,
             'product_id' => $request->input('productId'),
             'power_status' => $powerStatus,
-            'power' => $powerStatus == 'no_power' ? null : $request->input('firstEyePower'),
+            'power' => $powerStatus === 'no_power' ? null : $request->input('firstEyePower'),
             'pair' => $pairQuantity,
-            'user_id' => Auth::check() ? Auth::user()->id : null
+            'user_id' => $userId
         ];
 
-        // Check for existing cart entry based on user_id, product_id, and power
+        // Check for existing cart entry
         $existingCartEntryFirst = Cart::where(function ($query) use ($cartDataFirst) {
             $query->where('product_id', $cartDataFirst['product_id'])
                 ->where('user_id', $cartDataFirst['user_id'])
@@ -64,76 +71,69 @@ class CartController extends Controller
                 ->where('session_id', $sessionId)
                 ->where('power', $cartDataFirst['power']);
         })->first();
-        // If an existing cart entry is found, update the pair quantity
+
         if ($existingCartEntryFirst) {
-            $existingCartEntryFirst->pair += $pairQuantity; // Increment the pair quantity
+            $existingCartEntryFirst->pair += $pairQuantity;
             $existingCartEntryFirst->save();
 
-            // Check if we need to handle the second eye power
             $powerSecond = $request->input('secondEyePower');
-            if ($powerSecond != '' && $powerSecond !== $cartDataFirst['power']) {
-                // Prepare cart data for the second entry
+            if ($powerSecond !== '' && $powerSecond !== $cartDataFirst['power']) {
                 $cartDataSecond = [
                     'session_id' => $sessionId,
                     'product_id' => $request->input('productId'),
                     'power_status' => $powerStatus,
                     'power' => $powerSecond,
-                    'pair' => $pairQuantitySecond, // Use secondEyeQuantity for the second entry
-                    'user_id' => Auth::check() ? Auth::user()->id : null
+                    'pair' => $pairQuantitySecond,
+                    'user_id' => $userId
                 ];
-
-                // Create the second cart instance
-                $cartSecond = Cart::create($cartDataSecond);
+                Cart::create($cartDataSecond);
             }
 
-            // Add accessories if the product is a normal product
-            if ($product->product_type == 'normal') {
-                $this->addAccessoryToCart($sessionId, $product, $totalBag, Auth::check() ? Auth::user()->id : null);
+            if ($product->product_type === 'normal') {
+                $this->addAccessoryToCart($sessionId, $product, $totalBag, $userId);
             }
+
+            $cartCount = Cart::where('session_id', $sessionId)
+                ->orWhere('user_id', $userId)
+                ->sum('pair');
+
             return response()->json([
                 'success' => true,
                 'message' => 'Quantity updated in cart.',
-                'cartCount' => Cart::where('session_id', $sessionId)
-                    ->orWhere('user_id', Auth::id())
-                    ->count()
+                'cartCount' => $cartCount
             ]);
         }
 
-        // If no existing entry, create a new cart instance for the first entry
+        // No existing cart entry, create new ones
         try {
-            $cartFirst = Cart::create($cartDataFirst);
+            Cart::create($cartDataFirst);
 
-            // Check if we need to create a second entry for power
             $powerSecond = $request->input('secondEyePower');
-            if ($powerSecond != '' && $powerSecond !== $cartDataFirst['power']) {
-                // Prepare cart data for the second entry
+            if ($powerSecond !== '' && $powerSecond !== $cartDataFirst['power']) {
                 $cartDataSecond = [
                     'session_id' => $sessionId,
                     'product_id' => $request->input('productId'),
                     'power_status' => $powerStatus,
                     'power' => $powerSecond,
-                    'pair' => $pairQuantitySecond, // Use secondEyeQuantity for the second entry
-                    'user_id' => Auth::check() ? Auth::user()->id : null
+                    'pair' => $pairQuantitySecond,
+                    'user_id' => $userId
                 ];
-
-                // Create the second cart instance
-                $cartSecond = Cart::create($cartDataSecond);
+                Cart::create($cartDataSecond);
             }
 
-            // Add accessories if the product is a normal product
-            if ($product->product_type == 'normal') {
-                $this->addAccessoryToCart($sessionId, $product, $totalBag, Auth::check() ? Auth::user()->id : null);
+            if ($product->product_type === 'normal') {
+                $this->addAccessoryToCart($sessionId, $product, $totalBag, $userId);
             }
-    
+
             $cartCount = Cart::where('session_id', $sessionId)
-                ->orWhere('user_id', Auth::id())
-                ->count();
+                ->orWhere('user_id', $userId)
+                ->sum('pair');
+
             return response()->json([
                 'success' => true,
                 'message' => 'Product added to cart.',
                 'cartCount' => $cartCount
             ]);
-
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
@@ -145,21 +145,19 @@ class CartController extends Controller
     protected function addAccessoryToCart($sessionId, $product, $totalBag, $userId)
     {
         $accessory = Product::where('product_type', 'accessories')
-            ->where('is_default_bag', '1')
+            ->where('is_default_bag', 1)
             ->first();
-        Log::info($accessory);
+
         if ($accessory) {
-            // Prepare cart data for the accessory
             $accessoryCartData = [
                 'session_id' => $sessionId,
                 'product_id' => $accessory->id,
-                'power_status' => 'no_power', // Assume accessories have no power settings
+                'power_status' => 'no_power',
                 'power' => null,
                 'pair' => $totalBag,
                 'user_id' => $userId
             ];
 
-            // Check if the accessory is already in the cart
             $existingAccessoryEntry = Cart::where(function ($query) use ($accessoryCartData) {
                 $query->where('product_id', $accessoryCartData['product_id'])
                     ->where('user_id', $accessoryCartData['user_id']);
@@ -168,17 +166,16 @@ class CartController extends Controller
                     ->where('session_id', $sessionId);
             })->first();
 
-            // If accessory already exists, update the quantity
             if ($existingAccessoryEntry) {
                 $existingAccessoryEntry->pair += $totalBag;
                 $existingAccessoryEntry->save();
             } else {
-                // Otherwise, create a new entry for the accessory
                 Cart::create($accessoryCartData);
             }
         }
     }
-    
+
+
     public function cartItems()
     {
         $carts = Cart::with('product')->where('user_id', auth()->id())->get(); // Adjust as necessary
@@ -261,7 +258,6 @@ class CartController extends Controller
                     $accessoryCartItem->pair += 1;
                     $accessoryCartItem->save();
                     $accessoryQuantity = $accessoryCartItem->pair;
-                    
                 }
             }
         } elseif ($request->action == 'decrement') {
@@ -287,7 +283,7 @@ class CartController extends Controller
                 }
             }
         } else {
-            \Log::error('Invalid action provided', ['action' => $request->action]);
+            Log::error('Invalid action provided', ['action' => $request->action]);
             return response()->json(['error' => 'Invalid action'], 400);
         }
 
@@ -381,9 +377,10 @@ class CartController extends Controller
     }
 
 
-    public function addGiftToCart(){
-        $existingCart = Cart::where('user_id',Auth::user()->id)->sum('pair');
-        $product = Product::where('is_default_bag','1')->first();
+    public function addGiftToCart()
+    {
+        $existingCart = Cart::where('user_id', Auth::user()->id)->sum('pair');
+        $product = Product::where('is_default_bag', '1')->first();
         $userId = auth()->id();
         $cartAccessoryData = [
             'product_id' => $product->id,

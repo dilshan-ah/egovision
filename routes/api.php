@@ -11,6 +11,7 @@ use App\Http\Controllers\Api\EgoVisionControllers\FilterController;
 use App\Http\Controllers\Api\EgoVisionControllers\OrderController;
 use App\Http\Controllers\Api\EgoVisionControllers\PrescriptionController;
 use App\Http\Controllers\Api\EgoVisionControllers\ProductController;
+use App\Http\Controllers\Api\EgoVisionControllers\ReturnProductController;
 use App\Http\Controllers\Api\EgoVisionControllers\TicketController;
 use App\Http\Controllers\Api\EgoVisionControllers\WishlistController;
 use App\Models\GeneralSetting;
@@ -113,6 +114,11 @@ Route::controller(TicketController::class)->group(function(){
 Route::controller(PrescriptionController::class)->group(function(){
     Route::get('app/user/prescription/{id}','showPrescription');
     Route::post('app/user/prescription/upload/{id}','uploadPrescriptionSubmit');
+});
+
+Route::controller(ReturnProductController::class)->group(function(){
+    Route::get('app/user/returned-products/{userId}','myReturns');
+    Route::post('app/user/return-make','makeReturn');
 });
 
 Route::namespace('Api')->name('api.')->group(function () {

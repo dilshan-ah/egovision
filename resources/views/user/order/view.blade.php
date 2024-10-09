@@ -3,7 +3,7 @@
 @section('content')
 
 @php
-    $policyPages = getContent('policy_pages.element',false,null,true);
+$policyPages = getContent('policy_pages.element',false,null,true);
 @endphp
 <div class="container-fluid">
     <div class="row">
@@ -25,7 +25,7 @@
 
                 <button class="btn btn-outline-dark" @if($disableButton) disabled @endif data-bs-toggle="modal" data-bs-target="#returnModal">Return product</button>
 
-                <form action="{{route('return.make')}}" method="post">
+                <form action="{{ route('return.make') }}" method="post" id="returnForm">
                     @csrf
                     <div class="modal fade" id="returnModal" aria-hidden="true" aria-labelledby="exampleModalToggleLabel" tabindex="-1">
                         <div class="modal-dialog modal-dialog-centered">
@@ -38,7 +38,7 @@
                                     @php
                                     $hasItemsToReturn = false;
                                     foreach(@$order->orderItems as $item) {
-                                    if(!$item->return_quantity) {
+                                    if(!$item->return) {
                                     $hasItemsToReturn = true;
                                     break;
                                     }
@@ -47,15 +47,15 @@
 
                                     @if($hasItemsToReturn)
                                     @foreach(@$order->orderItems as $item)
-                                    @if(!$item->return_quantity)
+                                    @if(!$item->return)
                                     <div class="form-check justify-content-between d-flex mb-3">
                                         <div>
-                                            <input class="form-check-input" type="checkbox" value="{{$item->id}}" id="flexCheckDefault{{$item->id}}" name="items[{{ $loop->index }}][item]">
-                                            <label class="form-check-label" for="flexCheckDefault{{$item->id}}">
-                                                {{@$item->product->name}} x {{@$item->pair}}
+                                            <input class="form-check-input item-checkbox" type="checkbox" value="{{ $item->id }}" id="flexCheckDefault{{ $item->id }}" name="items[{{ $loop->index }}][item]" data-item-id="{{ $item->id }}">
+                                            <label class="form-check-label" for="flexCheckDefault{{ $item->id }}">
+                                                {{ @$item->product->name }} x {{ @$item->pair }}
                                             </label>
                                         </div>
-                                        <input type="number" name="items[{{ $loop->index }}][quantity]" min="1" max="{{ $item->pair }}" required/>
+                                        <input type="number" name="items[{{ $loop->index }}][quantity]" min="1" max="{{ $item->pair }}" class="quantity-input" disabled />
                                     </div>
                                     @endif
                                     @endforeach
@@ -64,7 +64,7 @@
                                     @endif
                                 </div>
                                 <div class="modal-footer">
-                                    <button type="button" class="btn btn-dark" data-bs-target="#exampleModalToggle2" data-bs-toggle="modal" @if(!$hasItemsToReturn) disabled @endif>Next</button>
+                                    <button type="button" class="btn btn-dark" id="nextButton" data-bs-target="#exampleModalToggle2" data-bs-toggle="modal" disabled>Next</button>
                                 </div>
                             </div>
                         </div>
@@ -84,7 +84,7 @@
 
                                         <div class="form-check text-start mb-3">
                                             <input type="checkbox" class="form-check-input" id="privacyPolicy" required>
-                                            <label class="form-check-label" for="privacyPolicy">I have read and accept <span>@foreach($policyPages as $policy) <a href="{{ route('policy.pages',[$policy->id, slug($policy->data_values->title)]) }}">{{ __($policy->data_values->title) }}</a> @if(!$loop->last), @endif @endforeach</span></label>
+                                            <label class="form-check-label" for="privacyPolicy">I have read and accept <span>@foreach($policyPages as $policy) <a href="{{ route('policy.pages', [$policy->id, slug($policy->data_values->title)]) }}">{{ __($policy->data_values->title) }}</a> @if(!$loop->last), @endif @endforeach</span></label>
                                         </div>
                                     </div>
                                 </div>
@@ -96,6 +96,50 @@
                         </div>
                     </div>
                 </form>
+
+                <script>
+                    document.addEventListener('DOMContentLoaded', function() {
+                        const checkboxes = document.querySelectorAll('.item-checkbox');
+                        const quantityInputs = document.querySelectorAll('.quantity-input');
+                        const nextButton = document.getElementById('nextButton');
+
+                        checkboxes.forEach((checkbox, index) => {
+                            checkbox.addEventListener('change', function() {
+                                // Enable/disable the corresponding quantity input
+                                quantityInputs[index].disabled = !this.checked;
+
+                                // Always check the Next button after changing checkbox state
+                                checkNextButton();
+                            });
+                        });
+
+                        // Function to check if all checked items have filled quantities
+                        function checkNextButton() {
+                            let allValid = true;
+
+                            checkboxes.forEach((checkbox, index) => {
+                                if (checkbox.checked) {
+                                    if (!quantityInputs[index].value) {
+                                        allValid = false; // If any checked box does not have a filled quantity, set to false
+                                    }
+                                }
+                            });
+
+                            // Enable or disable the Next button based on validity
+                            nextButton.disabled = !allValid;
+                        }
+
+                        // Add event listener to quantity inputs to validate when they change
+                        quantityInputs.forEach((input, index) => {
+                            input.addEventListener('input', function() {
+                                // Ensure Next button is checked whenever the quantity is changed
+                                checkNextButton();
+                            });
+                        });
+                    });
+                </script>
+
+
 
             </div>
         </div>

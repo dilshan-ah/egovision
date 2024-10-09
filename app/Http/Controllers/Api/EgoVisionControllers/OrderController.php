@@ -36,7 +36,7 @@ class OrderController extends Controller
             'order_items.*.pair' => 'required|integer',
             'order_items.*.price' => 'required|numeric',
         ]);
-    
+
         try {
             // Create order
             $order = Order::create([
@@ -59,7 +59,7 @@ class OrderController extends Controller
                 'amount' => $validatedData['delivery'] + $validatedData['total_amount'],
                 'transaction_id' => uniqid(),
             ]);
-    
+
             // Save order items
             foreach ($validatedData['order_items'] as $item) {
                 OrderItems::create([
@@ -70,7 +70,7 @@ class OrderController extends Controller
                     'price' => $item['price'],
                 ]);
             }
-    
+
             // Return success response
             return response()->json([
                 'success' => true,
@@ -80,7 +80,7 @@ class OrderController extends Controller
         } catch (\Exception $e) {
             // Log the error for debugging
             Log::error('Order creation failed: ' . $e->getMessage());
-    
+
             // Return error response
             return response()->json([
                 'success' => false,
@@ -92,71 +92,81 @@ class OrderController extends Controller
 
     public function userOrder(string $userId)
     {
-        // Fetch paginated orders with specific fields
-        $orders = Order::where('user_id', $userId)
-            ->select('id', 'transaction_id', 'amount', 'status', 'created_at')
-            ->with(['orderItems' => function ($query) {
-                $query->select('id', 'order_id', 'product_id', 'power', 'pair')
-                      ->with(['product' => function ($subQuery) {
-                          $subQuery->select('id', 'name'); // Select only name and id from products
-                      }]);
-            }])
-            ->orderBy('created_at', 'asc')
-            ->paginate(5);  // Paginate the results to show 5 per page
-    
-        // Format the orders and modify the structure
-        $orders->getCollection()->transform(function ($order) {
-            // Format date as 05, Oct 24
-            $order->created_at =  Carbon::parse($order->created_at)->format('d M,Y');
-            
-            foreach ($order->orderItems as $item) {
-                // Add product name directly into the orderItems
-                $item->product_name = $item->product->name;
-                unset($item->product); // Remove the product instance
+        try {
+            $orders = Order::where('user_id', $userId)
+                ->select('id', 'transaction_id', 'amount', 'status', 'created_at')
+                ->with(['orderItems' => function ($query) {
+                    $query->select('id', 'order_id', 'product_id', 'power', 'pair')
+                        ->with(['product' => function ($subQuery) {
+                            $subQuery->select('id', 'name');
+                        }]);
+                }])
+                ->orderBy('created_at', 'asc')
+                ->paginate(5);
+
+            $orders->getCollection()->transform(function ($order) {
+                $order->created_at =  Carbon::parse($order->created_at)->format('d M,Y');
+
+                foreach ($order->orderItems as $item) {
+                    $item->product_name = $item->product->name;
+                    unset($item->product);
+                }
+                return $order;
+            });
+
+            if($orders->count() == 0){
+                return response()->json([
+                    'error' => true,
+                    'message' => 'No Orders Found',
+                ]);
             }
-            return $order;
-        });
-    
-        // Return success message and paginated orders as JSON
-        return response()->json([
-            'success' => true,
-            'message' => 'Orders retrieved successfully.',
-            'orders' => $orders->items(), // Current page data
-            'current_page' => $orders->currentPage(),
-            'last_page' => $orders->lastPage(),
-            'total' => $orders->total(),
-        ]);
+
+            // Return success message and paginated orders as JSON
+            return response()->json([
+                'success' => true,
+                'message' => 'Orders retrieved successfully.',
+                'orders' => $orders->items(), // Current page data
+                'current_page' => $orders->currentPage(),
+                'last_page' => $orders->lastPage(),
+                'total' => $orders->total(),
+            ]);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'error' => true,
+                'message' => $th,
+            ]);
+        }
     }
-    
+
     public function singleOrder(string $orderId)
     {
         // Fetch the order without pagination
         $order = Order::where('id', $orderId)
             ->with(['orderItems' => function ($query) {
                 $query->select('id', 'order_id', 'product_id', 'power', 'pair', 'price')
-                      ->with(['product' => function ($subQuery) {
-                          $subQuery->select('id', 'name'); // Select only name and id from products
-                      }]);
+                    ->with(['product' => function ($subQuery) {
+                        $subQuery->select('id', 'name'); // Select only name and id from products
+                    }]);
             }])
             ->first(); // Get the single order
-    
+
         if (!$order) {
             return response()->json([
                 'success' => false,
                 'message' => 'Order not found.',
             ], 404);
         }
-    
+
         // Format date as 05, Oct 24
         $order->created_at = \Carbon\Carbon::parse($order->created_at)->format('d M, Y');
-        
+
         // Modify the orderItems structure
         foreach ($order->orderItems as $item) {
             // Add product name directly into the orderItems
             $item->product_name = $item->product->name;
             unset($item->product); // Remove the product instance
         }
-    
+
         // Return success message and order as JSON
         return response()->json([
             'success' => true,
@@ -164,6 +174,4 @@ class OrderController extends Controller
             'order' => $order,
         ]);
     }
-    
-    
 }
