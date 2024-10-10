@@ -179,7 +179,7 @@
             </div>
             <!-- Middle Side -->
             <div class="col-md-4">
-                <div class="dropdown ">
+                <!-- <div class="dropdown ">
                     <a style="border-radius: 0px;text-decoration: none" class=" dropdown-toggle " type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
                         @lang('messages.Currency')
                     </a>
@@ -187,7 +187,7 @@
                         <small class="dropdown-item "> @lang('messages.Dollar')</small>
                         <small class="dropdown-item ">@lang('messages.Euro')</small>
                     </div>
-                </div>
+                </div> -->
                 <div class="dropdown mt-2">
                     <a style="border-radius: 0px;text-decoration: none;" class=" dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
                         @lang('messages.language')

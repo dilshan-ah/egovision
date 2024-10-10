@@ -422,10 +422,6 @@
         document.getElementById(tabId).checked = true;
         const totalPriceElement = document.getElementById("total-price");
         totalPriceElement.textContent = '0.00';
-
-        // document.querySelectorAll(".quantity-btn, .quantity-btn-two, #quantity").forEach((quantityElement) => {
-        //     quantityElement.textContent = 0;
-        // });
     }
 </script>
 
@@ -488,14 +484,11 @@
         const totalPriceElement = button.closest('.adjustment-btns').querySelector('.total-price-section');
         const calculatedTotal = (currentQuantityValue * productPrice).toFixed(2);
 
-        // Update the displayed total for the specific section
         totalPriceElement.textContent = `Taka: ${calculatedTotal} ৳`;
 
-        // Recalculate the global total price
         calculateGlobalTotalPrice();
     }
 
-    // Function to recalculate the global total price based on all sections
     function calculateGlobalTotalPrice() {
         globalTotalPrice = 0;
         document.querySelectorAll(".total-price-section").forEach((priceElement) => {
@@ -518,11 +511,10 @@
             priceElement.textContent = `Taka: 0.00 ৳`; // Reset price display
         });
 
-        globalTotalPrice = 0; // Reset global total price
-        updateAddToCartButton(); // Update the add to cart button to show reset value
+        globalTotalPrice = 0;
+        updateAddToCartButton();
     }
 
-    // Attach event listeners for quantity buttons
     function attachQuantityListeners() {
         document.querySelectorAll(".increase-btn, .increase-btn-two").forEach((increaseButton) => {
             increaseButton.addEventListener("click", function() {

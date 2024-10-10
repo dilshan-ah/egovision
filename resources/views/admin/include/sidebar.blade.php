@@ -331,6 +331,13 @@
         </a>
     </li>
 
+    <li class="nav-item">
+        <a class="nav-link collapsed" href="{{ route('shipping.index') }}">
+            <i class="fa fa-thumbs-up"></i>
+            <span>@lang('Shipping Methods')</span>
+        </a>
+    </li>
+
     <!-- Divider -->
     <hr class="sidebar-divider">
 
