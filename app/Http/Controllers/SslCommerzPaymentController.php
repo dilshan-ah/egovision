@@ -8,6 +8,7 @@ use App\Lib\SslCommerz\SslCommerzNotification;
 use App\Models\EgoModels\Cart;
 use Illuminate\Support\Facades\Auth;
 use App\Models\EgoModels\OrderItems;
+use App\Models\PromoCode;
 
 class SslCommerzPaymentController extends Controller
 {
@@ -87,12 +88,22 @@ class SslCommerzPaymentController extends Controller
 
         $carts = Cart::where('user_id', Auth::id())->get();
 
-        // Filter and sum the prices where product->is_free == 1
+        
         $freeProductsTotal = $carts->filter(function ($cart) {
             return $cart->product->is_free == 1; // Filter products where is_free == 1
         })->sum(function ($cart) {
             return $cart->product->price * $cart->pair;
         });
+
+        $promo = PromoCode::where('reedem_code', $request->promo_code)->where('status', 'active')->first();
+
+        if($promo){
+            $discount = ($promo->offer_amount / 100) * $cartTotal;
+            $overallDiscount = $discount + $freeProductsTotal;
+        }else{
+            $overallDiscount = $freeProductsTotal;
+        }
+        
 
         // Before initiating the payment, insert or update order status as Pending
         DB::table('orders')->updateOrInsert([
@@ -114,8 +125,8 @@ class SslCommerzPaymentController extends Controller
             'delivery_charge' => $post_data['delivery'],
             'subtotal' => $cartTotal,
             'payment_method' => $post_data['payment_method'],
-            'discount' => $freeProductsTotal,
-            'amount' => $post_data['delivery'] + $cartTotal - $freeProductsTotal,
+            'discount' => $overallDiscount,
+            'amount' => $post_data['delivery'] + $cartTotal - $overallDiscount,
         ]);
 
         // Fetch the inserted/updated order to get the order ID

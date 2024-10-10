@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Models\EgoModels\Cart;
 use App\Models\EgoModels\Order;
 use App\Models\PromoCode;
+use App\Models\ShippingMethod;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Http;
 
@@ -88,7 +89,9 @@ class OrderController extends Controller
 
         $promoCodes = PromoCode::where('status','active')->get();
 
-        return view('ego.pages.checkout',compact('carts','pageTitle','countries','dialdatas','hasAccessory','freeGift','promoCodes'));
+        $shippingMethods = ShippingMethod::all();
+
+        return view('ego.pages.checkout',compact('carts','pageTitle','countries','dialdatas','hasAccessory','freeGift','promoCodes','shippingMethods'));
     }
 
 

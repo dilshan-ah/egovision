@@ -46,7 +46,7 @@
                         <label>Free Delivery</label>
                         <select name="free_delivery" id="" class="form-control">
                             <option value="yes" {{ old('free_delivery') == 'yes' ? 'selected' : '' }}>Yes</option>
-                            <option value="no" {{ old('free_delivery') == 'no' ? 'selected' : '' }}>No</option>
+                            <option value="no" {{ old('free_delivery') == 'no' ? 'selected' : 'selected' }}>No</option>
                         </select>
                         @error('free_delivery')
                         <span class="text-danger">{{ $message }}</span>

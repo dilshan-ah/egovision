@@ -125,9 +125,9 @@ class PromoCodeController extends Controller
             return response()->json(['success' => false, 'message' => 'Minimum order amount not met']);
         }
 
-        // Calculate discount
-        $discount = ($promo->offer_amount / 100) * $subtotal;
-        $newTotal = $subtotal - $discount + 60;
+        $discount = floatval($promo->offer_amount) / 100 * floatval($subtotal);
+
+        $newTotal = (float)$subtotal - (float)$discount + 60;
 
         return response()->json([
             'success' => true,
