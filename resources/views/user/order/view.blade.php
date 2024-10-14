@@ -173,9 +173,9 @@ $policyPages = getContent('policy_pages.element',false,null,true);
                                     @endif
                                 </td>
 
-                                <td>{{@$item->product->price ?? ''}}৳</td>
+                                <td>{{@$item->price/@$item->pair ?? ''}}৳</td>
                                 <td>{{@$item->pair}}</td>
-                                <td>{{@$item->pair*(@$item->product->price ?? 0)}}৳</td>
+                                <td>{{@$item->price}}৳</td>
                             </tr>
                             @endforeach
                             @endif

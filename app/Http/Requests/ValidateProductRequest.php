@@ -29,7 +29,7 @@ class ValidateProductRequest extends FormRequest
             'material_id' => 'nullable',
             'tone_id' => 'nullable',
             'lens_design_id' => 'nullable',
-            'water_content_id' => 'nullable',
+            'water_content' => 'nullable',
             'color_id' => 'nullable',
             'duration_id' => 'nullable',
             'product_intro' => 'required',

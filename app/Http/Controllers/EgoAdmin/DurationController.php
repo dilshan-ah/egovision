@@ -42,6 +42,7 @@ class DurationController extends Controller
             $duration->name = $request->name;
             $duration->months = $request->month;
             $duration->description = $request->duration_description;
+            $duration->is_month = $request->is_month;
 
             $imageName ='';
 
@@ -89,6 +90,7 @@ class DurationController extends Controller
         $duration->name = $request->input('name');
         $duration->months = $request->month;
         $duration->description = $request->duration_description;
+        $duration->is_month = $request->is_month;
 
         $imageName = $duration->image_path;
 
@@ -112,7 +114,7 @@ class DurationController extends Controller
         $duration->save();
 
         $notify[] = ['success', 'Duration updated successfully.'];
-        return redirect()->route('duration.index')->withNotify($notify);
+        return redirect()->route('duration.index')->withNotify($notify)->withInputs();
     }
 
     public function destroy($id)

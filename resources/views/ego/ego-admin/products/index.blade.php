@@ -30,7 +30,7 @@
                     <tbody>
                         @foreach ($products as $key => $product)
                         <tr class="text-center">
-                            <td>{{ $loop->iteration}}
+                            <td>{{ $products->firstItem() + $key }}
                             </td>
                             <td>
                                 <img src="{{asset($product->image_path)}}" width="200px" alt="">
@@ -48,8 +48,16 @@
                         @endforeach
                     </tbody>
                 </table>
+                @if ($products->hasPages())
+                <div class="card-footer py-4">
+                    {{ paginateLinks($products) }}
+                </div>
+                @endif
             </div>
         </div>
     </div>
 </div>
 @endsection
+@push('breadcrumb-plugins')
+<div class="mb-2"><x-search-form placeholder="Product name/Price" /></div>
+@endpush

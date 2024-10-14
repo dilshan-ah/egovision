@@ -219,8 +219,6 @@
     .navbar-brand-logo img {
         width: 200px;
         transition: transform 0.3s ease-in-out;
-        transition: transform 0.3s ease-in-out;
-        margin-left: 122px;
     }
 
     @media (max-width: 768px) {
@@ -229,8 +227,7 @@
         }
 
         .navbar-brand-logo img {
-            width: 148px;
-            height: 60px;
+            width: 170px;
         }
     }
 
@@ -243,7 +240,7 @@
 
     @media (max-width: 768px) {
         .navbar-toggler img {
-            width: 30px;
+            width: 20px;
         }
     }
 
@@ -654,7 +651,7 @@
                     </div>
                 </div>
                 <!-- Middle: Logo -->
-                <div class="navbar-brand-container-logo ">
+                <div class="navbar-brand-container-logo">
                     <a class="navbar-brand-logo" href="{{ route('ego.index') }}">
                         <img src="{{ asset('ego/ego_logo_black.png') }}" alt="Logo" />
                     </a>
@@ -667,20 +664,19 @@
                         <img src="{{ asset('ego/black_account.svg') }}" alt="Account"
                             style="height: 14px; width: 14px; margin-right: 5px;" />
                     </a>
-                @else
+                    @else
                     <a class="navbar-brand d-none d-md-block" href="{{ route('user.home') }}"
                         style="display: flex; align-items: center; font-size: 14px; color: black;">
                         <img src="{{ asset('ego/black_account.svg') }}" alt="Account"
                             style="height: 14px; width: 14px; margin-right: 5px;" />
                         {{ Auth::user()->fullname }}
                     </a>
-                @endif
-                <a class="navbar-brand mx-2 d-none d-lg-flex" href="#" id="search-icon"
-                style="align-items: center; font-size: 14px;">
-                 <img src="{{ asset('ego/search-icon_black.svg') }}" alt="Search"
-                      style="height: 14px; width: 14px; margin-right: 5px;" />
-             </a>
-             
+                    @endif
+                    <a class="navbar-brand mx-2" href="#" id="search-icon"
+                        style="display: flex; align-items: center; font-size: 14px;">
+                        <img src="{{ asset('ego/search-icon_black.svg') }}" alt="Search"
+                            style="height: 14px; width: 14px; margin-right: 5px;" />
+                    </a>
                     <div id="search-popup" class="search-popup">
                         <div class="search-popup-content">
                             <button type="button" id="close-popup" style="opacity: 0;" class="close-button position-absolute">&times;</button>
@@ -697,27 +693,45 @@
                             </div>
                         </div>
                     </div>
-                    
-                        <!-- Wishlist Icon -->
-                        <a class="navbar-brand mx-3 position-relative" href="{{route('ego.wishlist')}}"
-                        style="display: flex; align-items: center; font-size: 14px;">
-                            <img src="{{ asset('ego/love_shape_black.svg') }}" alt="Wishlist"
-                                style="height: 18px; width: 18px; margin-right: 5px;" />
-                            <span class="badge" style="font-size: 10px; position: absolute; top: 5px; right: 0; background-color: black; color: white; border-radius: 50%; width: 18px; height: 18px; display: flex; align-items: center; justify-content: center;">
-                                {{@$wishlists->count()}}
-                            </span>
-                        </a>
-                        <!-- Cart Icon -->
-                                                <a class="navbar-brand" href="#" id="openSidebar"
-                            style="display: flex; align-items: center; font-size: 14px; position: relative;">
-                                <img src="{{ asset('ego/cart_shape_black.svg') }}" alt="Cart"
-                                    style="height: 18px; width: 18px; margin-right: 5px;" />
-                                <span class="badge" id="cart-count" 
-                                    style="font-size: 10px; position: absolute; top: 5px; right: 0px; background-color: black; color: white; border-radius: 50%; width: 16px; height: 16px; display: flex; align-items: center; justify-content: center;">
-                                    <!-- Cart count will be dynamically added here -->
-                                </span>
-                            </a>
+                    <script>
+                        document.getElementById("search-icon").addEventListener("click", function() {
+                            document.getElementById("search-popup").style.display = "flex";
+                        });
 
+                        document.getElementById("close-popup").addEventListener("click", function() {
+                            document.getElementById("search-popup").style.display = "none";
+                        });
+
+                        // Optional: Close popup when clicking outside the search bar content
+                        document.getElementById("search-popup").addEventListener("click", function(e) {
+                            if (e.target == this) {
+
+                                document.getElementById("search-popup").style.display = "none";
+                            }
+                        });
+
+                        // Optional: Close popup when clicking outside the search bar content
+                        document.getElementById("search-popup").addEventListener("click", function(e) {
+                            if (e.target == this) {
+                                document.getElementById("search-popup").style.display = "none";
+                            }
+                        });
+                    </script>
+
+                    <a class="navbar-brand mx-2 position-relative" href="{{route('ego.wishlist')}}"
+                        style="display: flex; align-items: center; font-size: 14px;">
+                        <img src="{{ asset('ego/love_shape_black.svg') }}" alt="Love"
+                            style="height: 14px; width: 14px; margin-right: 5px;" />
+                        <span class="badge"
+                            style="font-size: 10px; position: absolute; top: 5px;">{{@$wishlists->count()}}</span>
+                    </a>
+                    <a id="openSidebar" class="navbar-brand mx-2 position-relative" href="#" id="Love-icon"
+                        style="display: flex; align-items: center; font-size: 14px;">
+                        <img src="{{ asset('ego/cart_shape_black.svg') }}" alt="Search"
+                            style="height: 14px; width: 14px; margin-right: 5px;" />
+                        <span class="badge" id="cart-count"
+                            style="font-size: 10px; position: absolute; top: 5px;"></span>
+                    </a>
                     <!-- Search Bar Popup -->
                     <div id="search-popup" class="search-popup">
                         <div class="search-popup-content">
@@ -732,21 +746,12 @@
                 </div>
             </div>
         </nav>
-        
         <!-- Secondary Navbar -->
         <nav class="navbar navbar-expand-lg navbar-dark">
             <div class="container-fluid" style="border-bottom: 1px solid #eee">
                 <div class="collapse navbar-collapse" id="navbarNavDropdown">
                     <ul class="navbar-nav mx-auto p-2">
                         <!-- mx-auto will center the items -->
-                        <li class="nav-item">
-                            <a class="navbar-brand  d-lg-none responsive-link" href="#" id="search-icon"
-                               style="display: flex; align-items: center; font-size: 14px;">
-                                <img src="{{ asset('ego/search-icon_black.svg') }}" alt="Search"
-                                     style="height: 18px; width: 18px; margin-right: 5px;" /> Search Lenses
-                            </a>
-                        </li>
-                        <hr>
                         <li class="nav-item">
                             @if (!Auth::user())
                             <a class="navbar-brand d-block d-lg-none responsive-link " href="{{ route('ego.login') }}"
@@ -763,270 +768,53 @@
                             </a>
                             @endif
                         </li>
-                        
+
                         <style>
                             @media (max-width: 991.98px) {
                                 .responsive-link {
-                                    color: black !important; /* Changes text color to black */
+                                    color: black !important;
+                                    /* Changes text color to black */
                                 }
+
                                 .responsive-img {
-                                    content: url('{{ asset('ego/black_account.svg') }}'); /* Changes image to black_account.svg */
+                                    content: url('{{ asset(' ego/black_account.svg') }}');
+                                    /* Changes image to black_account.svg */
                                 }
                             }
                         </style>
-                        
                         <li class="nav-item">
                             <a class="nav-link hover-line {{ Route::is('ego.index') ? 'active' : '' }}"
                                 href="{{ route('ego.index') }}">@lang('messages.home')</a>
                         </li>
-
-                                            
-{{-- sm  devise -----------------------------------------------------------------------------------------------------------------}}
-<style>
-    /* General styles for dropdown */
-.mega-menu {
-    display: none;
-    position: absolute;
-    top: 60px; /* Adjusted top position for better alignment */
-    left: 0;
-    background-color: #fff;
-    padding: 20px;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    z-index: 1000; /* Ensure the dropdown is above other elements */
-}
-
-.mega-column {
-    width: calc(33.33% - 20px); /* Three columns with space */
-    padding: 10px; /* Padding inside each column */
-}
-
-.sub-menu {
-    list-style: none;
-    padding-left: 0;
-    display: none; /* Hide by default */
-}
-
-.toggle {
-    cursor: pointer;
-    margin-left: 10px; /* Align the icon to the right */
-    font-size: 20px;
-    float: right; /* Float the toggle to the right */
-    margin-top: -8px;
-}
-
-/* Responsive behavior */
-@media screen and (max-width: 768px) {
-    .mega-menu {
-        position: static;
-        width: 100%;
-        background: #f5f5f5;
-    }
-
-    .mega-column {
-        width: 100%; /* Full width on mobile */
-    }
-}
-
-.flex-container {
-    display: flex; /* Use flexbox for layout */
-    justify-content: space-between; /* Space between items */
-    align-items: center; /* Center items vertically */
-}
-
-.hover-link {
-    text-decoration: none; /* Remove underline */
-    color: inherit; /* Inherit color from parent */
-    transition: color 0.3s; /* Smooth color transition */
-}
-
-.hover-link:hover {
-    color: #E9814C; /* Change color on hover */
-}
-
-.custom-dropdown-item {
-    display: block; /* Make link block-level for padding */
-    padding: 8px 12px; /* Increased padding for better click area */
-    color: #333; /* Set text color */
-    border-radius: 4px; /* Rounded corners for items */
-    transition: background-color 0.3s; /* Smooth background transition */
-}
-
-.custom-dropdown-item:hover {
-    background-color: #f2f2f2; 
-}
-
-/* Additional styles for headers */
-.section h3 {
-    display: flex; /* Use flex to align items */
-    align-items: center; /* Center items vertically */
-    justify-content: space-between; /* Space between title and toggle */
-    margin-bottom: 10px; /* Space below each section header */
-}
-
-</style>
-<li class="nav-item custom-dropdown">
-    <li class="dropdown">
-        <a href="#" class="dropbtn nav-link hover-link d-block d-lg-none" onclick="toggleMenu('services', event)">
-            @lang('messages.collections') 
-            <span class="toggle">+</span>
-        </a>
-        <div class="mega-menu" id="services">
-            @foreach ($collectionSets as $collectionSet)
-            <div class="mega-column">
-                <div class="section">
-                    <h3 class="flex-container">
-                        <a style="font-size: 13px" class="d-block mb-2 text-dark hover-link text-nowrap" 
-                        href="{{route('collectionSet.single.collection',$collectionSet->id)}}"
-                        onclick="toggleSubmenu(event, 'web-dev-{{ $loop->index }}', this);" 
-                        style="font-size: 14px; font-weight: 600;">
-                            {{ @$collectionSet->category->name ?? 'No Category' }} 
-                            {{ @$collectionSet->tone->name ? '-' . $collectionSet->tone->name : '' }} 
-                            {{ @$collectionSet->duration ? '-' . $collectionSet->duration->months . ' months' : '' }}
-                        </a>
-                        <span class="toggle" onclick="toggleSection('web-dev-{{ $loop->index }}', this)">+</span>
-                    </h3>
-                </div>
-                <ul class="sub-menu" id="web-dev-{{ $loop->index }}">
-                    <a href="{{route('collectionSet.single.collection',$collectionSet->id)}}" style="float: right"><u>See Collection</u></a>
-
-                    @foreach ($collectionSet->products as $product)
-                    <li>
-                        <a style="font-size: 13px" class="custom-dropdown-item text-nowrap mt-2" href="{{ route('addToCart.index', $product->id) }}">
-                            {{ $product->name }}
-                        </a>
-                    </li>
-                    @endforeach
-                </ul>
-            </div>
-            @endforeach
-        </div>
-    </li>
-</li>
-
-{{-- Color section --}}
-<li class="nav-item custom-dropdown">
-    <li class="dropdown">
-        <a href="#" class="dropbtn nav-link hover-link d-block d-lg-none" onclick="toggleMenu('colorsDropdown', event)">
-            @lang('messages.colors') 
-            <span class="toggle">+</span>
-        </a>
-        <div class="mega-menu" id="colorsDropdown" style="display: none;">
-            <div class="d-flex justify-content-center align-items-center">
-                <div class="row mt-3">
-                    @foreach ($colors as $color)
-                    <div class="col-md-2 mb-3 position-relative">
-                        <a href="{{ route('color.single.color', $color->id) }}" target="_blank">
-                           {{ $color->name }}
-                        </a>
-                    </div>
-                    @endforeach
-                </div>
-            </div>
-        </div>
-    </li>
-</li>
-
-{{-- Duration section --}}
-<li class="nav-item custom-dropdown">
-    <li class="dropdown">
-        <a href="#" class="dropbtn nav-link hover-link d-block d-lg-none" onclick="toggleMenu('durationDropdown', event)">
-            @lang('messages.duration') 
-            <span class="toggle">+</span>
-        </a>
-        <div class="mega-menu" id="durationDropdown" style="display: none;">
-            <div class="d-flex justify-content-center align-items-center">
-                <div class="row mt-3">
-                    @foreach ($durations as $duration)
-                    <div class="col-md-2 mb-3 position-relative">
-                        <a href="{{ route('duration.single.duration', $duration->id) }}" class="duration-link">
-                            <span class="duration-text">{{ $duration->name }} - {{ $duration->months }} MONTHS</span>
-                        </a>
-                    </div>
-                    @endforeach
-                </div>
-            </div>
-        </div>
-    </li>
-</li>
-
-
-<script>
-    function toggleMenu(menuId, event) {
-    event.preventDefault(); // Prevent the default anchor click behavior
-    const menu = document.getElementById(menuId);
-    if (menu.style.display === "flex" || menu.style.display === "block") {
-        menu.style.display = "none";
-        event.currentTarget.querySelector('.toggle').textContent = "+"; // Change to plus
-    } else {
-        menu.style.display = "flex";
-        event.currentTarget.querySelector('.toggle').textContent = "-"; // Change to minus
-    }
-}
-
-function toggleSection(sectionId, toggleElement) {
-    const section = document.getElementById(sectionId);
-    if (section.style.display === "block") {
-        section.style.display = "none";
-        toggleElement.textContent = "+"; // Change to plus
-    } else {
-        section.style.display = "block";
-        toggleElement.textContent = "-"; // Change to minus
-    }
-}
-
-function toggleSubmenu(event, sectionId, toggleElement) {
-    event.preventDefault(); // Prevent the default anchor click behavior
-    const submenu = document.getElementById(sectionId);
-    if (submenu.style.display === "block") {
-        submenu.style.display = "none";
-        toggleElement.querySelector('.toggle').textContent = "+"; // Change to plus
-    } else {
-        submenu.style.display = "block";
-        toggleElement.querySelector('.toggle').textContent = "-"; // Change to minus
-    }
-}
-
-</script>
-    {{-- ----------------------------------------------sm devise end--------------------------------------------------------------- --}}
-
-    {{-- lg devise --}}
-    <li class="nav-item">
-        <a class="nav-link hover-line collection d-none d-md-block" href="{{ route('ego.pages.collection.lense') }}">
-            @lang('messages.collections')
-        </a>
-        <div class="mega-box">
-            <div class="content">
-                <div class="row">
-                    @foreach ($collectionSets as $collectionSet)
-                    <div class="col-12 col-md-3 mb-3">
-                        <a class="d-block mb-2 text-dark hover-link" 
-                        href="{{route('collectionSet.single.collection',$collectionSet->id)}}" 
-                        style="font-size: 16px; font-weight: 600;">
-                            {{ @$collectionSet->category->name ?? 'No Category' }} 
-                            {{ @$collectionSet->tone->name ? '-' . $collectionSet->tone->name : '' }} 
-                            {{ @$collectionSet->duration ? '-' . $collectionSet->duration->months . ' months' : '' }}
-                        </a>
-                        <ul class="mega-links text-black">
-                            @foreach ($collectionSet->products as $product)
-                            <li>
-                                <a href="{{ route('addToCart.index', $product->id) }}" 
-                                class="text-black" 
-                                style="font-size: 12px;">
-                                {{ $product->name }}
-                                </a>
-                            </li>
-                            @endforeach
-                        </ul>
-                    </div>
-                    @endforeach
-                </div>
-            </div>
-        </div>
-    </li>
-    
                         <li class="nav-item">
-                            <a class="nav-link d-none d-md-block hover-line {{ Route::is('ego.pages.color.lense') ? 'active' : '' }}"
+                            <a class="nav-link hover-line {{ Route::is('ego.pages.collection.lense') ? 'active' : '' }}"
+                                href="{{ route('ego.pages.collection.lense') }}">@lang('messages.collections')</a>
+                            <div class="mega-box">
+                                <div class="content">
+                                    @foreach ($collectionSets as $collectionSet)
+                                    <div class="row" style="border-bottom: 1px solid  #8362a9; height: 100%">
+                                        <a style="margin-bottom: 10px !important; font-size: 16px"
+                                            href="{{ route('collectionSet.single.collection', $collectionSet->id) }}">{{ @$collectionSet->category->name ?? '' }}
+                                            {{ @$collectionSet->tone->name ? '-' . $collectionSet->tone->name : '' }}
+                                            {{ @$collectionSet->duration ? '-' . @$collectionSet->duration->months . ' ' . (@$collectionSet->duration->is_month == 0 ? 'days' : 'months') : '' }}</a>
+                                        <ul class="mega-links text-black">
+
+                                            @foreach (@$collectionSet->products as $product)
+                                            <li>
+                                                <a style="font-size: 12px"
+                                                    href="{{ route('addToCart.index', $product->id) }}"
+                                                    class="text-Black">{{ $product->name }}</a>
+                                            </li>
+                                            @endforeach
+                                        </ul>
+                                    </div>
+                                    @endforeach
+
+                                </div>
+                            </div>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link hover-line {{ Route::is('ego.pages.color.lense') ? 'active' : '' }}"
                                 href="{{ route('ego.pages.color.lense') }}">@lang('messages.colors')</a>
                             <div class="mega-box">
                                 <div class="d-flex justify-content-center align-items-center">
@@ -1045,28 +833,29 @@ function toggleSubmenu(event, sectionId, toggleElement) {
                                 </div>
                             </div>
                         </li>
-<style>
-.duration-link {
-    display: block; 
-    margin-top: 20px; 
-}
-.duration-text {
-    text-align: left;
-    padding: 10px; 
-    gap: 10px; 
-}
-</style>
+                        <style>
+                            .duration-link {
+                                display: block;
+                                margin-top: 20px;
+                            }
+
+                            .duration-text {
+                                text-align: left;
+                                padding: 10px;
+                                gap: 10px;
+                            }
+                        </style>
 
                         <li class="nav-item">
-                            <a class="nav-link d-none d-md-block hover-line {{ Route::is('ego.pages.duration.lense') ? 'active' : '' }}"
+                            <a class="nav-link hover-line {{ Route::is('ego.pages.duration.lense') ? 'active' : '' }}"
                                 href="{{ route('ego.pages.duration.lense') }}">@lang('messages.duration')</a>
                             <div class=" mega-box">
                                 <div class="content">
                                     <div class="row">
                                         <ul class="mega-links text-Black">
                                             @foreach ($durations as $duration)
-                                            <a href="{{ route('duration.single.duration', $duration->id) }}" class="duration-link">
-                                                <span class="duration-text">{{ $duration->name }} - {{ $duration->months }} MONTHS</span>
+                                            <a href="{{ route('duration.single.duration', @$duration->id) }}" class="duration-link">
+                                                <span class="duration-text">{{ @$duration->name }} - {{ @$duration->months }} {{@$duration->is_month == 1 ? 'Months' : 'Days'}}</span>
                                             </a>
                                             <br />
                                             @endforeach
@@ -1116,9 +905,12 @@ function toggleSubmenu(event, sectionId, toggleElement) {
     <div class="sidebar-content" style="padding: 15px;">
         @if ($carts->count() > 0)
         @foreach ($carts as $cart)
-        <div class="cart-item"
+        <div class="cart-item position-relative"
             style="display: flex; align-items: stretch; margin-bottom: 20px; height: 150px; border: 1px solid #e0e0e0; border-radius: 8px; padding: 10px;">
-            <div class="image-container"
+            @if($cart->product->is_free == true)
+            <span class="badge bg-dark text-white" style="position: absolute;top: 40px;width: max-content; left: -15px; z-index: 9; color: black; padding: 2px 6px; cursor: pointer; font-size: 12px; border-radius: 0">Free</span>
+            @endif
+            <div class="image-container position-relative"
                 style="width: 80px; height: 100%; position: relative; flex-shrink: 0;">
                 <img src="{{ asset($cart->product->image_path) }}" alt="Random Image"
                     style="width: 100%; height: 100%; object-fit: cover;">
@@ -1126,7 +918,7 @@ function toggleSubmenu(event, sectionId, toggleElement) {
                     style="position: absolute; top: -10px; right: -10px; color: black; padding: 2px 6px; cursor: pointer; font-size: 18px;" type="button" data-bs-toggle="modal" data-bs-target="#deleteCart{{$cart->id}}">&times;</span>
 
                 <div class="modal fade" id="deleteCart{{$cart->id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                    <div class="modal-dialog">
+                    <div class="modal-dialog modal-dialog-centered">
                         <div class="modal-content">
                             <div class="modal-header">
                                 <h5 class="modal-title" id="exampleModalLabel">Delete Cart Item</h5>
@@ -1143,10 +935,12 @@ function toggleSubmenu(event, sectionId, toggleElement) {
                             </div>
                         </div>
                     </div>
+                    <!-- Price -->
+                    <span style="font-size: 14px; font-weight: 600; margin-left: 10px;">
+                        {{ $cart->product->price }} ৳
+                    </span>
                 </div>
-
             </div>
-
             <div class="cart-details"
                 style="flex-grow: 1; padding-left: 15px; display: flex; flex-direction: column; justify-content: space-between;">
                 <div>
@@ -1161,17 +955,22 @@ function toggleSubmenu(event, sectionId, toggleElement) {
                     <!-- Quantity Selector -->
                     <div class="quantity-selector"
                         style="display: inline-flex; align-items: center; border: 1px solid black; padding: 1px; font-size: 12px;">
-                        <button class="quantity-btn decreaseQuantity" data-cart-id="{{ $cart->id }}"
+                        <button class="quantity-btn-cart decreaseQuantity"
+                            data-cart-id="{{ $cart->id }}"
                             style="padding: 4px 8px; background-color: transparent; border: none; cursor: pointer; font-size: 14px; font-weight: 600; color: black;">-</button>
-                        <span class="quantity-number" id="quantityValue{{ $cart->id }}"
+                        <span class="quantity-number @if($cart->product->product_type == 'accessories') acc-count @endif"
+                            id="quantityValue{{ $cart->id }}"
                             style="padding: 4px 8px; font-size: 12px; color: black;">{{ $cart->pair }}</span>
-                        <button class="quantity-btn increaseQuantity" data-cart-id="{{ $cart->id }}"
+
+                        <button class="quantity-btn-cart increaseQuantity"
+                            data-cart-id="{{ $cart->id }}"
                             style="padding: 4px 8px; background-color: transparent; border: none; cursor: pointer; font-size: 14px; font-weight: 600; color: black;">+</button>
                     </div>
                     <!-- Price -->
-                    <span
-                        style="font-size: 14px; font-weight: 600; margin-left: 10px;">{{ $cart->product->price }}
-                        ৳</span>
+                    <span style="font-size: 14px; font-weight: 600; margin-left: 10px;">
+                    {{ $cart->power_status == 'with_power' ? $cart->product->price : $cart->product->no_power_price }} ৳
+                    </span>
+
                 </div>
             </div>
         </div>
@@ -1273,7 +1072,7 @@ function toggleSubmenu(event, sectionId, toggleElement) {
     }
 
 
-    .quantity-btn {
+    .quantity-btn-cart {
         background-color: transparent;
         border: none;
         cursor: pointer;
@@ -1321,7 +1120,7 @@ function toggleSubmenu(event, sectionId, toggleElement) {
                 // Update the quantity and total price for this item in the UI
                 document.getElementById('quantityValue' + id).innerText = response.pair;
                 document.getElementById('totalPrice' + id).innerText = response.totalPrice + ' ৳';
-
+                fetchAccCount()
 
             } else if (xhr.readyState == 4) {
                 console.error('Failed to update cart quantity.');
@@ -1341,6 +1140,7 @@ function toggleSubmenu(event, sectionId, toggleElement) {
             updateCart(cartId, 'increment');
             fetchCartTotalPrice();
             fetchCartCount();
+            fetchAccCount()
         });
     });
 
@@ -1355,6 +1155,7 @@ function toggleSubmenu(event, sectionId, toggleElement) {
                 updateCart(cartId, 'decrement');
                 fetchCartTotalPrice();
                 fetchCartCount();
+                fetchAccCount()
             }
         });
     });
@@ -1372,6 +1173,28 @@ function toggleSubmenu(event, sectionId, toggleElement) {
 
         xhr.send();
     }
+</script>
+
+<script>
+    function fetchAccCount() {
+        var xhr = new XMLHttpRequest();
+        xhr.open('GET', '/cart/get-accessories/count', true); // No need for cart ID
+        xhr.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState == 4 && xhr.status == 200) {
+                // Parse the JSON response
+                var response = JSON.parse(xhr.responseText);
+                document.querySelector('.acc-count').innerText = response.accessoryQuantity; // Assuming you want the accessory quantity
+            } else if (xhr.readyState == 4) {
+                console.error('Failed to fetch accessory quantity.', xhr.status, xhr.responseText);
+            }
+        };
+        xhr.send();
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        fetchAccCount(); // Call it directly
+    });
 </script>
 
 <script>
@@ -1457,51 +1280,3 @@ function toggleSubmenu(event, sectionId, toggleElement) {
         });
     });
 </script> -->
-
-
-<script>
-    document.querySelectorAll("#search-icon").forEach(function(icon) {
-        icon.addEventListener("click", function() {
-            document.getElementById("search-popup").style.display = "flex";
-        });
-    });
-    
-    // Close popup when clicking the close button
-    document.getElementById("close-popup").addEventListener("click", function() {
-        document.getElementById("search-popup").style.display = "none";
-    });
-    
-    // Optional: Close popup when clicking outside the search bar content
-    document.getElementById("search-popup").addEventListener("click", function(e) {
-        if (e.target == this) {
-            document.getElementById("search-popup").style.display = "none";
-        }
-    });
-    
-    </script>
-
-
-<script>
-    document.getElementById("search-icon").addEventListener("click", function() {
-        document.getElementById("search-popup").style.display = "flex";
-    });
-
-    document.getElementById("close-popup").addEventListener("click", function() {
-        document.getElementById("search-popup").style.display = "none";
-    });
-
-    // Optional: Close popup when clicking outside the search bar content
-    document.getElementById("search-popup").addEventListener("click", function(e) {
-        if (e.target == this) {
-
-            document.getElementById("search-popup").style.display = "none";
-        }
-    });
-
-    // Optional: Close popup when clicking outside the search bar content
-    document.getElementById("search-popup").addEventListener("click", function(e) {
-        if (e.target == this) {
-            document.getElementById("search-popup").style.display = "none";
-        }
-    });
-</script>

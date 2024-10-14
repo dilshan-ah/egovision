@@ -121,7 +121,7 @@
     <div class="col-lg-4 col-sm-12 col-mb-4" style="background: #f5f5f5">
         <div class="mt-5 p-4">
             <h1>{{$color->name}}</h1>
-            <small>{{$color->products->count()}} PRODUCTS</small>
+            <small>{{$products->count()}} PRODUCTS</small>
             <br />
             <a href="#" class="add-to-cart-button w-50 mt-2 text-nowrap" id="filterBtnSide">FILTER <i class="fas fa-plus mx-5"></i></a>
             <div id="sidebarButton" class="sidebarButton">
