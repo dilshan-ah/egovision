@@ -65,14 +65,10 @@
                     </div>
                     <div class="form-group col-3">
                         <label for="">Water Content</label>
-                        <select name="water_content_id" class="form-control">
-                            <option value="" selected>Select Water Content</option>
-
-                            <option value="water content">water content</option>
-                        </select>
-                        <!-- @error('water_content_id')
+                        <input type="text" class="form-control" name="water_content" value="{{ old('water_content') }}" placeholder="Enter Water content">
+                         @error('water_content')
                         <span class="text-danger">{{ $message }}</span>
-                        @enderror -->
+                        @enderror
                     </div>
                     <div class="form-group col-3">
                         <label for="">Tones</label>

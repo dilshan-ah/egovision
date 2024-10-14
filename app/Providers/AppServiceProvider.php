@@ -64,6 +64,11 @@ class AppServiceProvider extends ServiceProvider
             ]);
         });
 
+        view()->composer('ego.include.banner', function ($view) {
+            $colors = Color::all();
+            $view->with('colors', $colors);
+        });
+        
         view()->composer('ego.include.header', function ($view) {
             $colors = Color::all();
             $view->with('colors', $colors);

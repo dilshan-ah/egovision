@@ -260,6 +260,10 @@ margin: 0 auto; /* This centers the element horizontally */
   }
   .eye-section {
       margin: 0 2.5%;
+      width: 100%;
+  }
+  .power-select{
+    width: 100%;
   }
   .product-count {
       display: flex;

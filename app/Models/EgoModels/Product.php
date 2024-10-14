@@ -5,10 +5,12 @@ namespace App\Models\EgoModels;
 use App\Models\Duration;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Traits\Searchable;
 
 class Product extends Model
 {
-    use HasFactory;
+    use HasFactory, Searchable;
+    
     public function color()
     {
         return $this->belongsTo(Color::class);

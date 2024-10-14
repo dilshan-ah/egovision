@@ -156,7 +156,7 @@
             <div class="col">
                 <h3> {{$collectionSet->category->name}}</h3>
                 <h3> {{$collectionSet->tone->name ?? ''}}</h3>
-                <h5 class="mt-2"> @lang('messages.discover')</h5>
+                <a href="{{route('collectionSet.single.collection',$collectionSet->id)}}" class="mt-2"> @lang('messages.discover')</a>
             </div>
         </div>
     </div>

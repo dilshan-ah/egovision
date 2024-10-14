@@ -65,10 +65,7 @@
                     </div>
                     <div class="form-group col-3">
                         <label for="">Water Content</label>
-                        <select name="water_content_id" class="form-control">
-                            <option value="" selected>Select Water Content</option>
-                            <option value="water content" {{ old('water_content_id', $product->water_content_id) == 'water content' ? 'selected' : '' }}>water content</option>
-                        </select>
+                        <input type="text" class="form-control" name="water_content" value="{{$product->water_content}}">
                     </div>
                     <div class="form-group col-3">
                         <label for="">Tones</label>

@@ -14,17 +14,8 @@ class CartController extends Controller
 {
     public function addToCart(Request $request)
     {
-        Log::error($request->all());
-        $request->validate([
-            'powerType' => 'required|string',
-            'productId' => 'required|integer|exists:products,id',
-            'nopairQuantity' => 'nullable|integer|min:0',
-            'firstEyeQuantity' => 'nullable|integer|min:0',
-            'secondEyeQuantity' => 'nullable|integer|min:0',
-            'firstEyePower' => 'nullable|string',
-            'secondEyePower' => 'nullable|string',
-        ]);
 
+        Log::info($request->all());
         $sessionId = $request->session()->getId();
         $userId = Auth::user()->id ?? null; // assuming user_id is passed in the request
 
@@ -60,6 +51,8 @@ class CartController extends Controller
             'pair' => $pairQuantity,
             'user_id' => $userId
         ];
+
+        Log::error($cartDataFirst);
 
         // Check for existing cart entry
         $existingCartEntryFirst = Cart::where(function ($query) use ($cartDataFirst) {
@@ -104,7 +97,6 @@ class CartController extends Controller
             ]);
         }
 
-        // No existing cart entry, create new ones
         try {
             Cart::create($cartDataFirst);
 
@@ -209,8 +201,7 @@ class CartController extends Controller
     {
         $userId = Auth::check() ? Auth::id() : null;
         $sessionId = $request->session()->getId();
-
-        // Calculate the total price of products in the cart
+    
         $cartTotal = Cart::where(function ($query) use ($userId, $sessionId) {
             if ($userId) {
                 $query->where('user_id', $userId);
@@ -218,14 +209,16 @@ class CartController extends Controller
                 $query->where('session_id', $sessionId);
             }
         })
-            ->with('product') // Ensure the product relation is loaded
-            ->get()
-            ->sum(function ($cart) {
-                return $cart->pair * $cart->product->price; // Calculate total price for each cart item
-            });
-
+        ->with('product')
+        ->get()
+        ->sum(function ($cart) {
+            $productPrice = $cart->power_status == 'no_power' ? $cart->product->no_power_price : $cart->product->price;
+    
+            return $cart->pair * $productPrice;
+        });
+    
         return response()->json(['cartTotal' => $cartTotal]);
-    }
+    }    
 
     public function updateCartQuantity(Request $request)
     {

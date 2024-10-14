@@ -92,6 +92,7 @@ class OrderController extends Controller
 
     public function userOrder(string $userId)
     {
+        
         try {
             $orders = Order::where('user_id', $userId)
                 ->select('id', 'transaction_id', 'amount', 'status', 'created_at')
@@ -108,7 +109,7 @@ class OrderController extends Controller
                 $order->created_at =  Carbon::parse($order->created_at)->format('d M,Y');
 
                 foreach ($order->orderItems as $item) {
-                    $item->product_name = $item->product->name;
+                    $item->product_name = @$item->product->name;
                     unset($item->product);
                 }
                 return $order;
@@ -163,7 +164,7 @@ class OrderController extends Controller
         // Modify the orderItems structure
         foreach ($order->orderItems as $item) {
             // Add product name directly into the orderItems
-            $item->product_name = $item->product->name;
+            $item->product_name = @$item->product->name;
             unset($item->product); // Remove the product instance
         }
 

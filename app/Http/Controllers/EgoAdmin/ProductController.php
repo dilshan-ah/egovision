@@ -29,7 +29,7 @@ class ProductController extends Controller
     public function index()
     {
         $pageTitle = "Product List";
-        $products = Product::where('product_type', 'normal')->with(['category', 'color', 'images'])->get();
+        $products = Product::where('product_type', 'normal')->with(['category', 'color', 'images'])->searchable(['name','price'])->orderBy('id','desc')->paginate(getPaginate());
         return view('ego.ego-admin.products.index', compact('pageTitle', 'products'));
     }
 
@@ -119,7 +119,7 @@ class ProductController extends Controller
             $product->diameter_id = $validated['diameter_id'];
             $product->base_curve_id = $validated['base_curve_id'];
             $product->material_id = $validated['material_id'];
-            $product->water_content = $validated['water_content_id'];
+            $product->water_content = $validated['water_content'];
             $product->tone_id = $validated['tone_id'];
             $product->lens_design_id = $validated['lens_design_id'];
             $product->price = $validated['price'];
@@ -196,7 +196,7 @@ class ProductController extends Controller
             $product->diameter_id = $validatedData['diameter_id'];
             $product->base_curve_id = $validatedData['base_curve_id'];
             $product->stock_quantity = $validatedData['stock_quantity'];
-            $product->price = $validatedData['price'];
+            $product->no_power_price = $validatedData['price'];
             $product->duration_id = $validatedData['duration_id'];
             $product->product_type = 'accessories';
             $product->is_default_bag = $validatedData['is_default'] ?? 0;

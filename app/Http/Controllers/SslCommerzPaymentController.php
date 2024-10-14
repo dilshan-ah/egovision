@@ -41,8 +41,10 @@ class SslCommerzPaymentController extends Controller
             ->with('product')
             ->get()
             ->sum(function ($cart) {
-                return $cart->pair * $cart->product->price;
+                $price = $cart->power_status === 'no_power' ? $cart->product->no_power_price : $cart->product->price;
+                return $cart->pair * $price;
             });
+        
 
         // Prepare data for payment
         $post_data = array();
@@ -92,7 +94,7 @@ class SslCommerzPaymentController extends Controller
         $freeProductsTotal = $carts->filter(function ($cart) {
             return $cart->product->is_free == 1; // Filter products where is_free == 1
         })->sum(function ($cart) {
-            return $cart->product->price * $cart->pair;
+            return $cart->product->no_power_price * $cart->pair;
         });
 
         $promo = PromoCode::where('reedem_code', $request->promo_code)->where('status', 'active')->first();
@@ -140,7 +142,7 @@ class SslCommerzPaymentController extends Controller
             $orderItem->product_id = $cart->product_id;
             $orderItem->power = $cart->power;
             $orderItem->pair = $cart->pair;
-            $orderItem->price = $cart->product->price * $cart->pair;
+            $orderItem->price = ($cart->power_type == 'with_power' ? $cart->product->price : $cart->product->no_power_price) * $cart->pair;
 
 
             if ($orderItem->save()) {
@@ -150,8 +152,8 @@ class SslCommerzPaymentController extends Controller
 
         // Check if payment method is COD
         if ($request->payment_method == 'cod') {
-            // If payment method is COD, redirect to success page
-            return redirect('/')->with('success', 'Order placed successfully!');
+            $notify[] = ['success', 'Order placed successfully!'];
+            return redirect('/')->withNotify($notify);
         }
 
         // For SSLCommerz payment method
@@ -163,7 +165,8 @@ class SslCommerzPaymentController extends Controller
                 print_r($payment_options);
                 $payment_options = array();
             } else {
-                return redirect('/')->with('message', 'Order placed successfully!');
+                $notify[] = ['success', 'Order placed successfully!'];
+                return redirect('/')->withNotify($notify);
             }
         }
     }

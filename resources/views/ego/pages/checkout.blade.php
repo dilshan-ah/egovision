@@ -161,7 +161,7 @@
                                 style="margin-top: 10px; display: flex; align-items: center; justify-content: space-between;">
                                 <span style="font-size: 14px; margin-left: 10px;">{{ $cart->pair }} QTY <span
                                         style="width: 20px; display: inline-block"></span>
-                                    {{ $cart->product->price * $cart->pair }} ৳</span>
+                                    {{ ($cart->power_type == 'with_power' ? $cart->product->price : $cart->product->no_power_price) * $cart->pair }} ৳</span>
                             </div>
                         </div>
                     </div>
@@ -239,7 +239,7 @@
                                 style="margin-top: 10px; display: flex; align-items: center; justify-content: space-between;">
                                 <span style="font-size: 14px; margin-left: 10px;">{{ $cart->pair }} QTY <span
                                         style="width: 20px; display: inline-block"></span>
-                                    {{ $cart->product->price * $cart->pair }} ৳</span>
+                                    {{ ($cart->power_type == 'with_power' ? $cart->product->price : $cart->product->no_power_price) * $cart->pair }} ৳</span>
                             </div>
                         </div>
                     </div>
@@ -248,12 +248,14 @@
                     <div class="d-flex justify-content-between">
                         <h4>Subtotal</h4>
                         <b>{{ $carts->sum(function($cart) {
-                                return $cart->product->price * $cart->pair;
-                            }) }}৳</b>
+                            $price = $cart->power_status == 'no_power' ? $cart->product->no_power_price : $cart->product->price;
+                            return $price * $cart->pair;
+                        }) }}৳</b>
+
                     </div>
                     <div class="d-flex justify-content-between">
                         <h4>Discount</h4>
-                        <b>- <span id="discount">{{ $carts->filter(function($cart) { return $cart->product->is_free == 1; })->sum(function($cart) { return $cart->product->price * $cart->pair; }) ?? 0 }}</span>৳</b>
+                        <b>- <span id="discount">{{ $carts->filter(function($cart) { return $cart->product->is_free == 1; })->sum(function($cart) { return $cart->product->no_power_price * $cart->pair; }) ?? 0 }}</span>৳</b>
                     </div>
                     <div class="d-flex justify-content-between">
                         <h4>Delivery Free</h4>
@@ -261,13 +263,22 @@
                     </div>
                     <div class="d-flex justify-content-between">
                         <h4>Total</h4>
-                        <b id="total">{{ $carts->sum(function($cart) {
-                                return $cart->product->price * $cart->pair;
-                            }) + 60 -$carts->filter(function($cart) {
-    return $cart->product->is_free == 1; // Filter products where is_free == 1
-})->sum(function($cart) {
-    return $cart->product->price * $cart->pair;
-}) }}৳</b>
+                        <b id="total">
+                            {{
+                                $carts->sum(function($cart) {
+                                    $price = $cart->power_status == 'no_power' ? $cart->product->no_power_price : $cart->product->price;
+                                    return $price * $cart->pair;
+                                }) 
+                                + 60 
+                                - $carts->filter(function($cart) {
+                                    return $cart->product->is_free == 1;
+                                })->sum(function($cart) {
+                                    $price = $cart->power_status == 'no_power' ? $cart->product->no_power_price : $cart->product->price;
+                                    return $price * $cart->pair;
+                                })
+                            }}৳
+                        </b>
+
                     </div>
                 </div>
             </div>
@@ -409,9 +420,18 @@
         function applyPromoCode() {
             var promoCode = $('#promo_code').val();
             
-            // Calculate subtotal and existing discount from backend values
-            var subtotal = {{ $carts->sum(function($cart) { return $cart->product->price * $cart->pair; }) }};
-            var existingDiscount = {{ $carts->filter(function($cart) { return $cart->product->is_free == 1; })->sum(function($cart) { return $cart->product->price * $cart->pair; }) }};
+            var subtotal = {{ $carts->sum(function($cart) { 
+                $price = $cart->power_status == 'no_power' ? $cart->product->no_power_price : $cart->product->price; 
+                return $price * $cart->pair; 
+            }) }};
+
+            var existingDiscount = {{ $carts->filter(function($cart) { 
+                return $cart->product->is_free == 1; 
+            })->sum(function($cart) { 
+                $price = $cart->power_status == 'no_power' ? $cart->product->no_power_price : $cart->product->price;
+                return $price * $cart->pair; 
+            }) }};
+
             var deliveryFee = $('#deliveryFee').text();
 
             if (promoCode) {
@@ -468,9 +488,19 @@
 
             $('#deliveryFee').text(selectedDeliveryFee + '৳');
 
-            var subtotal = {{ $carts->sum(function($cart) { return $cart->product->price * $cart->pair; }) }};
-            var existingDiscount = {{ $carts->filter(function($cart) { return $cart->product->is_free == 1; })->sum(function($cart) { return $cart->product->price * $cart->pair; }) }};
-            var deliveryFee = selectedDeliveryFee; // Use the selected delivery fee directly
+            var subtotal = {{ $carts->sum(function($cart) {
+                $price = $cart->power_status == 'no_power' ? $cart->product->no_power_price : $cart->product->price;
+                return $price * $cart->pair;
+            }) }};
+
+            var existingDiscount = {{ $carts->filter(function($cart) { 
+                return $cart->product->is_free == 1; 
+            })->sum(function($cart) {
+                $price = $cart->power_status == 'no_power' ? $cart->product->no_power_price : $cart->product->price;
+                return $price * $cart->pair;
+            }) }};
+
+            var deliveryFee = selectedDeliveryFee;
 
             var newTotal = selectedDeliveryFee + subtotal - existingDiscount;
             $('#total').text(newTotal.toFixed(2) + '৳'); // Update total

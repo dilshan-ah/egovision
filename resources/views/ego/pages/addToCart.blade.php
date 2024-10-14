@@ -5,37 +5,40 @@
 @section('content')
 <style>
     .imageAlbum {
-    margin-bottom: 10px; /* Default spacing */
-}
-
-.vertical-slider {
-    padding: 10px; /* Default padding */
-}
-
-/* Mobile Styles */
-@media (max-width: 768px) { /* Adjust the max-width as needed */
-    .imageAlbum {
-        margin-bottom: 5px; /* Reduce spacing for mobile */
+        margin-bottom: 10px;
+        /* Default spacing */
     }
 
     .vertical-slider {
-        padding: 5px; /* Reduce padding for mobile */
+        padding: 10px;
+        /* Default padding */
     }
-}
 
-.tab-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-wrap: wrap;
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    margin-top: 10px;
-}
+    /* Mobile Styles */
+    @media (max-width: 768px) {
 
+        /* Adjust the max-width as needed */
+        .imageAlbum {
+            margin-bottom: 5px;
+            /* Reduce spacing for mobile */
+        }
 
+        .vertical-slider {
+            padding: 5px;
+            /* Reduce padding for mobile */
+        }
+    }
 
+    .tab-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-wrap: wrap;
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        margin-top: 10px;
+    }
 </style>
 <br>
 
@@ -60,7 +63,7 @@
         </div>
     </div>
     <!-- Right Column - Add to Cart Section -->
-    <div class="col-md-5 right-column p-5" >
+    <div class="col-md-5 right-column p-5">
         <div class="add-to-cart-section">
             <h1>
                 <span>{{ $product->name }}</span>
@@ -69,16 +72,16 @@
                 {!! $product->product_intro !!}
             </div>
             <input type="hidden" name="product_id" value="{{ $product->id }}">
-            <div class="tab-container mx-auto" >
+            <div class="tab-container mx-auto">
                 @if ($product->product_type == 'normal')
                 <div class="tab p-4" id="tab1" onclick="selectTab('tab1-radio')">
                     <div class="tab-content">
                         <input type="radio" id="tab1-radio" name="power_type" value="no_power" @if($product->product_type == 'normal') checked @endif
-                            style="width: 20px; height: 15px;" />
+                        style="width: 20px; height: 15px;" />
                         <label for="tab1-radio" style="font-size: 14px">No Power</label>
                     </div>
                 </div>
-            
+
                 <div class="tab p-4 mx-2" id="tab2" onclick="selectTab('tab2-radio')">
                     <div class="tab-content">
                         <input type="radio" id="tab2-radio" name="power_type" value="with_power"
@@ -95,7 +98,7 @@
                     </div>
                 </div>
             </div>
-            
+
             <div class="mt-2" id="pair-state" style="background-color: #f5f5f5">
                 <div class="p-3">
                     <fieldset class="pair-fieldset">
@@ -104,7 +107,7 @@
                             <button id="decrement" style="font-size: 10px;">
                                 <span style="font-size: 25px">-</span>
                             </button>
-                            <span id="quantity" style="font-size: 20px" data-quantity="0">0</span>
+                            <span id="quantity" style="font-size: 20px" data-quantity="1">1</span>
                             <button id="increment">
                                 <span style="font-size: 25px">+</span>
                             </button>
@@ -144,13 +147,12 @@
                                                 <legend class="float-none w-auto p-2">Pair</legend>
                                                 <div class="product-count">
                                                     <button class="btn decrease-btn">-</button>
-                                                    <span class="quantity-btn" data-quantity="0"
-                                                        id="firstPair">0</span>
+                                                    <span class="quantity-btn" data-quantity="1"
+                                                        id="firstPair">1</span>
                                                     <button class="btn increase-btn">+</button>
                                                 </div>
                                             </fieldset>
-                                            <h6 class="text-center mt-3 total-price-section">Taka:{{ $product->price }}
-                                                ৳</h6>
+                                            <h6 class="text-center mt-3 total-price-section"></h6>
                                         </div>
                                     </div>
                                 </div>
@@ -173,13 +175,12 @@
                                                 <legend class="float-none w-auto p-2">pair</legend>
                                                 <div class="product-count">
                                                     <button class="btn decrease-btn-two">-</button>
-                                                    <span class="quantity-btn-two" data-quantity="0"
-                                                        id="secondPair">0</span>
+                                                    <span class="quantity-btn-two" data-quantity="1"
+                                                        id="secondPair">1</span>
                                                     <button class="btn increase-btn-two">+</button>
                                                 </div>
                                             </fieldset>
-                                            <h6 class="text-center mt-3 total-price-section">
-                                                Taka:{{ $product->price }} ৳</h6>
+                                            <h6 class="text-center mt-3 total-price-section"></h6>
                                         </div>
                                     </div>
                                 </div>
@@ -189,21 +190,10 @@
                     </div>
                 </div>
             </div>
-            @if(session('success'))
-    <div class="alert alert-success">
-        {{ session('success') }}
-    </div>
-@endif
-
-@if(session('error'))
-    <div class="alert alert-danger">
-        {{ session('error') }}
-    </div>
-@endif
 
 
             <button class="add-to-cart-button w-100 mt-4" id="add-to-cart">Add to Cart - <span
-                    id="total-price">{{ $product->price }}</span> ৳</button>
+                    id="total-price">{{ $product->no_power_price }}</span> ৳</button>
         </div>
         <!-- description -->
         <div
@@ -376,7 +366,7 @@
                     <!-- Content for Power Range -->
                     <h4>Monthly Spherical Lenses</h4>
 
-                    
+
                 </div>
             </div>
 
@@ -417,13 +407,6 @@
         });
     });
 </script>
-<script>
-    function selectTab(tabId) {
-        document.getElementById(tabId).checked = true;
-        const totalPriceElement = document.getElementById("total-price");
-        totalPriceElement.textContent = '0.00';
-    }
-</script>
 
 <script>
     // Function to handle selector change and button visibility
@@ -463,24 +446,37 @@
     });
 </script>
 
+<!-- Quantity update js -->
 <script>
-    let globalTotalPrice = 0; // Total price across all sections
-    const productPrice = {{ $product->price }}; // Product price
-    const addToCartButton = document.getElementById("total-price"); // The price span inside the "Add to Cart" button
-    const addBtn = document.getElementById('add-to-cart'); // The actual Add to Cart button element
+    function selectTab(tabId) {
+        document.getElementById(tabId).checked = true;
+        const totalPriceElement = document.getElementById("total-price");
+        if (tabId == 'tab1-radio') {
+            updateSimpleTotalPrice()
+        } else {
+            totalPriceElement.textContent = productPrice;
+        }
+
+    }
+
+    const productPrice = {{$product->price ?? 0}};
+    const productNoPowerPrice = {{ $product->no_power_price ?? 0 }};
+    let globalTotalPrice = productNoPowerPrice;
+    const addToCartButton = document.getElementById("total-price");
+    const addBtn = document.getElementById('add-to-cart');
+
+
 
     // Function to update the total price in the "Add to Cart" button
     function updateAddToCartButton() {
         addToCartButton.textContent = globalTotalPrice.toFixed(2);
 
-        // Disable the "Add to Cart" button if the global total is 0
         addBtn.disabled = globalTotalPrice === 0;
     }
 
-    // Function to update total price for a specific section and recalculate the global total
     function updateDisplayedTotal(button, quantityClass) {
         const quantityElement = button.parentElement.querySelector(quantityClass);
-        const currentQuantityValue = parseInt(quantityElement.textContent) || 0; // Handle NaN
+        const currentQuantityValue = parseInt(quantityElement.textContent) || 0;
         const totalPriceElement = button.closest('.adjustment-btns').querySelector('.total-price-section');
         const calculatedTotal = (currentQuantityValue * productPrice).toFixed(2);
 
@@ -520,7 +516,7 @@
             increaseButton.addEventListener("click", function() {
                 const quantityClass = increaseButton.classList.contains('increase-btn') ? '.quantity-btn' : '.quantity-btn-two';
                 const quantityElement = this.parentElement.querySelector(quantityClass);
-                let currentQuantityValue = parseInt(quantityElement.textContent) || 0; // Handle NaN
+                let currentQuantityValue = parseInt(quantityElement.textContent) || 1; // Handle NaN
                 currentQuantityValue += 1;
                 quantityElement.textContent = currentQuantityValue;
                 updateDisplayedTotal(this, quantityClass);
@@ -532,7 +528,7 @@
                 const quantityClass = decreaseButton.classList.contains('decrease-btn') ? '.quantity-btn' : '.quantity-btn-two';
                 const quantityElement = this.parentElement.querySelector(quantityClass);
                 let currentQuantityValue = parseInt(quantityElement.textContent) || 0; // Handle NaN
-                if (currentQuantityValue > 0) {
+                if (currentQuantityValue > 1) {
                     currentQuantityValue -= 1;
                     quantityElement.textContent = currentQuantityValue;
                     updateDisplayedTotal(this, quantityClass);
@@ -541,34 +537,31 @@
         });
     }
 
-    // Initialize each section's total price on page load
-    document.addEventListener("DOMContentLoaded", function() {
-        document.querySelectorAll(".total-price-section").forEach((priceElement) => {
-            const quantityElement = priceElement.closest('.adjustment-btns').querySelector('.quantity-btn, .quantity-btn-two');
-            const initialQuantity = parseInt(quantityElement.textContent) || 0; // Handle NaN
-            const initialTotal = (initialQuantity * productPrice).toFixed(2);
-            priceElement.textContent = `Taka: ${initialTotal} ৳`;
-        });
-
-        // Calculate and update the initial global total price
+    document.querySelectorAll(".toggle-btn").forEach((button) => {
         calculateGlobalTotalPrice();
-
-        // Attach click event to the reset button
-        const toggleButton = document.querySelector(".toggle-btn");
-        toggleButton.addEventListener("click", resetAllValues);
-
-        attachQuantityListeners(); // Attach quantity listeners
     });
 
-    // Separate functionality for simple increment/decrement control (if applicable)
-    let quantity = 0;
-    const totalPriceElement = document.getElementById("total-price");
+    document.addEventListener("DOMContentLoaded", function() {
+
+        const quantityElement = document.querySelector('.quantity-btn');
+        const initialQuantity = parseInt(quantityElement.textContent) || 0; // Handle NaN
+        const initialTotal = (initialQuantity * productPrice).toFixed(2);
+
+        calculateGlobalTotalPrice();
+
+        attachQuantityListeners();
+    });
+
+
+    let quantity = 1;
+    let totalPriceElement = document.getElementById("total-price");
 
     function updateSimpleTotalPrice() {
-        const total = (quantity * productPrice).toFixed(2);
-        globalTotalPrice = parseFloat(total); // Ensure it's a number
+        const total = (quantity * productNoPowerPrice).toFixed(2);
+        globalTotalPrice = parseFloat(total);
         totalPriceElement.textContent = total;
-        updateAddToCartButton(); // Update global button state based on total
+
+        updateAddToCartButton();
     }
 
     document.getElementById("increment").addEventListener("click", () => {
@@ -578,17 +571,16 @@
     });
 
     document.getElementById("decrement").addEventListener("click", () => {
-        if (quantity > 0) {
+        if (quantity > 1) {
             quantity--;
             document.getElementById("quantity").textContent = quantity;
             updateSimpleTotalPrice();
         }
     });
-
-    updateSimpleTotalPrice(); // Initialize the simple price update
+    document.addEventListener("DOMContentLoaded", function() {
+        updateSimpleTotalPrice();
+    });
 </script>
-
-
 
 
 <script>
@@ -645,7 +637,6 @@
             }
         });
     });
-    
 </script>
 
 <script>
@@ -679,66 +670,69 @@
 
 <script>
     document.getElementById('add-to-cart').addEventListener('click', function() {
-    var csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-    var productId = document.querySelector('input[name="product_id"]').value;
-    var powerType = document.querySelector('input[name="power_type"]:checked').value;
-    var nopairQuantity = document.getElementById('quantity').innerText.trim();
+        var csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+        var productId = document.querySelector('input[name="product_id"]').value;
+        var powerType = document.querySelector('input[name="power_type"]:checked').value;
+        var nopairQuantity = document.getElementById('quantity').innerText.trim();
 
-    var firstEyePower = document.getElementById('firstPower').value;
-    var firstEyeQuantityElement = document.getElementById('firstPair');
-    var firstEyeQuantity = firstEyeQuantityElement ? firstEyeQuantityElement.innerText.trim() : null;
+        var firstEyePower = document.getElementById('firstPower').value;
+        var firstEyeQuantityElement = document.getElementById('firstPair');
+        var firstEyeQuantity = firstEyeQuantityElement ? firstEyeQuantityElement.innerText.trim() : null;
 
-    var secondEyePower = document.getElementById('secondPower').value;
-    var secondEyeQuantityElement = document.getElementById('secondPair');
-    var secondEyeQuantity = secondEyeQuantityElement ? secondEyeQuantityElement.innerText.trim() : null;
+        var secondEyePower = document.getElementById('secondPower').value;
+        var secondEyeQuantityElement = document.getElementById('secondPair');
+        var secondEyeQuantity = secondEyeQuantityElement ? secondEyeQuantityElement.innerText.trim() : null;
 
-    var data = {
-        productId: productId,
-        powerType: powerType,
-        nopairQuantity: nopairQuantity,
-        firstEyePower: firstEyePower,
-        firstEyeQuantity: firstEyeQuantity,
-        secondEyePower: secondEyePower,
-        secondEyeQuantity: secondEyeQuantity,
-        _token: csrfToken
-    };
+        var data = {
+            productId: productId,
+            powerType: powerType,
+            nopairQuantity: nopairQuantity,
+            firstEyePower: firstEyePower,
+            firstEyeQuantity: firstEyeQuantity,
+            secondEyePower: secondEyePower,
+            secondEyeQuantity: secondEyeQuantity,
+            _token: csrfToken
+        };
 
-    var xhr = new XMLHttpRequest();
-    xhr.open('POST', '/cart/add-to-cart', true);
-    xhr.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
-    xhr.onreadystatechange = function() {
-        if (xhr.readyState == 4) {
-            var response = JSON.parse(xhr.responseText);
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', '/cart/add-to-cart', true);
+        xhr.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState == 4) {
+                console.log(xhr.responseText); // Log the raw response
+                try {
+                    var response = JSON.parse(xhr.responseText);
 
-            // Store the message in session storage
-            if (response.success) {
-                sessionStorage.setItem('cartMessage', response.message);
-                fetchCartCount();
-                window.location.reload();
-            } else {
-                sessionStorage.setItem('cartError', response.error || 'Unknown error');
-                alert('Failed to add to cart: ' + (response.error || 'Unknown error'));
+                    if (response.success) {
+                        sessionStorage.setItem('cartMessage', response.message);
+                        fetchCartCount();
+                        window.location.reload();
+                    } else {
+                        sessionStorage.setItem('cartError', response.error || 'Unknown error');
+                        alert('Failed to add to cart: ' + (response.error || 'Unknown error'));
+                    }
+                } catch (e) {
+                    console.error('Invalid JSON response:', xhr.responseText);
+                    alert('An error occurred while processing your request.');
+                }
             }
+        };
+        xhr.send(JSON.stringify(data));
+    });
+
+    window.onload = function() {
+        var message = sessionStorage.getItem('cartMessage');
+        var error = sessionStorage.getItem('cartError');
+
+        if (message) {
+            alert(message);
+            sessionStorage.removeItem('cartMessage');
+        }
+
+        if (error) {
+            alert(error);
+            sessionStorage.removeItem('cartError');
         }
     };
-    xhr.send(JSON.stringify(data));
-});
-
-// Check for messages in session storage and display them
-window.onload = function() {
-    var message = sessionStorage.getItem('cartMessage');
-    var error = sessionStorage.getItem('cartError');
-
-    if (message) {
-        alert(message); 
-        sessionStorage.removeItem('cartMessage'); 
-    }
-
-    if (error) {
-        alert(error);
-        sessionStorage.removeItem('cartError');
-    }
-};
-
 </script>
 @endpush
