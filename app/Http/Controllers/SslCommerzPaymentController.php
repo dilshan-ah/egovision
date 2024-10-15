@@ -152,8 +152,8 @@ class SslCommerzPaymentController extends Controller
 
         // Check if payment method is COD
         if ($request->payment_method == 'cod') {
-            $notify[] = ['success', 'Order placed successfully!'];
-            return redirect('/')->withNotify($notify);
+            
+            return redirect('/')->with('orderSuccess', 'Order placed successfully');
         }
 
         // For SSLCommerz payment method
@@ -165,8 +165,7 @@ class SslCommerzPaymentController extends Controller
                 print_r($payment_options);
                 $payment_options = array();
             } else {
-                $notify[] = ['success', 'Order placed successfully!'];
-                return redirect('/')->withNotify($notify);
+                return redirect('/')->with('orderSuccess', 'Order placed successfully');
             }
         }
     }

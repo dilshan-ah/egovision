@@ -4,7 +4,7 @@
                             <small class="text-danger d-block">{{ $errors->first('code') }}</small>
                         @endif
     <div class="verification-code">
-        <input type="text" name="code" id="verification-code" class="form-control overflow-hidden" required autocomplete="off">
+        <input type="text" name="code" id="verification-code" class="form-control overflow-hidden" required autocomplete="off" style="width: 100%; margin-bottom: 16px; margin-top: 0">
         <div class="boxes">
             <span>-</span>
             <span>-</span>

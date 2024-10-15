@@ -57,11 +57,6 @@ class RegisterController extends Controller
         return view('ego.auth.register', compact('pageTitle', 'mobileCode', 'countries', 'general'));
     }
 
-    function hello()
-    {
-        dd("hello");
-    }
-
 
     /**
      * Get a validator for an incoming registration request.
@@ -232,7 +227,6 @@ class RegisterController extends Controller
 
     public function egoPostRegister(Request $request)
     {
-        // Validate the form data
         $validatedData = $request->validate([
             'firstname' => 'required|string|max:255',
             'lastname' => 'required|string|max:255',
@@ -243,7 +237,6 @@ class RegisterController extends Controller
             'location' => 'nullable',
         ]);
 
-        // Create a new user
         $user = new User();
         $user->firstname = $validatedData['firstname'];
         $user->lastname = $validatedData['lastname'];
@@ -253,17 +246,13 @@ class RegisterController extends Controller
         $user->email = $validatedData['email'];
         $user->password = Hash::make($validatedData['password']);
 
-        // Save the user to the database
         $user->save();
 
         Auth::login($user);
 
-        // Optionally handle the newsletter sign-up
         if ($request->has('newsletter')) {
-            // Code to sign up the user for the newsletter
         }
         $notify[] = ['success', 'Account created successfully!'];
-        // Redirect to a success page or back to the form with a success message
         return redirect('/')->withNotify($notify);
     }
 }

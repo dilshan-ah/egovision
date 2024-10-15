@@ -146,7 +146,7 @@
                                     placeholder="Enter your last name">
                             </div>
                             <div class="form-check text-start mb-3">
-                                <input type="checkbox" class="form-check-input" id="newsletter">
+                                <input type="checkbox" class="form-check-input" name="newsletter" id="newsletter">
                                 <label class="form-check-label" for="newsletter">Sign Up for Newsletter</label>
                             </div>
                             <p class="text-start">By signing up for our newsletter, we will keep you informed by email on

@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 
 class AuthorizationController extends Controller
@@ -60,9 +62,9 @@ class AuthorizationController extends Controller
     }
 
 
-    public function sendVerifyCode($type)
+    public function sendVerifyCode($type, $userID)
     {
-        $user = auth()->user();
+        $user = User::where('id',$userID)->first();
 
         if ($this->checkCodeValidity($user)) {
             $targetTime = $user->ver_code_send_at->addMinutes(2)->timestamp;
@@ -100,42 +102,47 @@ class AuthorizationController extends Controller
         ]);
     }
 
-    public function emailVerification(Request $request)
+    public function emailVerification(Request $request, $userID)
     {
+        Log::info($request->all());
         $validator = Validator::make($request->all(), [
             'code' => 'required',
         ]);
-
+    
         if ($validator->fails()) {
             return response()->json([
-                'remark'=>'validation_error',
-                'status'=>'error',
-                'message'=>['error'=>$validator->errors()->all()],
-            ]);
+                'remark' => 'validation_error',
+                'status' => 'error',
+                'message' => ['error' => $validator->errors()->all()],
+            ], 422);
         }
-
-        $user = auth()->user();
-
+    
+        $user = User::where('id',$userID)->first();
+    
         if ($user->ver_code == $request->code) {
             $user->ev = 1;
-            $user->ver_code = null;
-            $user->ver_code_send_at = null;
+            $user->ver_code = null; // Clear verification code
+            $user->ver_code_send_at = null; // Clear the timestamp
             $user->save();
+    
+            // Return a success response
             $notify[] = 'Email verified successfully';
             return response()->json([
-                'remark'=>'email_verified',
-                'status'=>'success',
-                'message'=>['success'=>$notify],
-            ]);
+                'remark' => 'email_verified',
+                'status' => 'success',
+                'message' => ['success' => $notify],
+            ], 200); // 200 OK for success
         }
-
+    
+        // If the code doesn't match, return an error response
         $notify[] = 'Verification code doesn\'t match';
         return response()->json([
-            'remark'=>'validation_error',
-            'status'=>'error',
-            'message'=>['error'=>$notify],
-        ]);
+            'remark' => 'validation_error',
+            'status' => 'error',
+            'message' => ['error' => $notify],
+        ], 400); // 400 Bad Request for incorrect code
     }
+    
 
     public function mobileVerification(Request $request)
     {

@@ -1,7 +1,7 @@
 @extends('layouts.ego-app')
 @section('content')
 @include('ego.include.banner', ['banners' => $banners])
-
+<link rel='stylesheet' href='https://cdn-uicons.flaticon.com/2.6.0/uicons-solid-straight/css/uicons-solid-straight.css'>
 <style>
     /* Background overlay */
     .search-popup {
@@ -113,13 +113,73 @@
     }
 </style>
 
+@if(session('orderSuccess'))
+<!-- Custom Backdrop -->
+<!-- <div id="custom-backdrop" class="custom-backdrop"></div> -->
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog  modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header border-0">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body d-flex justify-content-center">
+                <div class="shadow-none d-flex flex-column align-items-center">
+                    <i class="fi fi-ss-check-circle" style="font-size: 70px;"></i>
+                    <h2 class="modal-title text-center mb-4" id="exampleModalLabel">{{ session('orderSuccess') }}</h2>
+                    <div class="d-flex w-100 justify-content-center">
+                        <a href="{{route('ego.orders')}}" class="btn btn-dark">Order History</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Custom Styles for Backdrop -->
+<style>
+    .custom-backdrop {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.7);
+        /* Semi-transparent background */
+        z-index: 1040;
+        /* Ensure it appears below the modal but above other content */
+        display: none;
+        /* Hidden by default */
+    }
+</style>
+
+<!-- jQuery to trigger the modal and backdrop on page load -->
+<script>
+    $(document).ready(function() {
+        // Show modal
+        $('#exampleModal').modal('show');
+
+        // Show custom backdrop when modal opens
+        $('#exampleModal').on('shown.bs.modal', function() {
+            $('#custom-backdrop').fadeIn(); // Fade in the custom backdrop
+        });
+
+        // Hide custom backdrop when modal closes
+        $('#exampleModal').on('hidden.bs.modal', function() {
+            $('#custom-backdrop').fadeOut(); // Fade out the custom backdrop
+        });
+    });
+</script>
+@endif
+
 
 <div class="container my-5">
     <div class="row">
         <div class="col">
             <h3 class="text-center">Welcome to Ego Vision Color Contact Lenses Official Store!</h3>
             <p>
-            Ego Vision, a sister company of Fashion Group, is a leading distributor of colored and powered contact lenses in Bangladesh. Since our establishment, we have prioritized offering top-quality products and services sourced globally. Our brand, “Ego Vision,” provides a wide selection of certified color contact lenses. These lenses are crafted to seamlessly complement your natural eye color, resulting in a subtle and realistic appearance. The effect of the colored lenses may differ depending on the natural hue of your iris. Additionally, our lenses can lighten darker eyes and enhance brighter ones for a striking visual transformation. We provide Premium shipping with an average delivery time of 24 to 48 hours, depending on the location within the country. Our lenses are available in our 18 exclusive optical stores and are also distributed through over 1,500 small and medium retail outlets nationwide.
+                Ego Vision, a sister company of Fashion Group, is a leading distributor of colored and powered contact lenses in Bangladesh. Since our establishment, we have prioritized offering top-quality products and services sourced globally. Our brand, “Ego Vision,” provides a wide selection of certified color contact lenses. These lenses are crafted to seamlessly complement your natural eye color, resulting in a subtle and realistic appearance. The effect of the colored lenses may differ depending on the natural hue of your iris. Additionally, our lenses can lighten darker eyes and enhance brighter ones for a striking visual transformation. We provide Premium shipping with an average delivery time of 24 to 48 hours, depending on the location within the country. Our lenses are available in our 18 exclusive optical stores and are also distributed through over 1,500 small and medium retail outlets nationwide.
             </p>
 
         </div>
@@ -146,11 +206,11 @@
             </div>
         </div>
     </div>
-    
+
     <!-- Welcome section END-->
     <!-- Attitude collection  -->
-     @foreach($collectionSets as $collectionSet)
-     <div class="container text-center my-5">
+    @foreach($collectionSets as $collectionSet)
+    <div class="container text-center my-5">
 
         <div class="row">
             <div class="col">
@@ -187,8 +247,8 @@
 
         </div>
     </div>
-     @endforeach
-    
+    @endforeach
+
     <!-- ------------------------------------------------------------------- -->
 
 

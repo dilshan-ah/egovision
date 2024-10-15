@@ -9,20 +9,21 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rules\Password;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
 
 class ForgotPasswordController extends Controller
 {
     public function sendResetCodeEmail(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'value'=>'required'
+            'value' => 'required'
         ]);
 
         if ($validator->fails()) {
             return response()->json([
-                'remark'=>'validation_error',
-                'status'=>'error',
-                'message'=>['error'=>$validator->errors()->all()],
+                'remark' => 'validation_error',
+                'status' => 'error',
+                'message' => ['error' => $validator->errors()->all()],
             ]);
         }
 
@@ -32,9 +33,9 @@ class ForgotPasswordController extends Controller
         if (!$user) {
             $notify[] = 'Couldn\'t find any account with this information';
             return response()->json([
-                'remark'=>'validation_error',
-                'status'=>'error',
-                'message'=>['error'=>$notify],
+                'remark' => 'validation_error',
+                'status' => 'error',
+                'message' => ['error' => $notify],
             ]);
         }
 
@@ -54,51 +55,54 @@ class ForgotPasswordController extends Controller
             'browser' => @$userBrowserInfo['browser'],
             'ip' => @$userIpInfo['ip'],
             'time' => @$userIpInfo['time']
-        ],['email']);
+        ], ['email']);
 
         $email = $user->email;
         $response[] = 'Verification code sent to mail';
         return response()->json([
-            'remark'=>'code_sent',
-            'status'=>'success',
-            'message'=>['success'=>$response],
-            'data'=>[
-                'email'=>$email
+            'remark' => 'code_sent',
+            'status' => 'success',
+            'message' => ['success' => $response],
+            'data' => [
+                'email' => $email
             ]
         ]);
     }
 
     public function verifyCode(Request $request)
     {
-        $validator = Validator::make($request->all(), [
+        $request->validate([
             'code' => 'required',
             'email' => 'required'
         ]);
 
-        if ($validator->fails()) {
-            return response()->json([
-                'remark'=>'validation_error',
-                'status'=>'error',
-                'message'=>['error'=>$validator->errors()->all()],
-            ]);
-        }
-        $code =  $request->code;
+        $code = str_replace(' ', '', $request->code);
 
-        if (PasswordReset::where('token', $code)->where('email', $request->email)->count() != 1) {
-            $notify[] = 'Verification code doesn\'t match';
+        // Find the password reset entry
+        $passwordReset = PasswordReset::where('token', $code)->where('email', $request->email)->first();
+
+        if (!$passwordReset) {
             return response()->json([
-                'remark'=>'validation_error',
-                'status'=>'error',
-                'message'=>['error'=>$notify],
-            ]);
+                'status' => 'error',
+                'message' => 'Verification code doesn\'t match'
+            ], 400);
         }
 
-        $response[] = 'You can change your password.';
+        // Generate a new token (could reuse the same token, or generate a new one)
+        $newToken = rand(100000, 999999);
+
+        // Save this new token in session and use it in the reset password form
+        session()->put('fpass_email', $request->email);
+        session()->put('token', $newToken);
+
+        // Update the PasswordReset token using email as the key
+        PasswordReset::where('email', $request->email)->update(['token' => $newToken]);
+
         return response()->json([
-            'remark'=>'verified',
-            'status'=>'success',
-            'message'=>['success'=>$response],
-        ]);
+            'status' => 'success',
+            'message' => 'Code verified. Proceed to reset password.',
+            'token' => $newToken // Return the new token so the app developer can redirect
+        ], 200);
     }
 
     public function reset(Request $request)
@@ -108,8 +112,8 @@ class ForgotPasswordController extends Controller
 
         if ($validator->fails()) {
             return response()->json([
-                'status'=>'error',
-                'message'=>['error'=>$validator->errors()->all()],
+                'status' => 'error',
+                'message' => ['error' => $validator->errors()->all()],
             ]);
         }
 
@@ -118,9 +122,9 @@ class ForgotPasswordController extends Controller
         if (!$reset) {
             $response[] = 'Invalid verification code.';
             return response()->json([
-                'remark'=>'validation_error',
-                'status'=>'error',
-                'message'=>['success'=>$response],
+                'remark' => 'validation_error',
+                'status' => 'error',
+                'message' => ['success' => $response],
             ]);
         }
 
@@ -137,14 +141,14 @@ class ForgotPasswordController extends Controller
             'browser' => @$userBrowser['browser'],
             'ip' => @$userIpInfo['ip'],
             'time' => @$userIpInfo['time']
-        ],['email']);
+        ], ['email']);
 
 
         $response[] = 'Password changed successfully';
         return response()->json([
-            'remark'=>'password_changed',
-            'status'=>'success',
-            'message'=>['success'=>$response],
+            'remark' => 'password_changed',
+            'status' => 'success',
+            'message' => ['success' => $response],
         ]);
     }
 
@@ -158,7 +162,7 @@ class ForgotPasswordController extends Controller
         return [
             'token' => 'required',
             'email' => 'required|email',
-            'password' => ['required','confirmed',$passwordValidation],
+            'password' => ['required', 'confirmed', $passwordValidation],
         ];
     }
 

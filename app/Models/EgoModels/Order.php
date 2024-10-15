@@ -5,10 +5,11 @@ namespace App\Models\EgoModels;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Traits\Searchable;
 
 class Order extends Model
 {
-    use HasFactory;
+    use HasFactory, Searchable;
 
     public function orderItems(){
         return $this->hasMany(OrderItems::class,'order_id');

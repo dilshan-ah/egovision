@@ -14,6 +14,10 @@ use App\Http\Controllers\Api\EgoVisionControllers\ProductController;
 use App\Http\Controllers\Api\EgoVisionControllers\ReturnProductController;
 use App\Http\Controllers\Api\EgoVisionControllers\TicketController;
 use App\Http\Controllers\Api\EgoVisionControllers\WishlistController;
+use App\Http\Controllers\Api\EgoVisionControllers\ForgotPasswordController;
+use App\Http\Controllers\Api\EgoVisionControllers\ProfileController;
+use App\Http\Controllers\Api\EgoVisionControllers\PromoCodeController;
+use App\Http\Controllers\Api\EgoVisionControllers\ShippingMethodsController;
 use App\Models\GeneralSetting;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
@@ -34,7 +38,7 @@ Route::get('/user', function (Request $request) {
 })->middleware('auth:sanctum');
 
 Route::controller(AuthController::class)->group(function () {
-    Route::post('ego/register', 'register');
+    Route::post('ego/register', 'egoPostRegister');
     Route::post('ego/login', 'login');
     Route::post('ego/logout', 'logout')->middleware('auth:sanctum');
     Route::get('ego/get/districts', 'getDistricts');
@@ -98,27 +102,39 @@ Route::controller(OrderController::class)->group(function () {
     Route::get('app/user/orederDetails/{productid}', 'singleOrder');
 });
 
-Route::controller(WishlistController::class)->group(function(){
-    Route::get('app/user/wishlists/{id}','userWishList');
-    Route::post('app/user/add-wishlists/{productid}/{userId}','store');
-    Route::delete('app/user/delete-wishlists/{userId}','delete');
+Route::controller(WishlistController::class)->group(function () {
+    Route::get('app/user/wishlists/{id}', 'userWishList');
+    Route::post('app/user/add-wishlists/{productid}/{userId}', 'store');
+    Route::delete('app/user/delete-wishlists/{userId}', 'delete');
 });
 
-Route::controller(TicketController::class)->group(function(){
-    Route::get('app/user/tickets/{id}','userTickets');
-    Route::get('app/user/ticket/view/{ticketId}','singleTicket');
-    Route::post('app/user/ticket/store/{userId}','contactSubmit');
-    Route::post('app/user/ticket/reply/{ticketId}/{userId}','replyTicketApi');
+Route::controller(TicketController::class)->group(function () {
+    Route::get('app/user/tickets/{id}', 'userTickets');
+    Route::get('app/user/ticket/view/{ticketId}', 'singleTicket');
+    Route::post('app/user/ticket/store/{userId}', 'contactSubmit');
+    Route::post('app/user/ticket/reply/{ticketId}/{userId}', 'replyTicketApi');
 });
 
-Route::controller(PrescriptionController::class)->group(function(){
-    Route::get('app/user/prescription/{id}','showPrescription');
-    Route::post('app/user/prescription/upload/{id}','uploadPrescriptionSubmit');
+Route::controller(PrescriptionController::class)->group(function () {
+    Route::get('app/user/prescription/{id}', 'showPrescription');
+    Route::post('app/user/prescription/upload/{id}', 'uploadPrescriptionSubmit');
 });
 
-Route::controller(ReturnProductController::class)->group(function(){
-    Route::get('app/user/returned-products/{userId}','myReturns');
-    Route::post('app/user/return-make','makeReturn');
+Route::controller(ReturnProductController::class)->group(function () {
+    Route::get('app/user/returned-products/{userId}', 'myReturns');
+    Route::post('app/user/return-make', 'makeReturn');
+});
+
+Route::controller(ShippingMethodsController::class)->group(function () {
+    Route::get('app/shipping/all', 'allMethods');
+});
+
+Route::controller(ProfileController::class)->group(function(){
+    Route::post('app/change/password/{id}', 'submitPassword');
+});
+
+Route::controller(PromoCodeController::class)->group(function(){
+    Route::post('app/apply/promo/', 'verifyPromo');
 });
 
 Route::namespace('Api')->name('api.')->group(function () {
@@ -171,18 +187,22 @@ Route::namespace('Api')->name('api.')->group(function () {
         Route::post('user-data-submit/{userId}', 'userDataSubmit');
     });
 
+    //authorization
+    Route::controller('AuthorizationController')->group(function () {
+        Route::get('authorization', 'authorization')->name('authorization');
+        Route::get('resend-verify/{type}/{userId}', 'sendVerifyCode')->name('send.verify.code');
+        Route::post('verify-email/{userId}', 'emailVerification')->name('verify.email');
+        Route::post('verify-mobile', 'mobileVerification')->name('verify.mobile');
+        Route::post('verify-g2fa', 'g2faVerification')->name('go2fa.verify');
+    });
+
+    // Route::controller('ForgotPasswordController')->group(function () {
+    //     Route::post('password-reset/request', 'sendResetCodeEmail');
+    //     Route::post('password-reset/verify-code', 'verifyCode');
+    // });
+
     Route::middleware('auth:sanctum')->group(function () {
 
-        //authorization
-        Route::controller('AuthorizationController')->group(function () {
-            Route::get('authorization', 'authorization')->name('authorization');
-            Route::get('resend-verify/{type}', 'sendVerifyCode')->name('send.verify.code');
-            Route::post('verify-email', 'emailVerification')->name('verify.email');
-            Route::post('verify-mobile', 'mobileVerification')->name('verify.mobile');
-            Route::post('verify-g2fa', 'g2faVerification')->name('go2fa.verify');
-        });
-
-        
 
         Route::middleware(['check.status'])->group(function () {
             // Route::post('user-data-submit/{userId}', 'UserController@userDataSubmit')->name('data.submit');

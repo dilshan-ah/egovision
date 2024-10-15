@@ -11,8 +11,20 @@ class DurationController extends Controller
 {
     public function getDurations()
     {
-        $durations = Duration::select('id','name','months')->get();
-
+        $durations = Duration::select('id', 'name', 'months', 'is_month')->get();
+    
+        // Modify durations based on the is_month field
+        $durations = $durations->map(function($duration) {
+            if ($duration->is_month == 0) {
+                // For is_month == 0, set the value of days to months directly
+                $duration->days = $duration->months;
+                unset($duration->months); // Optionally remove the months field
+            }
+            // No change for is_month == 1 (retain months)
+            return $duration;
+        });
+    
+        // Return the response based on whether durations are available or not
         if ($durations->isNotEmpty()) {
             return response()->json([
                 'status' => true,
@@ -28,9 +40,9 @@ class DurationController extends Controller
                 'data' => []
             ]);
         }
-
-        return response()->json($durations);
     }
+    
+    
 
     public function getDurationPage()
     {
