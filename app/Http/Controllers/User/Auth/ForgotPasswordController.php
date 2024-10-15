@@ -114,5 +114,6 @@ class ForgotPasswordController extends Controller
         session()->flash('fpass_email', $request->email);
         return to_route('user.password.reset', $code)->withNotify($notify);
     }
+    
 
 }

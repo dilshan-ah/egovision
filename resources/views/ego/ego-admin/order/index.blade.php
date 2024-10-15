@@ -38,9 +38,9 @@
                             </td>
                             <td>{{$order->amount}} ৳</td>
                             <td>
-                                <form id="orderStatusForm" action="{{route('addToCart.admin.change.status',$order->id)}}" method="post">
+                                <form id="orderStatusForm-{{$order->id}}" action="{{route('addToCart.admin.change.status', $order->id)}}" method="post">
                                     @csrf
-                                    <select name="status" id="orderStatus" class="form-control">
+                                    <select name="status" id="orderStatus-{{$order->id}}" class="form-control order-status" data-order-id="{{$order->id}}">
                                         <option value="Pending" @if($order->status == 'Pending') selected @endif>Pending</option>
                                         <option value="Processing" @if($order->status == 'Processing') selected @endif>Processing</option>
                                         <option value="Shipped" @if($order->status == 'Shipped') selected @endif>Shipped</option>
@@ -58,6 +58,11 @@
                         @endforeach
                     </tbody>
                 </table>
+                @if ($orders->hasPages())
+                <div class="card-footer py-4">
+                    {{ paginateLinks($orders) }}
+                </div>
+                @endif
             </div>
         </div>
     </div>
@@ -65,10 +70,11 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
     $(document).ready(function() {
-        // Detect changes in the status dropdown
-        $('#orderStatus').change(function() {
-            var selectedStatus = $(this).val();
-            var formAction = $('#orderStatusForm').attr('action');
+        // Detect changes in any of the status dropdowns
+        $('.order-status').change(function() {
+            var orderID = $(this).data('order-id'); // Get the order ID from the data attribute
+            var selectedStatus = $(this).val(); // Get the selected status
+            var formAction = $('#orderStatusForm-' + orderID).attr('action'); // Get the form action specific to this order
             var csrfToken = $('meta[name="csrf-token"]').attr('content'); // Get the CSRF token
 
             $.ajax({
@@ -104,3 +110,6 @@
     });
 </script>
 @endsection
+@push('breadcrumb-plugins')
+<div class="mb-2"><x-search-form placeholder="Order Order Id/Price" /></div>
+@endpush

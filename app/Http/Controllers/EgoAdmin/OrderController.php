@@ -98,7 +98,7 @@ class OrderController extends Controller
     public function indexadmin()
     {
         $pageTitle = 'Manage Order';
-        $orders = Order::with('orderItems.product')->orderBy('created_at','desc')->get();
+        $orders = Order::with('orderItems.product')->orderBy('created_at','desc')->searchable(['transaction_id','amount','status','orderItems.product:name'])->orderBy('id','desc')->paginate(getPaginate());
         return view('ego.ego-admin.order.index',compact('orders','pageTitle'));
     }
 

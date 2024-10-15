@@ -14,9 +14,9 @@ class CollectionSetController extends Controller
         try {
             // Fetch the collection sets with only the required fields for category, tone, and duration
             $collectionSets = CollectionSet::with([
-                'category:id,name', // Fetch only 'name' for category
-                'tone:id,name',     // Fetch only 'name' for tone
-                'duration:id,name'  // Fetch only 'name' for duration
+                'category:id,name',
+                'tone:id,name',
+                'duration:id,name'
             ])
                 ->get(['id', 'category_id', 'tone_id', 'duration_id']);
 

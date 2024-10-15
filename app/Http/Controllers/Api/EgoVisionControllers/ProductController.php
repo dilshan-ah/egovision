@@ -15,7 +15,7 @@ class ProductController extends Controller
             $perPage = $request->query('per_page', 12); // Default to 10 items per page
 
             // Fetch products with pagination
-            $products = Product::with(['color', 'lensDesign', 'baseCurve', 'category', 'tone', 'material', 'diameter', 'images'])->where('product_type','normal')
+            $products = Product::with(['color', 'lensDesign', 'baseCurve', 'category', 'tone', 'material', 'diameter', 'images'])->where('product_type', 'normal')
                 ->select('id', 'name', 'price', 'image_path')
                 ->paginate($perPage); // Use pagination instead of get()
 
@@ -67,7 +67,7 @@ class ProductController extends Controller
     {
         try {
             // Fetch product by ID along with its related images and variations
-            $product = Product::with(['images:id,product_id,image_path', 'variations:id,product_id,power,stock'])->findOrFail($id);
+            $product = Product::with(['images:id,product_id,image_path'])->findOrFail($id);
 
             // Remove HTML tags from 'product_intro' and 'description'
             $product->product_intro = strip_tags($product->product_intro);
@@ -76,22 +76,17 @@ class ProductController extends Controller
             // Format the main image path
             $product->image_path = $product->image_path ? 'https://egovision.shop/' . $product->image_path : null;
 
-            // Filter the images to include only 'id' and 'image_path' with the correct prefix
             $product->images = $product->images->map(function ($image) {
                 return [
                     'id' => $image->id,
-                    'image_path' => !empty($image->image_path) ? 'https://egovision.shop/' . $image->image_path : null,
+                    'image_path' => $image->image_path ? 'https://egovision.shop/' . $image->image_path : null,
                 ];
             });
 
-            // Filter the variations to include only 'id', 'power', and 'stock'
-            $product->variations = $product->variations->map(function ($variation) {
-                return [
-                    'id' => $variation->id,
-                    'power' => $variation->power,
-                    'stock' => $variation->stock,
-                ];
-            });
+            $availablePowers = json_decode($product->available_powers) ?? [];
+            $powers = $this->generatePowerValues($availablePowers);
+
+            $product->available_powers = $powers;
 
             // Return success response with the formatted product data
             return response()->json([
@@ -111,16 +106,55 @@ class ProductController extends Controller
         }
     }
 
+    public function generatePowerValues($availablePowers) {
+        $values = [];
+    
+        foreach ($availablePowers as $range) {
+            // Extract the numbers from the range string
+            preg_match_all('/-?\d+\.?\d*/', $range, $matches);
+    
+            if (count($matches[0]) == 2) {
+                $start = floatval($matches[0][0]);
+                $end = floatval($matches[0][1]);
+
+                // dd($end);
+    
+                // Determine the interval based on the range
+                if ($range === '(-0.25-6.00)' || $range === '(+0.25+6.00)' ) {
+                    $interval = 0.25;
+                } elseif ($range === '(-6.50-10.00)' || $range === '(+6.50+10.00)') {
+                    $interval = 0.50;
+                } else {
+                    continue;
+                }
+    
+                if($start > 0)
+                {
+                    for ($value = $start; $value <= $end; $value += $interval) {
+                        $values[] = round($value, 2);
+                    }
+                }else{
+                    for ($value = $start; $value >= $end; $value -= $interval) {
+                        $values[] = round($value, 2);
+                    }
+                }
+
+            }
+        }
+    
+        return $values;
+    }
+
     public function getAccessories(Request $request)
     {
         // Define the number of items per page
         $perPage = $request->input('per_page', 10); // Default to 10 if not provided
-    
+
         // Fetch the accessories with pagination, selecting specific fields
         $products = Product::where('product_type', 'accessories')
             ->select('id', 'image_path', 'name', 'price') // Select specific fields
             ->paginate($perPage);
-    
+
         // Customize the pagination response
         $customResponse = [
             'success' => true,
@@ -135,10 +169,7 @@ class ProductController extends Controller
             'total' => $products->total(),
             'per_page' => $products->perPage(),
         ];
-    
+
         return response()->json($customResponse, 200); // OK
     }
-    
-    
-    
 }
