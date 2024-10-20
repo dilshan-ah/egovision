@@ -29,7 +29,7 @@
                                 <img src="{{asset($banner->banner_path)}}" style="width:250px" alt="">
                             </td>
                             <td>
-                                {{$banner->product->name}}
+                                {{@$banner->product->name}}
                             </td>
                             <td>{{ $banner->created_at->format('m/d/Y g:i A') }}</td>
                             <td>

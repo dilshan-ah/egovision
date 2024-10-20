@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\EgoVisionControllers;
 use App\Http\Controllers\Controller;
 use App\Models\Duration;
 use App\Models\EgoModels\Product;
+use App\Models\EgoModels\Wishlist;
 use Illuminate\Http\Request;
 
 class DurationController extends Controller
@@ -76,7 +77,7 @@ class DurationController extends Controller
         return response()->json($formattedDurations);
     }
 
-    public function singleDuration(string $id)
+    public function singleDuration(string $id, string $userId)
     {
         try {
             // Fetch color by ID
@@ -93,12 +94,16 @@ class DurationController extends Controller
             $products = $productsQuery->paginate($productsPerPage);
     
             // Format the product image paths
-            $formattedProducts = $products->getCollection()->map(function ($product) {
+            $formattedProducts = $products->getCollection()->map(function ($product) use ($userId) {
+                $isWishlisted = Wishlist::where('user_id', $userId)
+                    ->where('product_id', $product->id)
+                    ->exists();
                 return [
                     'id' => $product->id,
                     'name' => $product->name,
                     'image_path' => $product->image_path ? 'https://egovision.shop/' . $product->image_path : null,
                     'price' => $product->price,
+                    'is_wishlisted' => $isWishlisted ? 1 : 0,
                 ];
             });
     

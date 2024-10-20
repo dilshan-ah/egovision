@@ -59,7 +59,7 @@
 
     /* Open the sidebarButton */
     .sidebarButton.open {
-        width: 450px;
+        width: 300px;
         /* Adjust width as needed */
     }
 

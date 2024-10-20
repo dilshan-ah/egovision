@@ -5,20 +5,24 @@ namespace App\Http\Controllers\Api\EgoVisionControllers;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\EgoModels\Product;
+use App\Models\EgoModels\Wishlist;
+use Illuminate\Support\Facades\Log;
 
 class ProductController extends Controller
 {
-    public function getProducts(Request $request)
+    public function getProducts(Request $request, string $userId)
     {
+        
         try {
             // Set default items per page, you can also pass this as a query parameter
-            $perPage = $request->query('per_page', 12); // Default to 10 items per page
-
+            $perPage = $request->query('per_page', 18);
+    
             // Fetch products with pagination
-            $products = Product::with(['color', 'lensDesign', 'baseCurve', 'category', 'tone', 'material', 'diameter', 'images'])->where('product_type', 'normal')
+            $products = Product::with(['color', 'lensDesign', 'baseCurve', 'category', 'tone', 'material', 'diameter', 'images'])
+                ->where('product_type', 'normal')
                 ->select('id', 'name', 'price', 'image_path')
-                ->paginate($perPage); // Use pagination instead of get()
-
+                ->paginate($perPage);
+    
             // Check if products exist
             if ($products->isEmpty()) {
                 return response()->json([
@@ -28,17 +32,25 @@ class ProductController extends Controller
                     'data' => []
                 ]);
             }
+    
+            // Format the product data and pass $userId to the map closure
+            $formattedProducts = $products->map(function ($product) use ($userId) {
+                
+                $isWishlisted = Wishlist::where('user_id', $userId)
+                    ->where('product_id', $product->id)
+                    ->exists();
 
-            // Format the product data
-            $formattedProducts = $products->map(function ($product) {
+
+    
                 return [
                     'id' => $product->id,
                     'name' => $product->name,
                     'price' => $product->price,
-                    'mainImage' => $product->image_path ? 'https://egovision.shop/' . $product->image_path : null
+                    'mainImage' => $product->image_path ? 'https://egovision.shop/' . $product->image_path : null,
+                    'is_wishlisted' => $isWishlisted ? 1 : 0,
                 ];
             });
-
+    
             // Return success response with pagination info
             return response()->json([
                 'status' => true,
@@ -62,6 +74,7 @@ class ProductController extends Controller
             ]);
         }
     }
+    
 
     public function singleProduct(string $id)
     {

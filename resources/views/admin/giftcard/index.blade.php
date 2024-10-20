@@ -31,8 +31,8 @@
                                     <tr>
                                         <td>{{ $loop->iteration }}</td>
                                         <td>{{ $giftCard->code }}</td>
-                                        <td>{{ $giftCard->balance }}৳</td>
-                                        <td>{{ $giftCard->initial_balance }}৳</td>
+                                        <td>{{ $giftCard->balance }}BDT</td>
+                                        <td>{{ $giftCard->initial_balance }}BDT</td>
                                         <td>{{ $giftCard->expiry_date }}</td>
                                         <td>{{ $giftCard->cutoff_percentage }}%</td>
                                         <td>

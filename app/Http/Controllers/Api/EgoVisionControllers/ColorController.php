@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\EgoVisionControllers;
 use App\Http\Controllers\Controller;
 use App\Models\EgoModels\Color;
 use App\Models\EgoModels\Product;
+use App\Models\EgoModels\Wishlist;
 use Illuminate\Http\Request;
 
 class ColorController extends Controller
@@ -74,7 +75,7 @@ class ColorController extends Controller
     }
     
 
-    public function singleColor(string $id)
+    public function singleColor(string $id,string $userId)
     {
         try {
             // Fetch color by ID
@@ -91,12 +92,16 @@ class ColorController extends Controller
             $products = $productsQuery->paginate($productsPerPage);
     
             // Format the product image paths
-            $formattedProducts = $products->getCollection()->map(function ($product) {
+            $formattedProducts = $products->getCollection()->map(function ($product) use ($userId) {
+                $isWishlisted = Wishlist::where('user_id', $userId)
+                    ->where('product_id', $product->id)
+                    ->exists();
                 return [
                     'id' => $product->id,
                     'name' => $product->name,
                     'image_path' => $product->image_path ? 'https://egovision.shop/' . $product->image_path : null,
                     'price' => $product->price,
+                    'is_wishlisted' => $isWishlisted ? 1 : 0,
                 ];
             });
     

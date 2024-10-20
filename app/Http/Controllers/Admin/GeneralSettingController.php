@@ -28,6 +28,7 @@ class GeneralSettingController extends Controller
             'cur_sym' => 'required|string|max:40',
             'base_color' => 'nullable', 'regex:/^[a-f0-9]{6}$/i',
             'secondary_color' => 'nullable', 'regex:/^[a-f0-9]{6}$/i',
+            'tax' => 'required|numeric|between:0,100',
             'timezone' => 'required',
         ]);
 
@@ -37,6 +38,7 @@ class GeneralSettingController extends Controller
         $general->cur_sym = $request->cur_sym;
         $general->base_color = $request->base_color;
         $general->secondary_color = $request->secondary_color;
+        $general->tax = $request->tax;
         $general->save();
 
         $timezoneFile = config_path('timezone.php');

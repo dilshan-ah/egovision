@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\EgoVisionControllers;
 use App\Http\Controllers\Controller;
 use App\Models\CollectionSet;
 use App\Models\EgoModels\Product;
+use App\Models\EgoModels\Wishlist;
 use Illuminate\Http\Request;
 
 class CollectionSetController extends Controller
@@ -142,7 +143,7 @@ class CollectionSetController extends Controller
         }
     }
 
-    public function singleCollection(string $id)
+    public function singleCollection(string $id, string $userId)
     {
         try {
             // Fetch the collection set with related category, tone, and duration
@@ -151,29 +152,34 @@ class CollectionSetController extends Controller
                 ->firstOrFail(['id', 'category_id', 'tone_id', 'duration_id', 'image_path', 'description']);
         
             // Initialize the query for products with pagination
-            $productsPerPage = 10; // Set how many products you want per page
+            $productsPerPage = 10;
             $productsQuery = Product::select('id', 'name', 'image_path', 'price');
         
             // Add category filter (mandatory)
             $productsQuery->where('category_id', $collectionSet->category_id);
         
-            // Add tone filter if tone_id exists
+            // Add tone and duration filters
             if ($collectionSet->tone_id) {
                 $productsQuery->where('tone_id', $collectionSet->tone_id);
             }
-        
-            // Add duration filter if duration_id exists
             if ($collectionSet->duration_id) {
                 $productsQuery->where('duration_id', $collectionSet->duration_id);
             }
         
-            // Fetch the products that match the query with pagination
+            // Fetch the products with pagination
             $products = $productsQuery->paginate($productsPerPage);
         
-            // Add prefix to image_path for each product
-            $prefix = 'https://egovision.shop/'; // Set your desired prefix here
+            // Add prefix to image_path for each product and check for wishlist
+            $prefix = 'https://egovision.shop/';
+        
             foreach ($products as $product) {
-                $product->image_path = $prefix . $product->image_path; // Add the prefix
+                $product->image_path = $prefix . $product->image_path;
+        
+                $isWishlisted = Wishlist::where('user_id', $userId)
+                    ->where('product_id', $product->id)
+                    ->exists();
+        
+                $product->is_wishlisted = $isWishlisted ? 1 : 0;
             }
         
             // Format the response data
@@ -182,11 +188,11 @@ class CollectionSetController extends Controller
                 'category_name' => $collectionSet->category->name ?? null,
                 'tone_name' => $collectionSet->tone->name ?? null,
                 'duration_name' => $collectionSet->duration->name ?? null,
-                'products' => $products->items(), // Get items for the current page
-                'product_count' => $products->total(), // Total count of products
-                'current_page' => $products->currentPage(), // Current page number
-                'last_page' => $products->lastPage(), // Total number of pages
-                'per_page' => $products->perPage(), // Items per page
+                'products' => $products->items(),
+                'product_count' => $products->total(),
+                'current_page' => $products->currentPage(),
+                'last_page' => $products->lastPage(),
+                'per_page' => $products->perPage(),
             ];
         
             // Return success response
@@ -206,6 +212,7 @@ class CollectionSetController extends Controller
             ]);
         }
     }
+    
 
     public function featuredCollection()
     {

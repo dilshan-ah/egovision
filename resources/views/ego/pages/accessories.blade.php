@@ -6,11 +6,18 @@
 <br>
 <br>
 <br>
+@php
+use App\Helpers\TranslationHelper;
+$preferredLanguage = session('preferredLanguage');
+$accessoryTitle = TranslationHelper::translateText('Accessories', $preferredLanguage);
+$productText = TranslationHelper::translateText('PRODUCTS', $preferredLanguage);
+@endphp
+
 <div class="row mt-5">
     <div class="col-md-4 col-12" style="background: #F5F5F5;">
         <div class="p-4">
-            <h1> Accessories</h1>
-            <small>{{$products->count()}} PRODUCTS</small>
+            <h1> {{$accessoryTitle}}</h1>
+            <small>{{$products->count()}} {{$productText}}</small>
         </div>
     </div>
 
@@ -42,7 +49,7 @@
                     </div>
                     <div class="card-product-slider-body">
                         <h5 class="card-product-slider-title">{{$product->name}}</h5>
-                        <small class="price">STARTING AT: {{$product->price}} TK</small>
+                        <small class="price">STARTING AT: {{$product->no_power_price}} TK</small>
                     </div>
                 </div>
             </div>

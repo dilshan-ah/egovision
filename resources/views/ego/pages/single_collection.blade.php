@@ -59,7 +59,7 @@
 
     /* Open the sidebarButton */
     .sidebarButton.open {
-        width: 450px;
+        width: 300px;
         /* Adjust width as needed */
     }
 
@@ -117,18 +117,26 @@
 <br>
 <br>
 <br>
+@php
+use App\Helpers\TranslationHelper;
+$preferredLanguage = session('preferredLanguage');
+
+$filterText = TranslationHelper::translateText('FILTER', $preferredLanguage);
+$productCollectionText = TranslationHelper::translateText('PRODUCTS', $preferredLanguage);
+$startText = TranslationHelper::translateText('STARTING AT', $preferredLanguage);
+@endphp
 <div class="row mt-5">
-    <div class="col-12 col-md-6 col-lg-4" style="background: #f5f5f5">
+    <div class="col-12 col-md-6 col-lg-2" style="background: #f5f5f5">
         <div class="mt-5 p-4">
             <h1>{{@$collectionSet->category->name}}</h1>
             <p> {{@$collectionSet->tone->name ? $collectionSet->tone->name : ''}} {{ @$collectionSet->duration ? '- ' . $collectionSet->duration->months. ' months' : '' }}</p>
-            <small>{{@$productsforCollection->count()}} PRODUCTS</small>
+            <small>{{@$productsforCollection->count()}} {{$productCollectionText}}</small>
             <br />
-            <a href="#" class="add-to-cart-button w-50 mt-4 text-nowrap" id="filterBtnSide">FILTER <i class="fas fa-plus mx-5"></i></a>
+            <a href="#" style="width: 85% !important;" class="add-to-cart-button w-50 mt-4 text-nowrap" id="filterBtnSide">{{$filterText}} <i class="fas fa-plus mx-5"></i></a>
 
             <div id="sidebarButton" class="sidebarButton">
                 <div class="sidebar-header">
-                    <h3 class="sidebar-title">Filter</h3>
+                    <h3 class="sidebar-title">{{$filterText}}</h3>
                     <button class="close-btn" id="closeBtn">&times;</button>
                 </div>
                 <div class="accordion" id="filterAccordion">
@@ -419,10 +427,10 @@
     </div>
 
     <!-- ------------------------------------------------------------- -->
-    <div class="col-12 col-md-8">
+    <div class="col-12 col-md-10">
         <div class="row">
             @foreach ($productsforCollection as $product)
-            <div class="col-12 col-sm-6 col-md-6">
+            <div class="col-12 col-sm-4 col-md-4">
                 <div class="card-product-slider mx-2">
                     <div class="card-product-slider-img-wrapper">
                         <img src="{{ asset($product->image_path) }}" class="card-product-slider-img-top img-fluid">
@@ -446,7 +454,7 @@
                     </div>
                     <div class="card-product-slider-body">
                         <h5 class="card-product-slider-title">{{ $product->name }}</h5>
-                        <small class="price">STARTING AT: {{ $product->price }} BDT</small>
+                        <small class="price">{{$startText}}: {{ $product->price }} BDT</small>
                     </div>
                 </div>
             </div>

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\EgoAdmin;
 
+use App\Helpers\TranslationHelper;
 use App\Http\Controllers\Controller;
 use App\Models\CollectionSet;
 use App\Models\Duration;
@@ -148,10 +149,19 @@ class CollectionSetController extends Controller
 
     public function singleCollection(Request $request, $id)
     {
+        $preferredLanguage = session('preferredLanguage');
         // Fetch the CollectionSet with its relationships
         $collectionSet = CollectionSet::with(['category', 'tone', 'duration'])
             ->where('id', $id)
             ->firstOrFail();
+
+            if (!is_null($collectionSet->category) && !is_null($collectionSet->category->name)) {
+                $collectionSet->category->name = TranslationHelper::translateText($collectionSet->category->name, $preferredLanguage);
+            }
+    
+            if (!is_null($collectionSet->tone) && !is_null($collectionSet->tone->name)) {
+                $collectionSet->tone->name = TranslationHelper::translateText($collectionSet->tone->name, $preferredLanguage);
+            }
     
         // Start querying products based on the collection's category
         $productsQuery = Product::where('category_id', $collectionSet->category_id);
@@ -218,18 +228,52 @@ class CollectionSetController extends Controller
     
         // Execute the filtered query and get the products
         $productsforCollection = $productsQuery->get();
+
+        foreach($productsforCollection as $product)
+        {
+            $product->name = TranslationHelper::translateText($product->name, $preferredLanguage);
+            $product->price = TranslationHelper::translateText((string) $product->price, $preferredLanguage);
+        }
     
+        $pageTitle = TranslationHelper::translateText($collectionSet->category->name, $preferredLanguage);
         // Retrieve necessary filter options for the view
         $colors = Color::all();
+        foreach($colors as $color)
+        {
+            $color->name = TranslationHelper::translateText($color->name, $preferredLanguage);
+        }
         $baseCurves = BaseCurve::all();
+        foreach($baseCurves as $baseCurve)
+        {
+            $color->name = TranslationHelper::translateText($color->name, $preferredLanguage);
+        }
         $diameters = Diameter::all();
+        foreach($diameters as $diameter)
+        {
+            $color->name = TranslationHelper::translateText($color->name, $preferredLanguage);
+        }
         $tones = Tone::all();
+        foreach($tones as $tone)
+        {
+            $color->name = TranslationHelper::translateText($color->name, $preferredLanguage);
+        }
         $replacements = Duration::all();
+        foreach($colors as $color)
+        {
+            $color->name = TranslationHelper::translateText($color->name, $preferredLanguage);
+        }
         $materials = Material::all();
+        foreach($colors as $color)
+        {
+            $color->name = TranslationHelper::translateText($color->name, $preferredLanguage);
+        }
         $lenses = LensDesign::all();
+        foreach($colors as $color)
+        {
+            $color->name = TranslationHelper::translateText($color->name, $preferredLanguage);
+        }
     
-        // Set the page title based on the category
-        $pageTitle = $collectionSet->category->name;
+        // Set the page title based on the categor
     
         // Pass data to the view
         return view('ego.pages.single_collection', compact(

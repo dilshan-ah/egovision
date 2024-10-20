@@ -102,7 +102,7 @@
             <div class="mt-2" id="pair-state" style="background-color: #f5f5f5">
                 <div class="p-3">
                     <fieldset class="pair-fieldset">
-                        <legend class="float-none w-auto">Pair</legend>
+                        <legend class="float-none w-auto">Pcs</legend>
                         <div class="product-count">
                             <button id="decrement" style="font-size: 10px;">
                                 <span style="font-size: 25px">-</span>
@@ -144,7 +144,7 @@
                                         <span class="power-value">0.50</span>
                                         <div class="adjustment-btns text-center">
                                             <fieldset class="pair-fieldset-main">
-                                                <legend class="float-none w-auto p-2">Pair</legend>
+                                                <legend class="float-none w-auto p-2">Pcs</legend>
                                                 <div class="product-count">
                                                     <button class="btn decrease-btn">-</button>
                                                     <span class="quantity-btn" data-quantity="1"
@@ -172,7 +172,7 @@
                                         <span class="power-value">0.50</span>
                                         <div class="adjustment-btns text-center">
                                             <fieldset class="pair-fieldset-main">
-                                                <legend class="float-none w-auto p-2">pair</legend>
+                                                <legend class="float-none w-auto p-2">Pcs</legend>
                                                 <div class="product-count">
                                                     <button class="btn decrease-btn-two">-</button>
                                                     <span class="quantity-btn-two" data-quantity="1"
@@ -193,7 +193,7 @@
 
 
             <button class="add-to-cart-button w-100 mt-4" id="add-to-cart">Add to Cart - <span
-                    id="total-price">{{ $product->no_power_price }}</span> ৳</button>
+                    id="total-price">{{ $product->no_power_price }}</span> BDT</button>
         </div>
         <!-- description -->
         <div
@@ -363,10 +363,39 @@
                     <span class="custom-closebtn" style="font-size: 24px; cursor: pointer;">&times;</span>
                 </div>
                 <div class="custom-accordion">
-                    <!-- Content for Power Range -->
-                    <h4>Monthly Spherical Lenses</h4>
-
-
+                    
+                    <table class="table mt-4">
+                        <tbody>
+                            <tr class="table-dark">
+                                <td></td>
+                                <td>Power Range</td>
+                                <td>Steps</td>
+                            </tr>
+                            <tr class="table-secondary">
+                                <td>Plano</td>
+                                <td>0.00</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td rowspan="2">Myopia</td>
+                                <td>-0.50 to -6.00</td>
+                                <td>in 0.25 steps</td>
+                            </tr>
+                            <tr>
+                                <td>-6.50 to -8.00</td>
+                                <td>in 0.50 steps</td>
+                            </tr>
+                            <tr class="table-secondary">
+                                <td rowspan="2">Hyperopia</td>
+                                <td>+0.50 to +6.00</td>
+                                <td>in 0.25 steps</td>
+                            </tr>
+                            <tr class="table-secondary">
+                                <td>+6.50 to +8.00</td>
+                                <td>in 0.50 steps</td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
 
@@ -382,7 +411,7 @@
                 </div>
                 <div class="custom-accordion">
                     <!-- Content for Lens Parameters -->
-                    <p>Lens Parameters content goes here.</p>
+                    {!! $product->lens_params !!}
                 </div>
             </div>
         </div>
@@ -480,7 +509,7 @@
         const totalPriceElement = button.closest('.adjustment-btns').querySelector('.total-price-section');
         const calculatedTotal = (currentQuantityValue * productPrice).toFixed(2);
 
-        totalPriceElement.textContent = `Taka: ${calculatedTotal} ৳`;
+        totalPriceElement.textContent = `Taka: ${calculatedTotal} BDT`;
 
         calculateGlobalTotalPrice();
     }
@@ -504,7 +533,7 @@
         });
 
         document.querySelectorAll(".total-price-section").forEach((priceElement) => {
-            priceElement.textContent = `Taka: 0.00 ৳`; // Reset price display
+            priceElement.textContent = `Taka: 0.00 BDT`; // Reset price display
         });
 
         globalTotalPrice = 0;

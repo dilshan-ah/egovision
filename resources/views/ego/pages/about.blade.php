@@ -8,10 +8,25 @@
 <br>
 <br>
 <br>
+@php
+use App\Helpers\TranslationHelper;
+$preferredLanguage = session('preferredLanguage');
+$homeUrl =  TranslationHelper::translateText('Home', $preferredLanguage);
+$aboutTitle = TranslationHelper::translateText('About', $preferredLanguage);
+$aboutText = TranslationHelper::translateText("Explore Ego Vision's range of colored contact lens collections, known for being the best contacts for dark eyes, carefully designed to enhance your natural eye beauty. Dive into our collections to discover the uniqueness of each design. Whether you're seeking hazel, grey, blue, or green lenses, you'll find them here. Our offerings also include prescription colored contact lenses, with some collections catering to those with astigmatism.", $preferredLanguage);
+
+$firstTitle = TranslationHelper::translateText("Timeless Collection", $preferredLanguage);
+$firstSubTitle = TranslationHelper::translateText("3 Tones - Monthly", $preferredLanguage);
+$firstDesc = TranslationHelper::translateText("Experience timeless elegance with Desio's Timeless Collection, ideal for achieving a subtle, natural eye color. Tailored for dark brown eyes, our collection satisfies your desire for darker lenses that seamlessly blend with your natural eye color. What sets this collection apart is the 14.2 lens diameter, a feature sought after by many of our customers.", $preferredLanguage);
+$firstAttrOne = TranslationHelper::translateText("Diameter: 14.2mm - Base curve 8.6mm", $preferredLanguage);
+$firstAttrTwo = TranslationHelper::translateText("Availability: From -8.00 to +4.00", $preferredLanguage);
+
+$discoBtn = TranslationHelper::translateText("Discover the Collection: From -8.00 to +4.00", $preferredLanguage);
+@endphp
 <div class="container">
-    <a href="{{ route('ego.index') }}">Home</a>
-    <h1 class="text-center" style="font-size: 5rem">About</h1>
-    <p class="text-center">Explore Desio's range of colored contact lens collections, known for being the best contacts for dark eyes, carefully designed to enhance your natural eye beauty. Dive into our collections to discover the uniqueness of each design. Whether you're seeking hazel, grey, blue, or green lenses, you'll find them here. Our offerings also include prescription colored contact lenses, with some collections catering to those with astigmatism.</p>
+    <a href="{{ route('ego.index') }}">{{$homeUrl}}</a>
+    <h1 class="text-center" style="font-size: 5rem">{{$aboutTitle}}</h1>
+    <p class="text-center">{{$aboutText}}</p>
 
     <div class="row align-items-center" style="background: #f5f5f5;">
         <div class="col-md-8">
@@ -19,12 +34,12 @@
         </div>
         <div class="col-md-4">
             <div class="p-5 mt-2">
-                <h1>Timeless Collection</h1>
-                <h6>3 Tones - Monthly</h6>
-                <p>Experience timeless elegance with Desio's Timeless Collection, ideal for achieving a subtle, natural eye color. Tailored for dark brown eyes, our collection satisfies your desire for darker lenses that seamlessly blend with your natural eye color. What sets this collection apart is the 14.2 lens diameter, a feature sought after by many of our customers.</p>
-                <small>Diameter: 14.2mm - Base curve 8.6mm</small>
-                <small>Availability: From -8.00 to +4.00</small> <br>
-                <a href="#" class="mt-5 text-black">Discover the Collection <i class="fa-solid fa-arrow-right"></i></a>
+                <h1>{{$firstTitle}}</h1>
+                <h6>{{$firstSubTitle}}</h6>
+                <p>{{$firstDesc}}</p>
+                <small>{{$firstAttrOne}}</small>
+                <small>{{$firstAttrTwo}}</small> <br>
+                <a href="#" class="mt-5 text-black">{{$discoBtn}} <i class="fa-solid fa-arrow-right"></i></a>
             </div>
         </div>
     </div>
@@ -35,12 +50,12 @@
 
         <div class="col-md-6">
             <div class="p-5 mt-2">
-                <h1>Timeless Collection</h1>
-                <h6>3 Tones - Monthly</h6>
-                <p>Experience timeless elegance with Desio's Timeless Collection, ideal for achieving a subtle, natural eye color. Tailored for dark brown eyes, our collection satisfies your desire for darker lenses that seamlessly blend with your natural eye color. What sets this collection apart is the 14.2 lens diameter, a feature sought after by many of our customers.</p>
-                <small>Diameter: 14.2mm - Base curve 8.6mm</small>
-                <small>Availability: From -8.00 to +4.00</small> <br>
-                <a href="#" class="mt-5 text-black">Discover the Collection <i class="fa-solid fa-arrow-right"></i></a>
+            <h1>{{$firstTitle}}</h1>
+                <h6>{{$firstSubTitle}}</h6>
+                <p>{{$firstDesc}}</p>
+                <small>{{$firstAttrOne}}</small>
+                <small>{{$firstAttrTwo}}</small> <br>
+                <a href="#" class="mt-5 text-black">{{$discoBtn}} <i class="fa-solid fa-arrow-right"></i></a>
             </div>
         </div>
         <div class="col-md-6">

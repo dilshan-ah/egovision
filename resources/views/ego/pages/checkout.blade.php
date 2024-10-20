@@ -32,13 +32,13 @@
                 <div class="card p-4 mb-4">
                     <div class="form-floating mb-3">
                         <input type="text" class="form-control w-100" id="first_name" placeholder="First Name"
-                            name="first_name" required>
+                            name="first_name" value="{{$userDetail->firstname}}" required>
                         <label for="first_name">First Name*</label>
                         <div class="invalid-feedback">Please enter your first name.</div> <!-- Validation message -->
                     </div>
                     <div class="form-floating">
                         <input type="text" class="form-control w-100" id="last_name" placeholder="Last Name"
-                            name="last_name" required>
+                            name="last_name" value="{{$userDetail->lastname}}" required>
                         <label for="last_name">Last Name*</label>
                         <div class="invalid-feedback">Please enter your last name.</div>
                     </div>
@@ -49,14 +49,9 @@
                     </div>
                     <div class="form-floating">
                         <input type="text" class="form-control w-100" id="address_one" placeholder="Street Address"
-                            name="address_one" required>
+                            name="address_one" value="{{$userDetail->address->address}}" required>
                         <label for="address_one">Street Address 1*</label>
                         <div class="invalid-feedback">Please enter your street address.</div>
-                    </div>
-                    <div class="form-floating">
-                        <input type="text" class="form-control w-100" id="address_two" placeholder="Street Address"
-                            name="address_two">
-                        <label for="address_two">Street Address 2</label>
                     </div>
                     <div class="form-floating">
                         <select class="form-select" id="countrySelect" aria-label="Floating label select example" name="country" required>
@@ -64,7 +59,7 @@
                             @foreach ($countries as $country)
                             @if ($country['name'] != 'Israel')
                             <option value="{{ $country['name'] }}"
-                                data-states="{{ json_encode($country['states']) }}">
+                                data-states="{{ json_encode($country['states']) }}" @if($country['name']=='Bangladesh' ) selected @endif>
                                 {{ $country['name'] }}
                             </option>
                             @endif
@@ -76,7 +71,13 @@
 
                     <div class="form-floating">
                         <select class="form-select" id="stateSelect" aria-label="Floating label select example" name="state" required>
-                            <option value="">Select a country first</option>
+                            @foreach($countries as $country)
+                            @if($country['name'] == 'Bangladesh')
+                            @foreach($country['states'] as $state)
+                            <option value="{{$state['name']}}" @if($state['name']=='Dhaka District' ) selected @endif>{{$state['name']}}</option>
+                            @endforeach
+                            @endif
+                            @endforeach
                         </select>
                         <label for="stateSelect">State*</label>
                         <div class="invalid-feedback">Please select a state.</div>
@@ -84,21 +85,21 @@
 
                     <div class="form-floating">
                         <input type="text" class="form-control w-100" id="city" placeholder="City"
-                            name="city" required>
+                            name="city" value="{{$userDetail->address->city}}" required>
                         <label for="city">City*</label>
                         <div class="invalid-feedback">Please enter your city.</div>
                     </div>
 
                     <div class="form-floating">
                         <input type="text" class="form-control w-100" id="zip" placeholder="Zip code"
-                            name="zip" required>
+                            name="zip" value="{{$userDetail->address->city}}" required>
                         <label for="zip">Zip code*</label>
                         <div class="invalid-feedback">Please enter your zip code.</div>
                     </div>
 
                     <div class="form-floating">
                         <input type="email" class="form-control w-100" id="email" placeholder="Email Address"
-                            name="email" required>
+                            name="email" value="{{$userDetail->email}}" required>
                         <label for="email">Email*</label>
                         <div class="invalid-feedback">Please enter a valid email.</div>
                     </div>
@@ -106,14 +107,13 @@
                     <div class="input-group mb-3">
                         <select class="form-select" id="dial_code" aria-label="Floating label select example" name="dial_code" required>
                             @foreach ($dialdatas as $dialdata)
-                            <option value="{{ $dialdata['dial_code'] }}">({{ $dialdata['dial_code'] }})<span
+                            <option value="{{ $dialdata['dial_code'] }}" @if($dialdata['dial_code']=='+880' ) selected @endif>({{ $dialdata['dial_code'] }})<span
                                     style="font-size: 10px; margin-left: 10px">{{ $dialdata['name'] }}</span>
                             </option>
                             @endforeach
-
                         </select>
                         <input type="text" class="form-control" style="width: 70%"
-                            aria-label="Text input with dropdown button" name="phone" placeholder="Phone Number" required>
+                            aria-label="Text input with dropdown button" name="phone" placeholder="Phone Number" value="{{$userDetail->mobile}}" required>
                         <div class="invalid-feedback">Please enter your phone number.</div>
                     </div>
                 </div>
@@ -124,10 +124,10 @@
                     <div class="form-check d-flex align-items-center gap-4 py-3 mt-3 border-top border-bottom">
                         <input class="form-check-input" type="radio" name="delivery" value="{{$shippingMethod->fee}}" id="flexRadioDefault{{$shippingMethod->fee}}" required>
                         <label class="form-check-label" for="flexRadioDefault{{$shippingMethod->fee}}">
-                            {{$shippingMethod->title}} <span style="font-size: 18px">({{$shippingMethod->fee}}৳)</span>
+                            {{$shippingMethod->title}} <span style="font-size: 18px">({{$shippingMethod->fee}} BDT)</span>
                         </label>
                         <label for="flexRadioDefault{{$shippingMethod->fee}}">
-                        {{$shippingMethod->place}}
+                            {{$shippingMethod->place}}
                         </label>
                         <div class="invalid-feedback">Please select a shipping method.</div>
                     </div>
@@ -144,7 +144,7 @@
                         style="display: flex; align-items: stretch; margin-bottom: 20px; height: 100%; border: 1px solid #e0e0e0; border-radius: 8px; padding: 10px;">
                         <div class="image-container"
                             style="width: 90px; height: 90px; position: relative; flex-shrink: 0;">
-                            <img src="{{ asset($cart->product->image_path) }}" alt="Random Image"
+                            <img src="{{ asset(@$cart->product->image_path) }}" alt="Random Image"
                                 style="width: 100%; height: 100%; object-fit: cover;">
                         </div>
 
@@ -161,7 +161,7 @@
                                 style="margin-top: 10px; display: flex; align-items: center; justify-content: space-between;">
                                 <span style="font-size: 14px; margin-left: 10px;">{{ $cart->pair }} QTY <span
                                         style="width: 20px; display: inline-block"></span>
-                                    {{ ($cart->power_type == 'with_power' ? $cart->product->price : $cart->product->no_power_price) * $cart->pair }} ৳</span>
+                                    {{ ($cart->power_type == 'with_power' ? $cart->product->price : $cart->product->no_power_price) * $cart->pair }}  BDT</span>
                             </div>
                         </div>
                     </div>
@@ -222,7 +222,7 @@
                         style="display: flex; align-items: stretch; margin-bottom: 20px; height: 100%; border: 1px solid #e0e0e0; border-radius: 8px; padding: 10px;">
                         <div class="image-container"
                             style="width: 90px; height: 90px; position: relative; flex-shrink: 0;">
-                            <img src="{{ asset($cart->product->image_path) }}" alt="Random Image"
+                            <img src="{{ asset(@$cart->product->image_path) }}" alt="Random Image"
                                 style="width: 100%; height: 100%; object-fit: cover;">
                         </div>
 
@@ -239,7 +239,7 @@
                                 style="margin-top: 10px; display: flex; align-items: center; justify-content: space-between;">
                                 <span style="font-size: 14px; margin-left: 10px;">{{ $cart->pair }} QTY <span
                                         style="width: 20px; display: inline-block"></span>
-                                    {{ ($cart->power_type == 'with_power' ? $cart->product->price : $cart->product->no_power_price) * $cart->pair }} ৳</span>
+                                    {{ ($cart->power_type == 'with_power' ? $cart->product->price : $cart->product->no_power_price) * $cart->pair }}  BDT</span>
                             </div>
                         </div>
                     </div>
@@ -250,16 +250,20 @@
                         <b>{{ $carts->sum(function($cart) {
                             $price = $cart->power_status == 'no_power' ? $cart->product->no_power_price : $cart->product->price;
                             return $price * $cart->pair;
-                        }) }}৳</b>
+                        }) }} BDT</b>
 
                     </div>
                     <div class="d-flex justify-content-between">
                         <h4>Discount</h4>
-                        <b>- <span id="discount">{{ $carts->filter(function($cart) { return $cart->product->is_free == 1; })->sum(function($cart) { return $cart->product->no_power_price * $cart->pair; }) ?? 0 }}</span>৳</b>
+                        <b>- <span id="discount">{{ $carts->filter(function($cart) { return $cart->product->is_free == 1; })->sum(function($cart) { return $cart->product->no_power_price * $cart->pair; }) ?? 0 }}</span> BDT</b>
                     </div>
                     <div class="d-flex justify-content-between">
                         <h4>Delivery Free</h4>
-                        <b id="deliveryFee">60৳</b>
+                        <b id="deliveryFee">60 BDT</b>
+                    </div>
+                    <div class="d-flex justify-content-between">
+                        <h4>Tax</h4>
+                        <b id="tax">{{number_format($taxprice,0)}}  BDT</b>
                     </div>
                     <div class="d-flex justify-content-between">
                         <h4>Total</h4>
@@ -275,8 +279,8 @@
                                 })->sum(function($cart) {
                                     $price = $cart->power_status == 'no_power' ? $cart->product->no_power_price : $cart->product->price;
                                     return $price * $cart->pair;
-                                })
-                            }}৳
+                                }) + $taxprice
+                            }} BDT
                         </b>
 
                     </div>
@@ -287,11 +291,9 @@
 </form>
 
 @if($hasAccessory == false)
-<!-- Custom Backdrop -->
-<div id="custom-backdrop" class="custom-backdrop"></div>
 
 <!-- Modal -->
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" style="z-index: 99999;">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -434,6 +436,8 @@
 
             var deliveryFee = $('#deliveryFee').text();
 
+            var tax = $('#tax').text();
+
             if (promoCode) {
                 $.ajax({
                     url: "{{ route('promo.verify') }}", // Promo code verification route
@@ -446,8 +450,8 @@
                     success: function(response) {
                         if (response.success) {
                             // Apply promo discount and add existing discount
-                            var discountAmount = parseFloat(response.discount) + parseFloat(existingDiscount); // Ensure numeric values
-                            var newTotal = parseFloat(subtotal) + parseFloat(deliveryFee) - discountAmount;
+                            var discountAmount = parseFloat(response.discount) + parseFloat(existingDiscount);
+                            var newTotal = parseFloat(subtotal) + parseFloat(deliveryFee) - discountAmount + parseFloat(tax);
 
                             // Round and format the values properly
                             discountAmount = discountAmount.toFixed(2); // Round to 2 decimal places
@@ -456,13 +460,13 @@
                             // Update the discount and total on the page
                             $('#promoMessage').text(response.message).removeClass('text-danger').addClass('text-success');
                             $('#discount').text(discountAmount); // Display discount
-                            $('#total').text(newTotal + '৳'); // Display total price
+                            $('#total').text(newTotal + ' BDT'); // Display total price
 
                             $('#promoInputGroup').css('display', 'none');
 
                             var promoInfoHtml = `
                                 <div id="promoInfo" class="alert alert-success mt-3">
-                                    <p>Promo code <strong>${promoCode}</strong> applied! You saved ${discountAmount}৳.</p>
+                                    <p>Promo code <strong>${promoCode}</strong> applied! You saved ${discountAmount} BDT.</p>
                                     <button id="removePromo" class="btn btn-danger">Remove Promo Code</button>
                                 </div>
                             `;
@@ -486,7 +490,7 @@
         $('input[name="delivery"]').on('change', function() {
             var selectedDeliveryFee = parseFloat($(this).val());
 
-            $('#deliveryFee').text(selectedDeliveryFee + '৳');
+            $('#deliveryFee').text(selectedDeliveryFee + ' BDT');
 
             var subtotal = {{ $carts->sum(function($cart) {
                 $price = $cart->power_status == 'no_power' ? $cart->product->no_power_price : $cart->product->price;
@@ -500,10 +504,12 @@
                 return $price * $cart->pair;
             }) }};
 
+            var tax = $('#tax').text();
+
             var deliveryFee = selectedDeliveryFee;
 
-            var newTotal = selectedDeliveryFee + subtotal - existingDiscount;
-            $('#total').text(newTotal.toFixed(2) + '৳'); // Update total
+            var newTotal = selectedDeliveryFee + subtotal - existingDiscount + parseFloat(tax);
+            $('#total').text(newTotal.toFixed(2) + ' BDT'); // Update total
 
             // Automatically apply the promo code whenever the delivery fee changes
             applyPromoCode(); // Call the function to apply the promo code
@@ -514,10 +520,17 @@
 
         // Remove Promo Code Function (Client-side only)
         function removePromoCode(subtotal, deliveryFee) {
-            // Reset the discount and total values
-            $('#discount').text('0'); // Reset discount to 0
-            var resetTotal = parseFloat(subtotal) + parseFloat(deliveryFee); // Reset total
-            $('#total').text(resetTotal.toFixed(2) + '৳'); // Update total
+            
+            var existingDiscount = {{ $carts->filter(function($cart) { 
+                return $cart->product->is_free == 1; 
+            })->sum(function($cart) {
+                $price = $cart->power_status == 'no_power' ? $cart->product->no_power_price : $cart->product->price;
+                return $price * $cart->pair;
+            }) }};
+            $('#discount').text(existingDiscount);
+            var tax = $('#tax').text();
+            var resetTotal = parseFloat(subtotal) + parseFloat(deliveryFee) + parseFloat(tax) -existingDiscount; // Reset total
+            $('#total').text(resetTotal.toFixed(2) + ' BDT'); // Update total
 
             // Show the promo input and button again
             $('#promoInputGroup').css('display', 'block'); // Show promo input

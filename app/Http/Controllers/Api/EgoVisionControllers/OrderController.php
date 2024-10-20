@@ -29,6 +29,7 @@ class OrderController extends Controller
             'cus_country' => 'required|string',
             'cus_postcode' => 'required|string',
             'payment_method' => 'required|string',
+            'transaction_id' => 'required|string|unique:orders',
             'delivery' => 'required|numeric',
             'order_items' => 'required|array',
             'order_items.*.product_id' => 'required|integer',
@@ -57,7 +58,7 @@ class OrderController extends Controller
                 'delivery_charge' => $validatedData['delivery'],
                 'payment_method' => $validatedData['payment_method'],
                 'amount' => $validatedData['delivery'] + $validatedData['total_amount'],
-                'transaction_id' => uniqid(),
+                'transaction_id' => $validatedData['transaction_id']
             ]);
 
             // Save order items

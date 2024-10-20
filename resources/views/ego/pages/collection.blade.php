@@ -8,10 +8,20 @@
 <br>
 <br>
 <br>
+@php
+use App\Helpers\TranslationHelper;
+$preferredLanguage = session('preferredLanguage');
+$homeUrl = TranslationHelper::translateText('Home', $preferredLanguage);
+$collectionPageTitle = TranslationHelper::translateText('Collection', $preferredLanguage);
+$collectionPageDesc = TranslationHelper::translateText("Discover Ego Vision's exquisite collection of colored contact lenses, renowned for being the top choice for dark eyes and thoughtfully crafted to enhance your natural eye beauty. Explore our range to find unique designs that suit your style. Whether you're looking for hazel, grey, blue, or green lenses, we have something for everyone. We also offer prescription colored contact lenses, with select collections designed for individuals with astigmatism.", $preferredLanguage);
+
+$discoverBtn = TranslationHelper::translateText('Discover the Collection', $preferredLanguage);
+@endphp
+
 <div class="container">
-    <a href="{{ route('ego.index') }}">Home</a>
-    <h1 class="text-center" style="font-size: 5rem">@lang('messages.Collections')</h1>
-    <p class="text-center">Discover Ego Vision's exquisite collection of colored contact lenses, renowned for being the top choice for dark eyes and thoughtfully crafted to enhance your natural eye beauty. Explore our range to find unique designs that suit your style. Whether you're looking for hazel, grey, blue, or green lenses, we have something for everyone. We also offer prescription colored contact lenses, with select collections designed for individuals with astigmatism.</p>
+    <a href="{{ route('ego.index') }}">{{$homeUrl}}</a>
+    <h1 class="text-center" style="font-size: 5rem">{{$collectionPageTitle}}</h1>
+    <p class="text-center">{{$collectionPageDesc}}</p>
 </div>
 <br>
 <div class="container">
@@ -30,7 +40,7 @@
 
                 {!! $collectionSet->description !!}
                 <br>
-                <a href="{{ route('collectionSet.single.collection', $collectionSet->id) }}" class="mt-5 text-black">Discover the Collection <i class="fa-solid fa-arrow-right"></i></a>
+                <a href="{{ route('collectionSet.single.collection', $collectionSet->id) }}" class="mt-5 text-black">{{$discoverBtn}} <i class="fa-solid fa-arrow-right"></i></a>
             </div>
         </div>
     </div>

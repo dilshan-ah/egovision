@@ -26,6 +26,12 @@
                                     <input class="form-control" type="text" name="cur_sym" required value="{{$general->cur_sym}}">
                                 </div>
                             </div>
+                            <div class="col-md-4 col-sm-6">
+                                <div class="form-group ">
+                                    <label>@lang('Tax')</label>
+                                    <input class="form-control" type="text" name="tax" required value="{{$general->tax}}">
+                                </div>
+                            </div>
                             <div class="form-group col-md-4 col-sm-6">
                                 <label> @lang('Timezone')</label>
                                 <select class="form-control" name="timezone">

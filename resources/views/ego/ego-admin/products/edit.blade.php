@@ -155,6 +155,43 @@
                         <span class="text-danger">{{ $message }}</span>
                         @enderror
                     </div>
+                    <div class="col-6 mb-5">
+                        <h4 class="col-12 mb-2">Choose Available powers</h4>
+                        <div class="row ml-2">
+                            <div class="form-group col-12 d-flex">
+                                <label for="available_power_1">-0.25 to -6.00</label>
+                                <input type="checkbox" class="form-check-input" value="(-0.25-6.00)" id="available_power_1"
+                                    name="available_powers[]"
+                                    {{ in_array('(-0.25-6.00)', json_decode($product->available_powers) ?? []) ? 'checked' : '' }}>
+                            </div>
+                            <div class="form-group col-12 d-flex">
+                                <label for="available_power_2">-6.50 to -10.00</label>
+                                <input type="checkbox" class="form-check-input" value="(-6.50-10.00)" id="available_power_2"
+                                    name="available_powers[]"
+                                    {{ in_array('(-6.50-10.00)', json_decode($product->available_powers) ?? []) ? 'checked' : '' }}>
+                            </div>
+                            <div class="form-group col-12 d-flex">
+                                <label for="available_power_3">+0.25 to +6.00</label>
+                                <input type="checkbox" class="form-check-input" value="(+0.25+6.00)" id="available_power_3"
+                                    name="available_powers[]"
+                                    {{ in_array('(+0.25+6.00)', json_decode($product->available_powers) ?? []) ? 'checked' : '' }}>
+                            </div>
+                            <div class="form-group col-12 d-flex">
+                                <label for="available_power_4">+6.50 to +10.00</label>
+                                <input type="checkbox" class="form-check-input" value="(+6.50+10.00)" id="available_power_4"
+                                    name="available_powers[]"
+                                    {{ in_array('(+6.50+10.00)', json_decode($product->available_powers) ?? []) ? 'checked' : '' }}>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group col-6">
+                        <label for="">Lens Parameter</label>
+                        <textarea name="lensparameter" class="form-control" id="editor3">{{ old('lensparameter',$product->lens_params) }}</textarea>
+                        @error('description')
+                        <span class="text-danger">{{ $message }}</span>
+                        @enderror
+                    </div>
                     <div class="form-group col-6">
                         <label for="">Product Image</label>
                         <div class="custom-file">
@@ -189,40 +226,6 @@
                         </div>
                     </div>
 
-                    <div class="col-12 mb-2">
-                        <h4>Choose Available powers</h4>
-                    </div>
-
-                    <div class="col-12 mb-5">
-                        <div class="row ml-2">
-                            <div class="form-group col-6 d-flex">
-                                <label for="available_power_1">-0.25 to -6.00</label>
-                                <input type="checkbox" class="form-check-input" value="(-0.25-6.00)" id="available_power_1"
-                                    name="available_powers[]"
-                                    {{ in_array('(-0.25-6.00)', json_decode($product->available_powers) ?? []) ? 'checked' : '' }}>
-                            </div>
-                            <div class="form-group col-6 d-flex">
-                                <label for="available_power_2">-6.50 to -10.00</label>
-                                <input type="checkbox" class="form-check-input" value="(-6.50-10.00)" id="available_power_2"
-                                    name="available_powers[]"
-                                    {{ in_array('(-6.50-10.00)', json_decode($product->available_powers) ?? []) ? 'checked' : '' }}>
-                            </div>
-                            <div class="form-group col-6 d-flex">
-                                <label for="available_power_3">+0.25 to +6.00</label>
-                                <input type="checkbox" class="form-check-input" value="(+0.25+6.00)" id="available_power_3"
-                                    name="available_powers[]"
-                                    {{ in_array('(+0.25+6.00)', json_decode($product->available_powers) ?? []) ? 'checked' : '' }}>
-                            </div>
-                            <div class="form-group col-6 d-flex">
-                                <label for="available_power_4">+6.50 to +10.00</label>
-                                <input type="checkbox" class="form-check-input" value="(+6.50+10.00)" id="available_power_4"
-                                    name="available_powers[]"
-                                    {{ in_array('(+6.50+10.00)', json_decode($product->available_powers) ?? []) ? 'checked' : '' }}>
-                            </div>
-                        </div>
-                    </div>
-
-
                     <div class="form-group col-12">
                         <button type="submit" class="btn btn-primary btn-block">Update</button>
                     </div>
@@ -244,6 +247,12 @@
         });
 
         const editor2 = new Jodit('#editor2', {
+            toolbarAdaptive: false,
+            toolbarSticky: true,
+            height: 300,
+        });
+
+        const editor3 = new Jodit('#editor3', {
             toolbarAdaptive: false,
             toolbarSticky: true,
             height: 300,
