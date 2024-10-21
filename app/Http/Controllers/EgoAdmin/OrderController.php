@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\EgoAdmin;
 
+use App\Helpers\TranslationHelper;
 use App\Http\Controllers\Controller;
 use App\Models\EgoModels\Product;
 use Illuminate\Http\Request;
@@ -22,10 +23,26 @@ class OrderController extends Controller
     {
         $product = Product::with(['images', 'color', 'lensDesign', 'baseCurve', 'category', 'duration', 'tone', 'material', 'variations'])
             ->findOrFail($id);
-        $pageTitle = $product->name . ' | Ego Vision';
+
+        $preferredLanguage = session('preferredLanguage');
+
+        $pageTitle = TranslationHelper::translateText($product->name . ' | Ego Vision', $preferredLanguage);
 
         $availablePowers = json_decode($product->available_powers) ?? [];
-        $powers = $this->generatePowerValues($availablePowers); // Use $this to call the method
+        $powers = $this->generatePowerValues($availablePowers);
+
+        $product->name =  TranslationHelper::translateText($product->name, $preferredLanguage);
+        $product->description =  TranslationHelper::translateText($product->description, $preferredLanguage);
+        $product->product_intro =  TranslationHelper::translateText($product->product_intro, $preferredLanguage);
+        $product->color->name =  TranslationHelper::translateText($product->color->name, $preferredLanguage);
+        $product->diameter->name =  TranslationHelper::translateText($product->diameter->name, $preferredLanguage);
+        $product->lensDesign->name =  TranslationHelper::translateText($product->lensDesign->name, $preferredLanguage);
+        $product->baseCurve->name =  TranslationHelper::translateText($product->baseCurve->name, $preferredLanguage);
+        $product->category->name =  TranslationHelper::translateText($product->category->name, $preferredLanguage);
+        $product->duration->name =  TranslationHelper::translateText($product->duration->name, $preferredLanguage);
+        $product->tone->name =  TranslationHelper::translateText($product->tone->name, $preferredLanguage);
+        $product->material->name =  TranslationHelper::translateText($product->material->name, $preferredLanguage);
+        $product->lens_params =  TranslationHelper::translateText((string) $product->lens_params, $preferredLanguage);
 
         return view('ego.pages.addToCart', compact('pageTitle', 'product', 'powers'));
     }
@@ -110,10 +127,10 @@ class OrderController extends Controller
                 return $cart->pair * $price;
             });
 
-            $taxprice = $cartTotal * $taxPerc / 100;
+        $taxprice = $cartTotal * $taxPerc / 100;
 
 
-        return view('ego.pages.checkout', compact('carts', 'pageTitle', 'countries', 'dialdatas', 'hasAccessory', 'freeGift', 'promoCodes', 'shippingMethods', 'userDetail','taxPerc','taxprice'));
+        return view('ego.pages.checkout', compact('carts', 'pageTitle', 'countries', 'dialdatas', 'hasAccessory', 'freeGift', 'promoCodes', 'shippingMethods', 'userDetail', 'taxPerc', 'taxprice'));
     }
 
 
@@ -140,11 +157,10 @@ class OrderController extends Controller
             $order->cancelling_time = null;
             $order->returning_time = null;
 
-            $orderNotes = OrderStatusNote::where('order_id',$id)->get();
-            foreach($orderNotes as $orderNote){
+            $orderNotes = OrderStatusNote::where('order_id', $id)->get();
+            foreach ($orderNotes as $orderNote) {
                 $orderNote->delete();
             }
-            
         }
 
         if ($request->status == 'Processing') {
@@ -155,25 +171,24 @@ class OrderController extends Controller
             $order->cancelling_time = null;
             $order->returning_time = null;
 
-            $processingNote = OrderStatusNote::where('order_id',$id)->where('status','Processing')->first();
+            $processingNote = OrderStatusNote::where('order_id', $id)->where('status', 'Processing')->first();
 
-            if($processingNote){
+            if ($processingNote) {
                 $processingNote->note =  $request->note;
                 $processingNote->save();
-            }elseif($request->note){
+            } elseif ($request->note) {
                 $orderNote = new OrderStatusNote();
                 $orderNote->order_id = $id;
                 $orderNote->status = 'Processing';
                 $orderNote->note = $request->note;
                 $orderNote->save();
 
-                $removeOthers =  OrderStatusNote::where('order_id',$id)->where('status','!=','Processing')->get();
+                $removeOthers =  OrderStatusNote::where('order_id', $id)->where('status', '!=', 'Processing')->get();
 
-                foreach($removeOthers as $removeOther){
+                foreach ($removeOthers as $removeOther) {
                     $removeOther->delete();
                 }
             }
-
         }
         if ($request->status == 'Shipped') {
             $order->shipping_time = Carbon::now();
@@ -182,25 +197,24 @@ class OrderController extends Controller
             $order->cancelling_time = null;
             $order->returning_time = null;
 
-            $shippingNote = OrderStatusNote::where('order_id',$id)->where('status','Shipped')->first();
+            $shippingNote = OrderStatusNote::where('order_id', $id)->where('status', 'Shipped')->first();
 
-            if($shippingNote){
+            if ($shippingNote) {
                 $shippingNote->note =  $request->note;
                 $shippingNote->save();
-            }elseif($request->note){
+            } elseif ($request->note) {
                 $orderNote = new OrderStatusNote();
                 $orderNote->order_id = $id;
                 $orderNote->status = 'Shipped';
                 $orderNote->note = $request->note;
                 $orderNote->save();
 
-                $removeOthers =  OrderStatusNote::where('order_id',$id)->where('status','!=','Processing')->where('status','!=','Shipped')->get();
+                $removeOthers =  OrderStatusNote::where('order_id', $id)->where('status', '!=', 'Processing')->where('status', '!=', 'Shipped')->get();
 
-                foreach($removeOthers as $removeOther){
+                foreach ($removeOthers as $removeOther) {
                     $removeOther->delete();
                 }
             }
-            
         }
         if ($request->status == 'Complete') {
             $order->completing_time = Carbon::now();
@@ -208,80 +222,76 @@ class OrderController extends Controller
             $order->cancelling_time = null;
             $order->returning_time = null;
 
-            $completingNote = OrderStatusNote::where('order_id',$id)->where('status','Complete')->first();
+            $completingNote = OrderStatusNote::where('order_id', $id)->where('status', 'Complete')->first();
 
-            if($completingNote){
+            if ($completingNote) {
                 $completingNote->note =  $request->note;
                 $completingNote->save();
-            }elseif($request->note){
+            } elseif ($request->note) {
                 $orderNote = new OrderStatusNote();
                 $orderNote->order_id = $id;
                 $orderNote->status = 'Complete';
                 $orderNote->note = $request->note;
                 $orderNote->save();
 
-                
-                $removeOthers =  OrderStatusNote::where('order_id',$id)->where('status','!=','Processing')->where('status','!=','Shipped')->where('status','!=','Complete')->get();
 
-                foreach($removeOthers as $removeOther){
+                $removeOthers =  OrderStatusNote::where('order_id', $id)->where('status', '!=', 'Processing')->where('status', '!=', 'Shipped')->where('status', '!=', 'Complete')->get();
+
+                foreach ($removeOthers as $removeOther) {
                     $removeOther->delete();
                 }
             }
-            
         }
         if ($request->status == 'Failed') {
             $order->failing_time = Carbon::now();
             $order->cancelling_time = null;
             $order->returning_time = null;
 
-            $failingNote = OrderStatusNote::where('order_id',$id)->where('status','Failed')->first();
+            $failingNote = OrderStatusNote::where('order_id', $id)->where('status', 'Failed')->first();
 
-            if($failingNote){
+            if ($failingNote) {
                 $failingNote->note =  $request->note;
                 $failingNote->save();
-            }elseif($request->note){
+            } elseif ($request->note) {
                 $orderNote = new OrderStatusNote();
                 $orderNote->order_id = $id;
                 $orderNote->status = 'Failed';
                 $orderNote->note = $request->note;
                 $orderNote->save();
             }
-            
         }
         if ($request->status == 'Canceled') {
             $order->cancelling_time = Carbon::now();
             $order->returning_time = null;
 
-            $cancellingNote = OrderStatusNote::where('order_id',$id)->where('status','Cancelled')->first();
+            $cancellingNote = OrderStatusNote::where('order_id', $id)->where('status', 'Cancelled')->first();
 
-            if($cancellingNote){
+            if ($cancellingNote) {
                 $cancellingNote->note =  $request->note;
                 $cancellingNote->save();
-            }elseif($request->note){
+            } elseif ($request->note) {
                 $orderNote = new OrderStatusNote();
                 $orderNote->order_id = $id;
                 $orderNote->status = 'Cancelled';
                 $orderNote->note = $request->note;
                 $orderNote->save();
             }
-            
         }
         if ($request->status == 'Returned') {
             $order->returning_time = Carbon::now();
 
-            $returningNote = OrderStatusNote::where('order_id',$id)->where('status','Returned')->first();
+            $returningNote = OrderStatusNote::where('order_id', $id)->where('status', 'Returned')->first();
 
-            if($returningNote){
+            if ($returningNote) {
                 $returningNote->note =  $request->note;
                 $returningNote->save();
-            }elseif($request->note){
+            } elseif ($request->note) {
                 $orderNote = new OrderStatusNote();
                 $orderNote->order_id = $id;
                 $orderNote->status = 'Returned';
                 $orderNote->note = $request->note;
                 $orderNote->save();
             }
-            
         }
 
         $order->status = $request->status;
@@ -294,14 +304,14 @@ class OrderController extends Controller
     public function viewOrder(string $id)
     {
         $order = Order::where('id', $id)->first();
-        $processingNote = OrderStatusNote::where('order_id',$id)->where('status','Processing')->first();
-        $shippingNote = OrderStatusNote::where('order_id',$id)->where('status','Shipped')->first();
-        $completingNote = OrderStatusNote::where('order_id',$id)->where('status','Complete')->first();
-        $failingNote = OrderStatusNote::where('order_id',$id)->where('status','Failed')->first();
-        $cancellingNote = OrderStatusNote::where('order_id',$id)->where('status','Cancelled')->first();
-        $returningNote = OrderStatusNote::where('order_id',$id)->where('status','Returned')->first();
+        $processingNote = OrderStatusNote::where('order_id', $id)->where('status', 'Processing')->first();
+        $shippingNote = OrderStatusNote::where('order_id', $id)->where('status', 'Shipped')->first();
+        $completingNote = OrderStatusNote::where('order_id', $id)->where('status', 'Complete')->first();
+        $failingNote = OrderStatusNote::where('order_id', $id)->where('status', 'Failed')->first();
+        $cancellingNote = OrderStatusNote::where('order_id', $id)->where('status', 'Cancelled')->first();
+        $returningNote = OrderStatusNote::where('order_id', $id)->where('status', 'Returned')->first();
         $pageTitle = "Order Details";
-        return view('ego.ego-admin.order.view', compact('order', 'pageTitle','processingNote','shippingNote','completingNote','failingNote','cancellingNote','returningNote'));
+        return view('ego.ego-admin.order.view', compact('order', 'pageTitle', 'processingNote', 'shippingNote', 'completingNote', 'failingNote', 'cancellingNote', 'returningNote'));
     }
 
     public function updateBilling(string $id, Request $request)
@@ -330,10 +340,10 @@ class OrderController extends Controller
 
     public function invoice(string $id)
     {
-        $order = Order::where('id',$id)->with('orderItems')->first();
-        return view('user.order.invoice',compact('order'));
+        $order = Order::where('id', $id)->with('orderItems')->first();
+        return view('user.order.invoice', compact('order'));
     }
-   
+
     public function updatePayment(string $id, Request $request)
     {
         try {

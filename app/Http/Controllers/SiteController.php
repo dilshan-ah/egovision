@@ -80,8 +80,13 @@ class SiteController extends Controller
 
     public function policyPages($id, $slug)
     {
+        $preferredLanguage = session('preferredLanguage');
         $policy = Frontend::where('id', $id)->where('data_keys', 'policy_pages.element')->firstOrFail();
-        $pageTitle = $policy->data_values->title;
+        $pageTitle = TranslationHelper::translateText($policy->data_values->title, $preferredLanguage);
+        $policy->data_values->title =  TranslationHelper::translateText($policy->data_values->title, $preferredLanguage);
+        $policy->data_values->details =  TranslationHelper::translateText(strip_tags($policy->data_values->details), $preferredLanguage);
+        
+
         return view('templates.basic.policy', compact('policy', 'pageTitle'));
     }
 
@@ -205,31 +210,24 @@ class SiteController extends Controller
         }
 
         // Fetch additional products with categories and collections
-        $products = Product::with([
+        $moreProducts = Product::where('product_type','normal')->with([
             'color',
             'category.collectionSet' => function ($query) {
                 $query->where('featured', '!=', 'yes');
             }
         ])->take(10)->get();
 
-        // Filter products where the related collectionSet's featured is not 'yes'
-        $moreProducts = $products->filter(function ($product) {
-            return $product->category && $product->category->collectionSet && $product->category->collectionSet->featured != 'yes';
-        });
-
         // Translate product names if needed
         foreach ($moreProducts as $product) {
             if ($product->name) {
                 $product->name = TranslationHelper::translateText($product->name, $preferredLanguage);
-                $product->price = TranslationHelper::translateText($product->price, $preferredLanguage);
+                $product->price = TranslationHelper::translateText((string) $product->price, $preferredLanguage);
             }
         }
 
         // Return the translated data to the view
         return view('ego_index', compact('pageTitle', 'banners', 'colors', 'moreProducts', 'collectionSets'));
     }
-
-
 
     public function toricLense()
     {
@@ -411,8 +409,6 @@ class SiteController extends Controller
 
         return view('ego.pages.all_lenses', compact('pageTitle', 'products', 'colors', 'baseCurves', 'diameters', 'tones', 'replacements', 'materials', 'lenses', 'colorArray', 'baseArray', 'diameterArray', 'toneArray', 'replacementArray', 'materialArray', 'lensArray'));
     }
-
-
 
     public function egoLogin()
     {

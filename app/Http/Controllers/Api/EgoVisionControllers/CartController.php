@@ -148,9 +148,8 @@ class CartController extends Controller
         $accessory = Product::where('product_type', 'accessories')
             ->where('is_default_bag', '1')
             ->first();
-
+    
         if ($accessory) {
-            // Prepare cart data for the accessory
             $accessoryCartData = [
                 'product_id' => $accessory->id,
                 'power_status' => 'no_power',
@@ -158,25 +157,22 @@ class CartController extends Controller
                 'pair' => $totalBag,
                 'user_id' => $userId
             ];
-
-            // Check if the accessory is already in the cart
-            $existingAccessoryEntry = Cart::where(function ($query) use ($accessoryCartData) {
-                $query->where('product_id', $accessoryCartData['product_id'])
-                    ->where('user_id', $accessoryCartData['user_id']);
-            })->orWhere(function ($query) use ($accessoryCartData) {
-                $query->where('product_id', $accessoryCartData['product_id']);
-            })->first();
-
-            // If accessory already exists, update the quantity
+    
+            $existingAccessoryEntry = Cart::where('product_id', $accessoryCartData['product_id'])
+                ->where('user_id', $accessoryCartData['user_id'])
+                ->first();
+    
             if ($existingAccessoryEntry) {
                 $existingAccessoryEntry->pair += $totalBag;
                 $existingAccessoryEntry->save();
             } else {
-                // Otherwise, create a new entry for the accessory
                 Cart::create($accessoryCartData);
             }
+        } else {
+            Log::info('No accessory found for product', ['product_id' => $product->id]);
         }
     }
+    
 
     public function userCartList(string $id)
     {
@@ -228,13 +224,13 @@ class CartController extends Controller
         if (!$cart) {
             return response()->json(['error' => 'Cart item not found'], 404);
         }
-        
+
         $request->validate([
             'id' => 'required|integer|exists:carts,id',
             'action' => 'required|string|in:increment,decrement',
         ]);
 
-        
+
 
         $product = $cart->product;
         $accessoryQuantity = 0;
@@ -327,5 +323,47 @@ class CartController extends Controller
 
         $cart->delete();
         return response()->json(['success' => true, 'message' => 'Item removed from cart.']);
+    }
+
+    public function addGiftToCart(Request $request, $userId)
+    {
+        try {
+
+            $existingCart = Cart::where('user_id', $userId)->sum('pair');
+
+            $product = Product::where('is_default_bag', '1')->first();
+
+            if (!$product) {
+                return response()->json([
+                    'status' => false,
+                    'response_code' => 404,
+                    'message' => 'Product not found.',
+                    'data' => []
+                ], 404);
+            }
+
+            $cartAccessoryData = [
+                'product_id' => $product->id,
+                'power_status' => 'no_power',
+                'pair' => $request->quantity,
+                'user_id' => $userId
+            ];
+
+            Cart::create($cartAccessoryData);
+
+            return response()->json([
+                'status' => true,
+                'response_code' => 200,
+                'message' => 'Gift added to cart successfully.',
+                'data' => $cartAccessoryData
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => false,
+                'response_code' => 500,
+                'message' => 'Server error: ' . $e->getMessage(),
+                'data' => []
+            ], 500);
+        }
     }
 }

@@ -5,41 +5,85 @@ namespace App\Http\Controllers\Api\EgoVisionControllers;
 use App\Http\Controllers\Controller;
 use App\Models\EgoModels\Order;
 use App\Models\EgoModels\OrderItems;
+use App\Models\EgoModels\Product;
+use App\Models\GeneralSetting;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Validation\ValidationException;
 
 class OrderController extends Controller
 {
-    public function store(Request $request)
+    public function checkPrices(Request $request)
     {
-        // Validate the incoming request data
         $validatedData = $request->validate([
-            'user_id' => 'required|integer',
-            'total_amount' => 'required|numeric',
-            'cus_name' => 'required|string',
-            'cus_email' => 'required|email',
-            'cus_phone' => 'required|string',
-            'cus_add1' => 'required|string',
-            'cus_add2' => 'nullable|string',
-            'cus_city' => 'required|string',
-            'cus_company' => 'nullable|string',
-            'cus_state' => 'required|string',
-            'cus_country' => 'required|string',
-            'cus_postcode' => 'required|string',
-            'payment_method' => 'required|string',
-            'transaction_id' => 'required|string|unique:orders',
-            'delivery' => 'required|numeric',
-            'order_items' => 'required|array',
+            'delivery_charge' => 'required|integer',
             'order_items.*.product_id' => 'required|integer',
             'order_items.*.power' => 'nullable|string',
-            'order_items.*.pair' => 'required|integer',
-            'order_items.*.price' => 'required|numeric',
+            'order_items.*.quantity' => 'required|integer',
         ]);
+    
+        $subTotal = 0;
+    
+        foreach ($validatedData['order_items'] as $item) {
+            $product = Product::where('id', $item['product_id'])->first();
+    
+            if (!$product) {
+                return response()->json(['error' => 'Product not found.'], 404);
+            }
+    
+            $price = $item['power'] != null ? $product->price : $product->no_power_price;
+    
+            $subTotal += $price * $item['quantity'];
 
+            $discount =  ($product->is_free == 1 ? $product->no_power_price : 0) * $item['quantity'];
+        }
+
+        $tax = GeneralSetting::first()->tax;
+
+        $taxPrice = $subTotal * $tax/100;
+
+        $total = $request->delivery_charge + $taxPrice + $subTotal -$discount;
+    
+        return response()->json([
+            'subTotal' => $subTotal,
+            'tax' => $taxPrice,
+            'delivery_charge' => $request->delivery_charge,
+            'discount' => $discount,
+            'total' => $total
+        ]);
+    }    
+
+    public function store(Request $request)
+    {
         try {
-            // Create order
+            // Validate incoming request data
+            $validatedData = $request->validate([
+                'user_id' => 'required|integer',
+                'total_amount' => 'required|numeric',
+                'cus_name' => 'required|string',
+                'cus_email' => 'required|email',
+                'cus_phone' => 'required|string',
+                'cus_add1' => 'required|string',
+                'cus_add2' => 'nullable|string',
+                'cus_city' => 'required|string',
+                'cus_company' => 'nullable|string',
+                'cus_state' => 'required|string',
+                'cus_country' => 'required|string',
+                'cus_postcode' => 'required|string',
+                'payment_method' => 'required|string',
+                'transaction_id' => 'required|string|unique:orders',
+                'status' => 'required',
+                'payment_status' => 'required',
+                'delivery' => 'required|numeric',
+                'order_items' => 'required|array',
+                'order_items.*.product_id' => 'required|integer',
+                'order_items.*.power' => 'nullable|string',
+                'order_items.*.pair' => 'required|integer',
+                'order_items.*.price' => 'required|numeric',
+            ]);
+    
             $order = Order::create([
                 'user_id' => $validatedData['user_id'],
                 'subtotal' => $validatedData['total_amount'],
@@ -47,7 +91,8 @@ class OrderController extends Controller
                 'name' => $validatedData['cus_name'],
                 'email' => $validatedData['cus_email'],
                 'phone' => $validatedData['cus_phone'],
-                'status' => 'Pending',
+                'status' => $validatedData['status'],
+                'payment_status' => $validatedData['payment_status'],
                 'address_one' => $validatedData['cus_add1'],
                 'address_two' => $validatedData['cus_add2'],
                 'city' => $validatedData['cus_city'],
@@ -60,7 +105,7 @@ class OrderController extends Controller
                 'amount' => $validatedData['delivery'] + $validatedData['total_amount'],
                 'transaction_id' => $validatedData['transaction_id']
             ]);
-
+    
             // Save order items
             foreach ($validatedData['order_items'] as $item) {
                 OrderItems::create([
@@ -71,17 +116,24 @@ class OrderController extends Controller
                     'price' => $item['price'],
                 ]);
             }
-
+    
             // Return success response
             return response()->json([
                 'success' => true,
                 'message' => 'Order placed successfully!',
                 'order' => $order
             ], 201);
+        } catch (ValidationException $e) {
+            // Return validation error messages
+            return response()->json([
+                'success' => false,
+                'message' => 'Validation failed.',
+                'errors' => $e->validator->errors(), // Get validation errors
+            ], 422);
         } catch (\Exception $e) {
             // Log the error for debugging
             Log::error('Order creation failed: ' . $e->getMessage());
-
+    
             // Return error response
             return response()->json([
                 'success' => false,

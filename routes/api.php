@@ -50,7 +50,8 @@ Route::controller(AuthController::class)->group(function () {
 Route::controller(ProductController::class)->group(function () {
     Route::get('ego/products/{userId}', 'getProducts');
     Route::get('ego/app/singleProduct/{id}', 'singleProduct');
-    Route::get('ego/accessories', 'getAccessories');
+    Route::get('ego/accessories/{id}', 'getAccessories');
+    Route::get('ego/search/{userId}', 'search');
 });
 
 
@@ -98,12 +99,14 @@ Route::controller(CartController::class)->group(function () {
     Route::get('app/getCart/{id}', 'userCartList');
     Route::post('app/cart/updateQuantity', 'updateCartQuantity');
     Route::delete('app/cart/deleteQuantity/{userId}', 'deleteCart');
+    Route::post('app/addGiftToCart/{userId}', 'addGiftToCart');
 });
 
 Route::controller(OrderController::class)->group(function () {
     Route::post('app/placeOrder', 'store');
     Route::get('app/user/oreders/{userid}', 'userOrder');
     Route::get('app/user/orederDetails/{productid}', 'singleOrder');
+    Route::post('app/checkPrice', 'checkPrices');
 });
 
 Route::controller(WishlistController::class)->group(function () {

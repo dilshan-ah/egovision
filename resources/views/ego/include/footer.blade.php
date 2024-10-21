@@ -179,6 +179,15 @@ $faq = TranslationHelper::translateText('FAQ', $preferredLanguage);
 $shippingDel = TranslationHelper::translateText('Shipping & Delivery', $preferredLanguage);
 $return = TranslationHelper::translateText('Return Policy', $preferredLanguage);
 $contactPromo = TranslationHelper::translateText('Contact us', $preferredLanguage);
+
+$moreAbourLenses = TranslationHelper::translateText('More about lenses', $preferredLanguage);
+$howtouse = TranslationHelper::translateText('How to Use your Lenses', $preferredLanguage);
+$howtoread = TranslationHelper::translateText('How To Read Your Prescription', $preferredLanguage);
+$packageInsert = TranslationHelper::translateText('Package Insert & fitting guides', $preferredLanguage);
+$rxVer = TranslationHelper::translateText('RX Verification for US residents', $preferredLanguage);
+
+$followUs = TranslationHelper::translateText('Follow Us', $preferredLanguage);
+$acceptPay = TranslationHelper::translateText('Accepted Payment Methods', $preferredLanguage);
 @endphp
 <footer class="footer mt-5">
     <div class="mt-2"></div>
@@ -262,15 +271,15 @@ $contactPromo = TranslationHelper::translateText('Contact us', $preferredLanguag
                     <div class="accordion-item">
                         <h2 class="accordion-header">
                             <button class="accordion-button collapsed text-white" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseThree" aria-expanded="false" aria-controls="flush-collapseThree">
-                                <span class="text-dark">@lang('messages.More_about_lenses')</span>
+                                <span class="text-dark">{{$moreAbourLenses}}</span>
                             </button>
                         </h2>
                         <div id="flush-collapseThree" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
                             <div class="accordion-body">
-                                <a href="#" style="text-decoration: none;">How to Use your Lenses</a><br>
-                                <a href="#" style="text-decoration: none;">How To Read Your Prescription</a><br>
-                                <a href="#" style="text-decoration: none;">Package Insert & fitting guides</a><br>
-                                <a href="#" style="text-decoration: none;">RX Verification for US residents</a>
+                                <a href="#" style="text-decoration: none;">{{$howtouse}}</a><br>
+                                <a href="#" style="text-decoration: none;">{{$howtoread}}</a><br>
+                                <a href="#" style="text-decoration: none;">{{$packageInsert}}</a><br>
+                                <a href="#" style="text-decoration: none;">{{$rxVer}}</a>
                             </div>
                         </div>
                     </div>
@@ -280,7 +289,7 @@ $contactPromo = TranslationHelper::translateText('Contact us', $preferredLanguag
         <div class="container text-center">
             <div class="row">
                 <div class="col-md-12">
-                    <h5>@lang('messages.follow')</h5>
+                    <h5>{{$followUs}}</h5>
                     <div class="social-icons">
                         <a href="https://www.facebook.com/fashionoptics.store"><i class="fab fa-facebook-f" target="_blank"></i></a>
                         <a href="#"><i class="fab fa-twitter"></i></a>
@@ -294,7 +303,7 @@ $contactPromo = TranslationHelper::translateText('Contact us', $preferredLanguag
             </div>
             <div class="row mt-4">
                 <div class="col-md-12">
-                    <h5>@lang('messages.payment')</h5>
+                    <h5>{{$acceptPay}}</h5>
                     <img src="{{asset('ego/footer_pay.png')}}" width="100%" height="auto" alt="">
                 </div>
             </div>
