@@ -114,17 +114,32 @@
 <br>
 <br>
 <br>
+@php
+use App\Helpers\TranslationHelper;
+$preferredLanguage = session('preferredLanguage');
+
+$filterText = TranslationHelper::translateText('FILTER', $preferredLanguage);
+$productCollectionText = TranslationHelper::translateText('PRODUCTS', $preferredLanguage);
+$startText = TranslationHelper::translateText('STARTING AT', $preferredLanguage);
+
+$colorText = TranslationHelper::translateText('Colors', $preferredLanguage);
+$baseText = TranslationHelper::translateText('Base curve', $preferredLanguage);
+$diameterText = TranslationHelper::translateText('Diameter', $preferredLanguage);
+$toneText = TranslationHelper::translateText('Tones', $preferredLanguage);
+$materialText = TranslationHelper::translateText('Material', $preferredLanguage);
+$lensText = TranslationHelper::translateText('Lens Design', $preferredLanguage);
+@endphp
 <div class="row mt-5">
-    <div class="col-12 col-md-6 col-lg-4" style="background: #f5f5f5">
+    <div class="col-12 col-md-2" style="background: #f5f5f5">
         <div class="mt-5 p-4">
             <h1>{{$duration->name}}</h1>
-            <small>{{$products->count()}} PRODUCTS</small>
+            <small>{{$products->count()}} {{$productCollectionText}}</small>
             <br />
-            <a href="#" class="add-to-cart-button w-50 mt-4 text-nowrap" id="filterBtnSide">FILTER <i class="fas fa-plus mx-5"></i></a>
+            <a href="#" style="width: 85% !important;" class="add-to-cart-button w-50 mt-4 text-nowrap" id="filterBtnSide">{{$filterText}} <i class="fas fa-plus mx-5"></i></a>
 
             <div id="sidebarButton" class="sidebarButton">
                 <div class="sidebar-header">
-                    <h3 class="sidebar-title">Filter</h3>
+                    <h3 class="sidebar-title">{{$filterText}}</h3>
                     <button class="close-btn" id="closeBtn">&times;</button>
                 </div>
                 <div class="accordion" id="filterAccordion">
@@ -137,7 +152,7 @@
                                         <div class="accordion-item">
                                             <h2 class="accordion-header">
                                                 <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseColor" aria-expanded="true" aria-controls="collapseOne">
-                                                    Colors
+                                                    {{$colorText}}
                                                 </button>
                                             </h2>
                                             <div id="collapseColor" class="accordion-collapse collapse show" data-bs-parent="#accordionExample">
@@ -165,8 +180,7 @@
                                         <div class="accordion-item">
                                             <h2 class="accordion-header">
                                                 <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseBaseCurve" aria-expanded="false" aria-controls="collapseOne">
-                                                    Base curve
-
+                                                    {{$baseText}}
                                                 </button>
                                             </h2>
                                             <div id="collapseBaseCurve" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
@@ -186,7 +200,7 @@
                                         <div class="accordion-item">
                                             <h2 class="accordion-header">
                                                 <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseDiameter" aria-expanded="false" aria-controls="collapseTwo">
-                                                    Diameter
+                                                    {{$diameterText}}
                                                 </button>
                                             </h2>
                                             <div id="collapseDiameter" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
@@ -210,7 +224,7 @@
                                         <div class="accordion-item">
                                             <h2 class="accordion-header">
                                                 <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTone" aria-expanded="false" aria-controls="collapseThree">
-                                                    Tones
+                                                    {{$toneText}}
                                                 </button>
                                             </h2>
                                             <div id="collapseTone" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
@@ -230,7 +244,7 @@
                                         <div class="accordion-item">
                                             <h2 class="accordion-header">
                                                 <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseMaterial" aria-expanded="false" aria-controls="collapseThree">
-                                                    Material
+                                                    {{$materialText}}
                                                 </button>
                                             </h2>
                                             <div id="collapseMaterial" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
@@ -250,7 +264,7 @@
                                         <div class="accordion-item">
                                             <h2 class="accordion-header">
                                                 <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseLens" aria-expanded="false" aria-controls="collapseThree">
-                                                    Lens Design
+                                                    {{$lensText}}
                                                 </button>
                                             </h2>
                                             <div id="collapseLens" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
@@ -384,10 +398,10 @@
     </div>
 
     <!-- ------------------------------------------------------------- -->
-    <div class="col-12 col-md-8">
+    <div class="col-12 col-md-10">
         <div class="row mt-3">
             @foreach ($products as $product)
-            <div class="col-12 col-sm-6 col-md-6">
+            <div class="col-12 col-sm-6 col-md-6 mb-5">
                 <div class="card-product-slider mx-2">
                     <div class="card-product-slider-img-wrapper">
                         <img src="{{ asset($product->image_path) }}" class="card-product-slider-img-top">
@@ -411,7 +425,7 @@
                     </div>
                     <div class="card-product-slider-body">
                         <h5 class="card-product-slider-title">{{ $product->name }}</h5>
-                        <small class="price">STARTING AT : {{ $product->price }} {{ 'BDT' }}</small>
+                        <small class="price">{{$startText}} : {{ $product->price }} {{ 'BDT' }}</small>
                     </div>
                 </div>
             </div>

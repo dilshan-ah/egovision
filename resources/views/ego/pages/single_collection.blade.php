@@ -124,6 +124,14 @@ $preferredLanguage = session('preferredLanguage');
 $filterText = TranslationHelper::translateText('FILTER', $preferredLanguage);
 $productCollectionText = TranslationHelper::translateText('PRODUCTS', $preferredLanguage);
 $startText = TranslationHelper::translateText('STARTING AT', $preferredLanguage);
+
+$colorText = TranslationHelper::translateText('Colors', $preferredLanguage);
+$baseText = TranslationHelper::translateText('Base curve', $preferredLanguage);
+$diameterText = TranslationHelper::translateText('Diameter', $preferredLanguage);
+$toneText = TranslationHelper::translateText('Tones', $preferredLanguage);
+$replacementText = TranslationHelper::translateText('Replacement', $preferredLanguage);
+$materialText = TranslationHelper::translateText('Material', $preferredLanguage);
+$lensText = TranslationHelper::translateText('Lens Design', $preferredLanguage);
 @endphp
 <div class="row mt-5">
     <div class="col-12 col-md-6 col-lg-2" style="background: #f5f5f5">
@@ -150,7 +158,7 @@ $startText = TranslationHelper::translateText('STARTING AT', $preferredLanguage)
                                         <div class="accordion-item">
                                             <h2 class="accordion-header">
                                                 <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseColor" aria-expanded="true" aria-controls="collapseOne">
-                                                    Colors
+                                                    {{$colorText}}
                                                 </button>
                                             </h2>
                                             <div id="collapseColor" class="accordion-collapse collapse show" data-bs-parent="#accordionExample">
@@ -178,7 +186,7 @@ $startText = TranslationHelper::translateText('STARTING AT', $preferredLanguage)
                                         <div class="accordion-item">
                                             <h2 class="accordion-header">
                                                 <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseBaseCurve" aria-expanded="false" aria-controls="collapseOne">
-                                                    Base curve
+                                                    {{$baseText}}
 
                                                 </button>
                                             </h2>
@@ -199,7 +207,7 @@ $startText = TranslationHelper::translateText('STARTING AT', $preferredLanguage)
                                         <div class="accordion-item">
                                             <h2 class="accordion-header">
                                                 <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseDiameter" aria-expanded="false" aria-controls="collapseTwo">
-                                                    Diameter
+                                                    {{$diameterText}}
                                                 </button>
                                             </h2>
                                             <div id="collapseDiameter" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
@@ -223,7 +231,7 @@ $startText = TranslationHelper::translateText('STARTING AT', $preferredLanguage)
                                         <div class="accordion-item">
                                             <h2 class="accordion-header">
                                                 <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTone" aria-expanded="false" aria-controls="collapseThree">
-                                                    Tones
+                                                    {{$toneText}}
                                                 </button>
                                             </h2>
                                             <div id="collapseTone" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
@@ -243,7 +251,7 @@ $startText = TranslationHelper::translateText('STARTING AT', $preferredLanguage)
                                         <div class="accordion-item">
                                             <h2 class="accordion-header">
                                                 <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseReplacement" aria-expanded="false" aria-controls="collapseThree">
-                                                    Replacement
+                                                    {{$replacementText}}
                                                 </button>
                                             </h2>
                                             <div id="collapseReplacement" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
@@ -263,7 +271,7 @@ $startText = TranslationHelper::translateText('STARTING AT', $preferredLanguage)
                                         <div class="accordion-item">
                                             <h2 class="accordion-header">
                                                 <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseMaterial" aria-expanded="false" aria-controls="collapseThree">
-                                                    Material
+                                                    {{$materialText}}
                                                 </button>
                                             </h2>
                                             <div id="collapseMaterial" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
@@ -283,7 +291,7 @@ $startText = TranslationHelper::translateText('STARTING AT', $preferredLanguage)
                                         <div class="accordion-item">
                                             <h2 class="accordion-header">
                                                 <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseLens" aria-expanded="false" aria-controls="collapseThree">
-                                                    Lens Design
+                                                    {{$lensText}}
                                                 </button>
                                             </h2>
                                             <div id="collapseLens" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
@@ -430,7 +438,7 @@ $startText = TranslationHelper::translateText('STARTING AT', $preferredLanguage)
     <div class="col-12 col-md-10">
         <div class="row">
             @foreach ($productsforCollection as $product)
-            <div class="col-12 col-sm-4 col-md-4">
+            <div class="col-12 col-md-6 mb-5">
                 <div class="card-product-slider mx-2">
                     <div class="card-product-slider-img-wrapper">
                         <img src="{{ asset($product->image_path) }}" class="card-product-slider-img-top img-fluid">

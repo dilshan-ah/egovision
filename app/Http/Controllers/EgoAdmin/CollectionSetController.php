@@ -258,19 +258,19 @@ class CollectionSetController extends Controller
             $color->name = TranslationHelper::translateText($color->name, $preferredLanguage);
         }
         $replacements = Duration::all();
-        foreach($colors as $color)
+        foreach($replacements as $replacement)
         {
-            $color->name = TranslationHelper::translateText($color->name, $preferredLanguage);
+            $replacement->name = TranslationHelper::translateText($color->name, $preferredLanguage);
         }
         $materials = Material::all();
-        foreach($colors as $color)
+        foreach($materials as $material)
         {
-            $color->name = TranslationHelper::translateText($color->name, $preferredLanguage);
+            $material->name = TranslationHelper::translateText($color->name, $preferredLanguage);
         }
         $lenses = LensDesign::all();
-        foreach($colors as $color)
+        foreach($lenses as $lense)
         {
-            $color->name = TranslationHelper::translateText($color->name, $preferredLanguage);
+            $lense->name = TranslationHelper::translateText($color->name, $preferredLanguage);
         }
     
         // Set the page title based on the categor

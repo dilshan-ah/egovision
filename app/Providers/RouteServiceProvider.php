@@ -150,7 +150,12 @@ class RouteServiceProvider extends ServiceProvider
                     ->namespace('EgoAdmin')
                     ->prefix('shipping')
                     ->name('shipping.')
-                    ->group(base_path('routes/shipping.php'));         
+                    ->group(base_path('routes/shipping.php'));   
+                Route::middleware('web')
+                    ->namespace('EgoAdmin')
+                    ->prefix('insta')
+                    ->name('insta.')
+                    ->group(base_path('routes/instagram.php'));         
             });
         });
     }

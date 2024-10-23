@@ -11,11 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('order_status_notes', function (Blueprint $table) {
+        Schema::create('instagram_posts', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('order_id')->constrained('orders')->onDelete('cascade');
-            $table->string('status');
-            $table->text('note')->nullable();
+            $table->foreignId('insta_user_id')->constrained('instagrams')->onDelete('cascade');
+            $table->string('post_id');
+            $table->foreignId('product_id')->constrained('products')->onDelete('cascade');
             $table->timestamps();
         });
     }
@@ -25,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('order_status_notes');
+        Schema::dropIfExists('instagram_posts');
     }
 };

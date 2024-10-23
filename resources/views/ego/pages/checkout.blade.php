@@ -32,13 +32,13 @@
                 <div class="card p-4 mb-4">
                     <div class="form-floating mb-3">
                         <input type="text" class="form-control w-100" id="first_name" placeholder="First Name"
-                            name="first_name" value="{{$userDetail->firstname}}" required>
+                            name="first_name" value="{{@$userDetail->firstname}}" required>
                         <label for="first_name">First Name*</label>
                         <div class="invalid-feedback">Please enter your first name.</div> <!-- Validation message -->
                     </div>
                     <div class="form-floating">
                         <input type="text" class="form-control w-100" id="last_name" placeholder="Last Name"
-                            name="last_name" value="{{$userDetail->lastname}}" required>
+                            name="last_name" value="{{@$userDetail->lastname}}" required>
                         <label for="last_name">Last Name*</label>
                         <div class="invalid-feedback">Please enter your last name.</div>
                     </div>
@@ -49,7 +49,7 @@
                     </div>
                     <div class="form-floating">
                         <input type="text" class="form-control w-100" id="address_one" placeholder="Street Address"
-                            name="address_one" value="{{$userDetail->address->address}}" required>
+                            name="address_one" value="{{@$userDetail->address->address}}" required>
                         <label for="address_one">Street Address 1*</label>
                         <div class="invalid-feedback">Please enter your street address.</div>
                     </div>
@@ -85,21 +85,21 @@
 
                     <div class="form-floating">
                         <input type="text" class="form-control w-100" id="city" placeholder="City"
-                            name="city" value="{{$userDetail->address->city}}" required>
+                            name="city" value="{{@$userDetail->address->city}}" required>
                         <label for="city">City*</label>
                         <div class="invalid-feedback">Please enter your city.</div>
                     </div>
 
                     <div class="form-floating">
                         <input type="text" class="form-control w-100" id="zip" placeholder="Zip code"
-                            name="zip" value="{{$userDetail->address->city}}" required>
+                            name="zip" value="{{@$userDetail->address->zip}}" required>
                         <label for="zip">Zip code*</label>
                         <div class="invalid-feedback">Please enter your zip code.</div>
                     </div>
 
                     <div class="form-floating">
                         <input type="email" class="form-control w-100" id="email" placeholder="Email Address"
-                            name="email" value="{{$userDetail->email}}" required>
+                            name="email" value="{{@$userDetail->email}}" required>
                         <label for="email">Email*</label>
                         <div class="invalid-feedback">Please enter a valid email.</div>
                     </div>
@@ -113,7 +113,7 @@
                             @endforeach
                         </select>
                         <input type="text" class="form-control" style="width: 70%"
-                            aria-label="Text input with dropdown button" name="phone" placeholder="Phone Number" value="{{$userDetail->mobile}}" required>
+                            aria-label="Text input with dropdown button" name="phone" placeholder="Phone Number" value="{{@$userDetail->mobile}}" required>
                         <div class="invalid-feedback">Please enter your phone number.</div>
                     </div>
                 </div>
@@ -122,11 +122,11 @@
                     <h2>Shipping Methods</h2>
                     @foreach($shippingMethods as $shippingMethod)
                     <div class="form-check d-flex align-items-center gap-4 py-3 mt-3 border-top border-bottom">
-                        <input class="form-check-input" type="radio" name="delivery" value="{{$shippingMethod->fee}}" id="flexRadioDefault{{$shippingMethod->fee}}" required>
-                        <label class="form-check-label" for="flexRadioDefault{{$shippingMethod->fee}}">
+                        <input class="form-check-input" type="radio" name="delivery" value="{{@$shippingMethod->fee}}" id="flexRadioDefault{{@$shippingMethod->fee}}" required>
+                        <label class="form-check-label" for="flexRadioDefault{{@$shippingMethod->fee}}">
                             {{$shippingMethod->title}} <span style="font-size: 18px">({{$shippingMethod->fee}} BDT)</span>
                         </label>
-                        <label for="flexRadioDefault{{$shippingMethod->fee}}">
+                        <label for="flexRadioDefault{{@$shippingMethod->fee}}">
                             {{$shippingMethod->place}}
                         </label>
                         <div class="invalid-feedback">Please select a shipping method.</div>
@@ -138,7 +138,7 @@
             <div class="col-lg-4 col-md-12">
                 <div class="card p-4">
                     <h2>Order Summary</h2>
-                    <h6>{{ $carts->sum('pair') }} items in cart</h6>
+                    <h6>{{ @$carts->sum('pair') }} items in cart</h6>
                     @foreach ($carts as $cart)
                     <div class="cart-item"
                         style="display: flex; align-items: stretch; margin-bottom: 20px; height: 100%; border: 1px solid #e0e0e0; border-radius: 8px; padding: 10px;">
@@ -289,66 +289,6 @@
         </div>
     </div>
 </form>
-
-@if($hasAccessory == false)
-
-<!-- Modal -->
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" style="z-index: 99999;">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body d-flex justify-content-center">
-                <div class="shadow-none d-flex flex-column align-items-center">
-                    <h2 class="modal-title text-center" id="exampleModalLabel">Select your free bag</h2>
-                    <img src="{{ asset(@$freeGift->image_path) }}" class="img-fluid mb-4" alt="Free Gift Image">
-                    <h4 class="text-center">{{ @$freeGift->name }}</h4>
-                    <form action="{{route('cart.add.gift.bag')}}" method="post">
-                        @csrf
-                        <button type="submit" class="btn btn-dark">ADD TO CART</button>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Custom Styles for Backdrop -->
-<style>
-    .custom-backdrop {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-color: rgba(0, 0, 0, 0.7);
-        /* Semi-transparent background */
-        z-index: 1040;
-        /* Ensure it appears below the modal but above other content */
-        display: none;
-        /* Hidden by default */
-    }
-</style>
-
-<!-- jQuery to trigger the modal and backdrop on page load -->
-<script>
-    $(document).ready(function() {
-        // Show modal
-        $('#exampleModal').modal('show');
-
-        // Show custom backdrop when modal opens
-        $('#exampleModal').on('shown.bs.modal', function() {
-            $('#custom-backdrop').fadeIn(); // Fade in the custom backdrop
-        });
-
-        // Hide custom backdrop when modal closes
-        $('#exampleModal').on('hidden.bs.modal', function() {
-            $('#custom-backdrop').fadeOut(); // Fade out the custom backdrop
-        });
-    });
-</script>
-@endif
 
 
 

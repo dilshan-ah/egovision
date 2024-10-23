@@ -34,14 +34,30 @@ class OrderController extends Controller
         $product->name =  TranslationHelper::translateText($product->name, $preferredLanguage);
         $product->description =  TranslationHelper::translateText($product->description, $preferredLanguage);
         $product->product_intro =  TranslationHelper::translateText($product->product_intro, $preferredLanguage);
-        $product->color->name =  TranslationHelper::translateText($product->color->name, $preferredLanguage);
-        $product->diameter->name =  TranslationHelper::translateText($product->diameter->name, $preferredLanguage);
-        $product->lensDesign->name =  TranslationHelper::translateText($product->lensDesign->name, $preferredLanguage);
-        $product->baseCurve->name =  TranslationHelper::translateText($product->baseCurve->name, $preferredLanguage);
-        $product->category->name =  TranslationHelper::translateText($product->category->name, $preferredLanguage);
-        $product->duration->name =  TranslationHelper::translateText($product->duration->name, $preferredLanguage);
-        $product->tone->name =  TranslationHelper::translateText($product->tone->name, $preferredLanguage);
-        $product->material->name =  TranslationHelper::translateText($product->material->name, $preferredLanguage);
+        if($product->color){
+            @$product->color->name =  TranslationHelper::translateText(@$product->color->name ?? '', @$preferredLanguage);
+        }
+        if($product->diameter){
+           $product->diameter->name =  TranslationHelper::translateText($product->diameter->name, $preferredLanguage); 
+        }
+        if($product->lensDesign){
+            $product->lensDesign->name =  TranslationHelper::translateText($product->lensDesign->name, $preferredLanguage);
+        }
+        if($product->baseCurve){
+            $product->baseCurve->name =  TranslationHelper::translateText($product->baseCurve->name, $preferredLanguage);
+        }
+        if($product->category){
+            $product->category->name =  TranslationHelper::translateText($product->category->name, $preferredLanguage);
+        }
+        if($product->duration){
+           $product->duration->name =  TranslationHelper::translateText($product->duration->name, $preferredLanguage); 
+        }
+        if($product->tone){
+            $product->tone->name =  TranslationHelper::translateText($product->tone->name, $preferredLanguage);
+        }
+        if($product->material){
+            $product->material->name =  TranslationHelper::translateText($product->material->name, $preferredLanguage);
+        }
         $product->lens_params =  TranslationHelper::translateText((string) $product->lens_params, $preferredLanguage);
 
         return view('ego.pages.addToCart', compact('pageTitle', 'product', 'powers'));

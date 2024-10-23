@@ -58,10 +58,9 @@ class OrderController extends Controller
     public function store(Request $request)
     {
         try {
-            // Validate incoming request data
             $validatedData = $request->validate([
                 'user_id' => 'required|integer',
-                'total_amount' => 'required|numeric',
+                'subtotal' => 'required|numeric',
                 'cus_name' => 'required|string',
                 'cus_email' => 'required|email',
                 'cus_phone' => 'required|string',
@@ -74,6 +73,9 @@ class OrderController extends Controller
                 'cus_postcode' => 'required|string',
                 'payment_method' => 'required|string',
                 'transaction_id' => 'required|string|unique:orders',
+                'discount' => 'required|numeric',
+                'tax' => 'required|numeric',
+                'total' => 'required|numeric',
                 'status' => 'required',
                 'payment_status' => 'required',
                 'delivery' => 'required|numeric',
@@ -86,7 +88,7 @@ class OrderController extends Controller
     
             $order = Order::create([
                 'user_id' => $validatedData['user_id'],
-                'subtotal' => $validatedData['total_amount'],
+                'subtotal' => $validatedData['subtotal'],
                 'currency' => 'BDT',
                 'name' => $validatedData['cus_name'],
                 'email' => $validatedData['cus_email'],
@@ -100,9 +102,11 @@ class OrderController extends Controller
                 'state' => $validatedData['cus_state'],
                 'country' => $validatedData['cus_country'],
                 'zip_code' => $validatedData['cus_postcode'],
+                'discount' => $validatedData['discount'],
                 'delivery_charge' => $validatedData['delivery'],
                 'payment_method' => $validatedData['payment_method'],
-                'amount' => $validatedData['delivery'] + $validatedData['total_amount'],
+                'tax' => $validatedData['tax'],
+                'amount' => $validatedData['total'],
                 'transaction_id' => $validatedData['transaction_id']
             ]);
     

@@ -338,6 +338,20 @@
         </a>
     </li>
 
+    <li class="nav-item">
+        <a class="nav-link collapsed" href="{{ route('insta.user.index') }}">
+        <i class="fab fa-instagram"></i>
+            <span>@lang('Instagram')</span>
+        </a>
+    </li>
+
+    <li class="nav-item">
+        <a class="nav-link collapsed" href="{{ route('insta.user.managePost') }}">
+        <i class="fab fa-instagram"></i>
+            <span>@lang('Instagram Posts')</span>
+        </a>
+    </li>
+
     <!-- Divider -->
     <hr class="sidebar-divider">
 

@@ -15,6 +15,7 @@ use App\Http\Controllers\Api\EgoVisionControllers\ReturnProductController;
 use App\Http\Controllers\Api\EgoVisionControllers\TicketController;
 use App\Http\Controllers\Api\EgoVisionControllers\WishlistController;
 use App\Http\Controllers\Api\EgoVisionControllers\ForgotPasswordController;
+use App\Http\Controllers\Api\EgoVisionControllers\InstagramController;
 use App\Http\Controllers\Api\EgoVisionControllers\NewsletterController;
 use App\Http\Controllers\Api\EgoVisionControllers\ProfileController;
 use App\Http\Controllers\Api\EgoVisionControllers\PromoCodeController;
@@ -146,6 +147,11 @@ Route::controller(PromoCodeController::class)->group(function(){
 
 Route::controller(NewsletterController::class)->group(function(){
     Route::post('app/subscribe/{userId}', 'store');
+});
+
+Route::controller(InstagramController::class)->group(function () {
+    Route::get('/instagram-posts','getAllInstagramPosts');
+
 });
 
 Route::namespace('Api')->name('api.')->group(function () {

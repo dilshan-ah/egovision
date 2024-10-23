@@ -11,6 +11,7 @@ use App\Models\EgoModels\Banner;
 use App\Models\EgoModels\BaseCurve;
 use App\Models\EgoModels\Color;
 use App\Models\EgoModels\Diameter;
+use App\Models\EgoModels\InstagramPost;
 use App\Models\EgoModels\LensDesign;
 use App\Models\EgoModels\Material;
 use App\Models\EgoModels\Order;
@@ -85,7 +86,7 @@ class SiteController extends Controller
         $pageTitle = TranslationHelper::translateText($policy->data_values->title, $preferredLanguage);
         $policy->data_values->title =  TranslationHelper::translateText($policy->data_values->title, $preferredLanguage);
         $policy->data_values->details =  TranslationHelper::translateText(strip_tags($policy->data_values->details), $preferredLanguage);
-        
+
 
         return view('templates.basic.policy', compact('policy', 'pageTitle'));
     }
@@ -189,8 +190,7 @@ class SiteController extends Controller
             // Attach products as a child object (keep as objects, no conversion to array)
             $collectionSet->products = $products;
 
-            foreach($collectionSet->products as $product)
-            {
+            foreach ($collectionSet->products as $product) {
                 $product->name = TranslationHelper::translateText($product->name, $preferredLanguage);
             }
 
@@ -198,19 +198,18 @@ class SiteController extends Controller
             if ($collectionSet->name) {
                 $collectionSet->name = TranslationHelper::translateText($collectionSet->name, $preferredLanguage);
             }
-    
+
             if (!is_null($collectionSet->category) && !is_null($collectionSet->category->name)) {
                 $collectionSet->category->name = TranslationHelper::translateText($collectionSet->category->name, $preferredLanguage);
             }
-    
+
             if (!is_null($collectionSet->tone) && !is_null($collectionSet->tone->name)) {
                 $collectionSet->tone->name = TranslationHelper::translateText($collectionSet->tone->name, $preferredLanguage);
             }
-
         }
 
         // Fetch additional products with categories and collections
-        $moreProducts = Product::where('product_type','normal')->with([
+        $moreProducts = Product::where('product_type', 'normal')->with([
             'color',
             'category.collectionSet' => function ($query) {
                 $query->where('featured', '!=', 'yes');
@@ -225,8 +224,11 @@ class SiteController extends Controller
             }
         }
 
-        // Return the translated data to the view
-        return view('ego_index', compact('pageTitle', 'banners', 'colors', 'moreProducts', 'collectionSets'));
+        
+        $instaDatas = InstagramPost::all();
+        
+
+        return view('ego_index', compact('pageTitle', 'banners', 'colors', 'moreProducts', 'collectionSets','instaDatas'));
     }
 
     public function toricLense()
@@ -240,13 +242,13 @@ class SiteController extends Controller
         $pageTitle = TranslationHelper::translateText("Collection", $preferredLanguage);
         $collectionSets = CollectionSet::with('category', 'tone', 'duration')->get();
 
-        foreach($collectionSets as $collectionSet){
+        foreach ($collectionSets as $collectionSet) {
             $collectionSet->description = TranslationHelper::translateText($collectionSet->description, $preferredLanguage);
 
             if (!is_null($collectionSet->category) && !is_null($collectionSet->category->name)) {
                 $collectionSet->category->name = TranslationHelper::translateText($collectionSet->category->name, $preferredLanguage);
             }
-    
+
             if (!is_null($collectionSet->tone) && !is_null($collectionSet->tone->name)) {
                 $collectionSet->tone->name = TranslationHelper::translateText($collectionSet->tone->name, $preferredLanguage);
             }
@@ -263,7 +265,7 @@ class SiteController extends Controller
         $preferredLanguage = session('preferredLanguage');
         $pageTitle = TranslationHelper::translateText("Color", $preferredLanguage);
         $colors = Color::all();
-        foreach($colors as $color){
+        foreach ($colors as $color) {
             $color->name = TranslationHelper::translateText($color->name, $preferredLanguage);
             $color->color_intro = TranslationHelper::translateText($color->color_intro, $preferredLanguage);
         }
@@ -275,7 +277,7 @@ class SiteController extends Controller
         $pageTitle = TranslationHelper::translateText("Best Durations", $preferredLanguage);
         $durations = Duration::all();
 
-        foreach($durations as $duration){
+        foreach ($durations as $duration) {
             $duration->name = TranslationHelper::translateText($duration->name, $preferredLanguage);
             $duration->description = TranslationHelper::translateText($duration->description, $preferredLanguage);
         }
@@ -295,8 +297,7 @@ class SiteController extends Controller
         $pageTitle = TranslationHelper::translateText("Accessories", $preferredLanguage);
 
         $products = Product::where('product_type', 'accessories')->with(['category', 'color', 'images'])->get();
-        foreach($products as $product)
-        {
+        foreach ($products as $product) {
             $product->name =  TranslationHelper::translateText($product->name, $preferredLanguage);
             $product->no_power_price =  TranslationHelper::translateText($product->no_power_price, $preferredLanguage);
         }
@@ -304,8 +305,14 @@ class SiteController extends Controller
     }
     public function shopInstagram()
     {
-        $pageTitle = "Shop Instagram";
-        return view('ego.pages.shop_instagram', compact('pageTitle'));
+        $preferredLanguage = session('preferredLanguage');
+        $pageTitle = TranslationHelper::translateText("Shop Instagram", $preferredLanguage);
+        $instaDatas = InstagramPost::all();
+        $colors = Color::all();
+        foreach($colors as $color){
+            $color->name = TranslationHelper::translateText($color->name, $preferredLanguage);
+        }
+        return view('ego.pages.shop_instagram', compact('pageTitle','instaDatas','colors'));
     }
 
     public function allLenses(Request $request)
@@ -365,45 +372,37 @@ class SiteController extends Controller
         }
 
         $products = $products->where('product_type', 'normal')->get();
-        foreach($products as $product)
-        {
+        foreach ($products as $product) {
             $product->name =  TranslationHelper::translateText($product->name, $preferredLanguage);
             $product->price =  TranslationHelper::translateText((string)$product->price, $preferredLanguage);
         }
 
         $colors = Color::all();
-        foreach($colors as $color)
-        {
+        foreach ($colors as $color) {
             $color->name =  TranslationHelper::translateText($color->name, $preferredLanguage);
         }
         $baseCurves = BaseCurve::all();
-        foreach($baseCurves as $baseCurve)
-        {
+        foreach ($baseCurves as $baseCurve) {
             $baseCurve->name =  TranslationHelper::translateText($baseCurve->name, $preferredLanguage);
         }
         $diameters = Diameter::all();
-        foreach($diameters as $diameter)
-        {
+        foreach ($diameters as $diameter) {
             $diameter->name =  TranslationHelper::translateText($diameter->name, $preferredLanguage);
         }
         $tones = Tone::all();
-        foreach($tones as $tone)
-        {
+        foreach ($tones as $tone) {
             $tone->name =  TranslationHelper::translateText($tone->name, $preferredLanguage);
         }
         $replacements = Duration::all();
-        foreach($replacements as $replacement)
-        {
+        foreach ($replacements as $replacement) {
             $replacement->name =  TranslationHelper::translateText($replacement->name, $preferredLanguage);
         }
         $materials = Material::all();
-        foreach($materials as $material)
-        {
+        foreach ($materials as $material) {
             $material->name =  TranslationHelper::translateText($material->name, $preferredLanguage);
         }
         $lenses = LensDesign::all();
-        foreach($lenses as $lense)
-        {
+        foreach ($lenses as $lense) {
             $lense->name =  TranslationHelper::translateText($lense->name, $preferredLanguage);
         }
 

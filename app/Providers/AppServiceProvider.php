@@ -136,7 +136,7 @@ class AppServiceProvider extends ServiceProvider
                     $collectionSet->tone->name = TranslationHelper::translateText($collectionSet->tone->name, $preferredLanguage);
                 }
 
-                $products = $productsQuery->get();
+                $products = $productsQuery->get()->take(5);
 
                 $collectionSet->products = $products;
 
@@ -175,7 +175,7 @@ class AppServiceProvider extends ServiceProvider
                     $collectionSet->tone->name = TranslationHelper::translateText($collectionSet->tone->name, $preferredLanguage);
                 }
 
-                $products = $productsQuery->get();
+                $products = $productsQuery->get()->take(5);
 
                 $collectionSet->products = $products;
 

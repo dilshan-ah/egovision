@@ -11,11 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('shipping_methods', function (Blueprint $table) {
+        Schema::create('instagrams', function (Blueprint $table) {
             $table->id();
-            $table->string('title');
-            $table->string('place')->nullable();
-            $table->decimal('fee',8,2);
+            $table->string('name')->nullable();
+            $table->string('access_token');
+            $table->boolean('is_expired')->default(false);
             $table->timestamps();
         });
     }
@@ -25,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('shipping_methods');
+        Schema::dropIfExists('instagrams');
     }
 };

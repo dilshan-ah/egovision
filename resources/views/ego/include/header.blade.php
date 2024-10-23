@@ -1008,7 +1008,7 @@ $aboutMenu = TranslationHelper::translateText('ABOUT US', $preferredLanguage);
                                                 style="font-size: 14px; font-weight: 600;">
                                                 {{ @$collectionSet->category->name ?? 'No Category' }}
                                                 {{ @$collectionSet->tone->name ? '-' . $collectionSet->tone->name : '' }}
-                                                {{ @$collectionSet->duration ? '-' . $collectionSet->duration->months . ' months' : '' }}
+                                                {{ @$collectionSet->duration ? '-' . $collectionSet->duration->months .$collectionSet->duration->is_month ? ' months': 'days' : '' }}
                                             </a>
                                             <span class="toggle" onclick="toggleSection('web-dev-{{ $loop->index }}', this)">+</span>
                                         </h3>
@@ -1066,7 +1066,7 @@ $aboutMenu = TranslationHelper::translateText('ABOUT US', $preferredLanguage);
                                         @foreach ($durations as $duration)
                                         <div class="col-md-2 mb-3 position-relative">
                                             <a href="{{ route('duration.single.duration', $duration->id) }}" class="duration-link">
-                                                <span class="duration-text">{{ $duration->name }} - {{ $duration->months }} MONTHS</span>
+                                                <span class="duration-text">{{ $duration->name }} - {{ $duration->months }} @if(@$duration->is_month == '1')MONTHS @else Days @endif</span>
                                             </a>
                                         </div>
                                         @endforeach

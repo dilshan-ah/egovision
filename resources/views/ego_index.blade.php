@@ -129,7 +129,7 @@ $followText = TranslationHelper::translateText('FOLLOW US ON', $preferredLanguag
 $instaText = TranslationHelper::translateText('Instagram', $preferredLanguage);
 $followEgo = TranslationHelper::translateText('GO FOLLOW @Ego Vision', $preferredLanguage);
 
-$loadbtn = TranslationHelper::translateText('Load More', $preferredLanguage);
+$loadbtn = TranslationHelper::translateText('See More', $preferredLanguage);
 
 $reviewVerified = TranslationHelper::translateText('Verified', $preferredLanguage);
 $reviewQuality = TranslationHelper::translateText('Great Quality', $preferredLanguage);
@@ -316,38 +316,17 @@ $trustpilotText = TranslationHelper::translateText('Trustpilot', $preferredLangu
         <p>{{ $followText }}</p>
         <h3>{{ $instaText }}</h3>
         <p>{{ $followEgo }}</p>
-        <div>
-            <div class="row row-cols-1 row-cols-md-5 g-4">
-                <div class="col-mb-2 col-12" style="cursor: pointer">
+        <div class="d-flex flex-column align-items-center">
+            <div class="row w-100 g-4">
+
+                @foreach($instaDatas as $data)
+                <div class="col-md-2" style="cursor: pointer" data-bs-toggle="modal" data-bs-target="#exampleModal{{$data->id}}">
                     <div class="wrapper">
                         <div class="cardd">
-                            <video style="width: 100%" autoplay loop muted playsinline>
-                                <source src="{{ asset('ego/video/demovideo.mp4') }}" type="video/mp4" />
-                            </video>
+                            <img src="{{ $data->post()['media_url'] }}" />
                             <div class="overlay">
                                 <div class="text-center">
-                                    <h5 class="title">@lang('messages.Salon_31')</h5>
-                                    <p class="text-p">
-                                        <span class="icon-wrapper">
-                                            <i class="fab fa-instagram"></i>
-                                        </span>
-                                        <span class="details">
-                                            <i class="fa-regular fa-heart"></i><span class="text-white">@lang('messages.120')</span>
-                                            <i class="fa-solid fa-comments"></i><span class="text-white">@lang('messages.30')</span>
-                                        </span>
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-mb-2 col-12" style="cursor: pointer">
-                    <div class="wrapper">
-                        <div class="cardd">
-                            <img src="{{ asset('ego/img3.jpeg') }}" />
-                            <div class="overlay">
-                                <div class="text-center">
-                                    <h5 class="title">@lang('messages.Salon_31')</h5>
+                                    <h5 class="title">{{ $data->post()['username'] }}</h5>
                                     <p class="text-p">
                                         <span class="icon-wrapper">
                                             <i class="fab fa-instagram"></i>
@@ -363,188 +342,55 @@ $trustpilotText = TranslationHelper::translateText('Trustpilot', $preferredLangu
                         </div>
                     </div>
                 </div>
-                <div class="col-mb-2 col-12" style="cursor: pointer">
-                    <div class="wrapper">
-                        <div class="cardd">
-                            <img src="{{ asset('ego/img1.jpeg') }}" />
-                            <div class="overlay">
-                                <div class="text-center">
-                                    <h5 class="title">@lang('messages.Salon_31')</h5>
-                                    <p class="text-p">
-                                        <span class="icon-wrapper">
-                                            <i class="fab fa-instagram"></i>
-                                        </span>
-                                        <span class="details">
-                                            <i class="fa-regular fa-heart"></i><span class="text-white">@lang('messages.120')</span>
-                                            <i class="fa-solid fa-comments"></i><span class="text-white">@lang('messages.30')</span>
-                                        </span>
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-mb-2 col-12" style="cursor: pointer">
-                    <div class="wrapper">
-                        <div class="cardd">
-                            <video style="width: 100%" autoplay loop muted playsinline>
-                                <source src="{{ asset('ego/video/motion.mp4') }}" type="video/mp4" />
-                            </video>
-                            <div class="overlay">
-                                <div class="text-center">
-                                    <h5 class="title">@lang('messages.Salon_31')</h5>
-                                    <p class="text-p">
-                                        <span class="icon-wrapper">
-                                            <i class="fab fa-instagram"></i>
-                                        </span>
-                                        <span class="details">
-                                            <i class="fa-regular fa-heart"></i><span class="text-white">@lang('messages.120')</span>
-                                            <i class="fa-solid fa-comments"></i><span class="text-white">@lang('messages.30')</span>
-                                        </span>
-                                    </p>
-                                </div>
-                                <!-- <a class="link-a" href="#">View And Shop</a> -->
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-mb-2 col-12" style="cursor: pointer">
-                    <div class="wrapper">
-                        <div class="cardd">
-                            <video style="width: 100%" autoplay loop muted playsinline>
-                                <source src="{{ asset('ego/video/demovideo.mp4') }}" type="video/mp4" />
-                            </video>
-                            <div class="overlay">
-                                <div class="text-center">
-                                    <h5 class="title">@lang('messages.Salon_31')</h5>
-                                    <p class="text-p">
-                                        <span class="icon-wrapper">
-                                            <i class="fab fa-instagram"></i>
-                                        </span>
-                                        <span class="details">
-                                            <i class="fa-regular fa-heart"></i><span class="text-white">@lang('messages.120')</span>
-                                            <i class="fa-solid fa-comments"></i><span class="text-white">@lang('messages.30')</span>
-                                        </span>
-                                    </p>
-                                </div>
-                                <!-- <a class="link-a" href="#">View And Shop</a> -->
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-mb-2 col-12" style="cursor: pointer">
-                    <div class="wrapper">
-                        <div class="cardd">
-                            <img src="https://m.photoslurp.com/i/fit?width=576&height=720&url=https%3A%2F%2Fpslurpmedia.s3.amazonaws.com%2Finstagram-business%2F17929953719331586_0.jpg" alt="" />
-                            <div class="overlay">
-                                <div class="text-center">
-                                    <h5 class="title">@lang('messages.Salon_31')</h5>
-                                    <p class="text-p">
-                                        <span class="icon-wrapper">
-                                            <i class="fab fa-instagram"></i>
-                                        </span>
-                                        <span class="details">
-                                            <i class="fa-regular fa-heart"></i><span class="text-white">@lang('messages.120')</span>
-                                            <i class="fa-solid fa-comments"></i><span class="text-white">@lang('messages.30')</span>
-                                        </span>
-                                    </p>
-                                </div>
-                                <!-- <a class="link-a" href="#">View And Shop</a> -->
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-mb-2 col-12" style="cursor: pointer">
-                    <div class="wrapper">
-                        <div class="cardd">
-                            <img src="https://m.photoslurp.com/i/fit?width=576&height=720&url=https%3A%2F%2Fpslurpmedia.s3.amazonaws.com%2Finstagram-business%2F17929953719331586_0.jpg" alt="" />
-                            <div class="overlay">
-                                <div class="text-center">
-                                    <h5 class="title">@lang('messages.Salon_31')</h5>
-                                    <p class="text-p">
-                                        <span class="icon-wrapper">
-                                            <i class="fab fa-instagram"></i>
-                                        </span>
-                                        <span class="details">
-                                            <i class="fa-regular fa-heart"></i><span class="text-white">@lang('messages.120')</span>
-                                            <i class="fa-solid fa-comments"></i><span class="text-white">@lang('messages.30')</span>
-                                        </span>
-                                    </p>
-                                </div>
-                                <!-- <a class="link-a" href="#">View And Shop</a> -->
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-mb-2 col-12" style="cursor: pointer">
-                    <div class="wrapper">
-                        <div class="cardd">
-                            <img src="https://m.photoslurp.com/i/fit?width=720&height=720&url=https%3A%2F%2Fpslurpmedia.s3.amazonaws.com%2Finstagram-business%2F17977397470323891_0.jpg" />
-                            <div class="overlay">
-                                <div class="text-center">
-                                    <h5 class="title">@lang('messages.Salon_31')</h5>
-                                    <p class="text-p">
-                                        <span class="icon-wrapper">
-                                            <i class="fab fa-instagram "></i>
-                                        </span>
-                                        <span class="details">
-                                            <i class="fa-regular fa-heart"></i><span class="text-white">@lang('messages.120')</span>
-                                            <i class="fa-solid fa-comments"></i><span class="text-white">@lang('messages.30')</span>
-                                        </span>
-                                    </p>
-                                </div>
-                                <!-- <a class="link-a" href="#">View And Shop</a> -->
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-mb-2 col-12" style="cursor: pointer">
-                    <div class="wrapper">
-                        <div class="cardd">
-                            <img src="https://m.photoslurp.com/i/fit?width=576&height=720&url=https%3A%2F%2Fpslurpmedia.s3.amazonaws.com%2Finstagram-business%2F17901155806886312_0.jpg" />
-                            <div class="overlay">
-                                <div class="text-center">
-                                    <h5 class="title">@lang('messages.Salon_31')</h5>
-                                    <p class="text-p">
-                                        <span class="icon-wrapper">
-                                            <i class="fab fa-instagram"></i>
-                                        </span>
-                                        <span class="details">
-                                            <i class="fa-regular fa-heart"></i><span class="text-white">@lang('messages.120')</span>
-                                            <i class="fa-solid fa-comments"></i><span class="text-white">@lang('messages.30')</span>
-                                        </span>
-                                    </p>
-                                </div>
-                                <!-- <a class="link-a" href="#">View And Shop</a> -->
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-mb-2 col-12" style="cursor: pointer">
-                    <div class="wrapper">
-                        <div class="cardd">
-                            <img src="https://m.photoslurp.com/i/fit?width=360&height=359&url=https%3A%2F%2Fpslurpmedia.s3.amazonaws.com%2Finstagram-business%2F18003480121418500_1.jpg" />
-                            <div class="overlay">
-                                <div class="text-center">
-                                    <h5 class="title">@lang('messages.Salon_31')</h5>
-                                    <p class="text-p">
-                                        <span class="icon-wrapper">
-                                            <i class="fab fa-instagram"></i>
-                                        </span>
-                                        <span class="details">
-                                            <i class="fa-regular fa-heart"></i><span class="text-white">@lang('messages.120')</span>
-                                            <i class="fa-solid fa-comments"></i><span class="text-white">@lang('messages.30')</span>
-                                        </span>
-                                    </p>
-                                </div>
-                                <!-- <a class="link-a" href="#">View And Shop</a> -->
-                            </div>
-                        </div>
-                    </div>
-                </div>
 
-                <button href="#" class="add-to-cart-button w-25 mt-4 text-nowrap">{{ $loadbtn }}</button>
+                <div class="modal fade mt-0" id="exampleModal{{$data->id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered modal-lg">
+                        <div class="modal-content">
+                            <div class="modal-body bg-light" style="width: 100%; padding: 0; overflow: hidden">
+                                <button type="button" class="btn-close position-absolute end-0 top-0" data-bs-dismiss="modal" aria-label="Close"></button>
+                                <div class="d-flex w-100">
+                                    <div style="width: 50%; border-radius: 7px">
+                                        <img src="{{@$data->post()['media_url']}}" style="width: 100%; height: 100%; object-fit: cover" alt="">
+                                    </div>
+
+                                    <div style="width: 50%;" class="py-5 px-3">
+                                        @if(@$data->product)
+                                        <div class="border bg-white p-2 d-flex flex-column align-items-center mb-3">
+                                            <img src="{{asset(@$data->product->image_path)}}" style="width: 65%;" alt="">
+                                            <h5>{{@$data->product->name}}</h5>
+                                            <a href="{{route('addToCart.index',$data->product->id)}}" class="btn btn-dark">Shop Now</a>
+                                        </div>
+                                        @endif
+                                        <div>
+                                            <div class="d-flex justify-content-between mb-2">
+                                                <div class="d-flex align-items-center gap-1">
+                                                    <i class="fab fa-instagram"></i>
+                                                    <a href="{{$data->post()['permalink']}}" target="_blank">{{$data->post()['username']}}</a>
+                                                </div>
+                                                <div class="d-flex align-items-center gap-2">
+                                                    <div class="d-flex align-items-center gap-1">
+                                                        <i class="far fa-heart"></i>
+                                                        666
+                                                    </div>
+
+                                                    <div class="d-flex align-items-center gap-1">
+                                                        <i class="far fa-comment"></i>
+                                                        56
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <p>{{$data->post()['caption']}}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                @endforeach
+
             </div>
+            <a href="{{route('ego.pages.shop.instagram')}}" class="add-to-cart-button w-25 mt-4 text-nowrap">{{ $loadbtn }}</a>
         </div>
     </div>
     <div class="mt-5">

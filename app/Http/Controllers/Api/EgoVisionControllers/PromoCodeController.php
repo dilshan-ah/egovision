@@ -30,10 +30,10 @@ class PromoCodeController extends Controller
             return response()->json([
                 'success' => true,
                 'message' => 'No promo code applied',
-                'tax' => number_format($taxPrice, 2),
-                'delivery' => number_format($delivery, 2),
+                'tax' => $taxPrice,
+                'delivery' => $delivery,
                 'discount' => 0,
-                'new_total' => number_format($newTotal, 2),
+                'new_total' => $newTotal,
             ]);
         }
     
@@ -45,10 +45,10 @@ class PromoCodeController extends Controller
             return response()->json([
                 'success' => false,
                 'message' => 'Invalid promo code',
-                'tax' => number_format($taxPrice, 2),
-                'delivery' => number_format($delivery, 2),
+                'tax' => $taxPrice,
+                'delivery' => $delivery,
                 'discount' => 0,
-                'new_total' => number_format($subtotal + $delivery + $taxPrice, 2),
+                'new_total' => $subtotal + $delivery + $taxPrice,
             ], 400);
         }
     
@@ -57,9 +57,9 @@ class PromoCodeController extends Controller
                 'success' => false,
                 'message' => 'Minimum order amount not met',
                 'tax' => 0,
-                'delivery' => number_format($delivery, 2),
+                'delivery' => $delivery,
                 'discount' => 0,
-                'new_total' => number_format($subtotal + $delivery, 2),
+                'new_total' => $subtotal + $delivery,
             ], 400);
         }
     
@@ -70,10 +70,10 @@ class PromoCodeController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'Promo code applied successfully',
-            'tax' => number_format($taxPrice, 2),
-            'delivery' => number_format($delivery, 2),
-            'discount' => number_format($discount, 2),
-            'new_total' => number_format($newTotal, 2),
+            'tax' => $taxPrice,
+            'delivery' => $delivery,
+            'discount' => $discount,
+            'new_total' => $newTotal,
         ]);
     }
     

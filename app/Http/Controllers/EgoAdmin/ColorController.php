@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\EgoAdmin;
 
+use App\Helpers\TranslationHelper;
 use App\Http\Controllers\Controller;
 use App\Models\Duration;
 use App\Models\EgoModels\BaseCurve;
@@ -138,14 +139,14 @@ class ColorController extends Controller
 
     public function singleColor(Request $request, string $id)
     {
-        // Find the color by its ID or fail with a 404 error
+        $preferredLanguage = session('preferredLanguage');
+
         $color = Color::findOrFail($id);
-        $pageTitle = $color->name;
+        $color->name = TranslationHelper::translateText($color->name, $preferredLanguage);
+        $pageTitle = TranslationHelper::translateText($color->name, $preferredLanguage);
     
-        // Start with the products associated with the color
-        $productsQuery = $color->products(); // Use () to get a query builder instance
+        $productsQuery = $color->products();
     
-        // Get filter parameters from the request
         $baseQueries = $request->query('base');
         $baseArray = $baseQueries ? explode(',', $baseQueries) : [];
     
@@ -189,16 +190,45 @@ class ColorController extends Controller
             $productsQuery->whereIn('lens_design_id', $lensArray);
         }
     
-        // Execute the query to get the products
         $products = $productsQuery->get();
+
+        foreach($products as $product)
+        {
+            $product->name = TranslationHelper::translateText($product->name, $preferredLanguage);
+            $product->price = TranslationHelper::translateText((string) $product->price, $preferredLanguage);
+        }
     
         // Retrieve other required data for the view
         $baseCurves = BaseCurve::all();
+        foreach($baseCurves as $baseCurve)
+        {
+            $baseCurve->name = TranslationHelper::translateText($baseCurve->name, $preferredLanguage);
+        }
         $diameters = Diameter::all();
+        foreach($diameters as $diameter)
+        {
+            $diameter->name = TranslationHelper::translateText($diameter->name, $preferredLanguage);
+        }
         $tones = Tone::all();
+        foreach($tones as $tone)
+        {
+            $tone->name = TranslationHelper::translateText($tone->name, $preferredLanguage);
+        }
         $replacements = Duration::all();
+        foreach($replacements as $replacement)
+        {
+            $replacement->name = TranslationHelper::translateText($replacement->name, $preferredLanguage);
+        }
         $materials = Material::all();
+        foreach($materials as $material)
+        {
+            $material->name = TranslationHelper::translateText($material->name, $preferredLanguage);
+        }
         $lenses = LensDesign::all();
+        foreach($lenses as $lense)
+        {
+            $lense->name = TranslationHelper::translateText($lense->name, $preferredLanguage);
+        }
     
         // Return the view with the required data
         return view('ego.pages.single_color', compact('color', 'pageTitle', 'products', 'baseCurves', 'diameters', 'tones', 'replacements', 'materials', 'lenses','baseArray','diameterArray','toneArray','replacementArray','materialArray','lensArray'));
