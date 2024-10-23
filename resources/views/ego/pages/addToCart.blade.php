@@ -41,7 +41,36 @@
     }
 </style>
 <br>
+@php
+use App\Helpers\TranslationHelper;
+$preferredLanguage = session('preferredLanguage');
+$noPower = TranslationHelper::translateText('No Power', $preferredLanguage);
+$withPower = TranslationHelper::translateText('With Power', $preferredLanguage);
+$pcs = TranslationHelper::translateText('Pcs', $preferredLanguage);
+$powerBtn = TranslationHelper::translateText('I need 2 different powers', $preferredLanguage);
+$firstEye = TranslationHelper::translateText('First eye', $preferredLanguage);
+$secondEye = TranslationHelper::translateText('Second eye', $preferredLanguage);
+$selectPower = TranslationHelper::translateText('Select Power', $preferredLanguage);
+$addToCart = TranslationHelper::translateText('Add to Cart', $preferredLanguage);
 
+$description = TranslationHelper::translateText('Description', $preferredLanguage);
+$moreInfo = TranslationHelper::translateText('More Information', $preferredLanguage);
+$powerRange = TranslationHelper::translateText('Power Range', $preferredLanguage);
+$lensParam = TranslationHelper::translateText('Lens Parameters', $preferredLanguage);
+
+$pack = TranslationHelper::translateText('Pack Content	', $preferredLanguage);
+$diameter = TranslationHelper::translateText('Diameter', $preferredLanguage);
+$base = TranslationHelper::translateText('Base curve', $preferredLanguage);
+$material = TranslationHelper::translateText('Material', $preferredLanguage);
+$water = TranslationHelper::translateText('Water content', $preferredLanguage);
+$replacement = TranslationHelper::translateText('Replacement', $preferredLanguage);
+$tone = TranslationHelper::translateText('Tones', $preferredLanguage);
+$lensdesign = TranslationHelper::translateText('Lens Design', $preferredLanguage);
+$step = TranslationHelper::translateText('Steps', $preferredLanguage);
+$plano = TranslationHelper::translateText('Plano', $preferredLanguage);
+$myopia = TranslationHelper::translateText('Myopia', $preferredLanguage);
+$hyperopia = TranslationHelper::translateText('Hyperopia', $preferredLanguage);
+@endphp
 <div class="row" style="margin-top:150px">
     <div class="col-md-2">
         <div class="vertical-slider" style="cursor: pointer; padding: 10px;">
@@ -78,7 +107,7 @@
                     <div class="tab-content">
                         <input type="radio" id="tab1-radio" name="power_type" value="no_power" @if($product->product_type == 'normal') checked @endif
                         style="width: 20px; height: 15px;" />
-                        <label for="tab1-radio" style="font-size: 14px">No Power</label>
+                        <label for="tab1-radio" style="font-size: 14px">{{$noPower}}</label>
                     </div>
                 </div>
 
@@ -86,7 +115,7 @@
                     <div class="tab-content">
                         <input type="radio" id="tab2-radio" name="power_type" value="with_power"
                             style="width: 20px; height: 15px;" />
-                        <label for="tab2-radio" style="font-size: 14px">With Power</label>
+                        <label for="tab2-radio" style="font-size: 14px">{{$withPower}}</label>
                     </div>
                 </div>
                 @endif
@@ -102,7 +131,7 @@
             <div class="mt-2" id="pair-state" style="background-color: #f5f5f5">
                 <div class="p-3">
                     <fieldset class="pair-fieldset">
-                        <legend class="float-none w-auto">Pair</legend>
+                        <legend class="float-none w-auto">{{$pcs}}</legend>
                         <div class="product-count">
                             <button id="decrement" style="font-size: 10px;">
                                 <span style="font-size: 25px">-</span>
@@ -121,7 +150,7 @@
                         <button type="button" class="toggle-btn big-btn" data-target="#home" aria-controls="home">
                             <i class="fas fa-toggle-off"></i>
                         </button>
-                        <p class="ml-3 mb-0">I need 2 different powers</p>
+                        <p class="ml-3 mb-0">{{$powerBtn}}</p>
                     </div>
                 </div>
                 <div class="tab-content" id="myTabContent">
@@ -129,10 +158,10 @@
                         <div>
                             <div class="d-flex justify-content-between align-items-center mb-3">
                                 <div class="eye-section open-content">
-                                    <h6 class="text-center">First eye</h6>
+                                    <h6 class="text-center">{{$firstEye}}</h6>
                                     <form>
                                         <select class="power-select" id="firstPower">
-                                            <option value="">Select power</option>
+                                            <option value="">{{$selectPower}}</option>
                                             @foreach ($powers as $power)
                                             <option value="{{ $power }}">
                                                 {{ $power }}
@@ -144,7 +173,7 @@
                                         <span class="power-value">0.50</span>
                                         <div class="adjustment-btns text-center">
                                             <fieldset class="pair-fieldset-main">
-                                                <legend class="float-none w-auto p-2">Pair</legend>
+                                                <legend class="float-none w-auto p-2">{{$pcs}}</legend>
                                                 <div class="product-count">
                                                     <button class="btn decrease-btn">-</button>
                                                     <span class="quantity-btn" data-quantity="1"
@@ -157,10 +186,10 @@
                                     </div>
                                 </div>
                                 <div class="eye-section closed-content">
-                                    <h6 class="text-center">Second eye</h6>
+                                    <h6 class="text-center">{{$secondEye}}</h6>
                                     <form>
                                         <select class="power-select" id="secondPower">
-                                            <option value="">Select power</option>
+                                            <option value="">{{$selectPower}}</option>
                                             @foreach ($powers as $power)
                                             <option value="{{ $power }}">
                                                 {{ $power }}
@@ -172,7 +201,7 @@
                                         <span class="power-value">0.50</span>
                                         <div class="adjustment-btns text-center">
                                             <fieldset class="pair-fieldset-main">
-                                                <legend class="float-none w-auto p-2">pair</legend>
+                                                <legend class="float-none w-auto p-2">{{$pcs}}</legend>
                                                 <div class="product-count">
                                                     <button class="btn decrease-btn-two">-</button>
                                                     <span class="quantity-btn-two" data-quantity="1"
@@ -192,8 +221,8 @@
             </div>
 
 
-            <button class="add-to-cart-button w-100 mt-4" id="add-to-cart">Add to Cart - <span
-                    id="total-price">{{ $product->no_power_price }}</span> ৳</button>
+            <button class="add-to-cart-button w-100 mt-4" id="add-to-cart">{{$addToCart}} - <span
+                    id="total-price">{{ $product->no_power_price }}</span> BDT</button>
         </div>
         <!-- description -->
         <div
@@ -228,7 +257,7 @@
                 ">
                 <div style="flex: 1;">
                     <a class="open-custom-sidebar" href="#"
-                        style="text-decoration: none; color: black;">Description</a>
+                        style="text-decoration: none; color: black;">{{$description}}</a>
                 </div>
 
                 <!-- Custom Sidebar Modal -->
@@ -237,7 +266,7 @@
                         style="border-bottom: 1px solid #e0e0e0; display: flex; justify-content: space-between; align-items: center; padding: 10px;">
                         <a class="navbar-brand" href="#"
                             style="font-size: 18px; display: flex; align-items: center; text-decoration: none; color: #000;">
-                            <span style="font-size: 18px; margin-left: 10px; margin-top:-55px">Description</span>
+                            <span style="font-size: 18px; margin-left: 10px; margin-top:-55px">{{$description}}</span>
                         </a>
                         <span class="custom-closebtn" style="font-size: 24px; cursor: pointer;">&times;</span>
                     </div>
@@ -255,8 +284,7 @@
                     +
                 </div>
                 <div style="flex: 1; padding-left: 20px;">
-                    <a class="open-custom-sidebar" href="#" style="text-decoration: none; color: black;">More
-                        Information</a>
+                    <a class="open-custom-sidebar" href="#" style="text-decoration: none; color: black;">{{$moreInfo}}</a>
                 </div>
                 <div
                     style="
@@ -274,7 +302,7 @@
                     style="border-bottom: 1px solid #e0e0e0; display: flex; justify-content: space-between; align-items: center; padding: 10px;">
                     <a class="navbar-brand" href="#"
                         style="font-size: 18px; display: flex; align-items: center; text-decoration: none; color: #000;">
-                        <span style="font-size: 18px; margin-left: 10px; margin-top:-55px">More Information</span>
+                        <span style="font-size: 18px; margin-left: 10px; margin-top:-55px">{{$moreInfo}}</span>
                     </a>
                     <span class="custom-closebtn" style="font-size: 24px; cursor: pointer;">&times;</span>
                 </div>
@@ -283,35 +311,35 @@
                     <table class="table mt-2">
                         <tbody>
                             <tr>
-                                <td class="table-secondary">Pack Content</td>
+                                <td class="table-secondary">{{$pack}}</td>
                                 <td>{{$product->pack_content}}</td>
                             </tr>
                             <tr>
-                                <td class="table-secondary">Diameter</td>
+                                <td class="table-secondary">{{$diameter}}</td>
                                 <td>{{@$product->diameter->name}}</td>
                             </tr>
                             <tr>
-                                <td class="table-secondary">Base curve</td>
+                                <td class="table-secondary">{{$diameter}}</td>
                                 <td>{{@$product->baseCurve->name}}</td>
                             </tr>
                             <tr>
-                                <td class="table-secondary">Material</td>
+                                <td class="table-secondary">{{$material}}</td>
                                 <td>{{@$product->material->name}}</td>
                             </tr>
                             <tr>
-                                <td class="table-secondary">Water content</td>
+                                <td class="table-secondary">{{$water}}</td>
                                 <td>{{@$product->water_content}}</td>
                             </tr>
                             <tr>
-                                <td class="table-secondary">Replacement</td>
+                                <td class="table-secondary">{{$replacement}}</td>
                                 <td>{{@$product->duration->name}}</td>
                             </tr>
                             <tr>
-                                <td class="table-secondary">Tones</td>
+                                <td class="table-secondary">{{$tone}}</td>
                                 <td>{{@$product->tone->name}}</td>
                             </tr>
                             <tr>
-                                <td class="table-secondary">Lens Design</td>
+                                <td class="table-secondary">{{$lensdesign}}</td>
                                 <td>{{@$product->lensDesign->name}}</td>
                             </tr>
                         </tbody>
@@ -319,7 +347,6 @@
                 </div>
             </div>
 
-            <!-- Second Row -->
             <div
                 style="
                 display: flex;
@@ -327,8 +354,7 @@
                 padding: 10px 0;
                 ">
                 <div style="flex: 1;">
-                    <a class="open-custom-sidebar" href="#" style="text-decoration: none; color: black;">Power
-                        Range</a>
+                    <a class="open-custom-sidebar" href="#" style="text-decoration: none; color: black;">{{$powerRange}}</a>
                 </div>
                 <div
                     style="
@@ -339,8 +365,7 @@
                     +
                 </div>
                 <div style="flex: 1; padding-left: 20px;">
-                    <a class="open-custom-sidebar" href="#" style="text-decoration: none; color: black;">Lens
-                        Parameters</a>
+                    <a class="open-custom-sidebar" href="#" style="text-decoration: none; color: black;">{{$lensParam}}</a>
                 </div>
                 <div
                     style="
@@ -352,21 +377,49 @@
                 </div>
             </div>
 
-            <!-- Power Range Sidebar -->
             <div class="custom-sidebar">
                 <div class="sidebar-header"
                     style="border-bottom: 1px solid #e0e0e0; display: flex; justify-content: space-between; align-items: center; padding: 10px;">
                     <a class="navbar-brand" href="#"
                         style="font-size: 18px; display: flex; align-items: center; text-decoration: none; color: #000;">
-                        <span style="font-size: 18px; margin-left: 10px; margin-top:-55px">Power Range</span>
+                        <span style="font-size: 18px; margin-left: 10px; margin-top:-55px">{{$powerRange}}</span>
                     </a>
                     <span class="custom-closebtn" style="font-size: 24px; cursor: pointer;">&times;</span>
                 </div>
                 <div class="custom-accordion">
-                    <!-- Content for Power Range -->
-                    <h4>Monthly Spherical Lenses</h4>
-
-
+                    
+                    <table class="table mt-4">
+                        <tbody>
+                            <tr class="table-dark">
+                                <td></td>
+                                <td>{{$powerRange}}</td>
+                                <td>{{$step}}</td>
+                            </tr>
+                            <tr class="table-secondary">
+                                <td>{{$plano}}</td>
+                                <td>0.00</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td rowspan="2">{{$myopia}}</td>
+                                <td>-0.50 to -6.00</td>
+                                <td>in 0.25 {{$step}}</td>
+                            </tr>
+                            <tr>
+                                <td>-6.50 to -8.00</td>
+                                <td>in 0.50 {{$step}}</td>
+                            </tr>
+                            <tr class="table-secondary">
+                                <td rowspan="2">{{$hyperopia}}</td>
+                                <td>+0.50 to +6.00</td>
+                                <td>in 0.25 {{$step}}</td>
+                            </tr>
+                            <tr class="table-secondary">
+                                <td>+6.50 to +8.00</td>
+                                <td>in 0.50 {{$step}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
 
@@ -376,13 +429,13 @@
                     style="border-bottom: 1px solid #e0e0e0; display: flex; justify-content: space-between; align-items: center; padding: 10px;">
                     <a class="navbar-brand" href="#"
                         style="font-size: 18px; display: flex; align-items: center; text-decoration: none; color: #000;">
-                        <span style="font-size: 18px; margin-left: 10px; margin-top:-55px">Lens Parameters</span>
+                        <span style="font-size: 18px; margin-left: 10px; margin-top:-55px">{{$lensParam}}</span>
                     </a>
                     <span class="custom-closebtn" style="font-size: 24px; cursor: pointer;">&times;</span>
                 </div>
                 <div class="custom-accordion">
                     <!-- Content for Lens Parameters -->
-                    <p>Lens Parameters content goes here.</p>
+                    {!! $product->lens_params !!}
                 </div>
             </div>
         </div>
@@ -480,7 +533,7 @@
         const totalPriceElement = button.closest('.adjustment-btns').querySelector('.total-price-section');
         const calculatedTotal = (currentQuantityValue * productPrice).toFixed(2);
 
-        totalPriceElement.textContent = `Taka: ${calculatedTotal} ৳`;
+        totalPriceElement.textContent = `Taka: ${calculatedTotal} BDT`;
 
         calculateGlobalTotalPrice();
     }
@@ -504,7 +557,7 @@
         });
 
         document.querySelectorAll(".total-price-section").forEach((priceElement) => {
-            priceElement.textContent = `Taka: 0.00 ৳`; // Reset price display
+            priceElement.textContent = `Taka: 0.00 BDT`; // Reset price display
         });
 
         globalTotalPrice = 0;

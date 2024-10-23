@@ -37,6 +37,8 @@ class Order extends Model
         'delivery_charge',
         'payment_method',
         'amount',
+        'discount',
+        'tax',
         'transaction_id',
     ];
 

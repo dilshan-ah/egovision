@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\User\NewsletterController;
 use Illuminate\Support\Facades\Route;
 
 Route::namespace('User\Auth')->name('user.')->group(function () {
@@ -28,6 +29,10 @@ Route::namespace('User\Auth')->name('user.')->group(function () {
         Route::post('password/reset', 'reset')->name('password.update');
         Route::get('password/reset/{token}', 'showResetForm')->name('password.reset');
     });
+});
+
+Route::controller(NewsletterController::class)->group(function () {
+    Route::post('subscribeWithEmail', 'storeWithEmail')->name('subscribe.store.email');
 });
 
 Route::middleware('auth')->name('user.')->group(function () {

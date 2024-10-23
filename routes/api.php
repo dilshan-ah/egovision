@@ -15,6 +15,8 @@ use App\Http\Controllers\Api\EgoVisionControllers\ReturnProductController;
 use App\Http\Controllers\Api\EgoVisionControllers\TicketController;
 use App\Http\Controllers\Api\EgoVisionControllers\WishlistController;
 use App\Http\Controllers\Api\EgoVisionControllers\ForgotPasswordController;
+use App\Http\Controllers\Api\EgoVisionControllers\InstagramController;
+use App\Http\Controllers\Api\EgoVisionControllers\NewsletterController;
 use App\Http\Controllers\Api\EgoVisionControllers\ProfileController;
 use App\Http\Controllers\Api\EgoVisionControllers\PromoCodeController;
 use App\Http\Controllers\Api\EgoVisionControllers\ShippingMethodsController;
@@ -42,13 +44,15 @@ Route::controller(AuthController::class)->group(function () {
     Route::post('ego/login', 'login');
     Route::post('ego/logout', 'logout')->middleware('auth:sanctum');
     Route::get('ego/get/districts', 'getDistricts');
+    Route::post('ego/google', 'callbackGoogle');
 });
 
 // Product
 Route::controller(ProductController::class)->group(function () {
-    Route::get('ego/products', 'getProducts');
+    Route::get('ego/products/{userId}', 'getProducts');
     Route::get('ego/app/singleProduct/{id}', 'singleProduct');
-    Route::get('ego/accessories', 'getAccessories');
+    Route::get('ego/accessories/{id}', 'getAccessories');
+    Route::get('ego/search/{userId}', 'search');
 });
 
 
@@ -63,14 +67,14 @@ Route::controller(BannerController::class)->group(function () {
 Route::controller(ColorController::class)->group(function () {
     Route::get('app/ego/dashboard/colors', 'getDashColor');
     Route::get('app/ego/page/colors', 'getPageColor');
-    Route::get('app/ego/singleColor/{id}', 'singleColor');
+    Route::get('app/ego/singleColor/{id}/{userId}', 'singleColor');
 });
 
 
 Route::controller(CollectionSetController::class)->group(function () {
     Route::get('app/ego/menu/collectionSets', 'collectionMenu');
     Route::get('app/ego/page/collectionSets', 'collectionPage');
-    Route::get('app/ego/page/singleCollection/{id}', 'singleCollection');
+    Route::get('app/ego/page/singleCollection/{id}/{userId}', 'singleCollection');
     Route::get('app/ego/featured/collectionSets', 'featuredCollection');
     Route::get('app/ego/moreProducts', 'moreProducts');
 });
@@ -84,7 +88,7 @@ Route::controller(CategoryController::class)->group(function () {
 Route::controller(DurationController::class)->group(function () {
     Route::get('app/ego/menu/durations', 'getDurations');
     Route::get('app/ego/page/durations', 'getDurationPage');
-    Route::get('app/ego/single/durations/{id}', 'singleDuration');
+    Route::get('app/ego/single/durations/{id}/{userId}', 'singleDuration');
 });
 
 Route::controller(FilterController::class)->group(function () {
@@ -94,12 +98,16 @@ Route::controller(FilterController::class)->group(function () {
 Route::controller(CartController::class)->group(function () {
     Route::post('app/addToCart', 'addToCart');
     Route::get('app/getCart/{id}', 'userCartList');
+    Route::post('app/cart/updateQuantity', 'updateCartQuantity');
+    Route::delete('app/cart/deleteQuantity/{userId}', 'deleteCart');
+    Route::post('app/addGiftToCart/{userId}', 'addGiftToCart');
 });
 
 Route::controller(OrderController::class)->group(function () {
     Route::post('app/placeOrder', 'store');
     Route::get('app/user/oreders/{userid}', 'userOrder');
     Route::get('app/user/orederDetails/{productid}', 'singleOrder');
+    Route::post('app/checkPrice', 'checkPrices');
 });
 
 Route::controller(WishlistController::class)->group(function () {
@@ -135,6 +143,15 @@ Route::controller(ProfileController::class)->group(function(){
 
 Route::controller(PromoCodeController::class)->group(function(){
     Route::post('app/apply/promo/', 'verifyPromo');
+});
+
+Route::controller(NewsletterController::class)->group(function(){
+    Route::post('app/subscribe/{userId}', 'store');
+});
+
+Route::controller(InstagramController::class)->group(function () {
+    Route::get('/instagram-posts','getAllInstagramPosts');
+
 });
 
 Route::namespace('Api')->name('api.')->group(function () {

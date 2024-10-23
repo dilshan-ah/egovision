@@ -25,8 +25,8 @@
             @if (isset($giftCard))
             <div class="gift-card-details">
                 <h2>Gift Card Code: {{ $giftCard->code }}</h2>
-                <p>Balance: {{ $giftCard->balance }}৳</p>
-                <p>Initial Balance: {{ $giftCard->initial_balance }}৳</p>
+                <p>Balance: {{ $giftCard->balance }}BDT</p>
+                <p>Initial Balance: {{ $giftCard->initial_balance }}BDT</p>
                 <p>Expiry Date: {{ $giftCard->expiry_date->diffForHumans() }}</p>
                 <p>Cutoff Percentage: {{ $giftCard->cutoff_percentage }}%</p>
             </div>

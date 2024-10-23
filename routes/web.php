@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\EgoAdmin\CategoryController;
+use App\Http\Controllers\LanguageController;
 use App\Http\Controllers\SslCommerzPaymentController;
 use App\Http\Controllers\User\Auth\GoogleAuthController;
 use Illuminate\Support\Facades\Route;
@@ -19,6 +20,9 @@ use Illuminate\Support\Facades\Route;
 Route::get('/clear', function () {
     \Illuminate\Support\Facades\Artisan::call('optimize:clear');
 });
+
+
+Route::post('/change-lang',[LanguageController::class,'changeLanguage'])->name('change.lang');
 
 // User Support Ticket
 Route::controller('TicketController')->prefix('ticket')->name('ticket.')->group(function () {

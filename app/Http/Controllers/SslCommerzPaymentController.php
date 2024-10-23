@@ -8,6 +8,7 @@ use App\Lib\SslCommerz\SslCommerzNotification;
 use App\Models\EgoModels\Cart;
 use Illuminate\Support\Facades\Auth;
 use App\Models\EgoModels\OrderItems;
+use App\Models\GeneralSetting;
 use App\Models\PromoCode;
 
 class SslCommerzPaymentController extends Controller
@@ -30,7 +31,6 @@ class SslCommerzPaymentController extends Controller
         $userId = Auth::check() ? Auth::id() : null;
         $sessionId = $request->session()->getId();
 
-        // Calculate total price for cart items
         $cartTotal = Cart::where(function ($query) use ($userId, $sessionId) {
             if ($userId) {
                 $query->where('user_id', $userId);
@@ -44,11 +44,33 @@ class SslCommerzPaymentController extends Controller
                 $price = $cart->power_status === 'no_power' ? $cart->product->no_power_price : $cart->product->price;
                 return $cart->pair * $price;
             });
-        
+
+        $carts = Cart::where('user_id', Auth::id())->get();
+
+
+        $freeProductsTotal = $carts->filter(function ($cart) {
+            return $cart->product->is_free == 1; // Filter products where is_free == 1
+        })->sum(function ($cart) {
+            return $cart->product->no_power_price * $cart->pair;
+        });
+
+        $promo = PromoCode::where('reedem_code', $request->promo_code)->where('status', 'active')->first();
+
+        if ($promo) {
+            $discount = ($promo->offer_amount / 100) * $cartTotal;
+            $overallDiscount = $discount + $freeProductsTotal;
+        } else {
+            $overallDiscount = $freeProductsTotal;
+        }
+
+        $tax = GeneralSetting::first()->tax;
+
+        $taxPrice = $cartTotal * $tax / 100;
 
         // Prepare data for payment
         $post_data = array();
-        $post_data['total_amount'] = $cartTotal;
+        $post_data['delivery'] = $request->delivery;
+        $post_data['total_amount'] = $post_data['delivery'] + $cartTotal - $overallDiscount + $taxPrice;
         $post_data['currency'] = "BDT";
         $post_data['tran_id'] = uniqid();
 
@@ -64,7 +86,7 @@ class SslCommerzPaymentController extends Controller
         $post_data['cus_company'] = $request->company;
         $post_data['cus_phone'] = $request->dial_code . $request->phone;
         $post_data['cus_fax'] = "";
-        $post_data['delivery'] = $request->delivery;
+
         $post_data['payment_method'] = $request->payment_method;
 
         // SHIPMENT INFORMATION
@@ -88,24 +110,8 @@ class SslCommerzPaymentController extends Controller
         $post_data['value_c'] = "ref003";
         $post_data['value_d'] = "ref004";
 
-        $carts = Cart::where('user_id', Auth::id())->get();
 
-        
-        $freeProductsTotal = $carts->filter(function ($cart) {
-            return $cart->product->is_free == 1; // Filter products where is_free == 1
-        })->sum(function ($cart) {
-            return $cart->product->no_power_price * $cart->pair;
-        });
 
-        $promo = PromoCode::where('reedem_code', $request->promo_code)->where('status', 'active')->first();
-
-        if($promo){
-            $discount = ($promo->offer_amount / 100) * $cartTotal;
-            $overallDiscount = $discount + $freeProductsTotal;
-        }else{
-            $overallDiscount = $freeProductsTotal;
-        }
-        
 
         // Before initiating the payment, insert or update order status as Pending
         DB::table('orders')->updateOrInsert([
@@ -128,7 +134,8 @@ class SslCommerzPaymentController extends Controller
             'subtotal' => $cartTotal,
             'payment_method' => $post_data['payment_method'],
             'discount' => $overallDiscount,
-            'amount' => $post_data['delivery'] + $cartTotal - $overallDiscount,
+            'amount' => $post_data['delivery'] + $cartTotal - $overallDiscount + $taxPrice,
+            'tax' => $taxPrice,
         ]);
 
         // Fetch the inserted/updated order to get the order ID
@@ -152,7 +159,7 @@ class SslCommerzPaymentController extends Controller
 
         // Check if payment method is COD
         if ($request->payment_method == 'cod') {
-            
+
             return redirect('/')->with('orderSuccess', 'Order placed successfully');
         }
 
@@ -256,13 +263,16 @@ class SslCommerzPaymentController extends Controller
             if ($validation) {
                 $update_product = DB::table('orders')
                     ->where('transaction_id', $tran_id)
-                    ->update(['status' => 'Processing']);
+                    ->update([
+                        'status' => 'Processing',
+                        'payment_status' => 'paid'
+                    ]);
 
                 return redirect('/')->with('success', 'Order made successfully');
                 echo "<br >Transaction is successfully Completed";
             }
         } else if ($order_details->status == 'Processing' || $order_details->status == 'Complete') {
-            
+
             return redirect('/')->with('success', 'Order made successfully');
             echo "Transaction is successfully Completed";
         } else {

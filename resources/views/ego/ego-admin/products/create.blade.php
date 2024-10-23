@@ -66,7 +66,7 @@
                     <div class="form-group col-3">
                         <label for="">Water Content</label>
                         <input type="text" class="form-control" name="water_content" value="{{ old('water_content') }}" placeholder="Enter Water content">
-                         @error('water_content')
+                        @error('water_content')
                         <span class="text-danger">{{ $message }}</span>
                         @enderror
                     </div>
@@ -158,6 +158,42 @@
                         <span class="text-danger">{{ $message }}</span>
                         @enderror
                     </div>
+                    <div class="col-6 mb-5">
+                        <h4 class="mb-2">Choose Available powers</h4>
+                        <div class="row ml-2">
+                            <div class="form-group col-12 d-flex">
+                                <label for="available_power_1">-0.25 to -6.00</label>
+                                <input type="checkbox" class="form-check-input" value="(-0.25-6.00)" id="available_power_1"
+                                    name="available_powers[]"
+                                    {{ in_array('(-0.25-6.00)', old('available_powers', [])) ? 'checked' : '' }}>
+                            </div>
+                            <div class="form-group col-12 d-flex">
+                                <label for="available_power_2">-6.50 to -10.00</label>
+                                <input type="checkbox" class="form-check-input" value="(-6.50-10.00)" id="available_power_2"
+                                    name="available_powers[]"
+                                    {{ in_array('(-6.25-10.00)', old('available_powers', [])) ? 'checked' : '' }}>
+                            </div>
+                            <div class="form-group col-12 d-flex">
+                                <label for="available_power_3">+0.25 to +6.00</label>
+                                <input type="checkbox" class="form-check-input" value="(+0.25+6.00)" id="available_power_3"
+                                    name="available_powers[]"
+                                    {{ in_array('(+0.25+6.00)', old('available_powers', [])) ? 'checked' : '' }}>
+                            </div>
+                            <div class="form-group col-12 d-flex">
+                                <label for="available_power_4">+6.50 to +10.00</label>
+                                <input type="checkbox" class="form-check-input" value="(+6.50+10.00)" id="available_power_4"
+                                    name="available_powers[]"
+                                    {{ in_array('(+6.25+10.00)', old('available_powers', [])) ? 'checked' : '' }}>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group col-6">
+                        <label for="">Lens Parameter</label>
+                        <textarea name="lensparameter" class="form-control" id="editor3">{{ old('description') }}</textarea>
+                        @error('description')
+                        <span class="text-danger">{{ $message }}</span>
+                        @enderror
+                    </div>
                     <div class="form-group col-6">
                         <label for="">Product Image</label>
                         <div class="custom-file">
@@ -186,39 +222,6 @@
                         <div id="imagePreview2" style="margin-top: 10px;"></div>
                     </div>
 
-                    <div class="col-12 mb-2">
-                        <h4>Choose Available powers</h4>
-                    </div>
-                    <div class="col-12 mb-5">
-                        <div class="row ml-2">
-                            <div class="form-group col-6 d-flex">
-                                <label for="available_power_1">-0.25 to -6.00</label>
-                                <input type="checkbox" class="form-check-input" value="(-0.25-6.00)" id="available_power_1"
-                                    name="available_powers[]"
-                                    {{ in_array('(-0.25-6.00)', old('available_powers', [])) ? 'checked' : '' }}>
-                            </div>
-                            <div class="form-group col-6 d-flex">
-                                <label for="available_power_2">-6.50 to -10.00</label>
-                                <input type="checkbox" class="form-check-input" value="(-6.50-10.00)" id="available_power_2"
-                                    name="available_powers[]"
-                                    {{ in_array('(-6.25-10.00)', old('available_powers', [])) ? 'checked' : '' }}>
-                            </div>
-                            <div class="form-group col-6 d-flex">
-                                <label for="available_power_3">+0.25 to +6.00</label>
-                                <input type="checkbox" class="form-check-input" value="(+0.25+6.00)" id="available_power_3"
-                                    name="available_powers[]"
-                                    {{ in_array('(+0.25+6.00)', old('available_powers', [])) ? 'checked' : '' }}>
-                            </div>
-                            <div class="form-group col-6 d-flex">
-                                <label for="available_power_4">+6.50 to +10.00</label>
-                                <input type="checkbox" class="form-check-input" value="(+6.50+10.00)" id="available_power_4"
-                                    name="available_powers[]"
-                                    {{ in_array('(+6.25+10.00)', old('available_powers', [])) ? 'checked' : '' }}>
-                            </div>
-                        </div>
-                    </div>
-
-
 
                     <div class="form-group col-12">
                         <button type="submit" class="btn btn-primary btn-block">Submit</button>
@@ -241,6 +244,12 @@
         });
 
         const editor2 = new Jodit('#editor2', {
+            toolbarAdaptive: false,
+            toolbarSticky: true,
+            height: 300,
+        });
+
+        const editor3 = new Jodit('#editor3', {
             toolbarAdaptive: false,
             toolbarSticky: true,
             height: 300,

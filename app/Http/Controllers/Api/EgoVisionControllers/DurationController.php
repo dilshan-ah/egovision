@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\EgoVisionControllers;
 use App\Http\Controllers\Controller;
 use App\Models\Duration;
 use App\Models\EgoModels\Product;
+use App\Models\EgoModels\Wishlist;
 use Illuminate\Http\Request;
 
 class DurationController extends Controller
@@ -76,33 +77,79 @@ class DurationController extends Controller
         return response()->json($formattedDurations);
     }
 
-    public function singleDuration(string $id)
+    public function singleDuration(string $id, string $userId)
     {
         try {
-            // Fetch color by ID
             $duration = Duration::findOrFail($id);
     
-            // Set the number of products per page
             $productsPerPage = 10; // Adjust as necessary
     
-            // Fetch products related to the color with pagination
+            // Initialize the query for products related to the duration
             $productsQuery = Product::select('id', 'name', 'image_path', 'price')
                 ->where('duration_id', $duration->id);
             
+            // Add additional filters from request (e.g., color, base, diameter, tones, replacement, material, lens)
+            $colorQueries = request()->query('colors');
+            $colorArray = $colorQueries ? explode(',', $colorQueries) : [];
+    
+            $baseQueries = request()->query('base');
+            $baseArray = $baseQueries ? explode(',', $baseQueries) : [];
+    
+            $diameterQueries = request()->query('diameter');
+            $diameterArray = $diameterQueries ? explode(',', $diameterQueries) : [];
+    
+            $toneQueries = request()->query('tones');
+            $toneArray = $toneQueries ? explode(',', $toneQueries) : [];
+    
+            $materialQueries = request()->query('material');
+            $materialArray = $materialQueries ? explode(',', $materialQueries) : [];
+    
+            $lensQueries = request()->query('lens');
+            $lensArray = $lensQueries ? explode(',', $lensQueries) : [];
+    
+            // Apply filters to the products query
+            if (!empty($colorArray)) {
+                $productsQuery->whereIn('color_id', $colorArray);
+            }
+    
+            if (!empty($baseArray)) {
+                $productsQuery->whereIn('base_curve_id', $baseArray);
+            }
+    
+            if (!empty($diameterArray)) {
+                $productsQuery->whereIn('diameter_id', $diameterArray);
+            }
+    
+            if (!empty($toneArray)) {
+                $productsQuery->whereIn('tone_id', $toneArray);
+            }
+    
+            if (!empty($materialArray)) {
+                $productsQuery->whereIn('material_id', $materialArray);
+            }
+    
+            if (!empty($lensArray)) {
+                $productsQuery->whereIn('lens_design_id', $lensArray);
+            }
+    
             // Paginate the products
             $products = $productsQuery->paginate($productsPerPage);
     
-            // Format the product image paths
-            $formattedProducts = $products->getCollection()->map(function ($product) {
+            // Format the product image paths and check for wishlist
+            $formattedProducts = $products->getCollection()->map(function ($product) use ($userId) {
+                $isWishlisted = Wishlist::where('user_id', $userId)
+                    ->where('product_id', $product->id)
+                    ->exists();
                 return [
                     'id' => $product->id,
                     'name' => $product->name,
                     'image_path' => $product->image_path ? 'https://egovision.shop/' . $product->image_path : null,
                     'price' => $product->price,
+                    'is_wishlisted' => $isWishlisted ? 1 : 0,
                 ];
             });
     
-            // Check if products exist and return a structured response
+            // Return a structured response
             return response()->json([
                 'status' => true,
                 'response_code' => 200,
@@ -126,4 +173,5 @@ class DurationController extends Controller
             ]);
         }
     }
+    
 }

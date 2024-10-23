@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\EgoAdmin;
 
+use App\Helpers\TranslationHelper;
 use App\Http\Controllers\Controller;
 use App\Models\Duration;
 use App\Models\EgoModels\BaseCurve;
@@ -134,8 +135,10 @@ class DurationController extends Controller
 
     public function singleDuration(Request $request, string $id)
     {
+        $preferredLanguage = session('preferredLanguage');
         $duration = Duration::findOrFail($id);
-        $pageTitle = $duration->name;
+        $duration->name = TranslationHelper::translateText($duration->name, $preferredLanguage);
+        $pageTitle = TranslationHelper::translateText($duration->name, $preferredLanguage);
 
         $productsQuery = $duration->products();
 
@@ -182,14 +185,47 @@ class DurationController extends Controller
         }
 
         $products = $productsQuery->get();
+        foreach($products as $product)
+        {
+            $product->name = TranslationHelper::translateText($product->name, $preferredLanguage);
+            $product->price = TranslationHelper::translateText((string )$product->price, $preferredLanguage);
+        }
 
         $colors = Color::all();
+        foreach($colors as $color)
+        {
+            $color->name = TranslationHelper::translateText($color->name, $preferredLanguage);
+        }
         $baseCurves = BaseCurve::all();
+        foreach($baseCurves as $baseCurve)
+        {
+            $baseCurve->name = TranslationHelper::translateText($baseCurve->name, $preferredLanguage);
+        }
         $diameters = Diameter::all();
+        foreach($diameters as $diameter)
+        {
+            $diameter->name = TranslationHelper::translateText($diameter->name, $preferredLanguage);
+        }
         $tones = Tone::all();
+        foreach($tones as $tone)
+        {
+            $tone->name = TranslationHelper::translateText($tone->name, $preferredLanguage);
+        }
         $replacements = Duration::all();
+        foreach($replacements as $replacement)
+        {
+            $replacement->name = TranslationHelper::translateText($replacement->name, $preferredLanguage);
+        }
         $materials = Material::all();
+        foreach($materials as $material)
+        {
+            $material->name = TranslationHelper::translateText($material->name, $preferredLanguage);
+        }
         $lenses = LensDesign::all();
+        foreach($lenses as $lense)
+        {
+            $lense->name = TranslationHelper::translateText($lense->name, $preferredLanguage);
+        }
 
         return view('ego.pages.single_duration', compact('duration', 'pageTitle', 'products','colors',  'baseCurves', 'diameters', 'tones', 'materials', 'lenses','colorArray', 'baseArray','diameterArray','toneArray','materialArray','lensArray'));
     }

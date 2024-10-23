@@ -332,39 +332,31 @@ class CartController extends Controller
 
     public function deleteCart(string $id)
     {
-        // Find the cart entry to be deleted
         $cart = Cart::find($id);
 
         if (!$cart) {
             return redirect()->back()->withErrors('Cart item not found.');
         }
 
-        // Check if the product type is a normal product or accessory
         $product = Product::find($cart->product_id);
 
-        // If the product is a normal product, handle accessory deletion or quantity reduction
         if ($product->product_type == 'normal') {
-            // Find the accessory tied to the session
             $accessory = Cart::where('session_id', $cart->session_id)
                 ->whereHas('product', function ($query) {
                     $query->where('product_type', 'accessories')
                         ->where('is_default_bag', '1');
                 })->first();
 
-            // If an accessory exists
             if ($accessory) {
-                // If the quantity of the accessory is greater than the normal product, reduce the quantity
                 if ($accessory->pair > $cart->pair) {
                     $accessory->pair -= $cart->pair;
                     $accessory->save();
                 } else {
-                    // If the accessory's quantity is less than or equal to the product, delete it
                     $accessory->delete();
                 }
             }
         }
 
-        // Delete the selected cart item (normal product or accessory)
         $cart->delete();
         return redirect()->back()->with('success', 'Item removed from cart.');
     }

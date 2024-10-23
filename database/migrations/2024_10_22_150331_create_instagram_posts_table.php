@@ -11,11 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('shipping_methods', function (Blueprint $table) {
+        Schema::create('instagram_posts', function (Blueprint $table) {
             $table->id();
-            $table->string('title');
-            $table->string('place')->nullable();
-            $table->decimal('fee',8,2);
+            $table->foreignId('insta_user_id')->constrained('instagrams')->onDelete('cascade');
+            $table->string('post_id');
+            $table->foreignId('product_id')->constrained('products')->onDelete('cascade');
             $table->timestamps();
         });
     }
@@ -25,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('shipping_methods');
+        Schema::dropIfExists('instagram_posts');
     }
 };

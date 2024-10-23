@@ -16,6 +16,7 @@
     @stack('style')
     <!-- Custom fonts for this template-->
     @include('admin.include.css')
+    @stack('custom-icon')
     <link rel="stylesheet" href="{{asset('assets/admin/css/vendor/select2.min.css')}}">
 
 </head>

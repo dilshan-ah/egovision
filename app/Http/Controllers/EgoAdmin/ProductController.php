@@ -129,6 +129,7 @@ class ProductController extends Controller
             $product->duration_id = $validated['duration_id'];
             $product->product_type = 'normal';
             $product->available_powers = json_encode($request->available_powers);
+            $product->lens_params = $request->lensparameter;
 
             if ($request->hasFile('product_image')) {
                 $validated['product_image'] = $this->handleFileUpload($request->file('product_image'), 'ego-assets/images/products', 'Product');
@@ -243,7 +244,7 @@ class ProductController extends Controller
             'diameter_id' => 'nullable|exists:diameters,id',
             'base_curve_id' => 'nullable|exists:base_curves,id',
             'material_id' => 'nullable|exists:materials,id',
-            'water_content_id' => 'nullable|numeric',
+            'water_content' => 'nullable|numeric',
             'tone_id' => 'nullable|exists:tones,id',
             'lens_design_id' => 'nullable|exists:lens_designs,id',
             'price' => 'required|numeric',
@@ -270,7 +271,7 @@ class ProductController extends Controller
             $product->diameter_id = $validated['diameter_id'];
             $product->base_curve_id = $validated['base_curve_id'];
             $product->material_id = $validated['material_id'];
-            $product->water_content = $validated['water_content_id'];
+            $product->water_content = $validated['water_content'];
             $product->tone_id = $validated['tone_id'];
             $product->lens_design_id = $validated['lens_design_id'];
             $product->price = $validated['price'];
@@ -280,7 +281,7 @@ class ProductController extends Controller
             $product->duration_id = $validated['duration_id'];
             $product->product_type = 'normal';
             $product->available_powers = json_encode($validated['available_powers']);
-
+            $product->lens_params = $request->lensparameter;
             // Handle product image upload if a new image is provided
             if ($request->hasFile('product_image')) {
                 if ($product->image_path) {

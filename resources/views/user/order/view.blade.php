@@ -173,9 +173,9 @@ $policyPages = getContent('policy_pages.element',false,null,true);
                                     @endif
                                 </td>
 
-                                <td>{{@$item->price/@$item->pair ?? ''}}৳</td>
+                                <td>{{@$item->price/@$item->pair ?? ''}}BDT</td>
                                 <td>{{@$item->pair}}</td>
-                                <td>{{@$item->price}}৳</td>
+                                <td>{{@$item->price}}BDT</td>
                             </tr>
                             @endforeach
                             @endif
@@ -186,28 +186,28 @@ $policyPages = getContent('policy_pages.element',false,null,true);
                                 <th></th>
                                 <th></th>
                                 <th>Subtotal</th>
-                                <th>{{@$order->subtotal}}৳</th>
+                                <th>{{@$order->subtotal}}BDT</th>
                             </tr>
                             <tr>
                                 <th></th>
                                 <th></th>
                                 <th></th>
                                 <th>Discount</th>
-                                <th>-{{@$order->discount}}৳</th>
+                                <th>-{{@$order->discount}}BDT</th>
                             </tr>
                             <tr>
                                 <th></th>
                                 <th></th>
                                 <th></th>
                                 <th>Delivery Charge</th>
-                                <th>{{@$order->delivery_charge}}৳</th>
+                                <th>{{@$order->delivery_charge}}BDT</th>
                             </tr>
                             <tr>
                                 <th></th>
                                 <th></th>
                                 <th></th>
                                 <th>Total</th>
-                                <th>{{@$order->amount}}৳</th>
+                                <th>{{@$order->amount}}BDT</th>
                             </tr>
                         </tfoot>
                     </table>

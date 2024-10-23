@@ -153,53 +153,83 @@
         /* Padding inside the card */
     }
 </style>
+@php
+use App\Helpers\TranslationHelper;
+$preferredLanguage = session('preferredLanguage');
 
+$getOffer = TranslationHelper::translateText('Get 10% OFF on your first order!', $preferredLanguage);
+$subsTitle = TranslationHelper::translateText('By signing up for, we will keep you informed by email on all the latest news and promotions.', $preferredLanguage);
+
+$policyTExt = TranslationHelper::translateText('I have read and accept the privacy policy', $preferredLanguage);
+$subsBtn = TranslationHelper::translateText('SUBSCRIBE', $preferredLanguage);
+
+$companyInfo = TranslationHelper::translateText('COMPANY INFORMATION', $preferredLanguage);
+$terms = TranslationHelper::translateText('Terms and Conditions', $preferredLanguage);
+$policy = TranslationHelper::translateText('Privacy Policy', $preferredLanguage);
+$cookieP = TranslationHelper::translateText('Cookie Policy', $preferredLanguage);
+$cookieS = TranslationHelper::translateText('Cookie Settings', $preferredLanguage);
+$counterF = TranslationHelper::translateText('Counterfeit Education', $preferredLanguage);
+$store = TranslationHelper::translateText('Store Locator', $preferredLanguage);
+
+
+$cusCare = TranslationHelper::translateText('CUSTOMER CARE', $preferredLanguage);
+
+$Hto = TranslationHelper::translateText('How To Order', $preferredLanguage);
+$faq = TranslationHelper::translateText('FAQ', $preferredLanguage);
+$shippingDel = TranslationHelper::translateText('Shipping & Delivery', $preferredLanguage);
+$return = TranslationHelper::translateText('Return Policy', $preferredLanguage);
+$contactPromo = TranslationHelper::translateText('Contact us', $preferredLanguage);
+
+$moreAbourLenses = TranslationHelper::translateText('More about lenses', $preferredLanguage);
+$howtouse = TranslationHelper::translateText('How to Use your Lenses', $preferredLanguage);
+$howtoread = TranslationHelper::translateText('How To Read Your Prescription', $preferredLanguage);
+$packageInsert = TranslationHelper::translateText('Package Insert & fitting guides', $preferredLanguage);
+$rxVer = TranslationHelper::translateText('RX Verification for US residents', $preferredLanguage);
+
+$followUs = TranslationHelper::translateText('Follow Us', $preferredLanguage);
+$acceptPay = TranslationHelper::translateText('Accepted Payment Methods', $preferredLanguage);
+@endphp
 <footer class="footer mt-5">
     <div class="mt-2"></div>
     <div class="container">
         <div class="row">
             <!-- Left Side -->
             <div class="col-md-4">
-                <h5>@lang('messages.first_order')</h5>
-                <p class="text-black">
-                    @lang('messages.PROMOTION')
-                </p>
-                <div class="input-group mb-3">
-                    <input id="emailInput" type="email" class="form-control" placeholder="Email address" aria-label="Email address" style=" border: 1px solid black;">
-                </div>
-                <div id="subscribeSection" class="hidden">
-                    <div class="form-check mb-3">
-                        <input class="form-check-input" type="checkbox" value="" id="privacyPolicyCheck">
-                        <label class="form-check-label text-white" for="privacyPolicyCheck">
-                            <i class="bi .bi-check-circle-fill"></i> <span class="text-dark">@lang('messages.promotion_next')</span>
-                        </label>
+                <form action="{{route('subscribe.store.email')}}" method="post">
+                    @csrf
+                    <h5>{{$getOffer}}</h5>
+                    <p class="text-black">
+                        {{$subsTitle}}
+                    </p>
+                    <div class="input-group mb-3">
+                        <input id="emailInput" type="email" class="form-control" placeholder="Email address" aria-label="Email address" style=" border: 1px solid black;" name="email">
                     </div>
-                    <button id="subscribeButton" class="btn btn-dark" type="button" disabled>@lang('messages.SUBSCRIBE')</button>
-                </div>
+                    <div id="subscribeSection" class="hidden">
+                        <div class="form-check mb-3">
+                            <input class="form-check-input" type="checkbox" value="" id="privacyPolicyCheck" required>
+                            <label class="form-check-label text-white" for="privacyPolicyCheck">
+                                <i class="bi .bi-check-circle-fill"></i> <span class="text-dark">{{$policyTExt}}</span>
+                            </label>
+                        </div>
+                        <button id="subscribeButton" class="btn btn-dark" type="submit" disabled>{{$subsBtn}}</button>
+                    </div>
+                </form>
+
             </div>
             <!-- Middle Side -->
             <div class="col-md-4">
-                <!-- <div class="dropdown ">
-                    <a style="border-radius: 0px;text-decoration: none" class=" dropdown-toggle " type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
-                        @lang('messages.Currency')
-                    </a>
-                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                        <small class="dropdown-item "> @lang('messages.Dollar')</small>
-                        <small class="dropdown-item ">@lang('messages.Euro')</small>
-                    </div>
-                </div> -->
                 <div class="dropdown mt-2">
-                    <a style="border-radius: 0px;text-decoration: none;" class=" dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
-                        @lang('messages.language')
+                    <form id="lang-form" style="width: max-content" action="{{route('change.lang')}}" method="post">
+                        @csrf
+                        <select onchange="document.getElementById('lang-form').submit();" name="code" style="width: 100%; background-color: transparent !important; border: 0; padding: 0 20px">
+                            <option value="en" {{ session('preferredLanguage') == 'en' ? 'selected' : '' }}>English</option>
+                            <option value="hi" {{ session('preferredLanguage') == 'hi' ? 'selected' : '' }}>Hindi</option>
+                            <option value="ru" {{ session('preferredLanguage') == 'ru' ? 'selected' : '' }}>Russian</option>
+                            <option value="zh" {{ session('preferredLanguage') == 'zh' ? 'selected' : '' }}>Chinese</option>
+                            <option value="bn" {{ session('preferredLanguage') == 'bn' ? 'selected' : '' }}>Bengali</option>
+                        </select>
+                    </form>
 
-                    </a>
-                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                        <small class="dropdown-item">English</small>
-                        <small class="dropdown-item">Bangla</small>
-                        <small class="dropdown-item">India</small>
-                        <small class="dropdown-item">chineess</small>
-                        <small class="dropdown-item">Russia</small>
-                    </div>
                 </div>
             </div>
             <!-- Right Side -->
@@ -208,50 +238,48 @@
                     <div class="accordion-item">
                         <h2 class="accordion-header">
                             <button class="accordion-button collapsed text-white" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
-                                <span class="text-dark">@lang('messages.company_name')</span>
+                                <span class="text-dark">{{$companyInfo}}</span>
                             </button>
                         </h2>
                         <div id="flush-collapseOne" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
                             <div class="accordion-body">
-                                <a href="{{ route('policy.pages', ['id' => 43, 'slug' => 'terms_and_conditions']) }}" style="text-decoration: none;">Terms and Conditions</a><br>
-                                <a href="{{ route('policy.pages', ['id' => 42, 'slug' => 'policy_pages']) }}" style="text-decoration: none;">Privacy Policy</a><br>
-                                <a href="#" style="text-decoration: none;">Cookie Policy</a><br>
-                                <a href="#" style="text-decoration: none;">Cookie Settings</a><br>
-                                <a href="#" style="text-decoration: none;">Counterfeit Education</a><br>
-                                <a href="#" style="text-decoration: none;">Store Locator</a>
+                                <a href="{{ route('policy.pages', ['id' => 43, 'slug' => 'terms_and_conditions']) }}" style="text-decoration: none;">{{$terms}}</a><br>
+                                <a href="{{ route('policy.pages', ['id' => 42, 'slug' => 'policy_pages']) }}" style="text-decoration: none;">{{$policy}}</a><br>
+                                <a href="#" style="text-decoration: none;">{{$cookieP}}</a><br>
+                                <a href="#" style="text-decoration: none;">{{$cookieS}}</a><br>
+                                <a href="#" style="text-decoration: none;">{{$counterF}}</a><br>
+                                <a href="#" style="text-decoration: none;">{{$store}}</a>
                             </div>
                         </div>
                     </div>
                     <div class="accordion-item">
                         <h2 class="accordion-header">
                             <button class="accordion-button collapsed text-white" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseTwo" aria-expanded="false" aria-controls="flush-collapseTwo">
-                                <span class="text-dark">@lang('messages.CUSTOMER')</span>
+                                <span class="text-dark">{{$cusCare}}</span>
                             </button>
                         </h2>
                         <div id="flush-collapseTwo" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
                             <div class="accordion-body">
-                                <a href="#" style="text-decoration: none;">How To Order</a><br>
-                                <a href="#" style="text-decoration: none;">FAQ</a><br>
-                                <a href="{{ route('policy.pages', ['id' => 46, 'slug' => 'shipping-and-delivery']) }}" style="text-decoration: none;">Shipping & Delivery</a><br>
-                                <a href="#" style="text-decoration: none;">Currency Converter</a><br>
-                                <a href="{{ route('policy.pages', ['id' => 45, 'slug' => 'returns-exchanges-refund-policy']) }}" style="text-decoration: none;">Return Policy</a><br>
-                                <a href="#" style="text-decoration: none;">Contact us</a>
-                                <a href="#" style="text-decoration: none;">Promotions</a>
+                                <a href="#" style="text-decoration: none;">{{$Hto}}</a><br>
+                                <a href="#" style="text-decoration: none;">{{$faq}}</a><br>
+                                <a href="{{ route('policy.pages', ['id' => 46, 'slug' => 'shipping-and-delivery']) }}" style="text-decoration: none;">{{$shippingDel}}</a><br>
+                                <a href="{{ route('policy.pages', ['id' => 45, 'slug' => 'returns-exchanges-refund-policy']) }}" style="text-decoration: none;">{{$return}}</a><br>
+                                <a href="#" style="text-decoration: none;">{{$contactPromo}}</a>
                             </div>
                         </div>
                     </div>
                     <div class="accordion-item">
                         <h2 class="accordion-header">
                             <button class="accordion-button collapsed text-white" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseThree" aria-expanded="false" aria-controls="flush-collapseThree">
-                                <span class="text-dark">@lang('messages.More_about_lenses')</span>
+                                <span class="text-dark">{{$moreAbourLenses}}</span>
                             </button>
                         </h2>
                         <div id="flush-collapseThree" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
                             <div class="accordion-body">
-                                <a href="#" style="text-decoration: none;">How to Use your Lenses</a><br>
-                                <a href="#" style="text-decoration: none;">How To Read Your Prescription</a><br>
-                                <a href="#" style="text-decoration: none;">Package Insert & fitting guides</a><br>
-                                <a href="#" style="text-decoration: none;">RX Verification for US residents</a>
+                                <a href="#" style="text-decoration: none;">{{$howtouse}}</a><br>
+                                <a href="#" style="text-decoration: none;">{{$howtoread}}</a><br>
+                                <a href="#" style="text-decoration: none;">{{$packageInsert}}</a><br>
+                                <a href="#" style="text-decoration: none;">{{$rxVer}}</a>
                             </div>
                         </div>
                     </div>
@@ -261,12 +289,12 @@
         <div class="container text-center">
             <div class="row">
                 <div class="col-md-12">
-                    <h5>@lang('messages.follow')</h5>
+                    <h5>{{$followUs}}</h5>
                     <div class="social-icons">
-                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="https://www.facebook.com/fashionoptics.store"><i class="fab fa-facebook-f" target="_blank"></i></a>
                         <a href="#"><i class="fab fa-twitter"></i></a>
-                        <a href="#"><i class="fab fa-instagram"></i></a>
-                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="https://www.instagram.com/fashionoptics.store"><i class="fab fa-instagram" target="_blank"></i></a>
+                        <a href="https://www.linkedin.com/company/76647866/admin/dashboard/" target="_blank"><i class="fab fa-linkedin-in"></i></a>
                         <a href="#"><i class="fab fa-pinterest"></i></a>
                         <a href="#"><i class="fab fa-youtube"></i></a>
                         <a href="#"><i class="fab fa-tiktok"></i></a>
@@ -275,16 +303,7 @@
             </div>
             <div class="row mt-4">
                 <div class="col-md-12">
-                    <h5>@lang('messages.payment')</h5>
-                    <!-- <div class="payment-icons">
-                        <img src="{{asset('ego/gplay.svg')}}" alt="Visa">
-                        <img src="{{asset('ego/iphone.svg')}}" alt="American Express">
-                        <img src="{{asset('ego/american.svg')}}" alt="Google Pay">
-                        <img src="{{asset('ego/american2.svg')}}" alt="Apple Pay">
-                        <img src="{{asset('ego/anoutherbank1.svg')}}" alt="Mastercard">
-                        <img src="{{asset('ego/visa.svg')}}" alt="PayPal">
-                        <img src="{{asset('ego/express.svg')}}" alt="Discover">
-                    </div> -->
+                    <h5>{{$acceptPay}}</h5>
                     <img src="{{asset('ego/footer_pay.png')}}" width="100%" height="auto" alt="">
                 </div>
             </div>

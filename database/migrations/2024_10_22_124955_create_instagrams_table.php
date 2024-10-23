@@ -11,18 +11,20 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('promo_codes', function (Blueprint $table) {
-            $table->enum('status',['active','inactive'])->default('active');
+        Schema::create('instagrams', function (Blueprint $table) {
+            $table->id();
+            $table->string('name')->nullable();
+            $table->string('access_token');
+            $table->boolean('is_expired')->default(false);
+            $table->timestamps();
         });
     }
-    
+
     /**
      * Reverse the migrations.
      */
     public function down(): void
     {
-        Schema::table('promo_codes', function (Blueprint $table) {
-            //
-        });
+        Schema::dropIfExists('instagrams');
     }
 };

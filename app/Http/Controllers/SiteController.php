@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Constants\Status;
+use App\Helpers\TranslationHelper;
 use App\Models\AdminNotification;
 use App\Models\CollectionSet;
 use App\Models\Duration;
@@ -10,6 +11,7 @@ use App\Models\EgoModels\Banner;
 use App\Models\EgoModels\BaseCurve;
 use App\Models\EgoModels\Color;
 use App\Models\EgoModels\Diameter;
+use App\Models\EgoModels\InstagramPost;
 use App\Models\EgoModels\LensDesign;
 use App\Models\EgoModels\Material;
 use App\Models\EgoModels\Order;
@@ -19,6 +21,7 @@ use App\Models\EgoModels\Replacement;
 use App\Models\EgoModels\Tone;
 use App\Models\EgoModels\Wishlist;
 use App\Models\Frontend;
+use App\Models\GlobalLanguage;
 use App\Models\Language;
 use App\Models\Page;
 use App\Models\Subscriber;
@@ -30,6 +33,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
+use Stichoza\GoogleTranslate\GoogleTranslate;
 
 class SiteController extends Controller
 {
@@ -76,8 +81,13 @@ class SiteController extends Controller
 
     public function policyPages($id, $slug)
     {
+        $preferredLanguage = session('preferredLanguage');
         $policy = Frontend::where('id', $id)->where('data_keys', 'policy_pages.element')->firstOrFail();
-        $pageTitle = $policy->data_values->title;
+        $pageTitle = TranslationHelper::translateText($policy->data_values->title, $preferredLanguage);
+        $policy->data_values->title =  TranslationHelper::translateText($policy->data_values->title, $preferredLanguage);
+        $policy->data_values->details =  TranslationHelper::translateText(strip_tags($policy->data_values->details), $preferredLanguage);
+
+
         return view('templates.basic.policy', compact('policy', 'pageTitle'));
     }
 
@@ -131,12 +141,28 @@ class SiteController extends Controller
 
     public function egoIndex()
     {
-        $pageTitle = "Ego Vision-Home";
+
+        $preferredLanguage = session('preferredLanguage');
+
+        $pageTitle = TranslationHelper::translateText("Ego Vision-Home", $preferredLanguage);
+
         $banners = Banner::all();
+        foreach ($banners as $banner) {
+            if ($banner->title) {
+                $banner->title = TranslationHelper::translateText($banner->title, $preferredLanguage);
+                $banner->btn_text = TranslationHelper::translateText($banner->btn_text, $preferredLanguage);
+            }
+        }
+
+        // Fetch colors with products
         $colors = Color::has('products')->with('products')->get();
+        foreach ($colors as $color) {
+            if ($color->name) {
+                $color->name = TranslationHelper::translateText($color->name, $preferredLanguage);
+            }
+        }
 
-        // $products = Product::with('color', 'category', 'tone')->get();
-
+        // Fetch collection sets with related products
         $collectionSets = CollectionSet::with(['category', 'tone', 'duration'])
             ->where('featured', 'yes')
             ->get();
@@ -145,7 +171,7 @@ class SiteController extends Controller
             // Initialize the query for products
             $productsQuery = Product::query();
 
-            // Add category filter (this is mandatory)
+            // Add category filter (mandatory)
             $productsQuery->where('category_id', $collectionSet->category_id);
 
             // Add tone filter if tone_id exists
@@ -162,27 +188,48 @@ class SiteController extends Controller
             $products = $productsQuery->get();
 
             // Attach products as a child object (keep as objects, no conversion to array)
-            $collectionSet->products = $products; // No ->toArray(), keep as Eloquent collection
+            $collectionSet->products = $products;
+
+            foreach ($collectionSet->products as $product) {
+                $product->name = TranslationHelper::translateText($product->name, $preferredLanguage);
+            }
+
+            // Translate collection set's name or other dynamic fields if necessary
+            if ($collectionSet->name) {
+                $collectionSet->name = TranslationHelper::translateText($collectionSet->name, $preferredLanguage);
+            }
+
+            if (!is_null($collectionSet->category) && !is_null($collectionSet->category->name)) {
+                $collectionSet->category->name = TranslationHelper::translateText($collectionSet->category->name, $preferredLanguage);
+            }
+
+            if (!is_null($collectionSet->tone) && !is_null($collectionSet->tone->name)) {
+                $collectionSet->tone->name = TranslationHelper::translateText($collectionSet->tone->name, $preferredLanguage);
+            }
         }
 
-        $products = Product::with([
+        // Fetch additional products with categories and collections
+        $moreProducts = Product::where('product_type', 'normal')->with([
             'color',
             'category.collectionSet' => function ($query) {
                 $query->where('featured', '!=', 'yes');
             }
         ])->take(10)->get();
 
-        // Filter products where the related collectionSet's featured is not 'yes'
-        $moreProducts = $products->filter(function ($product) {
-            return $product->category && $product->category->collectionSet && $product->category->collectionSet->featured != 'yes';
-        });
+        // Translate product names if needed
+        foreach ($moreProducts as $product) {
+            if ($product->name) {
+                $product->name = TranslationHelper::translateText($product->name, $preferredLanguage);
+                $product->price = TranslationHelper::translateText((string) $product->price, $preferredLanguage);
+            }
+        }
 
-        // dd($moreProducts);
+        
+        $instaDatas = InstagramPost::all();
+        
 
-
-        return view('ego_index', compact('pageTitle', 'banners', 'colors', 'moreProducts', 'collectionSets'));
+        return view('ego_index', compact('pageTitle', 'banners', 'colors', 'moreProducts', 'collectionSets','instaDatas'));
     }
-
 
     public function toricLense()
     {
@@ -191,45 +238,87 @@ class SiteController extends Controller
     }
     public function collection()
     {
-        $pageTitle = "collection";
+        $preferredLanguage = session('preferredLanguage');
+        $pageTitle = TranslationHelper::translateText("Collection", $preferredLanguage);
         $collectionSets = CollectionSet::with('category', 'tone', 'duration')->get();
+
+        foreach ($collectionSets as $collectionSet) {
+            $collectionSet->description = TranslationHelper::translateText($collectionSet->description, $preferredLanguage);
+
+            if (!is_null($collectionSet->category) && !is_null($collectionSet->category->name)) {
+                $collectionSet->category->name = TranslationHelper::translateText($collectionSet->category->name, $preferredLanguage);
+            }
+
+            if (!is_null($collectionSet->tone) && !is_null($collectionSet->tone->name)) {
+                $collectionSet->tone->name = TranslationHelper::translateText($collectionSet->tone->name, $preferredLanguage);
+            }
+
+            if (!is_null($collectionSet->duration) && !is_null($collectionSet->duration->name)) {
+                $collectionSet->duration->name = TranslationHelper::translateText($collectionSet->duration->name, $preferredLanguage);
+            }
+        }
         return view('ego.pages.collection', compact('pageTitle', 'collectionSets'));
     }
 
     public function color()
     {
-        $pageTitle = "color";
+        $preferredLanguage = session('preferredLanguage');
+        $pageTitle = TranslationHelper::translateText("Color", $preferredLanguage);
         $colors = Color::all();
+        foreach ($colors as $color) {
+            $color->name = TranslationHelper::translateText($color->name, $preferredLanguage);
+            $color->color_intro = TranslationHelper::translateText($color->color_intro, $preferredLanguage);
+        }
         return view('ego.pages.color', compact('pageTitle', 'colors'));
     }
     public function duration()
     {
-        $pageTitle = "Best Durations";
+        $preferredLanguage = session('preferredLanguage');
+        $pageTitle = TranslationHelper::translateText("Best Durations", $preferredLanguage);
         $durations = Duration::all();
+
+        foreach ($durations as $duration) {
+            $duration->name = TranslationHelper::translateText($duration->name, $preferredLanguage);
+            $duration->description = TranslationHelper::translateText($duration->description, $preferredLanguage);
+        }
 
         return view('ego.pages.duration', compact('pageTitle', 'durations'));
     }
     public function about()
     {
-        $pageTitle = "about";
+        $preferredLanguage = session('preferredLanguage');
+        $pageTitle = TranslationHelper::translateText("About", $preferredLanguage);
         return view('ego.pages.about', compact('pageTitle'));
     }
 
     public function accessories()
     {
-        $pageTitle = "Accessories";
-        $products = Product::where('product_type','accessories')->with(['category', 'color', 'images'])->get();
-        return view('ego.pages.accessories', compact('pageTitle','products'));
+        $preferredLanguage = session('preferredLanguage');
+        $pageTitle = TranslationHelper::translateText("Accessories", $preferredLanguage);
+
+        $products = Product::where('product_type', 'accessories')->with(['category', 'color', 'images'])->get();
+        foreach ($products as $product) {
+            $product->name =  TranslationHelper::translateText($product->name, $preferredLanguage);
+            $product->no_power_price =  TranslationHelper::translateText($product->no_power_price, $preferredLanguage);
+        }
+        return view('ego.pages.accessories', compact('pageTitle', 'products'));
     }
     public function shopInstagram()
     {
-        $pageTitle = "Shop Instagram";
-        return view('ego.pages.shop_instagram', compact('pageTitle'));
+        $preferredLanguage = session('preferredLanguage');
+        $pageTitle = TranslationHelper::translateText("Shop Instagram", $preferredLanguage);
+        $instaDatas = InstagramPost::all();
+        $colors = Color::all();
+        foreach($colors as $color){
+            $color->name = TranslationHelper::translateText($color->name, $preferredLanguage);
+        }
+        return view('ego.pages.shop_instagram', compact('pageTitle','instaDatas','colors'));
     }
 
     public function allLenses(Request $request)
     {
-        $pageTitle = "All Lenses";
+        $preferredLanguage = session('preferredLanguage');
+        $pageTitle = TranslationHelper::translateText("All Lenses", $preferredLanguage);
 
         $products = Product::query();
 
@@ -282,22 +371,43 @@ class SiteController extends Controller
             $products->whereIn('lens_design_id', $lensArray);
         }
 
-        $products = $products->where('product_type','normal')->get();
+        $products = $products->where('product_type', 'normal')->get();
+        foreach ($products as $product) {
+            $product->name =  TranslationHelper::translateText($product->name, $preferredLanguage);
+            $product->price =  TranslationHelper::translateText((string)$product->price, $preferredLanguage);
+        }
 
         $colors = Color::all();
+        foreach ($colors as $color) {
+            $color->name =  TranslationHelper::translateText($color->name, $preferredLanguage);
+        }
         $baseCurves = BaseCurve::all();
+        foreach ($baseCurves as $baseCurve) {
+            $baseCurve->name =  TranslationHelper::translateText($baseCurve->name, $preferredLanguage);
+        }
         $diameters = Diameter::all();
+        foreach ($diameters as $diameter) {
+            $diameter->name =  TranslationHelper::translateText($diameter->name, $preferredLanguage);
+        }
         $tones = Tone::all();
+        foreach ($tones as $tone) {
+            $tone->name =  TranslationHelper::translateText($tone->name, $preferredLanguage);
+        }
         $replacements = Duration::all();
+        foreach ($replacements as $replacement) {
+            $replacement->name =  TranslationHelper::translateText($replacement->name, $preferredLanguage);
+        }
         $materials = Material::all();
+        foreach ($materials as $material) {
+            $material->name =  TranslationHelper::translateText($material->name, $preferredLanguage);
+        }
         $lenses = LensDesign::all();
-
-        // dd($toneArray);
+        foreach ($lenses as $lense) {
+            $lense->name =  TranslationHelper::translateText($lense->name, $preferredLanguage);
+        }
 
         return view('ego.pages.all_lenses', compact('pageTitle', 'products', 'colors', 'baseCurves', 'diameters', 'tones', 'replacements', 'materials', 'lenses', 'colorArray', 'baseArray', 'diameterArray', 'toneArray', 'replacementArray', 'materialArray', 'lensArray'));
     }
-
-
 
     public function egoLogin()
     {
@@ -309,11 +419,11 @@ class SiteController extends Controller
         $pageTitle = "Ego Vision User Register";
         $response = Http::withOptions([
             'verify' => realpath('C:\\xampp\\php\\extras\\ssl\\cacert.pem')
-        ])->get('https://countriesnow.space/api/v0.1/countries/states');       
+        ])->get('https://countriesnow.space/api/v0.1/countries/states');
 
         $data = $response->json();
         $states = $data['data'][18];
-        return view('ego.auth.register', compact('pageTitle','states'));
+        return view('ego.auth.register', compact('pageTitle', 'states'));
     }
 
     public function testUser()
@@ -327,20 +437,20 @@ class SiteController extends Controller
         $pageTitle = "WishLists";
         $userId = Auth::id();
         $wishlists = Wishlist::where('user_id', $userId)
-        ->get();
+            ->get();
 
-        return view('user.wishlist.wishlist', compact('pageTitle','wishlists'));
+        return view('user.wishlist.wishlist', compact('pageTitle', 'wishlists'));
     }
 
 
     public function search(Request $request)
     {
         $query = $request->input('query');
-        $pageTitle = "Search result for ".$query;
+        $pageTitle = "Search result for " . $query;
 
         $products = Product::where('name', 'LIKE', '%' . $query . '%')->get();
 
-        return view('ego.pages.search', compact('products','query','pageTitle'));
+        return view('ego.pages.search', compact('products', 'query', 'pageTitle'));
     }
 
     public function myOrders()
@@ -348,29 +458,29 @@ class SiteController extends Controller
         $pageTitle = "My Orders";
         $userId = Auth::id();
         $orders = Order::where('user_id', $userId)->with('orderItems.product')
-        ->get();
+            ->get();
 
-        return view('user.order.index', compact('pageTitle','orders'));
+        return view('user.order.index', compact('pageTitle', 'orders'));
     }
 
     public function singleOrder(string $id)
     {
         $pageTitle = 'Order Details | Order';
-        $order = Order::where('id',$id)->with('orderItems.product','user')->first();
+        $order = Order::where('id', $id)->with('orderItems.product', 'user')->first();
 
-        return view('user.order.view',compact('order','pageTitle'));
+        return view('user.order.view', compact('order', 'pageTitle'));
     }
 
     public function newsLetter()
     {
         $pageTitle = 'Newsletter Subscription';
-        $subscribed = Subscriber::where('email',Auth::user()->email)->first();
-        return view('user.news_letter',compact('pageTitle','subscribed'));
+        $subscribed = Subscriber::where('email', Auth::user()->email)->first();
+        return view('user.news_letter', compact('pageTitle', 'subscribed'));
     }
 
     public function giftCard()
     {
         $pageTitle = 'Gift Card';
-        return view('user.gift_card',compact('pageTitle'));
+        return view('user.gift_card', compact('pageTitle'));
     }
 }

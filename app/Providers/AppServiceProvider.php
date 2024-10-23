@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Constants\Status;
+use App\Helpers\TranslationHelper;
 use App\Models\AdminNotification;
 use App\Models\CollectionSet;
 use App\Models\Deposit;
@@ -16,6 +17,7 @@ use App\Models\User;
 use App\Models\Withdrawal;
 use App\Models\EgoModels\Cart;
 use App\Models\EgoModels\Wishlist;
+use App\Models\GlobalLanguage;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Auth;
@@ -43,6 +45,12 @@ class AppServiceProvider extends ServiceProvider
         $viewShare['emptyMessage'] = 'Data not found';
         view()->share($viewShare);
 
+        view()->composer('*', function ($view) {
+            $languages = GlobalLanguage::all();
+            $preferredLanguage = session('preferredLanguage') ?? 'en';
+
+            $view->with(compact('languages', 'preferredLanguage'));
+        });
 
         view()->composer('admin.include.sidebar', function ($view) {
             $view->with([
@@ -65,26 +73,45 @@ class AppServiceProvider extends ServiceProvider
         });
 
         view()->composer('ego.include.banner', function ($view) {
+            $preferredLanguage = session('preferredLanguage');
             $colors = Color::all();
+            foreach($colors as $color){
+                $color->name = TranslationHelper::translateText($color->name, $preferredLanguage);
+            }
             $view->with('colors', $colors);
         });
         
         view()->composer('ego.include.header', function ($view) {
+            $preferredLanguage = session('preferredLanguage');
             $colors = Color::all();
+            foreach($colors as $color){
+                $color->name = TranslationHelper::translateText($color->name, $preferredLanguage);
+            }
             $view->with('colors', $colors);
         });
 
         view()->composer('ego.include.header', function ($view) {
+            $preferredLanguage = session('preferredLanguage');
             $durations = Duration::all();
+            foreach($durations as $duration){
+                $duration->name = TranslationHelper::translateText($duration->name, $preferredLanguage);
+                $duration->month = TranslationHelper::translateText((string) $duration->month, $preferredLanguage);
+            }
             $view->with('durations', $durations);
         });
 
         view()->composer('ego.include.banner', function ($view) {
+            $preferredLanguage = session('preferredLanguage');
             $durations = Duration::all();
+            foreach($durations as $duration){
+                $duration->name = TranslationHelper::translateText($duration->name, $preferredLanguage);
+                $duration->month = TranslationHelper::translateText((string) $duration->month, $preferredLanguage);
+            }
             $view->with('durations', $durations);
         });
 
         view()->composer('ego.include.header', function ($view) {
+            $preferredLanguage = session('preferredLanguage');
             $collectionSets = CollectionSet::with(['category', 'tone', 'duration'])
             ->get();
 
@@ -101,14 +128,29 @@ class AppServiceProvider extends ServiceProvider
                     $productsQuery->where('duration_id', $collectionSet->duration_id);
                 }
 
-                $products = $productsQuery->get();
+                if (!is_null($collectionSet->category) && !is_null($collectionSet->category->name)) {
+                    $collectionSet->category->name = TranslationHelper::translateText($collectionSet->category->name, $preferredLanguage);
+                }
+
+                if (!is_null($collectionSet->tone) && !is_null($collectionSet->tone->name)) {
+                    $collectionSet->tone->name = TranslationHelper::translateText($collectionSet->tone->name, $preferredLanguage);
+                }
+
+                $products = $productsQuery->get()->take(5);
 
                 $collectionSet->products = $products;
+
+                foreach($collectionSet->products as $product)
+                {
+                    $product->name = TranslationHelper::translateText($product->name, $preferredLanguage);
+                }
             }
+            
             $view->with('collectionSets', $collectionSets);
         });
 
         view()->composer('ego.include.banner', function ($view) {
+            $preferredLanguage = session('preferredLanguage');
             $collectionSets = CollectionSet::with(['category', 'tone', 'duration'])
             ->get();
 
@@ -125,9 +167,22 @@ class AppServiceProvider extends ServiceProvider
                     $productsQuery->where('duration_id', $collectionSet->duration_id);
                 }
 
-                $products = $productsQuery->get();
+                if (!is_null($collectionSet->category) && !is_null($collectionSet->category->name)) {
+                    $collectionSet->category->name = TranslationHelper::translateText($collectionSet->category->name, $preferredLanguage);
+                }
+
+                if (!is_null($collectionSet->tone) && !is_null($collectionSet->tone->name)) {
+                    $collectionSet->tone->name = TranslationHelper::translateText($collectionSet->tone->name, $preferredLanguage);
+                }
+
+                $products = $productsQuery->get()->take(5);
 
                 $collectionSet->products = $products;
+
+                foreach($collectionSet->products as $product)
+                {
+                    $product->name = TranslationHelper::translateText($product->name, $preferredLanguage);
+                }
             }
             $view->with('collectionSets', $collectionSets);
         });

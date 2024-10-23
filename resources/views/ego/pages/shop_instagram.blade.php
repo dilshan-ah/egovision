@@ -7,6 +7,13 @@
 <br>
 <br>
 <br>
+@php
+use App\Helpers\TranslationHelper;
+$preferredLanguage = session('preferredLanguage');
+$title = TranslationHelper::translateText('Shop Instagram', $preferredLanguage);
+$welcomeText = TranslationHelper::translateText('Welcome to Ego Vision world! <br>
+Discover the eyes looks with our vibrant shades and see how the lenses could appear on you! Tag @desioeyes for a chance to be featured', $preferredLanguage);
+@endphp
 <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,600;0,700;0,800;1,300;1,400;1,600;1,700;1,800&display=swap" rel="stylesheet">
 <!-- Font Awesome -->
 <script src="https://kit.fontawesome.com/a076d05399.js"></script>
@@ -20,236 +27,89 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-lg-12 text-center">
-                <h2>Shop Instagram</h2>
-                <p class="text-light">Welcome to Ego Vision world! <br>
-                    Discover the eyes looks with our vibrant shades and see how the lenses could appear on you! Tag @desioeyes for a chance to be featured</p>
+                <h2>{{$title}}</h2>
+                <p class="text-light">{{$welcomeText}}</p>
             </div>
         </div>
         <div class="portfolio-menu mt-2 mb-4">
             <nav class="controls">
-                <button type="button" class="control outline  p-4" data-filter="all">All Shades </button>
-                <button type="button" class="control outline  p-4" data-filter=".web">Brown Lenses</button>
-                <button type="button" class="control outline  p-4" data-filter=".dev">Grey Lenses</button>
-                <button type="button" class="control outline  p-4" data-filter=".wp">Green Lenses</button>
+                <button type="button" class="control outline  p-4" data-filter="all">All Shades</button>
+                @foreach($colors as $color)
+                <button type="button" class="control outline  p-4" data-filter=".{{ str_replace([' ', '&'], ['-', 'and'], strtolower($color->name)) }}
+">{{$color->name}}</button>
+                @endforeach
             </nav>
         </div>
         <ul class="row portfolio-item">
-            <li class="mix dev col-xl-3 col-md-4 col-12 col-sm-6 pd">
-                <img src="https://m.photoslurp.com/i/fit?width=720&height=720&url=https%3A%2F%2Fpslurpmedia.s3.amazonaws.com%2Finstagram-business%2F18065316847608153_1.jpg" itemprop="thumbnail" alt="Image description" />
-                <div class="portfolio-overlay">
-                    <div class="overlay-content">
-                        <p class="category">Model Name</p>
-                        <a href="#" title="View Project" target="_blank">
-                            <div class="magnify-icon">
-                                <p><span><i class="fa fa-link" aria-hidden="true"></i></span></p>
+            @foreach($instaDatas as $data)
+            <li class="mix {{ str_replace([' ', '&'], ['-', 'and'], strtolower($data->product->color->name)) }} col-md-3" style="cursor: pointer" data-bs-toggle="modal" data-bs-target="#exampleModal{{$data->id}}">
+                <div class="wrapper" style="height: 350px;">
+                    <div class="cardd">
+                        <img src="{{ $data->post()['media_url'] }}" />
+                        <div class="overlay">
+                            <div class="text-center">
+                                <h5 class="title">{{ $data->post()['username'] }}</h5>
+                                <p class="text-p">
+                                    <span class="icon-wrapper">
+                                        <i class="fab fa-instagram"></i>
+                                    </span>
+                                    <span class="details">
+                                        <i class="fa-regular fa-heart"></i><span class="text-white">@lang('messages.120')</span>
+                                        <i class="fa-solid fa-comments"></i><span class="text-white">@lang('messages.30')</span>
+                                    </span>
+                                </p>
                             </div>
-                        </a>
-                        <a data-fancybox="item" title="click to zoom-in" href="https://m.photoslurp.com/i/fit?width=720&height=720&url=https%3A%2F%2Fpslurpmedia.s3.amazonaws.com%2Finstagram-business%2F18065316847608153_1.jpg">
-                            <div class="magnify-icon">
-                                <p><span><i class="fa fa-search" aria-hidden="true"></i></span></p>
-                            </div>
-                        </a>
+
+                        </div>
                     </div>
                 </div>
             </li>
-            <li class="mix web col-xl-3 col-md-4 col-12 col-sm-6 pd">
-                <img src="https://m.photoslurp.com/i/fit?width=720&height=720&url=https%3A%2F%2Fpslurpmedia.s3.amazonaws.com%2Finstagram-business%2F18065316847608153_1.jpg" itemprop="thumbnail" alt="Image description" />
-                <div class="portfolio-overlay">
-                    <div class="overlay-content">
-                        <p class="category">Model Name</p>
-                        <a href="#" title="View Project" target="_blank">
-                            <div class="magnify-icon">
-                                <p><span><i class="fa fa-link" aria-hidden="true"></i></span></p>
+
+            <div class="modal fade mt-0" id="exampleModal{{$data->id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-body bg-light" style="width: 100%; padding: 0; overflow: hidden">
+                            <button type="button" class="btn-close position-absolute end-0 top-0" data-bs-dismiss="modal" aria-label="Close"></button>
+                            <div class="d-flex w-100">
+                                <div style="width: 50%; border-radius: 7px">
+                                    <img src="{{$data->post()['media_url']}}" style="width: 100%; height: 100%; object-fit: cover" alt="">
+                                </div>
+
+                                <div style="width: 50%;" class="py-5 px-3">
+                                    @if($data->product)
+                                    <div class="border bg-white p-2 d-flex flex-column align-items-center mb-3">
+                                        <img src="{{asset(@$data->product->image_path)}}" style="width: 65%;" alt="">
+                                        <h5>{{@$data->product->name}}</h5>
+                                        <a href="{{route('addToCart.index',@$data->product->id)}}" class="btn btn-dark">Shop Now</a>
+                                    </div>
+                                    @endif
+                                    <div>
+                                        <div class="d-flex justify-content-between mb-2">
+                                            <div class="d-flex align-items-center gap-1">
+                                                <i class="fab fa-instagram"></i>
+                                                <a href="{{$data->post()['permalink']}}" target="_blank">{{$data->post()['username']}}</a>
+                                            </div>
+                                            <div class="d-flex align-items-center gap-2">
+                                                <div class="d-flex align-items-center gap-1">
+                                                    <i class="far fa-heart"></i>
+                                                    666
+                                                </div>
+
+                                                <div class="d-flex align-items-center gap-1">
+                                                    <i class="far fa-comment"></i>
+                                                    56
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <p>{{$data->post()['caption']}}</p>
+                                    </div>
+                                </div>
                             </div>
-                        </a>
-                        <a data-fancybox="item" title="click to zoom-in" href="https://m.photoslurp.com/i/fit?width=720&height=720&url=https%3A%2F%2Fpslurpmedia.s3.amazonaws.com%2Finstagram-business%2F18065316847608153_1.jpg" data-size="1200x600">
-                            <div class="magnify-icon">
-                                <p><span><i class="fa fa-search" aria-hidden="true"></i></span></p>
-                            </div>
-                        </a>
+                        </div>
                     </div>
                 </div>
-            </li>
-            <li class="mix wp col-xl-3 col-md-4 col-12 col-sm-6 pd">
-                <img src="https://m.photoslurp.com/i/fit?width=576&height=720&url=https%3A%2F%2Fpslurpmedia.s3.amazonaws.com%2Finstagram-business%2F18126076765355790_2.jpg" itemprop="thumbnail" alt="Image description" />
-                <div class="portfolio-overlay">
-                    <div class="overlay-content">
-                        <p class="category">Model Name</p>
-                        <a href="#" title="View Project" target="_blank">
-                            <div class="magnify-icon">
-                                <p><span><i class="fa fa-link" aria-hidden="true"></i></span></p>
-                            </div>
-                        </a>
-                        <a data-fancybox="item" title="click to zoom-in" href="https://m.photoslurp.com/i/fit?width=576&height=720&url=https%3A%2F%2Fpslurpmedia.s3.amazonaws.com%2Finstagram-business%2F18126076765355790_2.jpg" data-size="1200x600">
-                            <div class="magnify-icon">
-                                <p><span><i class="fa fa-search" aria-hidden="true"></i></span></p>
-                            </div>
-                        </a>
-                    </div>
-                </div>
-            </li>
-            <li class="mix dev col-xl-3 col-md-4 col-12 col-sm-6 pd ">
-                <img src="https://m.photoslurp.com/i/fit?width=720&height=720&url=https%3A%2F%2Fpslurpmedia.s3.amazonaws.com%2Finstagram-business%2F17880316784521362_1.jpg" itemprop="thumbnail" alt="Image description" />
-                <div class="portfolio-overlay">
-                    <div class="overlay-content">
-                        <p class="category">Model Name</p>
-                        <a href="#" title="View Project" target="_blank">
-                            <div class="magnify-icon">
-                                <p><span><i class="fa fa-link" aria-hidden="true"></i></span></p>
-                            </div>
-                        </a>
-                        <a data-fancybox="item" title="click to zoom-in" href="https://m.photoslurp.com/i/fit?width=720&height=720&url=https%3A%2F%2Fpslurpmedia.s3.amazonaws.com%2Finstagram-business%2F17880316784521362_1.jpg" data-size="1200x600">
-                            <div class="magnify-icon">
-                                <p><span><i class="fa fa-search" aria-hidden="true"></i></span></p>
-                            </div>
-                        </a>
-                    </div>
-                </div>
-            </li>
-            <li class="mix web col-xl-3 col-md-4 col-12 col-sm-6 pd ">
-                <img src="https://m.photoslurp.com/i/fit?width=576&height=720&url=https%3A%2F%2Fpslurpmedia.s3.amazonaws.com%2Finstagram-business%2F17906455478315431_0.jpg" itemprop="thumbnail" alt="Image description" />
-                <div class="portfolio-overlay">
-                    <div class="overlay-content">
-                        <p class="category">Model Name</p>
-                        <a href="#" title="View Project" target="_blank">
-                            <div class="magnify-icon">
-                                <p><span><i class="fa fa-link" aria-hidden="true"></i></span></p>
-                            </div>
-                        </a>
-                        <a data-fancybox="item" title="click to zoom-in" href="https://m.photoslurp.com/i/fit?width=576&height=720&url=https%3A%2F%2Fpslurpmedia.s3.amazonaws.com%2Finstagram-business%2F17906455478315431_0.jpg" data-size="1200x600">
-                            <div class="magnify-icon">
-                                <p><span><i class="fa fa-search" aria-hidden="true"></i></span></p>
-                            </div>
-                        </a>
-                    </div>
-                </div>
-            </li>
-            <li class="mix wp col-xl-3 col-md-4 col-12 col-sm-6 pd ">
-                <img src="https://m.photoslurp.com/i/fit?width=576&height=720&url=https%3A%2F%2Fpslurpmedia.s3.amazonaws.com%2Finstagram-business%2F17930031653044148_0.jpg" itemprop="thumbnail" alt="Image description" />
-                <div class="portfolio-overlay">
-                    <div class="overlay-content">
-                        <p class="category">Model Name</p>
-                        <a href="#" title="View Project" target="_blank">
-                            <div class="magnify-icon">
-                                <p><span><i class="fa fa-link" aria-hidden="true"></i></span></p>
-                            </div>
-                        </a>
-                        <a data-fancybox="item" title="click to zoom-in" href="https://m.photoslurp.com/i/fit?width=576&height=720&url=https%3A%2F%2Fpslurpmedia.s3.amazonaws.com%2Finstagram-business%2F17930031653044148_0.jpg" data-size="1200x600">
-                            <div class="magnify-icon">
-                                <p><span><i class="fa fa-search" aria-hidden="true"></i></span></p>
-                            </div>
-                        </a>
-                    </div>
-                </div>
-            </li>
-            <li class="mix dev col-xl-3 col-md-4 col-12 col-sm-6 pd">
-                <img src="https://m.photoslurp.com/i/fit?width=576&height=720&url=https%3A%2F%2Fpslurpmedia.s3.amazonaws.com%2Finstagram-business%2F18022937879157703_0.jpg" itemprop="thumbnail" alt="Image description" />
-                <div class="portfolio-overlay">
-                    <div class="overlay-content">
-                        <p class="category">Model Name</p>
-                        <a href="#" title="View Project" target="_blank">
-                            <div class="magnify-icon">
-                                <p><span><i class="fa fa-link" aria-hidden="true"></i></span></p>
-                            </div>
-                        </a>
-                        <a data-fancybox="item" title="click to zoom-in" href="https://m.photoslurp.com/i/fit?width=576&height=720&url=https%3A%2F%2Fpslurpmedia.s3.amazonaws.com%2Finstagram-business%2F18022937879157703_0.jpg" data-size="1200x600">
-                            <div class="magnify-icon">
-                                <p><span><i class="fa fa-search" aria-hidden="true"></i></span></p>
-                            </div>
-                        </a>
-                    </div>
-                </div>
-            </li>
-            <li class="mix web col-xl-3 col-md-4 col-12 col-sm-6 pd">
-                <img src="https://www.desiolens.com/media/wysiwyg/Innocent_white_desio_lenses_square.jpg" itemprop="thumbnail" alt="Image description" />
-                <div class="portfolio-overlay">
-                    <div class="overlay-content">
-                        <p class="category">Model Name</p>
-                        <a href="#" title="View Project" target="_blank">
-                            <div class="magnify-icon">
-                                <p><span><i class="fa fa-link" aria-hidden="true"></i></span></p>
-                            </div>
-                        </a>
-                        <a data-fancybox="item" title="click to zoom-in" href="https://www.desiolens.com/media/wysiwyg/Innocent_white_desio_lenses_square.jpg" data-size="1200x600">
-                            <div class="magnify-icon">
-                                <p><span><i class="fa fa-search" aria-hidden="true"></i></span></p>
-                            </div>
-                        </a>
-                    </div>
-                </div>
-            </li>
-            <li class="mix wp col-xl-3 col-md-4 col-12 col-sm-6 pd">
-                <img src="https://www.desiolens.com/media/wysiwyg/wild_Green_desio_lenses_square.jpg" itemprop="thumbnail" alt="Image description" />
-                <div class="portfolio-overlay">
-                    <div class="overlay-content">
-                        <p class="category">Model Name</p>
-                        <a href="#" title="View Project" target="_blank">
-                            <div class="magnify-icon">
-                                <p><span><i class="fa fa-link" aria-hidden="true"></i></span></p>
-                            </div>
-                        </a>
-                        <a data-fancybox="item" title="click to zoom-in" href="https://www.desiolens.com/media/wysiwyg/wild_Green_desio_lenses_square.jpg" data-size="1200x600">
-                            <div class="magnify-icon">
-                                <p><span><i class="fa fa-search" aria-hidden="true"></i></span></p>
-                            </div>
-                        </a>
-                    </div>
-                </div>
-            </li>
-            <li class="mix dev col-xl-3 col-md-4 col-12 col-sm-6 pd">
-                <img src="https://www.desiolens.com/media/wysiwyg/Cappucino_desio_lenses_square.jpg" itemprop="thumbnail" alt="Image description" />
-                <div class="portfolio-overlay">
-                    <div class="overlay-content">
-                        <p class="category">Model Name</p>
-                        <a href="#" title="View Project" target="_blank">
-                            <div class="magnify-icon">
-                                <p><span><i class="fa fa-link" aria-hidden="true"></i></span></p>
-                            </div>
-                        </a>
-                        <a data-fancybox="item" title="click to zoom-in" href="https://www.desiolens.com/media/wysiwyg/Cappucino_desio_lenses_square.jpg" data-size="1200x600">
-                            <div class="magnify-icon">
-                                <p><span><i class="fa fa-search" aria-hidden="true"></i></span></p>
-                            </div>
-                        </a>
-                    </div>
-                </div>
-            </li>
-            <li class="mix web col-xl-3 col-md-4 col-12 col-sm-6 pd">
-                <img src="https://www.desiolens.com/media/wysiwyg/Sublime_grey_desio_lenses_square.jpeg" itemprop="thumbnail" alt="Image description" />
-                <div class="portfolio-overlay">
-                    <div class="overlay-content">
-                        <p class="category">Model Name</p>
-                        <a href="#" title="View Project" target="_blank">
-                            <div class="magnify-icon">
-                                <p><span><i class="fa fa-link" aria-hidden="true"></i></span></p>
-                            </div>
-                        </a>
-                        <a data-fancybox="item" title="click to zoom-in" href="https://www.desiolens.com/media/wysiwyg/Sublime_grey_desio_lenses_square.jpeg" data-size="1200x600">
-                            <div class="magnify-icon">
-                                <p><span><i class="fa fa-search" aria-hidden="true"></i></span></p>
-                            </div>
-                        </a>
-                    </div>
-                </div>
-            </li>
-            <li class="mix wp col-xl-3 col-md-4 col-12 col-sm-6 pd">
-                <img src="https://www.desiolens.com/media/wysiwyg/Deep_Brown_desio_colored_contact_lenses_1.jpg" itemprop="thumbnail" alt="Image description" />
-                <div class="portfolio-overlay">
-                    <div class="overlay-content">
-                        <p class="category">Model Name</p>
-                        <a href="#" title="View Project" target="_blank">
-                            <div class="magnify-icon">
-                                <p><span><i class="fa fa-link" aria-hidden="true"></i></span></p>
-                            </div>
-                        </a>
-                        <a data-fancybox="item" title="click to zoom-in" href="https://www.desiolens.com/media/wysiwyg/Deep_Brown_desio_colored_contact_lenses_1.jpg" data-size="1200x600">
-                            <div class="magnify-icon">
-                                <p><span><i class="fa fa-search" aria-hidden="true"></i></span></p>
-                            </div>
-                        </a>
-                    </div>
-                </div>
-            </li>
+            </div>
+            @endforeach
         </ul>
     </div>
 </section>

@@ -113,6 +113,35 @@
     }
 </style>
 
+@php
+use App\Helpers\TranslationHelper;
+$preferredLanguage = session('preferredLanguage');
+$welcomeText = TranslationHelper::translateText('Welcome to Ego Vision Color Contact Lenses Official Store!', $preferredLanguage);
+
+$aboutText = TranslationHelper::translateText('Ego Vision, a sister company of Fashion Group, is a leading distributor of colored and powered contact lenses in Bangladesh. Since our establishment, we have prioritized offering top-quality products and services sourced globally. Our brand, “Ego Vision,” provides a wide selection of certified color contact lenses. These lenses are crafted to seamlessly complement your natural eye color, resulting in a subtle and realistic appearance. The effect of the colored lenses may differ depending on the natural hue of your iris. Additionally, our lenses can lighten darker eyes and enhance brighter ones for a striking visual transformation. We provide Premium shipping with an average delivery time of 24 to 48 hours, depending on the location within the country. Our lenses are available in our 18 exclusive optical stores and are also distributed through over 1,500 small and medium retail outlets nationwide.', $preferredLanguage);
+
+$discobtn = TranslationHelper::translateText('Discover', $preferredLanguage);
+$shopbtn = TranslationHelper::translateText('Shop The Color', $preferredLanguage);
+
+$moreText = TranslationHelper::translateText('More Ego Vision Lenses', $preferredLanguage);
+
+$followText = TranslationHelper::translateText('FOLLOW US ON', $preferredLanguage);
+$instaText = TranslationHelper::translateText('Instagram', $preferredLanguage);
+$followEgo = TranslationHelper::translateText('GO FOLLOW @Ego Vision', $preferredLanguage);
+
+$loadbtn = TranslationHelper::translateText('See More', $preferredLanguage);
+
+$reviewVerified = TranslationHelper::translateText('Verified', $preferredLanguage);
+$reviewQuality = TranslationHelper::translateText('Great Quality', $preferredLanguage);
+$quality = TranslationHelper::translateText('Quality', $preferredLanguage);
+$nameTime = TranslationHelper::translateText('Angela 5 hour ago', $preferredLanguage);
+
+$ratedText = TranslationHelper::translateText('Rated', $preferredLanguage);
+$rateDetText = TranslationHelper::translateText('5 based on 908 reviews.Showing our 5 star reviews', $preferredLanguage);
+$trustpilotText = TranslationHelper::translateText('Trustpilot', $preferredLanguage);
+
+@endphp
+
 @if(session('orderSuccess'))
 <!-- Custom Backdrop -->
 <!-- <div id="custom-backdrop" class="custom-backdrop"></div> -->
@@ -177,9 +206,12 @@
 <div class="container my-5">
     <div class="row">
         <div class="col">
-            <h3 class="text-center">Welcome to Ego Vision Color Contact Lenses Official Store!</h3>
+
+            <h3 class="text-center">
+                {{$welcomeText}}
+            </h3>
             <p>
-                Ego Vision, a sister company of Fashion Group, is a leading distributor of colored and powered contact lenses in Bangladesh. Since our establishment, we have prioritized offering top-quality products and services sourced globally. Our brand, “Ego Vision,” provides a wide selection of certified color contact lenses. These lenses are crafted to seamlessly complement your natural eye color, resulting in a subtle and realistic appearance. The effect of the colored lenses may differ depending on the natural hue of your iris. Additionally, our lenses can lighten darker eyes and enhance brighter ones for a striking visual transformation. We provide Premium shipping with an average delivery time of 24 to 48 hours, depending on the location within the country. Our lenses are available in our 18 exclusive optical stores and are also distributed through over 1,500 small and medium retail outlets nationwide.
+                {{$aboutText}}
             </p>
 
         </div>
@@ -214,9 +246,10 @@
 
         <div class="row">
             <div class="col">
-                <h3> {{$collectionSet->category->name}}</h3>
-                <h3> {{$collectionSet->tone->name ?? ''}}</h3>
-                <a href="{{route('collectionSet.single.collection',$collectionSet->id)}}" class="mt-2"> @lang('messages.discover')</a>
+                <h3> {{@$collectionSet->category->name}}</h3>
+                <h3> {{@$collectionSet->tone->name ?? ''}}</h3>
+                <a href="{{route('collectionSet.single.collection',$collectionSet->id)}}" class="mt-2">
+                    {{$discobtn}}</a>
             </div>
         </div>
     </div>
@@ -229,15 +262,11 @@
                 <a href="{{ route('addToCart.index', $product->id) }}" class="card-link d-block ">
                     <div class="card border-0 text-center ">
                         <div class="card-video-top overflow-hidden position-relative">
-                            <!-- <video src="{{ asset('ego/video/motion.mp4') }}" class="card-video img-fluid" alt="Video 1"
-                                autoplay loop muted playsinline>
-                                Your browser does not support the video tag.
-                            </video> -->
                             <img src="{{asset($product->image_path)}}" style="width: 100%; height: 100%; object-fit: cover" alt="">
                         </div>
                         <div class="card-body">
                             <h5>{{$product->name}}</h5>
-                            <h6>@lang('messages.shop_color')</h6>
+                            <h6>{{$shopbtn}}</h6>
                         </div>
                     </div>
                 </a>
@@ -254,7 +283,7 @@
 
 
     <div class="container">
-        <h3>@lang('messages.More_Ego_Vision_Lenses')</h3>
+        <h3>{{ $moreText }}</h3>
     </div>
 
     <div class="mt-5 container">
@@ -273,8 +302,8 @@
                             </div>
                         </div>
                         <div class="card-product-slider-body">
-                            <h5 class="card-product-slider-title">{{$moreProduct->name}}</h5>
-                            <small class="price">{{$moreProduct->price}}৳</small>
+                            <h5 class="card-product-slider-title">{{ $moreProduct->name }}</h5>
+                            <small class="price">{{ $moreProduct->price }} BDT</small>
                         </div>
                     </div>
                     @endforeach
@@ -284,41 +313,20 @@
     </div>
 
     <div class="container mt-5">
-        <p>@lang('messages.FOLLOW_US_ON')</p>
-        <h3>@lang('messages.instagram')</h3>
-        <p>@lang('messages.GO_FOLLOW_Ego_Vision')</p>
-        <div>
-            <div class="row row-cols-1 row-cols-md-5 g-4">
-                <div class="col-mb-2 col-12" style="cursor: pointer">
+        <p>{{ $followText }}</p>
+        <h3>{{ $instaText }}</h3>
+        <p>{{ $followEgo }}</p>
+        <div class="d-flex flex-column align-items-center">
+            <div class="row w-100 g-4">
+
+                @foreach($instaDatas as $data)
+                <div class="col-md-2" style="cursor: pointer" data-bs-toggle="modal" data-bs-target="#exampleModal{{$data->id}}">
                     <div class="wrapper">
                         <div class="cardd">
-                            <video style="width: 100%" autoplay loop muted playsinline>
-                                <source src="{{ asset('ego/video/demovideo.mp4') }}" type="video/mp4" />
-                            </video>
+                            <img src="{{ $data->post()['media_url'] }}" />
                             <div class="overlay">
                                 <div class="text-center">
-                                    <h5 class="title">@lang('messages.Salon_31')</h5>
-                                    <p class="text-p">
-                                        <span class="icon-wrapper">
-                                            <i class="fab fa-instagram"></i>
-                                        </span>
-                                        <span class="details">
-                                            <i class="fa-regular fa-heart"></i><span class="text-white">@lang('messages.120')</span>
-                                            <i class="fa-solid fa-comments"></i><span class="text-white">@lang('messages.30')</span>
-                                        </span>
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-mb-2 col-12" style="cursor: pointer">
-                    <div class="wrapper">
-                        <div class="cardd">
-                            <img src="{{ asset('ego/img3.jpeg') }}" />
-                            <div class="overlay">
-                                <div class="text-center">
-                                    <h5 class="title">@lang('messages.Salon_31')</h5>
+                                    <h5 class="title">{{ $data->post()['username'] }}</h5>
                                     <p class="text-p">
                                         <span class="icon-wrapper">
                                             <i class="fab fa-instagram"></i>
@@ -334,188 +342,55 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-mb-2 col-12" style="cursor: pointer">
-                    <div class="wrapper">
-                        <div class="cardd">
-                            <img src="{{ asset('ego/img1.jpeg') }}" />
-                            <div class="overlay">
-                                <div class="text-center">
-                                    <h5 class="title">@lang('messages.Salon_31')</h5>
-                                    <p class="text-p">
-                                        <span class="icon-wrapper">
-                                            <i class="fab fa-instagram"></i>
-                                        </span>
-                                        <span class="details">
-                                            <i class="fa-regular fa-heart"></i><span class="text-white">@lang('messages.120')</span>
-                                            <i class="fa-solid fa-comments"></i><span class="text-white">@lang('messages.30')</span>
-                                        </span>
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-mb-2 col-12" style="cursor: pointer">
-                    <div class="wrapper">
-                        <div class="cardd">
-                            <video style="width: 100%" autoplay loop muted playsinline>
-                                <source src="{{ asset('ego/video/motion.mp4') }}" type="video/mp4" />
-                            </video>
-                            <div class="overlay">
-                                <div class="text-center">
-                                    <h5 class="title">@lang('messages.Salon_31')</h5>
-                                    <p class="text-p">
-                                        <span class="icon-wrapper">
-                                            <i class="fab fa-instagram"></i>
-                                        </span>
-                                        <span class="details">
-                                            <i class="fa-regular fa-heart"></i><span class="text-white">@lang('messages.120')</span>
-                                            <i class="fa-solid fa-comments"></i><span class="text-white">@lang('messages.30')</span>
-                                        </span>
-                                    </p>
-                                </div>
-                                <!-- <a class="link-a" href="#">View And Shop</a> -->
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-mb-2 col-12" style="cursor: pointer">
-                    <div class="wrapper">
-                        <div class="cardd">
-                            <video style="width: 100%" autoplay loop muted playsinline>
-                                <source src="{{ asset('ego/video/demovideo.mp4') }}" type="video/mp4" />
-                            </video>
-                            <div class="overlay">
-                                <div class="text-center">
-                                    <h5 class="title">@lang('messages.Salon_31')</h5>
-                                    <p class="text-p">
-                                        <span class="icon-wrapper">
-                                            <i class="fab fa-instagram"></i>
-                                        </span>
-                                        <span class="details">
-                                            <i class="fa-regular fa-heart"></i><span class="text-white">@lang('messages.120')</span>
-                                            <i class="fa-solid fa-comments"></i><span class="text-white">@lang('messages.30')</span>
-                                        </span>
-                                    </p>
-                                </div>
-                                <!-- <a class="link-a" href="#">View And Shop</a> -->
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-mb-2 col-12" style="cursor: pointer">
-                    <div class="wrapper">
-                        <div class="cardd">
-                            <img src="https://m.photoslurp.com/i/fit?width=576&height=720&url=https%3A%2F%2Fpslurpmedia.s3.amazonaws.com%2Finstagram-business%2F17929953719331586_0.jpg" alt="" />
-                            <div class="overlay">
-                                <div class="text-center">
-                                    <h5 class="title">@lang('messages.Salon_31')</h5>
-                                    <p class="text-p">
-                                        <span class="icon-wrapper">
-                                            <i class="fab fa-instagram"></i>
-                                        </span>
-                                        <span class="details">
-                                            <i class="fa-regular fa-heart"></i><span class="text-white">@lang('messages.120')</span>
-                                            <i class="fa-solid fa-comments"></i><span class="text-white">@lang('messages.30')</span>
-                                        </span>
-                                    </p>
-                                </div>
-                                <!-- <a class="link-a" href="#">View And Shop</a> -->
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-mb-2 col-12" style="cursor: pointer">
-                    <div class="wrapper">
-                        <div class="cardd">
-                            <img src="https://m.photoslurp.com/i/fit?width=576&height=720&url=https%3A%2F%2Fpslurpmedia.s3.amazonaws.com%2Finstagram-business%2F17929953719331586_0.jpg" alt="" />
-                            <div class="overlay">
-                                <div class="text-center">
-                                    <h5 class="title">@lang('messages.Salon_31')</h5>
-                                    <p class="text-p">
-                                        <span class="icon-wrapper">
-                                            <i class="fab fa-instagram"></i>
-                                        </span>
-                                        <span class="details">
-                                            <i class="fa-regular fa-heart"></i><span class="text-white">@lang('messages.120')</span>
-                                            <i class="fa-solid fa-comments"></i><span class="text-white">@lang('messages.30')</span>
-                                        </span>
-                                    </p>
-                                </div>
-                                <!-- <a class="link-a" href="#">View And Shop</a> -->
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-mb-2 col-12" style="cursor: pointer">
-                    <div class="wrapper">
-                        <div class="cardd">
-                            <img src="https://m.photoslurp.com/i/fit?width=720&height=720&url=https%3A%2F%2Fpslurpmedia.s3.amazonaws.com%2Finstagram-business%2F17977397470323891_0.jpg" />
-                            <div class="overlay">
-                                <div class="text-center">
-                                    <h5 class="title">@lang('messages.Salon_31')</h5>
-                                    <p class="text-p">
-                                        <span class="icon-wrapper">
-                                            <i class="fab fa-instagram "></i>
-                                        </span>
-                                        <span class="details">
-                                            <i class="fa-regular fa-heart"></i><span class="text-white">@lang('messages.120')</span>
-                                            <i class="fa-solid fa-comments"></i><span class="text-white">@lang('messages.30')</span>
-                                        </span>
-                                    </p>
-                                </div>
-                                <!-- <a class="link-a" href="#">View And Shop</a> -->
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-mb-2 col-12" style="cursor: pointer">
-                    <div class="wrapper">
-                        <div class="cardd">
-                            <img src="https://m.photoslurp.com/i/fit?width=576&height=720&url=https%3A%2F%2Fpslurpmedia.s3.amazonaws.com%2Finstagram-business%2F17901155806886312_0.jpg" />
-                            <div class="overlay">
-                                <div class="text-center">
-                                    <h5 class="title">@lang('messages.Salon_31')</h5>
-                                    <p class="text-p">
-                                        <span class="icon-wrapper">
-                                            <i class="fab fa-instagram"></i>
-                                        </span>
-                                        <span class="details">
-                                            <i class="fa-regular fa-heart"></i><span class="text-white">@lang('messages.120')</span>
-                                            <i class="fa-solid fa-comments"></i><span class="text-white">@lang('messages.30')</span>
-                                        </span>
-                                    </p>
-                                </div>
-                                <!-- <a class="link-a" href="#">View And Shop</a> -->
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-mb-2 col-12" style="cursor: pointer">
-                    <div class="wrapper">
-                        <div class="cardd">
-                            <img src="https://m.photoslurp.com/i/fit?width=360&height=359&url=https%3A%2F%2Fpslurpmedia.s3.amazonaws.com%2Finstagram-business%2F18003480121418500_1.jpg" />
-                            <div class="overlay">
-                                <div class="text-center">
-                                    <h5 class="title">@lang('messages.Salon_31')</h5>
-                                    <p class="text-p">
-                                        <span class="icon-wrapper">
-                                            <i class="fab fa-instagram"></i>
-                                        </span>
-                                        <span class="details">
-                                            <i class="fa-regular fa-heart"></i><span class="text-white">@lang('messages.120')</span>
-                                            <i class="fa-solid fa-comments"></i><span class="text-white">@lang('messages.30')</span>
-                                        </span>
-                                    </p>
-                                </div>
-                                <!-- <a class="link-a" href="#">View And Shop</a> -->
-                            </div>
-                        </div>
-                    </div>
-                </div>
 
-                <button href="#" class="add-to-cart-button w-25 mt-4 text-nowrap">@lang('messages.LoadMore')</button>
+                <div class="modal fade mt-0" id="exampleModal{{$data->id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered modal-lg">
+                        <div class="modal-content">
+                            <div class="modal-body bg-light" style="width: 100%; padding: 0; overflow: hidden">
+                                <button type="button" class="btn-close position-absolute end-0 top-0" data-bs-dismiss="modal" aria-label="Close"></button>
+                                <div class="d-flex w-100">
+                                    <div style="width: 50%; border-radius: 7px">
+                                        <img src="{{@$data->post()['media_url']}}" style="width: 100%; height: 100%; object-fit: cover" alt="">
+                                    </div>
+
+                                    <div style="width: 50%;" class="py-5 px-3">
+                                        @if(@$data->product)
+                                        <div class="border bg-white p-2 d-flex flex-column align-items-center mb-3">
+                                            <img src="{{asset(@$data->product->image_path)}}" style="width: 65%;" alt="">
+                                            <h5>{{@$data->product->name}}</h5>
+                                            <a href="{{route('addToCart.index',$data->product->id)}}" class="btn btn-dark">Shop Now</a>
+                                        </div>
+                                        @endif
+                                        <div>
+                                            <div class="d-flex justify-content-between mb-2">
+                                                <div class="d-flex align-items-center gap-1">
+                                                    <i class="fab fa-instagram"></i>
+                                                    <a href="{{$data->post()['permalink']}}" target="_blank">{{$data->post()['username']}}</a>
+                                                </div>
+                                                <div class="d-flex align-items-center gap-2">
+                                                    <div class="d-flex align-items-center gap-1">
+                                                        <i class="far fa-heart"></i>
+                                                        666
+                                                    </div>
+
+                                                    <div class="d-flex align-items-center gap-1">
+                                                        <i class="far fa-comment"></i>
+                                                        56
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <p>{{$data->post()['caption']}}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                @endforeach
+
             </div>
+            <a href="{{route('ego.pages.shop.instagram')}}" class="add-to-cart-button w-25 mt-4 text-nowrap">{{ $loadbtn }}</a>
         </div>
     </div>
     <div class="mt-5">
@@ -544,16 +419,16 @@
                                 <i class="fas fa-star"></i>
                             </div>
                             <span class="ml-2 text-sm text-gray-500 ">
-                                <i class="fas fa-check-circle mx-2" style="color:#6c6c85;"></i>@lang('messages.Verified')
+                                <i class="fas fa-check-circle mx-2" style="color:#6c6c85;"></i>{{ $reviewVerified }}
                             </span>
                         </div>
-                        <p class="mb-1 text-lg font-bold" style="line-height: 1.2; "><b style="font-size:14px">@lang('messages.Great_quality')</b></p>
-                        <p class="mb-4 text-gray-700" style="line-height: 1.2; font-size:14px">@lang('messages.quality')</p>
-                        <small style="margin-top:-30px;position: absolute;font-size:12px">@lang('messages.Angela')</small>
+                        <p class="mb-1 text-lg font-bold" style="line-height: 1.2; "><b style="font-size:14px">{{ $reviewQuality }}</b></p>
+                        <p class="mb-4 text-gray-700" style="line-height: 1.2; font-size:14px">{{ $quality }}</p>
+                        <small style="margin-top:-30px;position: absolute;font-size:12px">{{ $nameTime }}</small>
                     </div>
                 </div>
             </div>
-            <div class="row slider" style="cursor: pointer;">
+            <div class="row slider " style="cursor: pointer;">
                 <div class="col-12">
                     <div class="card-body card-body-slider">
                         <div class="d-flex align-items-center mb-2">
@@ -573,16 +448,16 @@
                                 <i class="fas fa-star"></i>
                             </div>
                             <span class="ml-2 text-sm text-gray-500 ">
-                                <i class="fas fa-check-circle mx-2" style="color: #6c6c85;;"></i>@lang('messages.Verified')
+                                <i class="fas fa-check-circle mx-2" style="color:#6c6c85;"></i>{{ $reviewVerified }}
                             </span>
                         </div>
-                        <p class="mb-1 text-lg font-bold" style="line-height: 1.2; "><b style="font-size:14px">@lang('messages.Great_quality')</b></p>
-                        <p class="mb-4 text-gray-700" style="line-height: 1.2; font-size:14px">@lang('messages.quality')</p>
-                        <small style="margin-top:-30px;position: absolute;font-size:12px">@lang('messages.Angela')</small>
+                        <p class="mb-1 text-lg font-bold" style="line-height: 1.2; "><b style="font-size:14px">{{ $reviewQuality }}</b></p>
+                        <p class="mb-4 text-gray-700" style="line-height: 1.2; font-size:14px">{{ $quality }}</p>
+                        <small style="margin-top:-30px;position: absolute;font-size:12px">{{ $nameTime }}</small>
                     </div>
                 </div>
             </div>
-            <div class="row slider" style="cursor: pointer;">
+            <div class="row slider " style="cursor: pointer;">
                 <div class="col-12">
                     <div class="card-body card-body-slider">
                         <div class="d-flex align-items-center mb-2">
@@ -602,16 +477,16 @@
                                 <i class="fas fa-star"></i>
                             </div>
                             <span class="ml-2 text-sm text-gray-500 ">
-                                <i class="fas fa-check-circle mx-2" style="color: #6c6c85;;"></i>@lang('messages.Verified')
+                                <i class="fas fa-check-circle mx-2" style="color:#6c6c85;"></i>{{ $reviewVerified }}
                             </span>
                         </div>
-                        <p class="mb-1 text-lg font-bold" style="line-height: 1.2; "><b style="font-size:14px">@lang('messages.Great_quality')</b></p>
-                        <p class="mb-4 text-gray-700" style="line-height: 1.2; font-size:14px">@lang('messages.quality')</p>
-                        <small style="margin-top:-30px;position: absolute;font-size:12px">@lang('messages.Angela')</small>
+                        <p class="mb-1 text-lg font-bold" style="line-height: 1.2; "><b style="font-size:14px">{{ $reviewQuality }}</b></p>
+                        <p class="mb-4 text-gray-700" style="line-height: 1.2; font-size:14px">{{ $quality }}</p>
+                        <small style="margin-top:-30px;position: absolute;font-size:12px">{{ $nameTime }}</small>
                     </div>
                 </div>
             </div>
-            <div class="row slider" style="cursor: pointer;">
+            <div class="row slider " style="cursor: pointer;">
                 <div class="col-12">
                     <div class="card-body card-body-slider">
                         <div class="d-flex align-items-center mb-2">
@@ -631,16 +506,16 @@
                                 <i class="fas fa-star"></i>
                             </div>
                             <span class="ml-2 text-sm text-gray-500 ">
-                                <i class="fas fa-check-circle mx-2" style="color: #6c6c85;;"></i>@lang('messages.Verified')
+                                <i class="fas fa-check-circle mx-2" style="color:#6c6c85;"></i>{{ $reviewVerified }}
                             </span>
                         </div>
-                        <p class="mb-1 text-lg font-bold" style="line-height: 1.2; "><b style="font-size:14px">@lang('messages.Great_quality')</b></p>
-                        <p class="mb-4 text-gray-700" style="line-height: 1.2; font-size:14px">@lang('messages.quality')</p>
-                        <small style="margin-top:-30px;position: absolute;font-size:12px">@lang('messages.Angela')</small>
+                        <p class="mb-1 text-lg font-bold" style="line-height: 1.2; "><b style="font-size:14px">{{ $reviewQuality }}</b></p>
+                        <p class="mb-4 text-gray-700" style="line-height: 1.2; font-size:14px">{{ $quality }}</p>
+                        <small style="margin-top:-30px;position: absolute;font-size:12px">{{ $nameTime }}</small>
                     </div>
                 </div>
             </div>
-            <div class="row slider" style="cursor: pointer;">
+            <div class="row slider " style="cursor: pointer;">
                 <div class="col-12">
                     <div class="card-body card-body-slider">
                         <div class="d-flex align-items-center mb-2">
@@ -660,16 +535,16 @@
                                 <i class="fas fa-star"></i>
                             </div>
                             <span class="ml-2 text-sm text-gray-500 ">
-                                <i class="fas fa-check-circle mx-2" style="color: #6c6c85;;"></i>@lang('messages.Verified')
+                                <i class="fas fa-check-circle mx-2" style="color:#6c6c85;"></i>{{ $reviewVerified }}
                             </span>
                         </div>
-                        <p class="mb-1 text-lg font-bold" style="line-height: 1.2; "><b style="font-size:14px">@lang('messages.Great_quality')</b></p>
-                        <p class="mb-4 text-gray-700" style="line-height: 1.2; font-size:14px">@lang('messages.quality')</p>
-                        <small style="margin-top:-30px;position: absolute;font-size:12px">@lang('messages.Angela')</small>
+                        <p class="mb-1 text-lg font-bold" style="line-height: 1.2; "><b style="font-size:14px">{{ $reviewQuality }}</b></p>
+                        <p class="mb-4 text-gray-700" style="line-height: 1.2; font-size:14px">{{ $quality }}</p>
+                        <small style="margin-top:-30px;position: absolute;font-size:12px">{{ $nameTime }}</small>
                     </div>
                 </div>
             </div>
-            <div class="row slider" style="cursor: pointer;">
+            <div class="row slider " style="cursor: pointer;">
                 <div class="col-12">
                     <div class="card-body card-body-slider">
                         <div class="d-flex align-items-center mb-2">
@@ -689,19 +564,19 @@
                                 <i class="fas fa-star"></i>
                             </div>
                             <span class="ml-2 text-sm text-gray-500 ">
-                                <i class="fas fa-check-circle mx-2" style="color: #6c6c85;"></i>@lang('messages.Verified')
+                                <i class="fas fa-check-circle mx-2" style="color:#6c6c85;"></i>{{ $reviewVerified }}
                             </span>
                         </div>
-                        <p class="mb-1 text-lg font-bold" style="line-height: 1.2; "><b style="font-size:14px">@lang('messages.Great_quality')</b></p>
-                        <p class="mb-4 text-gray-700" style="line-height: 1.2; font-size:14px">@lang('messages.quality')</p>
-                        <small style="margin-top:-30px;position: absolute;font-size:12px">@lang('messages.Angela')</small>
+                        <p class="mb-1 text-lg font-bold" style="line-height: 1.2; "><b style="font-size:14px">{{ $reviewQuality }}</b></p>
+                        <p class="mb-4 text-gray-700" style="line-height: 1.2; font-size:14px">{{ $quality }}</p>
+                        <small style="margin-top:-30px;position: absolute;font-size:12px">{{ $nameTime }}</small>
                     </div>
                 </div>
             </div>
         </div>
     </div>
     <div class="text-center">
-        <small>@lang('messages.rate') <b>4.3</b>@lang('messages.reviews')</small> <br>
-        <small> <i class="fas fa-star " style="color: #00b67a;font-size: 16px;"></i><strong>@lang('messages.Trustpilot') </strong></small>
+        <small>{{ $ratedText }} <b>4.3</b>{{ $rateDetText }}</small> <br>
+        <small> <i class="fas fa-star " style="color: #00b67a;font-size: 16px;"></i><strong>{{ $trustpilotText }}</strong></small>
     </div>
     @endsection

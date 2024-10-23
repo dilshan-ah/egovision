@@ -29,7 +29,7 @@
                                 @endforeach
                                 @endif
                             </td>
-                            <td>{{$order->amount}}৳</td>
+                            <td>{{$order->amount}}BDT</td>
                             <td>{{$order->status}}</td>
                             <td>{{ $order->created_at ? $order->created_at->format('d, M y') : 'N/A' }}</td>
                         </tr>

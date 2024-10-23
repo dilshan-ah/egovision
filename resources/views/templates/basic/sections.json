@@ -103,6 +103,16 @@
             "modal": false
         }
     },
+    "deletion_policy": {
+        "builder": true,
+        "no_selection":true,
+        "name": "Data Deletion Policy",
+        "element": {
+            "title": "text",
+            "details": "textarea-nic",
+            "modal": false
+        }
+    },
     "faq": {
         "builder": true,
         "name": "FAQ Section",
