@@ -12,6 +12,7 @@ use App\Models\GeneralSetting;
 use App\Models\OrderStatusNote;
 use App\Models\PromoCode;
 use App\Models\ShippingMethod;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
 use Carbon\Carbon;
 use Dotenv\Util\Str;
 use Illuminate\Support\Facades\Auth;
@@ -357,7 +358,9 @@ class OrderController extends Controller
     public function invoice(string $id)
     {
         $order = Order::where('id', $id)->with('orderItems')->first();
-        return view('user.order.invoice', compact('order'));
+        $url = route('ego.single.orders',$id);
+        $qrCode = QrCode::size(80)->generate($url);
+        return view('user.order.invoice', compact('order','qrCode'));
     }
 
     public function updatePayment(string $id, Request $request)

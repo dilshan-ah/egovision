@@ -177,6 +177,7 @@ $cusCare = TranslationHelper::translateText('CUSTOMER CARE', $preferredLanguage)
 $Hto = TranslationHelper::translateText('How To Order', $preferredLanguage);
 $faq = TranslationHelper::translateText('FAQ', $preferredLanguage);
 $shippingDel = TranslationHelper::translateText('Shipping & Delivery', $preferredLanguage);
+$deletionPolicy = TranslationHelper::translateText('Deletion Policy', $preferredLanguage);
 $return = TranslationHelper::translateText('Return Policy', $preferredLanguage);
 $contactPromo = TranslationHelper::translateText('Contact us', $preferredLanguage);
 
@@ -263,6 +264,7 @@ $acceptPay = TranslationHelper::translateText('Accepted Payment Methods', $prefe
                                 <a href="#" style="text-decoration: none;">{{$Hto}}</a><br>
                                 <a href="#" style="text-decoration: none;">{{$faq}}</a><br>
                                 <a href="{{ route('policy.pages', ['id' => 46, 'slug' => 'shipping-and-delivery']) }}" style="text-decoration: none;">{{$shippingDel}}</a><br>
+                                <a href="{{ route('policy.pages', ['id' => 47, 'slug' => 'deletion-policy']) }}" style="text-decoration: none;">{{$deletionPolicy}}</a><br>
                                 <a href="{{ route('policy.pages', ['id' => 45, 'slug' => 'returns-exchanges-refund-policy']) }}" style="text-decoration: none;">{{$return}}</a><br>
                                 <a href="#" style="text-decoration: none;">{{$contactPromo}}</a>
                             </div>

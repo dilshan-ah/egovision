@@ -3,10 +3,12 @@
 namespace App\Http\Controllers\Api\EgoVisionControllers;
 
 use App\Http\Controllers\Controller;
+use App\Models\EgoModels\Cart;
 use App\Models\EgoModels\Order;
 use App\Models\EgoModels\OrderItems;
 use App\Models\EgoModels\Product;
 use App\Models\GeneralSetting;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -23,18 +25,18 @@ class OrderController extends Controller
             'order_items.*.power' => 'nullable|string',
             'order_items.*.quantity' => 'required|integer',
         ]);
-    
+
         $subTotal = 0;
-    
+
         foreach ($validatedData['order_items'] as $item) {
             $product = Product::where('id', $item['product_id'])->first();
-    
+
             if (!$product) {
                 return response()->json(['error' => 'Product not found.'], 404);
             }
-    
+
             $price = $item['power'] != null ? $product->price : $product->no_power_price;
-    
+
             $subTotal += $price * $item['quantity'];
 
             $discount =  ($product->is_free == 1 ? $product->no_power_price : 0) * $item['quantity'];
@@ -42,10 +44,10 @@ class OrderController extends Controller
 
         $tax = GeneralSetting::first()->tax;
 
-        $taxPrice = $subTotal * $tax/100;
+        $taxPrice = $subTotal * $tax / 100;
 
-        $total = $request->delivery_charge + $taxPrice + $subTotal -$discount;
-    
+        $total = $request->delivery_charge + $taxPrice + $subTotal - $discount;
+
         return response()->json([
             'subTotal' => $subTotal,
             'tax' => $taxPrice,
@@ -53,7 +55,7 @@ class OrderController extends Controller
             'discount' => $discount,
             'total' => $total
         ]);
-    }    
+    }
 
     public function store(Request $request)
     {
@@ -85,7 +87,7 @@ class OrderController extends Controller
                 'order_items.*.pair' => 'required|integer',
                 'order_items.*.price' => 'required|numeric',
             ]);
-    
+
             $order = Order::create([
                 'user_id' => $validatedData['user_id'],
                 'subtotal' => $validatedData['subtotal'],
@@ -109,7 +111,24 @@ class OrderController extends Controller
                 'amount' => $validatedData['total'],
                 'transaction_id' => $validatedData['transaction_id']
             ]);
-    
+
+            if ($order) {
+                Cart::where('user_id', $validatedData['user_id'])->delete();
+            }
+
+            $user = User::where('user_id',$request->user_id)->first();
+            if ($order) {
+                notify($user, 'Order_Confirm', [
+                    'subject' => "Your order is placed successfully",
+                    'orderId' => $order->transaction_id,
+                    'address' => $order->address_one . ',' . $order->city . ',' . $order->state . ',' . $order->zip_code . ',' . $order->country,
+                    'ordertime' => $order->created_at,
+                    'name' => $order->name,
+                    'invoicelink' => route('addToCart.invoice', $order->id),
+                    'orderlink' => route('ego.single.orders', $order->id),
+                ], ['email']);
+            }
+
             // Save order items
             foreach ($validatedData['order_items'] as $item) {
                 OrderItems::create([
@@ -120,7 +139,7 @@ class OrderController extends Controller
                     'price' => $item['price'],
                 ]);
             }
-    
+
             // Return success response
             return response()->json([
                 'success' => true,
@@ -137,7 +156,7 @@ class OrderController extends Controller
         } catch (\Exception $e) {
             // Log the error for debugging
             Log::error('Order creation failed: ' . $e->getMessage());
-    
+
             // Return error response
             return response()->json([
                 'success' => false,
@@ -149,7 +168,7 @@ class OrderController extends Controller
 
     public function userOrder(string $userId)
     {
-        
+
         try {
             $orders = Order::where('user_id', $userId)
                 ->select('id', 'transaction_id', 'amount', 'status', 'created_at')
@@ -159,8 +178,8 @@ class OrderController extends Controller
                             $subQuery->select('id', 'name');
                         }]);
                 }])
-                ->orderBy('created_at', 'asc')
-                ->paginate(5);
+                ->orderBy('created_at', 'desc')
+                ->paginate(18);
 
             $orders->getCollection()->transform(function ($order) {
                 $order->created_at =  Carbon::parse($order->created_at)->format('d M,Y');
@@ -172,7 +191,7 @@ class OrderController extends Controller
                 return $order;
             });
 
-            if($orders->count() == 0){
+            if ($orders->count() == 0) {
                 return response()->json([
                     'error' => true,
                     'message' => 'No Orders Found',

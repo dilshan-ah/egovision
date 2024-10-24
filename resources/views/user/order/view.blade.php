@@ -186,21 +186,28 @@ $policyPages = getContent('policy_pages.element',false,null,true);
                                 <th></th>
                                 <th></th>
                                 <th>Subtotal</th>
-                                <th>{{@$order->subtotal}}BDT</th>
+                                <th>{{@$order->subtotal}} BDT</th>
                             </tr>
                             <tr>
                                 <th></th>
                                 <th></th>
                                 <th></th>
                                 <th>Discount</th>
-                                <th>-{{@$order->discount}}BDT</th>
+                                <th>-{{@$order->discount}} BDT</th>
+                            </tr>
+                            <tr>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th>Tax</th>
+                                <th>{{@$order->tax}} BDT</th>
                             </tr>
                             <tr>
                                 <th></th>
                                 <th></th>
                                 <th></th>
                                 <th>Delivery Charge</th>
-                                <th>{{@$order->delivery_charge}}BDT</th>
+                                <th>{{@$order->delivery_charge}} BDT</th>
                             </tr>
                             <tr>
                                 <th></th>

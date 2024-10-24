@@ -19,7 +19,7 @@ class ReturnProductController extends Controller
                 ->select('id', 'return_id', 'order_item_id', 'quantity', 'status', 'created_at')
                 ->with('item.product:id,name,price') // Include product name and price
                 ->orderBy('created_at', 'asc')
-                ->paginate(5);
+                ->paginate(18);
 
             // Transform the paginated results
             $customizedResults = $returnedProducts->getCollection()->map(function ($returnProduct) {

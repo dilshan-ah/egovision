@@ -200,7 +200,7 @@ class ProductController extends Controller
 
     public function getAccessories(Request $request, string $userId)
     {
-        $perPage = $request->input('per_page', 10);
+        $perPage = $request->input('per_page', 18);
 
         $products = Product::where('product_type', 'accessories')
             ->select('id', 'image_path', 'name', 'price')
