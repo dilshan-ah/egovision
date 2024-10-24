@@ -140,6 +140,7 @@
                 <tr>
                     <td><strong>Invoice No:</strong> {{$order->transaction_id}}</td>
                     <td><strong>Invoice Date:</strong> {{$order->created_at->format('d-m-Y')}}</td>
+                    <td style="display: flex; justify-content: end;">{!! $qrCode !!}</td>
                 </tr>
                 <tr>
                     <td><strong>Payment Status:</strong>
@@ -152,6 +153,7 @@
                 </tr>
                 <tr>
                     <td><strong>Customer Name:</strong> {{$order->name}}</td>
+                    
                 </tr>
             </table>
         </div>

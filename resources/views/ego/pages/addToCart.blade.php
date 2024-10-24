@@ -74,12 +74,12 @@ $hyperopia = TranslationHelper::translateText('Hyperopia', $preferredLanguage);
 <div class="row" style="margin-top:150px">
     <div class="col-md-2">
         <div class="vertical-slider" style="cursor: pointer; padding: 10px;">
-            <div>
-                <img src="{{ asset($product->image_path) }}" class="img-fluid imageAlbum" style="margin-bottom: 10px;">
+            <div class="d-flex justify-content-end">
+                <img src="{{ asset($product->image_path) }}" class="img-fluid imageAlbum" style="margin-bottom: 10px; margin-left: 0; margin-right: 0">
             </div>
             @foreach ($product->images as $image)
-            <div>
-                <img src="{{ asset($image->image_path) }}" class="img-fluid imageAlbum" style="margin-bottom: 10px;">
+            <div class="d-flex justify-content-end">
+                <img src="{{ asset($image->image_path) }}" class="img-fluid imageAlbum" style="margin-bottom: 10px; margin-left: 0; margin-right: 0">
             </div>
             @endforeach
         </div>
@@ -87,7 +87,7 @@ $hyperopia = TranslationHelper::translateText('Hyperopia', $preferredLanguage);
     <!-- Middle Column - Vertical Images -->
     <div class="col-md-5">
         <div class="main-image-container">
-            <img id="mainImage" src="{{ asset($product->image_path) }}" class="main-image img-fluid"
+            <img id="mainImage" src="{{ asset($product->image_path) }}" class="main-image img-fluid w-100"
                 alt="Main Display" />
         </div>
     </div>

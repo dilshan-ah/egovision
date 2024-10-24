@@ -70,14 +70,14 @@
                         <span class="text-danger">{{ $message }}</span>
                         @enderror
                     </div>
-                    <div class="form-group col-3">
+                    <!-- <div class="form-group col-3">
                         <label for="">Is Free?</label>
                         <select name="is_free" class="form-control">
                             <option value="1" {{ old('is_free') == '1' ? 'selected' : '' }}>Yes</option>
                             <option value="0" {{ old('is_free') == '0' ? 'selected' : '' }}>No</option>
                         </select>
-                    </div>
-                    <div class="form-group col-3">
+                    </div> -->
+                    <div class="form-group col-6">
                         <label for="">Is Default? (you can only keep one default)</label>
                         <select name="is_default" class="form-control">
                             <option value="" {{ old('is_default', $product->is_default) === null ? 'selected' : '' }}>set yes if you want it default</option>

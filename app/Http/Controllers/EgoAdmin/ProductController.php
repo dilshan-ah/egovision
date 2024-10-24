@@ -201,7 +201,7 @@ class ProductController extends Controller
             $product->duration_id = $validatedData['duration_id'];
             $product->product_type = 'accessories';
             $product->is_default_bag = $validatedData['is_default'] ?? 0;
-            $product->is_free = $validatedData['is_free'] ?? 0;
+            $product->is_free = 0;
 
             if ($request->hasFile('product_image')) {
                 $imagePath = $this->handleFileUpload($request->file('product_image'), 'ego-assets/images/products', 'Product');
@@ -363,7 +363,7 @@ class ProductController extends Controller
             $product->duration_id = $validatedData['duration_id'];
             $product->product_type = 'accessories';
             $product->is_default_bag = $validatedData['is_default'] ?? 0;
-            $product->is_free = $validatedData['is_free'] ?? 0;
+            $product->is_free = 0;
 
             // Handle product image update
             if ($request->hasFile('product_image')) {

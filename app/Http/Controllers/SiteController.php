@@ -457,7 +457,7 @@ class SiteController extends Controller
     {
         $pageTitle = "My Orders";
         $userId = Auth::id();
-        $orders = Order::where('user_id', $userId)->with('orderItems.product')
+        $orders = Order::where('user_id', $userId)->with('orderItems.product')->orderBy('created_at','desc')
             ->get();
 
         return view('user.order.index', compact('pageTitle', 'orders'));

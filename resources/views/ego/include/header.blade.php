@@ -1304,7 +1304,6 @@ $aboutMenu = TranslationHelper::translateText('ABOUT US', $preferredLanguage);
         @endforeach
 
         <div class="buttons d-flex justify-content-between my-3" style="margin-top: 25px;">
-            <button class="add-to-cart-button-more" style="width: 45%;">Bag</button>
             <a href="{{route('addToCart.checkout')}}" class="add-to-cart-button" style="width: 45%;">Checkout</a>
         </div>
 

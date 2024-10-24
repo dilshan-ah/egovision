@@ -23,6 +23,7 @@
         "phpmailer/phpmailer": "^6.2",
         "razorpay/razorpay": "2.*",
         "sendgrid/sendgrid": "^7.6",
+        "simplesoftwareio/simple-qrcode": "^4.2",
         "stichoza/google-translate-php": "^5.2",
         "stripe/stripe-php": "^7.72",
         "textmagic/sdk": "dev-master",

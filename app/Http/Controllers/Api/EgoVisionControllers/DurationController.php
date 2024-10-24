@@ -82,7 +82,7 @@ class DurationController extends Controller
         try {
             $duration = Duration::findOrFail($id);
     
-            $productsPerPage = 10; // Adjust as necessary
+            $productsPerPage = 18; // Adjust as necessary
     
             // Initialize the query for products related to the duration
             $productsQuery = Product::select('id', 'name', 'image_path', 'price')

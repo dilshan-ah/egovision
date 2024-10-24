@@ -140,7 +140,18 @@ class SslCommerzPaymentController extends Controller
 
         // Fetch the inserted/updated order to get the order ID
         $order = DB::table('orders')->where('transaction_id', $post_data['tran_id'])->first();
-
+        $user = Auth::user();
+        if($order){
+            notify($user, 'Order_Confirm', [
+                'subject' => "Your order is placed successfully",
+                'orderId' => $order->transaction_id,
+                'address' => $order->address_one. ','. $order->city.','. $order->state.','. $order->zip_code.','.$order->country,
+                'ordertime' => $order->created_at,
+                'name' => $order->name,
+                'invoicelink' => route('addToCart.invoice',$order->id),
+                'orderlink' => route('ego.single.orders',$order->id),
+            ], ['email']);
+        }
         // Save order items
         foreach ($carts as $cart) {
             $orderItem = new OrderItems();

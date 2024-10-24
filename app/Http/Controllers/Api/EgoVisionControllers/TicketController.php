@@ -25,7 +25,7 @@ class TicketController extends Controller
         // Paginate tickets with 5 per page
         $tickets = SupportTicket::where('user_id', $userId)
             ->select('id', 'ticket', 'subject', 'status', 'priority', 'last_reply', 'created_at')
-            ->paginate(5); // Limit to 5 tickets per page
+            ->paginate(18); // Limit to 5 tickets per page
 
         // Transform the ticket data
         $tickets->getCollection()->transform(function ($ticket) {
