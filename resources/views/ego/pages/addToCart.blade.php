@@ -319,7 +319,7 @@ $hyperopia = TranslationHelper::translateText('Hyperopia', $preferredLanguage);
                                 <td>{{@$product->diameter->name}}</td>
                             </tr>
                             <tr>
-                                <td class="table-secondary">{{$diameter}}</td>
+                                <td class="table-secondary">{{$base}}</td>
                                 <td>{{@$product->baseCurve->name}}</td>
                             </tr>
                             <tr>
