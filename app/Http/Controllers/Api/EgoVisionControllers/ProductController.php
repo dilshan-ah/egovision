@@ -121,7 +121,8 @@ class ProductController extends Controller
     {
         try {
             // Fetch product by ID along with its related images and variations
-            $product = Product::with(['images:id,product_id,image_path'])->findOrFail($id);
+            $product = Product::with(['images:id,product_id,image_path', 'color', 'diameter', 'lensDesign', 'baseCurve', 'material', 'tone', 'duration'])
+                ->findOrFail($id);
 
             // Remove HTML tags from 'product_intro' and 'description'
             $product->product_intro = strip_tags($product->product_intro);
@@ -130,6 +131,7 @@ class ProductController extends Controller
             // Format the main image path
             $product->image_path = $product->image_path ? 'https://egovision.shop/' . $product->image_path : null;
 
+            // Format related images
             $product->images = $product->images->map(function ($image) {
                 return [
                     'id' => $image->id,
@@ -137,9 +139,26 @@ class ProductController extends Controller
                 ];
             });
 
+            // Safely extract related model names, ensuring they exist
+            $product->color_id = $product->color->name ?? null;
+            $product->diameter_id = $product->diameter->name ?? null;
+            $product->lens_design_id = $product->lensDesign->name ?? null;
+            $product->base_curve_id = $product->baseCurve->name ?? null;
+            $product->material_id = $product->material->name ?? null;
+            $product->tone_id = $product->tone->name ?? null;
+            $product->duration_id = $product->duration->name ?? null;
+
+            unset($product->color);
+            unset($product->diameter);
+            unset($product->lensDesign);
+            unset($product->baseCurve);
+            unset($product->material);
+            unset($product->tone);
+            unset($product->duration);
+
+            // Process available powers
             $availablePowers = json_decode($product->available_powers) ?? [];
             $powers = $this->generatePowerValues($availablePowers);
-
             $product->available_powers = $powers;
 
             // Return success response with the formatted product data
@@ -159,6 +178,7 @@ class ProductController extends Controller
             ]);
         }
     }
+
 
     public function generatePowerValues($availablePowers)
     {

@@ -116,7 +116,7 @@ class OrderController extends Controller
                 Cart::where('user_id', $validatedData['user_id'])->delete();
             }
 
-            $user = User::where('user_id',$request->user_id)->first();
+            $user = User::where('id',$request->user_id)->first();
             if ($order) {
                 notify($user, 'Order_Confirm', [
                     'subject' => "Your order is placed successfully",

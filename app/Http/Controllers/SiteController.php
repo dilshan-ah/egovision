@@ -188,7 +188,7 @@ class SiteController extends Controller
             $products = $productsQuery->get();
 
             // Attach products as a child object (keep as objects, no conversion to array)
-            $collectionSet->products = $products;
+            $collectionSet->products = $products->take(4);
 
             foreach ($collectionSet->products as $product) {
                 $product->name = TranslationHelper::translateText($product->name, $preferredLanguage);

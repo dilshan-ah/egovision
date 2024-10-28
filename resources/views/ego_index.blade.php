@@ -379,7 +379,7 @@ $trustpilotText = TranslationHelper::translateText('Trustpilot', $preferredLangu
                                                     </div>
                                                 </div>
                                             </div>
-                                            <p>{{$data->post()['caption']}}</p>
+                                            <p>{{@$data->post()['caption']}}</p>
                                         </div>
                                     </div>
                                 </div>
