@@ -92,7 +92,7 @@ $hyperopia = TranslationHelper::translateText('Hyperopia', $preferredLanguage);
         </div>
     </div>
     <!-- Right Column - Add to Cart Section -->
-    <div class="col-md-5 right-column p-5">
+    <div class="col-md-5 right-column py-5">
         <div class="add-to-cart-section">
             <h1>
                 <span>{{ $product->name }}</span>
@@ -228,7 +228,6 @@ $hyperopia = TranslationHelper::translateText('Hyperopia', $preferredLanguage);
         <div
             style="
                 width: 100%;
-                max-width: 600px;
                 margin: 50px auto;
                 border-top: 1px solid #ddd;
                 border-bottom: 1px solid #ddd;
@@ -406,7 +405,7 @@ $hyperopia = TranslationHelper::translateText('Hyperopia', $preferredLanguage);
                                 <td>in 0.25 {{$step}}</td>
                             </tr>
                             <tr>
-                                <td>-6.50 to -8.00</td>
+                                <td>-6.50 to -10.00</td>
                                 <td>in 0.50 {{$step}}</td>
                             </tr>
                             <tr class="table-secondary">
@@ -415,7 +414,7 @@ $hyperopia = TranslationHelper::translateText('Hyperopia', $preferredLanguage);
                                 <td>in 0.25 {{$step}}</td>
                             </tr>
                             <tr class="table-secondary">
-                                <td>+6.50 to +8.00</td>
+                                <td>+6.50 to +10.00</td>
                                 <td>in 0.50 {{$step}}</td>
                             </tr>
                         </tbody>

@@ -168,6 +168,12 @@
                                     <img src="https://img.icons8.com/color/16/000000/google-logo.png"> Sign in Using Google
                                 </a>
                             </div>
+
+                            <div class="w-100 d-flex justify-content-center mt-3">
+                                <a href="{{route('facebook.auth')}}" class="btn btn-lg btn-google btn-block btn-outline text-black shadow" style="font-size: 16px">
+                                    <img width="16px" src="https://img.icons8.com/?size=100&id=118497&format=png&color=000000"> Sign in Using Facebook
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -193,4 +199,4 @@
             </div>
         </div>
     </div>
-@endsection
+    @endsection

@@ -209,6 +209,14 @@
                                 </a>
                             </div>
                         </div>
+
+                        <div class="row my-5">
+                            <div class="col-md-12">
+                                <a href="{{route('facebook.auth')}}" class="btn btn-lg btn-google btn-block text-uppercase btn-outline text-black w-100" style="font-size: 16px">
+                                    <img width="16px" src="https://img.icons8.com/?size=100&id=118497&format=png&color=000000"> Signup Using Facebook
+                                </a>
+                            </div>
+                        </div>
                         
                     </div>
 

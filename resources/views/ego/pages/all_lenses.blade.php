@@ -142,13 +142,13 @@ $lensFilter =  TranslationHelper::translateText('Lens Design', $preferredLanguag
 @endphp
 <div class="row mt-5">
 
-    <div class="col-md-4 col-12 mt-1 "  style="background: #f5f5f5">
+    <div class="col-12 col-md-2"  style="background: #f5f5f5">
 
         <div class="p-4">
             <h1>{{$allLensesTitle}}</h1>
             <small>{{$products->count()}} {{$productText}}</small>
             <br />
-            <a href="#" class="add-to-cart-button w-50 mt-4 text-nowrap" id="filterBtnSide">{{$filterText}} <i class="fas fa-plus mx-5"></i></a>
+            <a href="#" style="width: 85% !important;" class="add-to-cart-button w-50 mt-4 text-nowrap" id="filterBtnSide">{{$filterText}} <i class="fas fa-plus mx-5"></i></a>
 
             <div id="sidebarButton" class="sidebarButton">
                 <div class="sidebar-header">
@@ -445,10 +445,10 @@ $lensFilter =  TranslationHelper::translateText('Lens Design', $preferredLanguag
     </div>
 
     <!-- ------------------------------------------------------------- -->
-    <div class="col-12 col-lg-8 p-2">
+    <div class="col-12 col-md-10">
         <div class="row">
             @foreach ($products as $product)
-            <div class="col-12 col-sm-6 col-md-4 mb-4 "> 
+            <div class="col-12 col-sm-6 col-md-6 mb-4 "> 
                 <div class="card-product-slider border shadow-sm overflow-hidden">
                     <div class="card-product-slider-img-wrapper position-relative">
                         <img src="{{ asset($product->image_path) }}" class="card-product-slider-img-top img-fluid" alt="{{ $product->name }}"> <!-- Responsive image -->
@@ -471,7 +471,7 @@ $lensFilter =  TranslationHelper::translateText('Lens Design', $preferredLanguag
                     </div>
                     <div class="card-product-slider-body p-3 text-center">
                         <h5 class="card-product-slider-title mb-1">{{ $product->name }}</h5>
-                        <small class="price text-muted">STARTING AT: <strong>{{ $product->price }} BDT</strong></small>
+                        <small class="price text-muted">STARTING AT: <strong>{{ $product->no_power_price ?? $product->price }} BDT</strong></small>
                         <div class="mt-2">
                             <a href="{{ route('addToCart.index', $product->id) }}" class="btn btn-primary w-100">Add to Cart</a>
                         </div>

@@ -21,7 +21,9 @@
                     <tbody>
                         @foreach($orders as $order)
                         <tr>
-                            <td><a href="{{route('ego.single.orders',$order->id)}}">{{$order->transaction_id}}</a></td>
+                            <td>
+                                <a style="color: blue; text-decoration: underline" href="{{route('ego.single.orders',$order->id)}}">{{$order->transaction_id}}</a>
+                            </td>
                             <td>
                                 @if($order->orderItems)
                                 @foreach($order->orderItems as $item)
