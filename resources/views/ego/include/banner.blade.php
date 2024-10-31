@@ -37,7 +37,7 @@
         color: #fff;
         padding: 5px 0;
         font-size: 14px;
-    }
+     }
 </style>
 <style>
     /* Customize the button appearance */
@@ -155,9 +155,8 @@
         width: 200px;
         transition: transform 0.3s ease-in-out;
         /* Smooth transition for hover effect */
-        margin-left: 122px;
+        /* margin-left: 260px; */
     }
-
 
     @media (max-width: 768px) {
         .navbar-brand-logo img {
@@ -592,12 +591,15 @@
 </style>
 
 <style>
-    .nav-link {
-        position: relative;
-        padding-bottom: 5px;
-        color: white;
-        font-size: 14px;
-    }
+ .nav-link {
+    position: relative;
+    padding-bottom: 5px;
+    color: white;
+    font-size: 15px;
+    margin: 0 18px; 
+}
+
+
 
     .nav-link::after {
         content: '';
@@ -745,7 +747,7 @@ $aboutMenu = TranslationHelper::translateText('ABOUT US', $preferredLanguage);
     <!-- Header content including Navbars -->
     <div class="header-content" style="margin-top: 15px; padding-top: 15px;" style="width:100%">
         <!-- Top Navbar -->
-        <nav class="navbar navbar-expand-lg navbar-light;">
+        <nav class="navbar navbar-expand-lg navbar-light; container">
             <div class="container-fluid" style="padding: 5px;">
                 <!-- Left side: Toggle button -->
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
@@ -753,10 +755,11 @@ $aboutMenu = TranslationHelper::translateText('ABOUT US', $preferredLanguage);
                     aria-label="Toggle navigation">
                     <img src="{{ asset('ego/toggle.svg') }}" alt="Toggle Button">
                 </button>
-
+                
+                <div class="d-flex">
                 <a class="navbar-brand d-none d-sm-block" href="#" id="language-selector"
-                    style="font-size: 14px; color: white">
-                    <i class="fas fa-globe"></i> <span id="language-text">
+                    style="font-size: 15px; color: white">
+                    <i class="fas fa-globe" style="font-size:15px"></i>   <span id="language-text">
                         @if(session('preferredLanguage') == 'en')
                         English
                         @elseif(session('preferredLanguage') == 'hi')
@@ -772,6 +775,125 @@ $aboutMenu = TranslationHelper::translateText('ABOUT US', $preferredLanguage);
                         @endif
                     </span>
                 </a>
+
+
+<style>
+  .toggle-switch {
+    position: relative;
+    width: 44px; /* Reduced width */
+    height: 30px; /* Reduced height */
+    --light: #d8dbe0;
+    --dark: #28292c;
+    --link: rgb(27, 129, 112);
+    --link-hover: rgb(24, 94, 82);
+  }
+
+  .switch-label {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: var(--dark);
+    border-radius: 15px; /* Adjusted border radius */
+    cursor: pointer;
+    border: 2px solid var(--dark); /* Reduced border width */
+    transition: background-color 0.3s ease;
+  }
+
+  .checkbox {
+    position: absolute;
+    display: none;
+  }
+
+  .slider {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: 15px;
+    transition: 0.3s;
+  }
+
+  .checkbox:checked ~ .slider {
+    background-color: var(--light);
+  }
+
+  .slider::before {
+    content: "";
+    position: absolute;
+    top: 3px; /* Adjusted positioning */
+    left: 3px;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    box-shadow: inset 8px -2px 0px 0px var(--light); /* Reduced shadow */
+    background-color: var(--dark);
+    transition: 0.3s;
+  }
+
+  .checkbox:checked ~ .slider::before {
+    transform: translateX(15px); /* Adjusted for new size */
+    background-color: var(--dark);
+    box-shadow: none;
+  }
+
+  .toggle-switch:hover .switch-label {
+    background-color: var(--link-hover); /* Interactive hover effect */
+  }
+
+
+
+  /* Default light mode styles */
+body, .card, .footer, .header, .text {
+  background-color: white;
+  color: black;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+/* Dark mode styles */
+.dark-mode body,
+.dark-mode .card,
+.dark-mode .footer,
+.dark-mode .header,
+.card-body,
+.dark-mode .text {
+  background-color: black;
+  color: #d8dbe0;
+}
+
+</style>
+
+<div class="toggle-switch">
+  <label class="switch-label">
+    <input type="checkbox" class="checkbox">
+    <span class="slider"></span>
+  </label>
+</div>
+  
+<script>
+    // JavaScript to handle dark mode toggle
+    const toggleSwitch = document.querySelector('.checkbox');
+    
+    // Load saved dark mode state from localStorage
+    if (localStorage.getItem('darkMode') === 'enabled') {
+      document.documentElement.classList.add('dark-mode');
+      toggleSwitch.checked = true;
+    }
+    
+    toggleSwitch.addEventListener('change', () => {
+      if (toggleSwitch.checked) {
+        document.documentElement.classList.add('dark-mode');
+        localStorage.setItem('darkMode', 'enabled'); // Save preference
+      } else {
+        document.documentElement.classList.remove('dark-mode');
+        localStorage.setItem('darkMode', 'disabled'); // Save preference
+      }
+    });
+</script>
+
+
+
+
+                </div>
+               
                 <div id="language-modal" class="modal">
                     <div class="modal-content">
                         <span class="close">&times;</span>
@@ -797,7 +919,20 @@ $aboutMenu = TranslationHelper::translateText('ABOUT US', $preferredLanguage);
                 </div>
                 <!-- Right side: Account link -->
                 <div class="d-flex">
-                    @if (!Auth::user())
+                   
+                    <!-- Search Icon -->
+
+
+                    <a class="navbar-brand mx-2 d-none d-md-flex" href="#"
+                        style="align-items: center; font-size: 14px;">
+                        <form class="form-inline my-2 my-lg-0">
+                        <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+                        </form>
+                    </a>
+
+
+                    <!-- user -->
+                    <!-- @if (!Auth::user())
                     <a class="navbar-brand d-none d-md-block" href="{{ route('ego.login') }}"
                         style="font-size: 14px; color: white; display: flex; align-items: center;">
                         <img src="{{ asset('ego/white_account.svg') }}" alt="Account"
@@ -811,16 +946,7 @@ $aboutMenu = TranslationHelper::translateText('ABOUT US', $preferredLanguage);
 
                         {{ Auth::user()->fullname }}
                     </a>
-                    @endif
-                    <!-- Search Icon -->
-
-
-                    <a class="navbar-brand mx-2 d-none d-md-flex" href="#" id="search-icon"
-                        style="align-items: center; font-size: 14px;">
-                        <img src="{{ asset('ego/search-icon.svg') }}" alt="Search"
-                            style="height: 18px; width: 18px; margin-right: 5px;" />
-                    </a>
-
+                    @endif -->
                     <!-- Search Bar Popup -->
                     <div id="search-popup" class="search-popup">
                         <div class="search-popup-content">
@@ -966,7 +1092,7 @@ $aboutMenu = TranslationHelper::translateText('ABOUT US', $preferredLanguage);
             </div>
         </nav>
         <!-- Secondary Navbar -->
-        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <nav class="navbar navbar-expand-lg navbar-dark ">
             <div class="container-fluid" style="border-bottom: .25px solid rgba(230, 230, 230, 0.3)">
                 <div class="collapse navbar-collapse" id="navbarNavDropdown">
                     <ul class="navbar-nav mx-auto p-2">
@@ -983,7 +1109,7 @@ $aboutMenu = TranslationHelper::translateText('ABOUT US', $preferredLanguage);
                         <hr>
 
 
-
+                                    
                         <li class="nav-item">
                             @if (!Auth::user())
                             <a class="navbar-brand d-block d-lg-none responsive-link nav-link hover-line" href="{{ route('ego.login') }}"
@@ -1598,13 +1724,9 @@ $aboutMenu = TranslationHelper::translateText('ABOUT US', $preferredLanguage);
             document.getElementById("search-popup").style.display = "flex";
         });
     });
-
-    // Close popup when clicking the close button
     document.getElementById("close-popup").addEventListener("click", function() {
         document.getElementById("search-popup").style.display = "none";
     });
-
-    // Optional: Close popup when clicking outside the search bar content
     document.getElementById("search-popup").addEventListener("click", function(e) {
         if (e.target == this) {
             document.getElementById("search-popup").style.display = "none";
