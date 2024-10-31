@@ -904,19 +904,18 @@ body {
         padding: 10px 20px;
         background-color: black;
         color: white;
-        border: none;
         text-align: center;
         text-decoration: none;
         display: inline-block;
         font-size: 16px;
         cursor: pointer;
+        border: 1px solid black;
         transition: background-color 0.3s, border-color 0.3s, color 0.3s;
     }
 
     .add-to-cart-button:hover {
         background-color: white;
         color: black;
-        border: 1px solid white;
         border: 1px solid black;
     }
 

@@ -430,7 +430,7 @@ $lensText = TranslationHelper::translateText('Lens Design', $preferredLanguage);
                     document.body.appendChild(overlay);
                 });
             </script>
-            
+
         </div>
     </div>
 
@@ -447,7 +447,7 @@ $lensText = TranslationHelper::translateText('Lens Design', $preferredLanguage);
                             <form id="add-to-wishlist-{{ $product->id }}" action="{{ route('wishlist.add', $product->id) }}" method="post">
                                 @csrf
                             </form>
-    
+
                             <a href="#" onclick="event.preventDefault(); document.getElementById('add-to-wishlist-{{ $product->id }}').submit();" class="add-to-wishlist" style="z-index: 9999;">
                                 @if($product->wishlist)
                                 <i class="fas fa-heart" style="background-color: white; color: black; display: flex"></i>
@@ -462,60 +462,60 @@ $lensText = TranslationHelper::translateText('Lens Design', $preferredLanguage);
                     </div>
                     <div class="card-product-slider-body">
                         <h5 class="card-product-slider-title">{{ $product->name }}</h5>
-                        <small class="price">{{$startText}}: {{ $product->price }} BDT</small>
+                        <small class="price">{{$startText}}: {{ $product->no_power_price ?? $product->price }} BDT</small>
                     </div>
                 </div>
             </div>
             @endforeach
         </div>
     </div>
-    
+
     <!-- CSS -->
     <style>
-    .card-product-slider {
-        /* Ensure some padding and margin adjustments */
-        padding: 10px;
-    }
-    
-    .card-product-slider-img-top {
-        width: 100%;
-        height: auto;
-    }
-    
-    /* Responsive design */
-    @media (max-width: 768px) {
-        .card-product-slider-title {
-            font-size: 1.1rem;
+        .card-product-slider {
+            /* Ensure some padding and margin adjustments */
+            padding: 10px;
         }
-    
-        .price {
-            font-size: 0.9rem;
+
+        .card-product-slider-img-top {
+            width: 100%;
+            height: auto;
         }
-    
-        .card-product-slider-body {
-            padding: 5px;
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .card-product-slider-title {
+                font-size: 1.1rem;
+            }
+
+            .price {
+                font-size: 0.9rem;
+            }
+
+            .card-product-slider-body {
+                padding: 5px;
+            }
+
+            .col-6 {
+                flex: 0 0 100%;
+                max-width: 100%;
+            }
         }
-    
-        .col-6 {
-            flex: 0 0 100%;
-            max-width: 100%;
+
+        @media (max-width: 576px) {
+            .card-product-slider-title {
+                font-size: 1rem;
+            }
+
+            .price {
+                font-size: 0.8rem;
+            }
+
+            .card-product-slider-icons i {
+                font-size: 0.8rem;
+            }
         }
-    }
-    
-    @media (max-width: 576px) {
-        .card-product-slider-title {
-            font-size: 1rem;
-        }
-    
-        .price {
-            font-size: 0.8rem;
-        }
-        
-        .card-product-slider-icons i {
-            font-size: 0.8rem;
-        }
-    }
     </style>
-    
+
 </div>
 @endsection

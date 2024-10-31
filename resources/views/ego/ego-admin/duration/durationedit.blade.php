@@ -31,7 +31,7 @@
                         @enderror
                     </div>
                     <div class="form-group col-6">
-                        <label id="duration-label">Count as Day</label> <!-- Added ID here -->
+                        <label id="duration-label">Count as Month</label> <!-- Added ID here -->
                         <select name="is_month" class="form-control" id="isMonthSelect">
                             <option value="1" @if($duration->is_month == '1') selected @endif>Yes</option>
                             <option value="0" @if($duration->is_month == '0') selected @endif>No</option>
@@ -48,10 +48,8 @@
                             var fieldLabel = document.getElementById('duration-field-label');
 
                             if (selectedValue === '0') {
-                                label.textContent = 'Count as Month';
                                 fieldLabel.textContent = 'Days (number of days)'; // Changes label to "Days"
                             } else {
-                                label.textContent = 'Count as Day';
                                 fieldLabel.textContent = 'Months (number of months)'; // Reverts to "Months"
                             }
                         });

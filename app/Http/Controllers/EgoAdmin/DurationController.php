@@ -115,7 +115,7 @@ class DurationController extends Controller
         $duration->save();
 
         $notify[] = ['success', 'Duration updated successfully.'];
-        return redirect()->route('duration.index')->withNotify($notify)->withInputs();
+        return redirect()->route('duration.index')->withNotify($notify);
     }
 
     public function destroy($id)

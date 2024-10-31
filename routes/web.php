@@ -3,6 +3,7 @@
 use App\Http\Controllers\EgoAdmin\CategoryController;
 use App\Http\Controllers\LanguageController;
 use App\Http\Controllers\SslCommerzPaymentController;
+use App\Http\Controllers\User\Auth\FacebookAuthController;
 use App\Http\Controllers\User\Auth\GoogleAuthController;
 use Illuminate\Support\Facades\Route;
 
@@ -116,3 +117,8 @@ Route::post('/ipn', [SslCommerzPaymentController::class, 'ipn']);
 
 Route::get('/auth/google',[GoogleAuthController::class, 'redirect'])->name('google.auth');
 Route::get('/auth/google/callback',[GoogleAuthController::class, 'callbackGoogle'])->name('google.callback');
+
+// Facebook Sign in
+
+Route::get('/auth/facebook',[FacebookAuthController::class, 'redirectToFacebook'])->name('facebook.auth');
+Route::get('/auth/facebook/callback',[FacebookAuthController::class, 'handleFacebookCallback'])->name('facebook.callback');

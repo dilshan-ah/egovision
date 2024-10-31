@@ -10,8 +10,8 @@
             slidesToScroll: 3,
             centerMode: true,
             centerPadding: '0',
-            autoplay: true, 
-            autoplaySpeed: 2000, 
+            autoplay: true,
+            autoplaySpeed: 2000,
             responsive: [{
                 breakpoint: 768,
                 settings: {
@@ -108,6 +108,8 @@
             infinite: true,
             slidesToShow: 4,
             slidesToScroll: 1,
+            autoplay: true,
+            autoplaySpeed: 1700,
             responsive: [{
                     breakpoint: 1024,
                     settings: {

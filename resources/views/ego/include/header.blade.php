@@ -1321,12 +1321,6 @@ $aboutMenu = TranslationHelper::translateText('ABOUT US', $preferredLanguage);
         <h4 style="font-size: 16px; font-weight: 600;">You have no items in your shopping cart.
         </h4>
         @endif
-
-        <div class="footer-text mt-5 text-center" style="color: white;">
-            <p style="margin-bottom: 5px; font-size: 14px; font-weight: 600;">FREE SAMPLES</p>
-            <p style="font-size: 13px; margin-bottom: 5px;">Go to your SHOPPING BAG to pick your FREE samples.</p>
-            <p style="font-size: 13px;">You can select up to 4 with your order!</p>
-        </div>
     </div>
 </div>
 
@@ -1335,12 +1329,12 @@ $aboutMenu = TranslationHelper::translateText('ABOUT US', $preferredLanguage);
         padding: 10px 20px;
         background-color: black;
         color: white;
-        border: none;
         text-align: center;
         text-decoration: none;
         display: inline-block;
         font-size: 16px;
         cursor: pointer;
+        border: 1px solid black;
         transition: background-color 0.3s, border-color 0.3s, color 0.3s;
     }
 

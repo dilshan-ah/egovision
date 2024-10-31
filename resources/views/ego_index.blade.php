@@ -111,6 +111,14 @@
         font-size: 20px;
         cursor: pointer;
     }
+
+    .card-anime img{
+        transition: transform 1s ease;
+    }
+
+    .card-anime:hover img{
+        transform: scale(1.1);
+    }
 </style>
 
 @php
@@ -210,7 +218,7 @@ $trustpilotText = TranslationHelper::translateText('Trustpilot', $preferredLangu
             <h3 class="text-center">
                 {{$welcomeText}}
             </h3>
-            <p>
+            <p class="text-justify">
                 {{$aboutText}}
             </p>
 
@@ -220,7 +228,7 @@ $trustpilotText = TranslationHelper::translateText('Trustpilot', $preferredLangu
         <div class="m-1">
             <div class="row">
                 @foreach($colors as $color)
-                <div class="col-12 col-md-6 col-lg-4 mb-4"> <!-- Adjusted classes -->
+                <div class="col-12 col-md-6 col-lg-4 mb-4 card-anime"> <!-- Adjusted classes -->
                     <a href="{{route('color.single.color',$color->id)}}" class="card-link">
                         <div class="card border-0 text-center">
                             <div class="overflow-hidden">
@@ -258,7 +266,7 @@ $trustpilotText = TranslationHelper::translateText('Trustpilot', $preferredLangu
         <div class="row">
             @foreach($collectionSet->products as $product )
             @if($product)
-            <div class="col-md-6 mb-4">
+            <div class="col-md-6 mb-4 card-anime">
                 <a href="{{ route('addToCart.index', $product->id) }}" class="card-link d-block ">
                     <div class="card border-0 text-center ">
                         <div class="card-video-top overflow-hidden position-relative">
@@ -278,7 +286,7 @@ $trustpilotText = TranslationHelper::translateText('Trustpilot', $preferredLangu
     </div>
     @endforeach
 
-    <!-- ------------------------------------------------------------------- -->
+    <!--------------------------------------------------------------------- -->
 
 
 

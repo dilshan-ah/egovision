@@ -429,8 +429,8 @@ $lensText = TranslationHelper::translateText('Lens Design', $preferredLanguage);
                         </div>
                     </div>
                     <div class="card-product-slider-body">
-                        <h5 class="card-product-slider-title">{{ $product->name }}</h5>
-                        <small class="price">{{$startText}} : {{ $product->price }} {{ 'BDT' }}</small>
+                        <h5 class="card-product-slider-title">{{ @$product->name }}</h5>
+                        <small class="price">{{$startText}} : {{ @$product->no_power_price ?? @$product->price }} {{ 'BDT' }}</small>
                     </div>
                 </div>
             </div>

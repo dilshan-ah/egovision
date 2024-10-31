@@ -384,7 +384,6 @@
         padding: 10px 20px;
         background-color: black;
         color: white;
-        border: none;
         text-align: center;
         text-decoration: none;
         display: inline-block;
@@ -954,11 +953,6 @@ $aboutMenu = TranslationHelper::translateText('ABOUT US', $preferredLanguage);
                             @else
                             <h4 style="font-size: 16px; font-weight: 600;">You have no items in your shopping cart.</h4>
                             @endif
-                            <div class="footer-text mt-5 text-center" style="color: white;">
-                                <p style="margin-bottom: 5px; font-size: 14px; font-weight: 600;">FREE SAMPLES</p>
-                                <p style="font-size: 13px; margin-bottom: 5px;">Go to your SHOPPING BAG to pick your FREE samples.</p>
-                                <p style="font-size: 13px;">You can select up to 4 with your order!</p>
-                            </div>
                         </div>
                     </div>
                 </div>
