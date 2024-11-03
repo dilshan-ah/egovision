@@ -86,7 +86,8 @@ class WishlistController extends Controller
     
         return response()->json([
             'success' => true,
-            'message' => 'Product added to your wishlist.'
+            'message' => 'Product added to your wishlist.',
+            'wishlist_count'=> Wishlist::where('user_id',$userExists->id)->count()
         ], 201); // Created
     }
     
