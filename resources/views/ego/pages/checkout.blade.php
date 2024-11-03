@@ -268,7 +268,7 @@
                     <div class="d-flex justify-content-between">
                         <h4>Total</h4>
                         <b id="total">
-                            {{
+                            <!-- {{
                                 $carts->sum(function($cart) {
                                     $price = $cart->power_status == 'no_power' ? $cart->product->no_power_price : $cart->product->price;
                                     return $price * $cart->pair;
@@ -280,7 +280,8 @@
                                     $price = $cart->power_status == 'no_power' ? $cart->product->no_power_price : $cart->product->price;
                                     return $price * $cart->pair;
                                 }) + $taxprice
-                            }} BDT
+                            }} BDT -->
+                             {{$total + 100}} BDT
                         </b>
 
                     </div>

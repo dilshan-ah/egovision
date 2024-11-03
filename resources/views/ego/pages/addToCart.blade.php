@@ -58,7 +58,7 @@ $moreInfo = TranslationHelper::translateText('More Information', $preferredLangu
 $powerRange = TranslationHelper::translateText('Power Range', $preferredLanguage);
 $lensParam = TranslationHelper::translateText('Lens Parameters', $preferredLanguage);
 
-$pack = TranslationHelper::translateText('Pack Content	', $preferredLanguage);
+$pack = TranslationHelper::translateText('Pack Content ', $preferredLanguage);
 $diameter = TranslationHelper::translateText('Diameter', $preferredLanguage);
 $base = TranslationHelper::translateText('Base curve', $preferredLanguage);
 $material = TranslationHelper::translateText('Material', $preferredLanguage);
@@ -70,9 +70,10 @@ $step = TranslationHelper::translateText('Steps', $preferredLanguage);
 $plano = TranslationHelper::translateText('Plano', $preferredLanguage);
 $myopia = TranslationHelper::translateText('Myopia', $preferredLanguage);
 $hyperopia = TranslationHelper::translateText('Hyperopia', $preferredLanguage);
+$relatedProduct = TranslationHelper::translateText('Related Products', $preferredLanguage);
 @endphp
 <div class="row" style="margin-top:150px">
-    <div class="col-md-2">
+    <div class="col-md-1">
         <div class="vertical-slider" style="cursor: pointer; padding: 10px;">
             <div class="d-flex justify-content-end">
                 <img src="{{ asset($product->image_path) }}" class="img-fluid imageAlbum" style="margin-bottom: 10px; margin-left: 0; margin-right: 0">
@@ -85,7 +86,7 @@ $hyperopia = TranslationHelper::translateText('Hyperopia', $preferredLanguage);
         </div>
     </div>
     <!-- Middle Column - Vertical Images -->
-    <div class="col-md-5">
+    <div class="col-md-6">
         <div class="main-image-container">
             <img id="mainImage" src="{{ asset($product->image_path) }}" class="main-image img-fluid w-100"
                 alt="Main Display" />
@@ -386,7 +387,7 @@ $hyperopia = TranslationHelper::translateText('Hyperopia', $preferredLanguage);
                     <span class="custom-closebtn" style="font-size: 24px; cursor: pointer;">&times;</span>
                 </div>
                 <div class="custom-accordion">
-                    
+
                     <table class="table mt-4">
                         <tbody>
                             <tr class="table-dark">
@@ -438,6 +439,39 @@ $hyperopia = TranslationHelper::translateText('Hyperopia', $preferredLanguage);
                 </div>
             </div>
         </div>
+    </div>
+</div>
+<div class="mt-5 container-fluid">
+    <div class="row">
+    <div class="col-1"></div>
+        <div class="col-11">
+            <h1>
+                <span>{{$relatedProduct}}</span>
+            </h1>
+        </div>
+        <div class="col-1"></div>
+        <div class="col-10">
+            <div class="product-slider d-flex flex-nowrap overflow-hidden ">
+                @foreach($relatedProducts as $relatedProduct)
+                <div class="card-product-slider mx-2 mb-5">
+
+                    <div class="card-product-slider-img-wrapper ">
+                        <img src="{{asset($relatedProduct->image_path)}}" style="width: 100%; height: auto" class="card-product-slider-img-top" alt="...">
+                        <a href="{{ route('addToCart.index', $relatedProduct->id) }}" class="stretched-link"></a>
+                        <div class="card-product-slider-icons">
+                            <i class="fas fa-heart"></i>
+                            <i class="fas fa-share"></i>
+                        </div>
+                    </div>
+                    <div class="card-product-slider-body">
+                        <h5 class="card-product-slider-title">{{ $relatedProduct->name }}</h5>
+                        <small class="price">{{ $relatedProduct->price }} BDT</small>
+                    </div>
+                </div>
+                @endforeach
+            </div>
+        </div>
+        <div class="col-1"></div>
     </div>
 </div>
 <div class="lightbox" id="lightbox">
@@ -511,8 +545,16 @@ $hyperopia = TranslationHelper::translateText('Hyperopia', $preferredLanguage);
 
     }
 
-    const productPrice = {{$product->price ?? 0}};
-    const productNoPowerPrice = {{ $product->no_power_price ?? 0 }};
+    const productPrice = {
+        {
+            $product - > price ?? 0
+        }
+    };
+    const productNoPowerPrice = {
+        {
+            $product - > no_power_price ?? 0
+        }
+    };
     let globalTotalPrice = productNoPowerPrice;
     const addToCartButton = document.getElementById("total-price");
     const addBtn = document.getElementById('add-to-cart');

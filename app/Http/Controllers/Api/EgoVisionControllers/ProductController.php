@@ -148,6 +148,16 @@ class ProductController extends Controller
             $product->tone_id = $product->tone->name ?? null;
             $product->duration_id = $product->duration->name ?? null;
 
+            if ($product->color) {
+                $relatedProducts = Product::with('color')
+                ->whereHas('color', function ($query) use ($product) {
+                    $query->where('id', $product->color->id);
+                })->where('id','!=',$product->id)->select('id','name','no_power_price','image_path')
+                ->take(6)
+                ->get();
+            }
+            
+
             unset($product->color);
             unset($product->diameter);
             unset($product->lensDesign);
@@ -166,7 +176,8 @@ class ProductController extends Controller
                 'status' => true,
                 'response_code' => 200,
                 'message' => 'success',
-                'data' => $product
+                'data' => $product,
+                'relatedProduct' => $relatedProducts ?? [],
             ]);
         } catch (\Exception $e) {
             // Catch and return error in case of exception

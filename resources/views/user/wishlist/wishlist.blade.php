@@ -15,10 +15,10 @@
                     <div class="col-6 mb-2">
                         <div class="card-product-slider mx-2">
                             <div class="card-product-slider-img-wrapper position-relative">
-                                <img src="{{ asset($wishlist->product->image_path) }}" class="card-product-slider-img-top w-100">
-                                <a href="{{ route('addToCart.index', $wishlist->product->id) }}" class="stretched-link"></a>
+                                <img src="{{ asset(@$wishlist->product->image_path) }}" class="card-product-slider-img-top w-100">
+                                <a href="{{ route('addToCart.index', @$wishlist->product->id ?? 1) }}" class="stretched-link"></a>
 
-                                <form action="{{route('wishlist.delete',$wishlist->id)}}" method="post">
+                                <form action="{{route('wishlist.delete',@$wishlist->id ?? 1)}}" method="post">
                                     @csrf
                                     @method('delete')
                                     <button type="submit" class="badge bg-danger text-white position-absolute" style="border-radius: 0; font-size: 10px; padding: 10px; right: 20px; top: 20px; border: 0; z-index: 99999 !important">
@@ -28,8 +28,8 @@
 
                             </div>
                             <div class="card-product-slider-body">
-                                <h5 class="card-product-slider-title">{{ $wishlist->product->name }}</h5>
-                                <small class="price">STARTING AT : {{ $wishlist->product->price }} {{ 'BDT' }}</small>
+                                <h5 class="card-product-slider-title">{{ @$wishlist->product->name }}</h5>
+                                <small class="price">STARTING AT : {{ @$wishlist->product->price }} {{ 'BDT' }}</small>
                             </div>
                         </div>
                     </div>

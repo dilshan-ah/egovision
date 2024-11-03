@@ -35,33 +35,48 @@ class OrderController extends Controller
         $product->name =  TranslationHelper::translateText($product->name, $preferredLanguage);
         $product->description =  TranslationHelper::translateText($product->description, $preferredLanguage);
         $product->product_intro =  TranslationHelper::translateText($product->product_intro, $preferredLanguage);
-        if($product->color){
+        if ($product->color) {
             @$product->color->name =  TranslationHelper::translateText(@$product->color->name ?? '', @$preferredLanguage);
         }
-        if($product->diameter){
-           $product->diameter->name =  TranslationHelper::translateText($product->diameter->name, $preferredLanguage); 
+        if ($product->diameter) {
+            $product->diameter->name =  TranslationHelper::translateText($product->diameter->name, $preferredLanguage);
         }
-        if($product->lensDesign){
+        if ($product->lensDesign) {
             $product->lensDesign->name =  TranslationHelper::translateText($product->lensDesign->name, $preferredLanguage);
         }
-        if($product->baseCurve){
+        if ($product->baseCurve) {
             $product->baseCurve->name =  TranslationHelper::translateText($product->baseCurve->name, $preferredLanguage);
         }
-        if($product->category){
+        if ($product->category) {
             $product->category->name =  TranslationHelper::translateText($product->category->name, $preferredLanguage);
         }
-        if($product->duration){
-           $product->duration->name =  TranslationHelper::translateText($product->duration->name, $preferredLanguage); 
+        if ($product->duration) {
+            $product->duration->name =  TranslationHelper::translateText($product->duration->name, $preferredLanguage);
         }
-        if($product->tone){
+        if ($product->tone) {
             $product->tone->name =  TranslationHelper::translateText($product->tone->name, $preferredLanguage);
         }
-        if($product->material){
+        if ($product->material) {
             $product->material->name =  TranslationHelper::translateText($product->material->name, $preferredLanguage);
         }
         $product->lens_params =  TranslationHelper::translateText((string) $product->lens_params, $preferredLanguage);
 
-        return view('ego.pages.addToCart', compact('pageTitle', 'product', 'powers'));
+        $relatedProducts = collect();
+        if($product->color){
+            $relatedProducts = Product::with('color')
+            ->whereHas('color', function ($query) use ($product) {
+                $query->where('id', $product->color->id);
+            })->where('id','!=',$product->id)
+            ->get()->take(6);
+        }
+        
+        
+        foreach($relatedProducts as $relatedProduct){
+            $relatedProduct->name = TranslationHelper::translateText((string) $relatedProduct->name, $preferredLanguage);
+        }    
+
+
+        return view('ego.pages.addToCart', compact('pageTitle', 'product', 'powers','relatedProducts'));
     }
 
     public function generatePowerValues($availablePowers)
@@ -146,8 +161,9 @@ class OrderController extends Controller
 
         $taxprice = $cartTotal * $taxPerc / 100;
 
+        $total = $cartTotal + $taxprice;
 
-        return view('ego.pages.checkout', compact('carts', 'pageTitle', 'countries', 'dialdatas', 'hasAccessory', 'freeGift', 'promoCodes', 'shippingMethods', 'userDetail', 'taxPerc', 'taxprice'));
+        return view('ego.pages.checkout', compact('carts', 'pageTitle', 'countries', 'dialdatas', 'hasAccessory', 'freeGift', 'promoCodes', 'shippingMethods', 'userDetail', 'taxPerc', 'taxprice', 'total'));
     }
 
 
@@ -358,9 +374,9 @@ class OrderController extends Controller
     public function invoice(string $id)
     {
         $order = Order::where('id', $id)->with('orderItems')->first();
-        $url = route('ego.single.orders',$id);
+        $url = route('ego.single.orders', $id);
         $qrCode = QrCode::size(80)->generate($url);
-        return view('user.order.invoice', compact('order','qrCode'));
+        return view('user.order.invoice', compact('order', 'qrCode'));
     }
 
     public function updatePayment(string $id, Request $request)
