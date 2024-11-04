@@ -25,7 +25,6 @@ $high = TranslationHelper::translateText('High', $preferredLanguage);
 $addNew = TranslationHelper::translateText('Add New', $preferredLanguage);
 $attach = TranslationHelper::translateText('Attachments', $preferredLanguage);
 $max = TranslationHelper::translateText('Max 5 files can be uploaded Maximum upload size is', $preferredLanguage);
-$max = TranslationHelper::translateText('Max 5 files can be uploaded Maximum upload size is', $preferredLanguage);
 $allowed = TranslationHelper::translateText('Allowed File Extensions: .jpg, .jpeg, .png, .pdf, .doc, .docx', $preferredLanguage);
 $submitBtn = TranslationHelper::translateText('Submit', $preferredLanguage);
 @endphp
@@ -88,7 +87,7 @@ $submitBtn = TranslationHelper::translateText('Submit', $preferredLanguage);
                         </div>
 
                         <div class="form-group">
-                            <button class="btn btn-dark w-100" type="submit"><i class="fa fa-paper-plane"></i>&nbsp;@lang('Submit')</button>
+                            <button class="btn btn-dark w-100" type="submit"><i class="fa fa-paper-plane"></i> {{$submitBtn}}</button>
                         </div>
                     </form>
                 </div>

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\EgoAdmin;
 
+use App\Helpers\TranslationHelper;
 use App\Http\Controllers\Controller;
 use App\Models\EgoModels\OrderItems;
 use App\Models\ReturnProduct;
@@ -42,8 +43,20 @@ class ReturnProductController extends Controller
 
     public function showReturns()
     {
-        $pageTitle = "Returend Products";
+        $preferredLanguage = session('preferredLanguage');
+        $pageTitle = TranslationHelper::translateText("Returend Products", $preferredLanguage);
+        
         $returnProducts = ReturnProduct::where('user_id', Auth::user()->id)->get();
+        foreach($returnProducts as $returnProduct){
+            $returnProduct->status = TranslationHelper::translateText($returnProduct->status, $preferredLanguage);
+            
+            if (!empty($returnProduct->item) && is_iterable($returnProduct->item->product)) {
+                foreach ($returnProduct->item->product as $product) {
+        
+                    $product->name = TranslationHelper::translateText($product->name, $preferredLanguage);
+                }
+            }
+        }
 
         return view('user.returned_products', compact('returnProducts', 'pageTitle'));
     }

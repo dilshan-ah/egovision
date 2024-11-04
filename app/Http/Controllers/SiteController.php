@@ -503,7 +503,8 @@ class SiteController extends Controller
 
     public function newsLetter()
     {
-        $pageTitle = 'Newsletter Subscription';
+        $preferredLanguage = session('preferredLanguage');
+        $pageTitle = TranslationHelper::translateText("Newsletter Subscription", $preferredLanguage);
         $subscribed = Subscriber::where('email', Auth::user()->email)->first();
         return view('user.news_letter', compact('pageTitle', 'subscribed'));
     }
