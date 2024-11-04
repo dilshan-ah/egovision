@@ -27,17 +27,17 @@ class SupportTicket extends Model
         return new Attribute(function(){
             $html = '';
             if($this->status == Status::TICKET_OPEN){
-                $html = '<span class="badge badge-success">'.trans("Open").'</span>';
+                $html = '<span class="badge bg-success text-white py-1 px-2 rounded" style="font-size: 20px;">'.trans("Open").'</span>';
             }
             elseif($this->status == Status::TICKET_ANSWER){
-                $html = '<span class="badge badge-primary">'.trans("Answered").'</span>';
+                $html = '<span class="badge bg-primary text-white py-1 px-2 rounded" style="font-size: 20px;">'.trans("Answered").'</span>';
             }
 
             elseif($this->status == Status::TICKET_REPLY){
-                $html = '<span class="badge badge-warning">'.trans("Customer Reply").'</span>';
+                $html = '<span class="badge bg-warning text-white py-1 px-2 rounded" style="font-size: 20px;">'.trans("Customer Reply").'</span>';
             }
             elseif($this->status == Status::TICKET_CLOSE){
-                $html = '<span class="badge badge-dark">'.trans("Closed").'</span>';
+                $html = '<span class="badge bg-dark text-white py-1 px-2 rounded" style="font-size: 20px;">'.trans("Closed").'</span>';
             }
             return $html;
         });

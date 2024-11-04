@@ -1,13 +1,19 @@
 @extends('layouts.app')
 
 @section('content')
+@php
+use App\Helpers\TranslationHelper;
+$preferredLanguage = session('preferredLanguage');
+$wishlistText = TranslationHelper::translateText('WishLists', $preferredLanguage);
+$startText = TranslationHelper::translateText('STARTING AT', $preferredLanguage);
+@endphp
 <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/2.6.0/uicons-bold-rounded/css/uicons-bold-rounded.css'>
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-12">
             <div class="card custom-card">
                 <div class="card-header">
-                    <h5 class="card-title" style="font-size: 30px; color: black">{{ __($pageTitle) }}</h5>
+                    <h5 class="card-title" style="font-size: 30px; color: black">{{ $wishlistText }}</h5>
                 </div>
 
                 <div class="row my-5">
@@ -29,7 +35,7 @@
                             </div>
                             <div class="card-product-slider-body">
                                 <h5 class="card-product-slider-title">{{ @$wishlist->product->name }}</h5>
-                                <small class="price">STARTING AT : {{ @$wishlist->product->price }} {{ 'BDT' }}</small>
+                                <small class="price">{{$startText}} : {{ @$wishlist->product->no_power_price }} {{ 'BDT' }}</small>
                             </div>
                         </div>
                     </div>

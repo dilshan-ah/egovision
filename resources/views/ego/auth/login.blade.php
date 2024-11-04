@@ -125,7 +125,29 @@
         }
     }
 </style>
+@php
+use App\Helpers\TranslationHelper;
+$preferredLanguage = session('preferredLanguage');
+$loginTitle = TranslationHelper::translateText('Login', $preferredLanguage);
+$haveAccount = TranslationHelper::translateText('If you have an account, sign in with your email address.', $preferredLanguage);
+$emailLabel = TranslationHelper::translateText('Email/User Name', $preferredLanguage);
+$passwordLabel = TranslationHelper::translateText('Password', $preferredLanguage);
+$rememberLabel = TranslationHelper::translateText('Remember Me', $preferredLanguage);
+$resetPassword = TranslationHelper::translateText('If you have not reset your password in 2023, your password has expired and must be changed by clicking the link below. ', $preferredLanguage);
+$forgotPassword = TranslationHelper::translateText('Forgot your password?', $preferredLanguage);
+$signGoogle = TranslationHelper::translateText('Sign in Using Google', $preferredLanguage);
+$signFacebook = TranslationHelper::translateText('Sign in Using Facebook', $preferredLanguage);
 
+$newCustomer = TranslationHelper::translateText('New Customers', $preferredLanguage);
+$checkFast = TranslationHelper::translateText('Check out faster, keep more than one address, track orders, and more.', $preferredLanguage);
+$accCreate = TranslationHelper::translateText('Creating an account has many benefits:', $preferredLanguage);
+
+$regOne = TranslationHelper::translateText('Get 10% off your first order by signing up for our newsletter.', $preferredLanguage);
+$regTwo = TranslationHelper::translateText('Receive email delivery updates.', $preferredLanguage);
+$regThree = TranslationHelper::translateText('Easy access to your order history.', $preferredLanguage);
+
+$regBtn = TranslationHelper::translateText('Register', $preferredLanguage);
+@endphp
 <body>
     <br><br><br><br><br><br><br>
     <div class="container">
@@ -135,43 +157,43 @@
                 <div class="row">
                     <div class="col-12 mt-5 mb-5">
                         <div class="p-5 bg-light">
-                            <h2>Login</h2>
-                            <p><b>If you have an account, sign in with your email address.</b></p>
+                            <h2>{{$loginTitle}}</h2>
+                            <p><b>{{$haveAccount}}</b></p>
                             <form action="{{route('user.login')}}" method="post">
                                 @csrf
                                 <div class="mb-3 text-start">
-                                    <label for="loginEmail" class="form-label">Email/User Name</label>
+                                    <label for="loginEmail" class="form-label">{{$emailLabel}}</label>
                                     <input type="email" class="form-control" name="username" id="loginEmail" placeholder="Enter your email">
                                 </div>
                                 <div class="mb-3 text-start">
-                                    <label for="loginPassword" class="form-label">Password</label>
+                                    <label for="loginPassword" class="form-label">{{$passwordLabel}}</label>
                                     <input type="password" class="form-control" name="password" id="loginPassword" placeholder="Enter your password">
                                 </div>
                                 <div class="form-check mb-3">
                                     <input type="checkbox" class="form-check-input" name="remember" id="remember">
-                                    <label class="form-check-label" for="rememberMe">Remember Me</label>
+                                    <label class="form-check-label" for="rememberMe">{{$rememberLabel}}</label>
                                 </div>
                                 <div class="forgot-password-container mb-3 text-center">
                                     <p style="font-size: 1rem; color: #333; line-height: 1.5;">
-                                        If you have not reset your password in 2023, your password has expired and must be changed by clicking the link below.
+                                        {{$resetPassword}}
                                         <span style="font-weight: 600;">
                                             <a href="{{ route('user.password.request') }}" style="color: #E9814C; text-decoration: none; border-bottom: 2px solid #E9814C; transition: color 0.3s ease;">
-                                                Forgot your password?
+                                                {{$forgotPassword}}
                                             </a>
                                         </span>
                                     </p>
                                 </div>
-                                <button type="submit" class="btn btn-dark w-100">Login <span><i class="fas fa-arrow-right mx-3" style="color: white; font-size:12px;"></i></span></button>
+                                <button type="submit" class="btn btn-dark w-100">{{$loginTitle}} <span><i class="fas fa-arrow-right mx-3" style="color: white; font-size:12px;"></i></span></button>
                             </form>
                             <div class="w-100 d-flex justify-content-center mt-3">
                                 <a href="{{route('google.auth')}}" class="btn btn-lg btn-google btn-block btn-outline text-black shadow" style="font-size: 16px">
-                                    <img src="https://img.icons8.com/color/16/000000/google-logo.png"> Sign in Using Google
+                                    <img src="https://img.icons8.com/color/16/000000/google-logo.png"> {{$signGoogle}}
                                 </a>
                             </div>
 
                             <div class="w-100 d-flex justify-content-center mt-3">
                                 <a href="{{route('facebook.auth')}}" class="btn btn-lg btn-google btn-block btn-outline text-black shadow" style="font-size: 16px">
-                                    <img width="16px" src="https://img.icons8.com/?size=100&id=118497&format=png&color=000000"> Sign in Using Facebook
+                                    <img width="16px" src="https://img.icons8.com/?size=100&id=118497&format=png&color=000000"> {{$signFacebook}}
                                 </a>
                             </div>
                         </div>
@@ -184,15 +206,15 @@
                 <div class="row">
                     <div class="col-12 mt-5 mb-5">
                         <div class="p-5 bg-light">
-                            <h2>New Customers</h2>
-                            <p>Check out faster, keep more than one address, track orders, and more.</p>
-                            <p><b>Creating an account has many benefits:</b></p>
+                            <h2>{{$newCustomer}}</h2>
+                            <p>{{$checkFast}}</p>
+                            <p><b>{{$accCreate}}</b></p>
                             <ul>
-                                <li>Get 10% off your first order by signing up for our newsletter.</li>
-                                <li>Receive email delivery updates.</li>
-                                <li>Easy access to your order history.</li>
+                                <li>{{$regOne}}</li>
+                                <li>{{$regTwo}}</li>
+                                <li>{{$regThree}}</li>
                             </ul>
-                            <a href="{{route('ego.register')}}" class="btn btn-dark w-100 mt-5 text-light">Register <span><i class="fas fa-arrow-right mx-3" style="color: white; font-size:12px;"></i></span></a>
+                            <a href="{{route('ego.register')}}" class="btn btn-dark w-100 mt-5 text-light">{{$regBtn}} <span><i class="fas fa-arrow-right mx-3" style="color: white; font-size:12px;"></i></span></a>
                         </div>
                     </div>
                 </div>
