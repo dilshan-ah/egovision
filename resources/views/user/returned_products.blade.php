@@ -1,6 +1,11 @@
 @extends('layouts.app')
 
 @section('content')
+@php
+use App\Helpers\TranslationHelper;
+$preferredLanguage = session('preferredLanguage');
+$newTicket = TranslationHelper::translateText('New Ticket', $preferredLanguage);
+@endphp
 <div class="container">
     <div class="row justify-content-center mt-4">
         <div class="col-12 mb-5">

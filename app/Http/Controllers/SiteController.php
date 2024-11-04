@@ -434,10 +434,15 @@ class SiteController extends Controller
 
     public function wishlist()
     {
-        $pageTitle = "WishLists";
+        $preferredLanguage = session('preferredLanguage');
+        $pageTitle = TranslationHelper::translateText("WishLists", $preferredLanguage);
         $userId = Auth::id();
         $wishlists = Wishlist::where('user_id', $userId)
             ->get();
+        
+        foreach($wishlists as $wishlist){
+            $wishlist->product->name = TranslationHelper::translateText($wishlist->product->name, $preferredLanguage);
+        }
 
         return view('user.wishlist.wishlist', compact('pageTitle', 'wishlists'));
     }
@@ -455,25 +460,51 @@ class SiteController extends Controller
 
     public function myOrders()
     {
-        $pageTitle = "My Orders";
+        $preferredLanguage = session('preferredLanguage');
+        $pageTitle = TranslationHelper::translateText("My Orders", $preferredLanguage);
+
         $userId = Auth::id();
         $orders = Order::where('user_id', $userId)->with('orderItems.product')->orderBy('created_at','desc')
             ->get();
+
+        foreach($orders as $order){
+            $order->status = TranslationHelper::translateText($order->status, $preferredLanguage);
+
+            foreach ($order->orderItems as $item) {
+                if ($item->product) {
+                    $item->product->name = TranslationHelper::translateText($item->product->name, $preferredLanguage);
+                }
+            }
+        }
 
         return view('user.order.index', compact('pageTitle', 'orders'));
     }
 
     public function singleOrder(string $id)
     {
+        $preferredLanguage = session('preferredLanguage');
         $pageTitle = 'Order Details | Order';
         $order = Order::where('id', $id)->with('orderItems.product', 'user')->first();
+
+        $order->user->firstname = TranslationHelper::translateText($order->user->firstname, $preferredLanguage);
+        $order->user->lastname = TranslationHelper::translateText($order->user->lastname, $preferredLanguage);
+
+        $order->name = TranslationHelper::translateText($order->name, $preferredLanguage);
+        $order->address_one = TranslationHelper::translateText($order->address_one, $preferredLanguage);
+        $order->address_two = TranslationHelper::translateText($order->address_two, $preferredLanguage);
+        $order->company = TranslationHelper::translateText($order->company, $preferredLanguage);
+        $order->city = TranslationHelper::translateText($order->city, $preferredLanguage);
+        $order->zip_code = TranslationHelper::translateText($order->zip_code, $preferredLanguage);
+        $order->state = TranslationHelper::translateText($order->state, $preferredLanguage);
+        $order->country = TranslationHelper::translateText($order->country, $preferredLanguage);
 
         return view('user.order.view', compact('order', 'pageTitle'));
     }
 
     public function newsLetter()
     {
-        $pageTitle = 'Newsletter Subscription';
+        $preferredLanguage = session('preferredLanguage');
+        $pageTitle = TranslationHelper::translateText("Newsletter Subscription", $preferredLanguage);
         $subscribed = Subscriber::where('email', Auth::user()->email)->first();
         return view('user.news_letter', compact('pageTitle', 'subscribed'));
     }

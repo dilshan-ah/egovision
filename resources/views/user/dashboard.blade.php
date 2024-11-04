@@ -27,14 +27,23 @@
     color: #333 !important;
   }
 </style>
-<h2 class="mt-4">Welcome {{ auth()->user()->firstname }} {{ auth()->user()->lastname }}</h2>
+@php
+use App\Helpers\TranslationHelper;
+$preferredLanguage = session('preferredLanguage');
+$welcome = TranslationHelper::translateText('Welcome', $preferredLanguage);
+$order = TranslationHelper::translateText('My Orders', $preferredLanguage);
+$wishlist = TranslationHelper::translateText('Wishlist', $preferredLanguage);
+$accountInfo = TranslationHelper::translateText('Account Information', $preferredLanguage);
+@endphp
+
+<h2 class="mt-4">{{$welcome}} {{ auth()->user()->firstname }} {{ auth()->user()->lastname }}</h2>
 
 <div class="row">
   <div class="col-md-4">
     <div class="card">
       <a href="{{route('ego.orders')}}">
         <i class="fas fa-box"></i>
-        <h3 class="card-title">My Orders</h3>
+        <h3 class="card-title">{{$order}}</h3>
       </a>
     </div>
   </div>
@@ -42,7 +51,7 @@
     <div class="card">
       <a href="{{route('ego.wishlist')}}">
         <i class="fas fa-heart"></i>
-        <h3 class="card-title">Wishlist</h3>
+        <h3 class="card-title">{{$wishlist}}</h3>
       </a>
     </div>
   </div>
@@ -58,7 +67,7 @@
     <div class="card">
       <a href="{{ route('user.profile.setting') }}">
         <i class="fas fa-user"></i>
-        <h3 class="card-title">Account Information</h3>
+        <h3 class="card-title">{{$accountInfo}}</h3>
       </a>
     </div>
   </div>
