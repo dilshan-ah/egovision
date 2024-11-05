@@ -176,7 +176,7 @@ textarea:focus {
             width: 133%;
             height: 100%;
             border-radius: 10px; /* Rounded corners */
-            background-color: white; /* Light background */
+            border:3px solid white;
             transition: background-color 0.3s ease, box-shadow 0.3s ease; /* Smooth transition for background and shadow */
         }
 
@@ -189,7 +189,7 @@ textarea:focus {
 
         .custom-slider {
     position: absolute;
-    top: 3.5px; /* Adjust top position */
+    top: 1.5px; /* Adjust top position */
     left: 2px; /* Adjust left position */
     width: 24px; /* Width of the eye shape */
     height: 12px; /* Height of the eye shape */
@@ -272,7 +272,7 @@ textarea:focus {
 .custom-mode-text {
     color: white;
     margin-left: 10px; /* Adjusted for better alignment */
-    font-size: 12px;
+    font-size: 16px;
 }
 
 .custom-icon-link {
