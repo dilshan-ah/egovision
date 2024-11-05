@@ -27,12 +27,11 @@ $discoBtn = TranslationHelper::translateText("Discover the Collection: From -8.0
     <a href="{{ route('ego.index') }}">{{$homeUrl}}</a>
     <h1 class="text-center" style="font-size: 5rem">{{$aboutTitle}}</h1>
     <p class="text-center">{{$aboutText}}</p>
-
-    <div class="row align-items-center" style="background: #f5f5f5;">
+    <div class="row align-items-center all  ">
         <div class="col-md-8">
             <img src="https://www.desiolens.com/media/wysiwyg/Topmenu_-color_SBL13.jpg" class="img-fluid" alt="Timeless Collection">
         </div>
-        <div class="col-md-4">
+        <div class="col-md-4 abouMode">
             <div class="p-5 mt-2">
                 <h1>{{$firstTitle}}</h1>
                 <h6>{{$firstSubTitle}}</h6>
@@ -45,10 +44,10 @@ $discoBtn = TranslationHelper::translateText("Discover the Collection: From -8.0
     </div>
 </div>
 <br>
-<div class="container">
+<div class="container allLense">
     <div class="row align-items-center" style="background: #f5f5f5;">
 
-        <div class="col-md-6">
+        <div class="col-md-6 allLense">
             <div class="p-5 mt-2">
             <h1>{{$firstTitle}}</h1>
                 <h6>{{$firstSubTitle}}</h6>
@@ -58,7 +57,7 @@ $discoBtn = TranslationHelper::translateText("Discover the Collection: From -8.0
                 <a href="#" class="mt-5 text-black">{{$discoBtn}} <i class="fa-solid fa-arrow-right"></i></a>
             </div>
         </div>
-        <div class="col-md-6">
+        <div class="col-md-6 allLens">
             <img src="https://www.desiolens.com/media/wysiwyg/romanticblue.jpg" class="img-fluid" alt="Timeless Collection">
         </div>
     </div>

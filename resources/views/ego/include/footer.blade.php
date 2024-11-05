@@ -198,8 +198,8 @@ $acceptPay = TranslationHelper::translateText('Accepted Payment Methods', $prefe
             <div class="col-md-4">
                 <form action="{{route('subscribe.store.email')}}" method="post">
                     @csrf
-                    <h5>{{$getOffer}}</h5>
-                    <p class="text-black">
+                    <h5 class="getoffer">{{$getOffer}}</h5>
+                    <p class=" subsTitle">
                         {{$subsTitle}}
                     </p>
                     <div class="input-group mb-3">
@@ -208,14 +208,13 @@ $acceptPay = TranslationHelper::translateText('Accepted Payment Methods', $prefe
                     <div id="subscribeSection" class="hidden">
                         <div class="form-check mb-3">
                             <input class="form-check-input" type="checkbox" value="" id="privacyPolicyCheck" required>
-                            <label class="form-check-label text-white" for="privacyPolicyCheck">
-                                <i class="bi .bi-check-circle-fill"></i> <span class="text-dark">{{$policyTExt}}</span>
+                            <label class="form-check-label " for="privacyPolicyCheck">
+                                <i class="bi .bi-check-circle-fill"></i> <span class="policyTExt">{{$policyTExt}}</span>
                             </label>
                         </div>
                         <button id="subscribeButton" class="btn btn-dark" type="submit" disabled>{{$subsBtn}}</button>
                     </div>
                 </form>
-
             </div>
             <!-- Middle Side -->
             <div class="col-md-4">
@@ -234,8 +233,8 @@ $acceptPay = TranslationHelper::translateText('Accepted Payment Methods', $prefe
                 </div>
             </div>
             <!-- Right Side -->
-            <div class="col-md-4">
-                <div class="accordion accordion-flush" id="accordionFlushExample">
+            <div class="col-md-4 " >
+                <div class="accordion accordion-flush bg-success" id="accordionFlushExample">
                     <div class="accordion-item">
                         <h2 class="accordion-header">
                             <button class="accordion-button collapsed text-white" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
@@ -291,7 +290,7 @@ $acceptPay = TranslationHelper::translateText('Accepted Payment Methods', $prefe
         <div class="container text-center">
             <div class="row">
                 <div class="col-md-12">
-                    <h5>{{$followUs}}</h5>
+                    <h5 class="followUs">{{$followUs}}</h5>
                     <div class="social-icons">
                         <a href="https://www.facebook.com/fashionoptics.store"><i class="fab fa-facebook-f" target="_blank"></i></a>
                         <a href="#"><i class="fab fa-twitter"></i></a>
@@ -305,7 +304,7 @@ $acceptPay = TranslationHelper::translateText('Accepted Payment Methods', $prefe
             </div>
             <div class="row mt-4">
                 <div class="col-md-12">
-                    <h5>{{$acceptPay}}</h5>
+                    <h5 class="acceptPay">{{$acceptPay}}</h5>
                     <img src="{{asset('ego/footer_pay.png')}}" width="100%" height="auto" alt="">
                 </div>
             </div>

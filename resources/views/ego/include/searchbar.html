@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Egovision Search Bar</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <div class="search-container_final">
+        <input type="text" class="search-bar_final" placeholder="Search fashion...">
+        <div class="search-icon_final">
+            <i class="fas fa-search"></i>
+        </div>
+    </div>
+
+    <style>
+     
+
+        .search-container_final {
+            position: relative;
+            width: 300px; /* Fixed width */
+            margin: 20px;
+            border-radius: 25px;
+            overflow: hidden;
+        }
+
+        .search-bar_final {
+            width: 100%;
+            padding: 10px 40px 10px 15px;
+            font-size: 14px; /* Reduced font size */
+            border: 2px solid #000; /* Black border */
+            border-radius: 25px;
+            outline: none;
+            transition: all 0.3s ease;
+            background-color: #fff; /* White background */
+            color: #000; /* Black text */
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Hover effect */
+        .search-container_final:hover .search-bar_final {
+            border-color: #E9814C; /* Highlight border color on hover */
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .search-container_final:hover .search-icon_final i {
+            color: #E9814C; /* Icon color on hover */
+            transform: scale(1.2);
+            transition: transform 0.3s ease;
+        }
+
+        /* Search icon styling */
+        .search-icon_final {
+            position: absolute;
+            top: 50%;
+            right: 15px;
+            transform: translateY(-50%);
+            font-size: 18px;
+            color: #000; /* Black icon color */
+        }
+
+        /* Placeholder styling */
+        .search-bar_final::placeholder {
+            font-style: italic;
+            color: rgba(0, 0, 0, 0.5); /* Light gray placeholder */
+        }
+    </style>
+
+    <script>
+        const placeholderTexts = [
+            "Search fashion...",
+            "Latest styles...",
+            "Your next outfit...",
+            "Explore collections..."
+        ];
+        
+        let currentPlaceholderIndex = 0;
+        const searchBar = document.querySelector('.search-bar_final');
+        const typingSpeed = 100; // Time in milliseconds for typing effect
+        const erasingSpeed = 50; // Time in milliseconds for erasing effect
+        const pauseDuration = 1000; // Time to pause before changing text
+
+        function typePlaceholder() {
+            const currentText = placeholderTexts[currentPlaceholderIndex];
+            let charIndex = 0;
+
+            // Typing effect
+            function typeChar() {
+                if (charIndex < currentText.length) {
+                    searchBar.placeholder += currentText.charAt(charIndex);
+                    charIndex++;
+                    setTimeout(typeChar, typingSpeed);
+                } else {
+                    setTimeout(erasePlaceholder, pauseDuration);
+                }
+            }
+            typeChar();
+        }
+
+        function erasePlaceholder() {
+            const currentText = placeholderTexts[currentPlaceholderIndex];
+            let charIndex = currentText.length;
+
+            // Erasing effect
+            function eraseChar() {
+                if (charIndex > 0) {
+                    searchBar.placeholder = currentText.slice(0, charIndex - 1);
+                    charIndex--;
+                    setTimeout(eraseChar, erasingSpeed);
+                } else {
+                    // Move to the next placeholder
+                    currentPlaceholderIndex = (currentPlaceholderIndex + 1) % placeholderTexts.length;
+                    setTimeout(typePlaceholder, pauseDuration);
+                }
+            }
+            eraseChar();
+        }
+
+        // Start the typing animation
+        document.addEventListener('DOMContentLoaded', () => {
+            typePlaceholder();
+        });
+    </script>
+</body>
+</html>

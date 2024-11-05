@@ -140,9 +140,9 @@ $replacementFilter =  TranslationHelper::translateText('Replacement', $preferred
 $materialFilter =  TranslationHelper::translateText('Material', $preferredLanguage);
 $lensFilter =  TranslationHelper::translateText('Lens Design', $preferredLanguage);
 @endphp
-<div class="row mt-5">
+<div class="row mt-5 allLense">
 
-    <div class="col-md-4 col-12 mt-1 "  style="background: #f5f5f5">
+    <div class="col-md-4 col-12 mt-1 ">
 
         <div class="p-4">
             <h1>{{$allLensesTitle}}</h1>

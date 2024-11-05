@@ -1,3 +1,32 @@
+
+<style>
+    .rotating-text {
+        position: relative;
+        font-size: 12px;
+        text-align: center;
+        height: 28px;
+        overflow: hidden;
+        background-color: black;
+        color: white;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .rotating-text .sentence {
+        position: absolute;
+        width: 100%;
+        opacity: 0;
+        transform: translateX(-100%);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        animation: slideLeftToRight 9s infinite;
+    }
+
+</style>
+
 <style>
     .carousel-item {
         height: 80vh;
@@ -37,10 +66,10 @@
         color: #fff;
         padding: 5px 0;
         font-size: 14px;
-     }
+    }
 </style>
+
 <style>
-    /* Customize the button appearance */
     .navbar-toggler {
         border: none;
         background-color: transparent;
@@ -591,13 +620,13 @@
 </style>
 
 <style>
- .nav-link {
-    position: relative;
-    padding-bottom: 5px;
-    color: white;
-    font-size: 15px;
-    margin: 0 18px; 
-}
+    .nav-link {
+        position: relative;
+        padding-bottom: 5px;
+        color: white;
+        font-size: 15px;
+        margin: 0 18px;
+    }
 
 
 
@@ -706,17 +735,79 @@
     }
 </style>
 
+<style>
+        .navbar-brand {
+            align-items: center;
+            font-size: 14px;
+        }
+
+        /* Styling for the search form */
+        .search-container {
+            position: relative;
+            width: 300px;
+            margin: 20px;
+        }
+
+        /* Search input styling */
+        .form-control {
+            width: 100%;
+            padding: 4px; /* Adjust padding */
+            font-size: 14px; /* Font size */
+            border: 2px solid #000; /* Black border */
+            outline: none; /* No outline on focus */
+            transition: all 0.3s ease; /* Transition for hover effect */
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Hover effect */
+        .search-container:hover .form-control {
+            border-color: #E9814C; /* Highlight border color on hover */
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Placeholder styling */
+        .form-control::placeholder {
+            color: white; 
+        }
+
+        /* Styling for the search icon */
+        .search-icon {
+            position: absolute;
+            top: 50%;
+            right: 15px; /* Positioning of the icon */
+            transform: translateY(-50%); /* Center the icon */
+            font-size: 14px;
+            color: white; /* Icon color */
+        }
+
+        /* Icon hover effect */
+        .search-container:hover .search-icon i {
+            color: white; /* Icon color on hover */
+            transform: scale(1.2);
+            transition: transform 0.3s ease;
+        }
+
+        .search-container input::placeholder{
+            color: #fff !important;
+        }
+        .form-control:hover {
+    background-color: #3b434a; /* Slightly lighter shade on hover */
+}
+
+       
+    </style>
+
 @php
-use App\Helpers\TranslationHelper;
-$preferredLanguage = session('preferredLanguage');
-$homeMenu = TranslationHelper::translateText('HOME', $preferredLanguage);
-$collectionMenu = TranslationHelper::translateText('COLLECTIONS', $preferredLanguage);
-$colorMenu = TranslationHelper::translateText('COLORS', $preferredLanguage);
-$durationMenu = TranslationHelper::translateText('DURATIONS', $preferredLanguage);
-$accessoryMenu = TranslationHelper::translateText('ACCESSORIES', $preferredLanguage);
-$instaMenu = TranslationHelper::translateText('SHOP ON INSTAGRAM', $preferredLanguage);
-$allLenseMenu = TranslationHelper::translateText('ALL LENSES', $preferredLanguage);
-$aboutMenu = TranslationHelper::translateText('ABOUT US', $preferredLanguage);
+    use App\Helpers\TranslationHelper;
+    $preferredLanguage = session('preferredLanguage');
+    $homeMenu = TranslationHelper::translateText('HOME', $preferredLanguage);
+    $collectionMenu = TranslationHelper::translateText('COLLECTIONS', $preferredLanguage);
+    $colorMenu = TranslationHelper::translateText('COLORS', $preferredLanguage);
+    $durationMenu = TranslationHelper::translateText('DURATIONS', $preferredLanguage);
+    $accessoryMenu = TranslationHelper::translateText('ACCESSORIES', $preferredLanguage);
+    $instaMenu = TranslationHelper::translateText('SHOP ON INSTAGRAM', $preferredLanguage);
+    $allLenseMenu = TranslationHelper::translateText('ALL LENSES', $preferredLanguage);
+    $aboutMenu = TranslationHelper::translateText('ABOUT US', $preferredLanguage);
 
 @endphp
 
@@ -732,14 +823,14 @@ $aboutMenu = TranslationHelper::translateText('ABOUT US', $preferredLanguage);
         </div>
         <div class="carousel-inner">
             @foreach ($banners as $banner)
-            <div class="carousel-item active" style="background-image: url('{{ asset($banner->banner_path) }}')">
-                <a href="{{ route('addToCart.index', $banner->product_id) }}" class="stretched-link">
-                    <div class="carousel-caption d-md-block">
-                        <h2 class="hd" style="font-size:35px">{{ $banner->title }}</h2>
-                        <p class="hd">{{ $banner->btn_text }} <i class="fa-solid fa-arrow-right mx-2"></i> </p>
-                    </div>
-                </a>
-            </div>
+                <div class="carousel-item active" style="background-image: url('{{ asset($banner->banner_path) }}')">
+                    <a href="{{ route('addToCart.index', $banner->product_id) }}" class="stretched-link">
+                        <div class="carousel-caption d-md-block">
+                            <h2 class="hd" style="font-size:35px">{{ $banner->title }}</h2>
+                            <p class="hd">{{ $banner->btn_text }} <i class="fa-solid fa-arrow-right mx-2"></i> </p>
+                        </div>
+                    </a>
+                </div>
             @endforeach
 
         </div>
@@ -748,349 +839,336 @@ $aboutMenu = TranslationHelper::translateText('ABOUT US', $preferredLanguage);
     <div class="header-content" style="margin-top: 15px; padding-top: 15px;" style="width:100%">
         <!-- Top Navbar -->
         <nav class="navbar navbar-expand-lg navbar-light; container">
-            <div class="container-fluid" style="padding: 5px;">
-                <!-- Left side: Toggle button -->
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                    data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false"
-                    aria-label="Toggle navigation">
-                    <img src="{{ asset('ego/toggle.svg') }}" alt="Toggle Button">
-                </button>
+                            <div class="container-fluid" style="padding: 5px;">
+                                <!-- Left side: Toggle button -->
+                                <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false"
+                                    aria-label="Toggle navigation">
+                                    <img src="{{ asset('ego/toggle.svg') }}" alt="Toggle Button">
+                                </button>
+
+                                <div class="d-sm-flex d-none" style="width: 33.33%">
+                                    <a class="navbar-brand d-block" href="#" id="language-selector"
+                                        style="font-size: 15px; color: white">
+                                        <i class="fas fa-globe" style="font-size:15px"></i> <span id="language-text">
+                                            @if (session('preferredLanguage') == 'en')
+                                                English
+                                            @elseif(session('preferredLanguage') == 'hi')
+                                                Hindi
+                                            @elseif(session('preferredLanguage') == 'ru')
+                                                Russian
+                                            @elseif(session('preferredLanguage') == 'zh')
+                                                Chinese
+                                            @elseif(session('preferredLanguage') == 'bn')
+                                                Bangla
+                                            @else
+                                                English
+                                            @endif
+                                        </span>
+                                    </a>
+
+
+                                
+
+
+
+
+                                </div>
+
+                                <div id="language-modal" class="modal">
+                                    <div class="modal-content">
+                                        <span class="close">&times;</span>
+                                        <h3>@lang('messages.select_language')</h3>
+                                        <form id="lang-form" action="{{ route('change.lang') }}" method="post">
+                                            @csrf
+                                            <select onchange="document.getElementById('lang-form').submit();" name="code"
+                                                style="width: 100%;">
+                                                <option value="en" {{ session('preferredLanguage') == 'en' ? 'selected' : '' }}>
+                                                    English</option>
+                                                <option value="hi" {{ session('preferredLanguage') == 'hi' ? 'selected' : '' }}>
+                                                    Hindi</option>
+                                                <option value="ru" {{ session('preferredLanguage') == 'ru' ? 'selected' : '' }}>
+                                                    Russian</option>
+                                                <option value="zh" {{ session('preferredLanguage') == 'zh' ? 'selected' : '' }}>
+                                                    Chinese</option>
+                                                <option value="bn" {{ session('preferredLanguage') == 'bn' ? 'selected' : '' }}>
+                                                    Bengali</option>
+                                            </select>
+                                        </form>
+
+                                    </div>
+                                </div>
+                                <!-- Middle: Logo -->
+                                <div class="navbar-brand-container-logo" style="width: 33.33%">
+                                    <a class="navbar-brand-logo" href="{{ route('ego.index') }}">
+                                        <img src="{{ asset('ego/ego_main_log.png') }}" alt="Logo" />
+                                    </a>
+                                </div>
+                                <!-- Right side: Account link -->
+                                <div class="d-flex justify-content-end" style="width: 33.33%">
+
+                                    <!-- Search Icon -->
+
+
                 
-                <div class="d-flex">
-                <a class="navbar-brand d-none d-sm-block" href="#" id="language-selector"
-                    style="font-size: 15px; color: white">
-                    <i class="fas fa-globe" style="font-size:15px"></i>   <span id="language-text">
-                        @if(session('preferredLanguage') == 'en')
-                        English
-                        @elseif(session('preferredLanguage') == 'hi')
-                        Hindi
-                        @elseif(session('preferredLanguage') == 'ru')
-                        Russian
-                        @elseif(session('preferredLanguage') == 'zh')
-                        Chinese
-                        @elseif(session('preferredLanguage') == 'bn')
-                        Bangla
-                        @else
-                        English
-                        @endif
-                    </span>
-                </a>
+
+                                <a class="navbar-brand mx-2 d-none d-md-flex" href="#">
+                                    <div class="search-container">
+                                    <input 
+                                placeholder="" 
+                                style="background-color: transparent; border: none; border-bottom: 0.5px solid white; outline: none;border-radious:0px; box-shadow: none;" 
+                                class="form-control text-white" 
+                                type="search" 
+                                aria-label="Search">
 
 
-<style>
-  .toggle-switch {
-    position: relative;
-    width: 44px; /* Reduced width */
-    height: 30px; /* Reduced height */
-    --light: #d8dbe0;
-    --dark: #28292c;
-    --link: rgb(27, 129, 112);
-    --link-hover: rgb(24, 94, 82);
-  }
-
-  .switch-label {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    background-color: var(--dark);
-    border-radius: 15px; /* Adjusted border radius */
-    cursor: pointer;
-    border: 2px solid var(--dark); /* Reduced border width */
-    transition: background-color 0.3s ease;
-  }
-
-  .checkbox {
-    position: absolute;
-    display: none;
-  }
-
-  .slider {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    border-radius: 15px;
-    transition: 0.3s;
-  }
-
-  .checkbox:checked ~ .slider {
-    background-color: var(--light);
-  }
-
-  .slider::before {
-    content: "";
-    position: absolute;
-    top: 3px; /* Adjusted positioning */
-    left: 3px;
-    width: 20px;
-    height: 20px;
-    border-radius: 50%;
-    box-shadow: inset 8px -2px 0px 0px var(--light); /* Reduced shadow */
-    background-color: var(--dark);
-    transition: 0.3s;
-  }
-
-  .checkbox:checked ~ .slider::before {
-    transform: translateX(15px); /* Adjusted for new size */
-    background-color: var(--dark);
-    box-shadow: none;
-  }
-
-  .toggle-switch:hover .switch-label {
-    background-color: var(--link-hover); /* Interactive hover effect */
-  }
-
-
-
-  /* Default light mode styles */
-body, .card, .footer, .header, .text {
-  background-color: white;
-  color: black;
-  transition: background-color 0.3s, color 0.3s;
-}
-
-/* Dark mode styles */
-.dark-mode body,
-.dark-mode .card,
-.dark-mode .footer,
-.dark-mode .header,
-.card-body,
-.dark-mode .text {
-  background-color: black;
-  color: #d8dbe0;
-}
-
-</style>
-
-<div class="toggle-switch">
-  <label class="switch-label">
-    <input type="checkbox" class="checkbox">
-    <span class="slider"></span>
-  </label>
-</div>
-  
-<script>
-    // JavaScript to handle dark mode toggle
-    const toggleSwitch = document.querySelector('.checkbox');
-    
-    // Load saved dark mode state from localStorage
-    if (localStorage.getItem('darkMode') === 'enabled') {
-      document.documentElement.classList.add('dark-mode');
-      toggleSwitch.checked = true;
-    }
-    
-    toggleSwitch.addEventListener('change', () => {
-      if (toggleSwitch.checked) {
-        document.documentElement.classList.add('dark-mode');
-        localStorage.setItem('darkMode', 'enabled'); // Save preference
-      } else {
-        document.documentElement.classList.remove('dark-mode');
-        localStorage.setItem('darkMode', 'disabled'); // Save preference
-      }
-    });
-</script>
-
-
-
-
-                </div>
-               
-                <div id="language-modal" class="modal">
-                    <div class="modal-content">
-                        <span class="close">&times;</span>
-                        <h3>@lang('messages.select_language')</h3>
-                        <form id="lang-form" action="{{route('change.lang')}}" method="post">
-                            @csrf
-                            <select onchange="document.getElementById('lang-form').submit();" name="code" style="width: 100%;">
-                                <option value="en" {{ session('preferredLanguage') == 'en' ? 'selected' : '' }}>English</option>
-                                <option value="hi" {{ session('preferredLanguage') == 'hi' ? 'selected' : '' }}>Hindi</option>
-                                <option value="ru" {{ session('preferredLanguage') == 'ru' ? 'selected' : '' }}>Russian</option>
-                                <option value="zh" {{ session('preferredLanguage') == 'zh' ? 'selected' : '' }}>Chinese</option>
-                                <option value="bn" {{ session('preferredLanguage') == 'bn' ? 'selected' : '' }}>Bengali</option>
-                            </select>
-                        </form>
-
-                    </div>
-                </div>
-                <!-- Middle: Logo -->
-                <div class="navbar-brand-container-logo">
-                    <a class="navbar-brand-logo" href="{{ route('ego.index') }}">
-                        <img src="{{ asset('ego/ego_main_log.png') }}" alt="Logo" />
-                    </a>
-                </div>
-                <!-- Right side: Account link -->
-                <div class="d-flex">
-                   
-                    <!-- Search Icon -->
-
-
-                    <a class="navbar-brand mx-2 d-none d-md-flex" href="#"
-                        style="align-items: center; font-size: 14px;">
-                        <form class="form-inline my-2 my-lg-0">
-                        <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-                        </form>
-                    </a>
-
-
-                    <!-- user -->
-                    <!-- @if (!Auth::user())
-                    <a class="navbar-brand d-none d-md-block" href="{{ route('ego.login') }}"
-                        style="font-size: 14px; color: white; display: flex; align-items: center;">
-                        <img src="{{ asset('ego/white_account.svg') }}" alt="Account"
-                            style="height: 18px; width: 18px; margin-right: 5px; margin-top:-2px" />
-                    </a>
-                    @else
-                    <a class="navbar-brand d-none d-md-block" href="{{ route('user.home') }}"
-                        style="display: flex; align-items: center; font-size: 14px; color: white;">
-                        <img src="{{ asset('ego/white_account.svg')}}" alt="Account"
-                            style="height: 18px; width: 18px; margin-right: 5px; margin-top:-2px" />
-
-                        {{ Auth::user()->fullname }}
-                    </a>
-                    @endif -->
-                    <!-- Search Bar Popup -->
-                    <div id="search-popup" class="search-popup">
-                        <div class="search-popup-content">
-                            <button type="button" id="close-popup" style="opacity: 0;" class="close-button position-absolute">&times;</button>
-                            <div class="input-container" style="width: 100%;">
-                                <form action="{{ route('product.search') }}" method="GET" class="d-flex align-items-center">
-                                    @csrf
-                                    <input type="text" name="query" id="search-input" placeholder="Search..." />
-                                    <button type="submit" style="border: 0; background: transparent;">
-                                        <img src="{{ asset('ego/search-icon_black.svg') }}" alt="Search" class="search-icon" />
-                                    </button>
-                                </form>
+                            <div class="search-icon">
+                                <i class="fas fa-search" style="width:18px;height:18px"></i>
                             </div>
-                        </div>
-                    </div>
+                            </div>
+                                        </a>
 
-                    <!-- Wishlist Icon -->
-                    <a class="navbar-brand mx-3 position-relative" href="{{route('ego.wishlist')}}"
-                        style="display: flex; align-items: center; font-size: 14px;">
-                        <img src="{{ asset('ego/love_shape.svg') }}" alt="Wishlist"
-                            style="height: 18px; width: 18px; margin-right: 5px;" />
-                        <span class="badge" style="font-size: 10px; position: absolute; top: 5px; right: 0; background-color: black; color: white; border-radius: 50%; width: 18px; height: 18px; display: flex; align-items: center; justify-content: center;">
-                            {{@$wishlists->count()}}
-                        </span>
-                    </a>
+                                        <script>
+                                            const placeholderTexts = [
+                                                "Search fashion...",
+                                                "Latest styles...",
+                                                "Your next outfit...",
+                                                "Explore collections..."
+                                            ];
+
+                                            let currentPlaceholderIndex = 0;
+                                            const searchBar = document.querySelector('.form-control');
+                                            const typingSpeed = 100; // Typing speed in milliseconds
+                                            const erasingSpeed = 50; // Erasing speed in milliseconds
+                                            const pauseDuration = 1000; // Pause duration before changing text
+
+                                            function typePlaceholder() {
+                                                const currentText = placeholderTexts[currentPlaceholderIndex];
+                                                let charIndex = 0;
+
+                                                // Typing effect
+                                                function typeChar() {
+                                                    if (charIndex < currentText.length) {
+                                                        searchBar.placeholder += currentText.charAt(charIndex);
+                                                        charIndex++;
+                                                        setTimeout(typeChar, typingSpeed);
+                                                    } else {
+                                                        setTimeout(erasePlaceholder, pauseDuration);
+                                                    }
+                                                }
+                                                typeChar();
+                                            }
+
+                                            function erasePlaceholder() {
+                                                const currentText = placeholderTexts[currentPlaceholderIndex];
+                                                let charIndex = currentText.length;
+                                                // Erasing effect
+                                                function eraseChar() {
+                                                    if (charIndex > 0) {
+                                                        searchBar.placeholder = currentText.slice(0, charIndex - 1);
+                                                        charIndex--;
+                                                        setTimeout(eraseChar, erasingSpeed);
+                                                    } else {
+                                                        // Move to the next placeholder
+                                                        currentPlaceholderIndex = (currentPlaceholderIndex + 1) % placeholderTexts.length;
+                                                        setTimeout(typePlaceholder, pauseDuration);
+                                                    }
+                                                }
+                                                eraseChar();
+                                            }
+
+                                            // Start the typing animation on DOM content loaded
+                                            document.addEventListener('DOMContentLoaded', () => {
+                                                typePlaceholder();
+                                            });
+                                        </script>
 
 
-                    <!-- Cart Icon -->
-                    <a class="navbar-brand" href="#" id="openSidebar"
-                        style="display: flex; align-items: center; font-size: 14px; position: relative;">
-                        <img src="{{ asset('ego/cart_shape.svg') }}" alt="Cart"
-                            style="height: 18px; width: 18px; margin-right: 5px;" />
-                        <span class="badge" id="cart-count"
-                            style="font-size: 10px; position: absolute; top: 5px; right: 0px; background-color: black; color: white; border-radius: 50%; width: 16px; height: 16px; display: flex; align-items: center; justify-content: center;">
-                            <!-- Cart count will be dynamically added here -->
-                        </span>
-                    </a>
-
-                    <!-- Sidebar Content -->
-                    <div class="sidebar" id="sidebar"
-                        style="background-color: #fff; box-shadow: 0 4px 10px rgba(0,0,0,0.1); color: #000;">
-                        <div class="sidebar-header"
-                            style="padding: 15px; border-bottom: 1px solid #e0e0e0; display: flex; justify-content: space-between; align-items: center;">
-                            <a class="navbar-brand" href="#" class="cart-icon"
-                                style="font-size: 18px; display: flex; align-items: center; text-decoration: none; color: #000;">
-                                <img src="{{ asset('ego/cart_shape_black.svg') }}" alt="Cart" style="width: 24px; height: 24px;" />
-                                <span style="font-size: 18px; margin-left: 10px; font-weight: 600;">Cart</span>
-                            </a>
-                            <span class="close-btn" id="closeSidebar" style="font-size: 24px; cursor: pointer;">&times;</span>
-                        </div>
-
-                        <div class="sidebar-content" style="padding: 15px;">
-                            @if ($carts->count() > 0)
-                            @foreach ($carts as $cart)
-                            <div class="cart-item"
-                                style="display: flex; align-items: stretch; margin-bottom: 20px; height: 150px; border: 1px solid #e0e0e0; border-radius: 8px; padding: 10px;">
-                                <div class="image-container"
-                                    style="width: 80px; height: 100%; position: relative; flex-shrink: 0;">
-                                    <img src="{{ asset($cart->product->image_path) }}" alt="Random Image"
-                                        style="width: 100%; height: 100%; object-fit: cover;">
-                                    <span class="close-icon"
-                                        style="position: absolute; top: -10px; right: -10px; color: black; padding: 2px 6px; cursor: pointer; font-size: 18px;" type="button" data-bs-toggle="modal" data-bs-target="#deleteCart{{$cart->id}}">&times;</span>
-
-                                    <div class="modal fade" id="deleteCart{{$cart->id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" style="z-index: 99999;">
-                                        <div class="modal-dialog modal-dialog-centered">
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <h5 class="modal-title" id="exampleModalLabel">Delete Cart Item</h5>
-                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                </div>
-                                                <div class="modal-footer">
-                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                                    <form action="{{route('cart.delete',$cart->id)}}" method="post">
+                                        <!-- user -->
+                                        
+                                        <!-- Search Bar Popup -->
+                                        <div id="search-popup" class="search-popup">
+                                            <div class="search-popup-content">
+                                                <button type="button" id="close-popup" style="opacity: 0;"
+                                                    class="close-button position-absolute">&times;</button>
+                                                <div class="input-container" style="width: 100%;">
+                                                    <form action="{{ route('product.search') }}" method="GET"
+                                                        class="d-flex align-items-center">
                                                         @csrf
-                                                        @method('delete')
-                                                        <button type="submit" data-cart-id="{{ $cart->id }}" class="btn btn-dark delete-item">Delete</button>
+                                                        <input type="text" name="query" id="search-input"
+                                                            placeholder="Search..." />
+                                                        <button type="submit" style="border: 0; background: transparent;">
+                                                            <img src="{{ asset('ego/search-icon_black.svg') }}" alt="Search"
+                                                                class="search-icon" />
+                                                        </button>
                                                     </form>
-
                                                 </div>
                                             </div>
                                         </div>
-                                        <!-- Price -->
-                                        <span style="font-size: 14px; font-weight: 600; margin-left: 10px;">
-                                        {{ $cart->power_status == 'no_power' ? $cart->product->no_power_price : $cart->product->price }} BDT
-                                        </span>
-                                    </div>
-                                </div>
-                                <div class="cart-details"
-                                    style="flex-grow: 1; padding-left: 15px; display: flex; flex-direction: column; justify-content: space-between;">
-                                    <div>
-                                        <h5 style="font-size: 14px; font-weight: 600; margin: 0 0 6px 0;">
-                                            {{ $cart->product->name }} {{ $cart->power }}
-                                        </h5>
-                                    </div>
 
-                                    <!-- Price and Quantity Section -->
-                                    <div
-                                        style="margin-top: 10px; display: flex; align-items: center; justify-content: space-between;">
-                                        <!-- Quantity Selector -->
-                                        <div class="quantity-selector"
-                                            style="display: inline-flex; align-items: center; border: 1px solid black; padding: 1px; font-size: 12px;">
-                                            <button class="quantity-btn decreaseQuantity"
-                                                data-cart-id="{{ $cart->id }}"
-                                                style="padding: 4px 8px; background-color: transparent; border: none; cursor: pointer; font-size: 14px; font-weight: 600; color: black;">-</button>
-                                            <span class="quantity-number"
-                                                id="quantityValue{{ $cart->id }}"
-                                                style="padding: 4px 8px; font-size: 12px; color: black;">{{ $cart->pair }}</span>
-                                            <button class="quantity-btn increaseQuantity"
-                                                data-cart-id="{{ $cart->id }}"
-                                                style="padding: 4px 8px; background-color: transparent; border: none; cursor: pointer; font-size: 14px; font-weight: 600; color: black;">+</button>
+                                        <!-- Wishlist Icon -->
+                                        <a class="navbar-brand mx-3 position-relative" href="{{ route('ego.wishlist') }}"
+                                            style="display: flex; align-items: center; font-size: 14px;">
+                                            <img src="{{ asset('ego/love_shape.svg') }}" alt="Wishlist"
+                                                style="height: 18px; width: 18px; margin-right: 5px;" />
+                                            <span class="badge"
+                                                style="font-size: 10px; position: absolute; top: 25px; right: 0; background-color: black; color: white; border-radius: 50%; width: 18px; height: 18px; display: flex; align-items: center; justify-content: center;">
+                                                {{ @$wishlists->count() }}
+                                            </span>
+                                        </a>
+
+
+                                        <!-- Cart Icon -->
+                                        <a class="navbar-brand" href="#" id="openSidebar"
+                                            style="display: flex; align-items: center; font-size: 14px; position: relative;">
+                                            <img src="{{ asset('ego/cart_shape.svg') }}" alt="Cart"
+                                                style="height: 18px; width: 18px; margin-right: 5px;" />
+                                            <span class="badge" id="cart-count"
+                                                style="font-size: 10px; position: absolute; top: 25px; right: 0px; background-color: black; color: white; border-radius: 50%; width: 16px; height: 16px; display: flex; align-items: center; justify-content: center;">
+                                                <!-- Cart count will be dynamically added here -->
+                                            </span>
+                                        </a>
+                                 <!-- 
+                                        @if (!Auth::user())
+                                            <a class="navbar-brand d-none d-md-flex m-0" href="{{ route('ego.login') }}"
+                                                style="font-size: 14px; color: white; align-items: center;">
+                                                <img src="{{ asset('ego/white_account.svg') }}" alt="Account"
+                                                    style="height: 18px; width: 18px; margin-right: 5px; margin-top:-2px" />
+                                            </a>
+                                        @else
+                                            <a class="navbar-brand d-none d-md-flex m-0" href="{{ route('user.home') }}"
+                                                style="align-items: center; font-size: 14px; color: white;">
+                                                <img src="{{ asset('ego/white_account.svg') }}" alt="Account"
+                                                    style="height: 18px; width: 18px; margin-right: 5px; margin-top:-2px" />
+
+                                                {{ Auth::user()->fullname }}
+                                            </a>
+                                        @endif -->
+
+                                        <!-- Sidebar Content -->
+                                        <div class="sidebar" id="sidebar"
+                                            style="background-color: #fff; box-shadow: 0 4px 10px rgba(0,0,0,0.1); color: #000;">
+                                            <div class="sidebar-header"
+                                                style="padding: 15px; border-bottom: 1px solid #e0e0e0; display: flex; justify-content: space-between; align-items: center;">
+                                                <a class="navbar-brand" href="#" class="cart-icon"
+                                                    style="font-size: 18px; display: flex; align-items: center; text-decoration: none; color: #000;">
+                                                    <img src="{{ asset('ego/cart_shape_black.svg') }}" alt="Cart"
+                                                        style="width: 24px; height: 24px;" />
+                                                    <span style="font-size: 18px; margin-left: 10px; font-weight: 600;">Cart</span>
+                                                </a>
+                                                <span class="close-btn" id="closeSidebar"
+                                                    style="font-size: 24px; cursor: pointer;">&times;</span>
+                                            </div>
+
+                                            <div class="sidebar-content" style="padding: 15px;">
+                                                @if ($carts->count() > 0)
+                                                    @foreach ($carts as $cart)
+                                                        <div class="cart-item"
+                                                            style="display: flex; align-items: stretch; margin-bottom: 20px; height: 150px; border: 1px solid #e0e0e0; border-radius: 8px; padding: 10px;">
+                                                            <div class="image-container"
+                                                                style="width: 80px; height: 100%; position: relative; flex-shrink: 0;">
+                                                                <img src="{{ asset($cart->product->image_path) }}" alt="Random Image"
+                                                                    style="width: 100%; height: 100%; object-fit: cover;">
+                                                                <span class="close-icon"
+                                                                    style="position: absolute; top: -10px; right: -10px; color: black; padding: 2px 6px; cursor: pointer; font-size: 18px;"
+                                                                    type="button" data-bs-toggle="modal"
+                                                                    data-bs-target="#deleteCart{{ $cart->id }}">&times;</span>
+
+                                                                <div class="modal fade" id="deleteCart{{ $cart->id }}"
+                                                                    tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true"
+                                                                    style="z-index: 99999;">
+                                                                    <div class="modal-dialog modal-dialog-centered">
+                                                                        <div class="modal-content">
+                                                                            <div class="modal-header">
+                                                                                <h5 class="modal-title" id="exampleModalLabel">Delete Cart
+                                                                                    Item</h5>
+                                                                                <button type="button" class="btn-close"
+                                                                                    data-bs-dismiss="modal" aria-label="Close"></button>
+                                                                            </div>
+                                                                            <div class="modal-footer">
+                                                                                <button type="button" class="btn btn-secondary"
+                                                                                    data-bs-dismiss="modal">Close</button>
+                                                                                <form action="{{ route('cart.delete', $cart->id) }}"
+                                                                                    method="post">
+                                                                                    @csrf
+                                                                                    @method('delete')
+                                                                                    <button type="submit"
+                                                                                        data-cart-id="{{ $cart->id }}"
+                                                                                        class="btn btn-dark delete-item">Delete</button>
+                                                                                </form>
+
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <!-- Price -->
+                                                                    <span style="font-size: 14px; font-weight: 600; margin-left: 10px;">
+                                                                        {{ $cart->power_status == 'no_power' ? $cart->product->no_power_price : $cart->product->price }}
+                                                                        BDT
+                                                                    </span>
+                                                                </div>
+                                                            </div>
+                                                            <div class="cart-details"
+                                                                style="flex-grow: 1; padding-left: 15px; display: flex; flex-direction: column; justify-content: space-between;">
+                                                                <div>
+                                                                    <h5 style="font-size: 14px; font-weight: 600; margin: 0 0 6px 0;">
+                                                                        {{ $cart->product->name }} {{ $cart->power }}
+                                                                    </h5>
+                                                                </div>
+
+                                                                <!-- Price and Quantity Section -->
+                                                                <div
+                                                                    style="margin-top: 10px; display: flex; align-items: center; justify-content: space-between;">
+                                                                    <!-- Quantity Selector -->
+                                                                    <div class="quantity-selector"
+                                                                        style="display: inline-flex; align-items: center; border: 1px solid black; padding: 1px; font-size: 12px;">
+                                                                        <button class="quantity-btn decreaseQuantity"
+                                                                            data-cart-id="{{ $cart->id }}"
+                                                                            style="padding: 4px 8px; background-color: transparent; border: none; cursor: pointer; font-size: 14px; font-weight: 600; color: black;">-</button>
+                                                                        <span class="quantity-number"
+                                                                            id="quantityValue{{ $cart->id }}"
+                                                                            style="padding: 4px 8px; font-size: 12px; color: black;">{{ $cart->pair }}</span>
+                                                                        <button class="quantity-btn increaseQuantity"
+                                                                            data-cart-id="{{ $cart->id }}"
+                                                                            style="padding: 4px 8px; background-color: transparent; border: none; cursor: pointer; font-size: 14px; font-weight: 600; color: black;">+</button>
+                                                                    </div>
+                                                                    <!-- Price -->
+                                                                    <span
+                                                                        style="font-size: 14px; font-weight: 600; margin-left: 10px;">{{ $cart->power_status == 'no_power' ? $cart->product->no_power_price : $cart->product->price }}
+                                                                        BDT</span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    @endforeach
+                                                    <div class="buttons d-flex justify-content-between my-3" style="margin-top: 25px;">
+                                                        <a href="{{ route('addToCart.checkout') }}" class="add-to-cart-button"
+                                                            style="width: 45%;">Checkout</a>
+                                                    </div>
+                                                    <div class="cart-subtotal my-4"
+                                                        style="border-top: 1px solid #e0e0e0; padding-top: 20px; text-align: center;">
+                                                        <h4 style="font-size: 18px; font-weight: 600;">
+                                                            CART SUBTOTAL: <span
+                                                                id="cartSubtotal">{{ $carts->sum(function ($cart) {
+                                                                    return $cart->pair * $cart->product->price;
+                                                                }) }}</span>
+                                                            BDT
+                                                        </h4>
+                                                    </div>
+                                                @else
+                                                    <h4 style="font-size: 16px; font-weight: 600;">You have no items in your shopping cart.
+                                                    </h4>
+                                                @endif
+                                                <div class="footer-text mt-5 text-center" style="color: white;">
+                                                    <p style="margin-bottom: 5px; font-size: 14px; font-weight: 600;">FREE SAMPLES</p>
+                                                    <p style="font-size: 13px; margin-bottom: 5px;">Go to your SHOPPING BAG to pick your
+                                                        FREE samples.</p>
+                                                    <p style="font-size: 13px;">You can select up to 4 with your order!</p>
+                                                </div>
+                                            </div>
                                         </div>
-                                        <!-- Price -->
-                                        <span
-                                            style="font-size: 14px; font-weight: 600; margin-left: 10px;">{{ $cart->power_status == 'no_power' ? $cart->product->no_power_price : $cart->product->price }}
-                                            BDT</span>
                                     </div>
-                                </div>
-                            </div>
-                            @endforeach
-                            <div class="buttons d-flex justify-content-between my-3" style="margin-top: 25px;">
-                                <a href="{{route('addToCart.checkout')}}" class="add-to-cart-button" style="width: 45%;">Checkout</a>
-                            </div>
-                            <div class="cart-subtotal my-4"
-                                style="border-top: 1px solid #e0e0e0; padding-top: 20px; text-align: center;">
-                                <h4 style="font-size: 18px; font-weight: 600;">
-                                    CART SUBTOTAL: <span id="cartSubtotal">{{ $carts->sum(function ($cart) {
-                                        return $cart->pair * $cart->product->price;
-                                    }) }}</span> BDT
-                                </h4>
-                            </div>
-                            @else
-                            <h4 style="font-size: 16px; font-weight: 600;">You have no items in your shopping cart.</h4>
-                            @endif
-                            <div class="footer-text mt-5 text-center" style="color: white;">
-                                <p style="margin-bottom: 5px; font-size: 14px; font-weight: 600;">FREE SAMPLES</p>
-                                <p style="font-size: 13px; margin-bottom: 5px;">Go to your SHOPPING BAG to pick your FREE samples.</p>
-                                <p style="font-size: 13px;">You can select up to 4 with your order!</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
 
-            </div>
-        </nav>
+                                </div>
+                            </nav>
         <!-- Secondary Navbar -->
         <nav class="navbar navbar-expand-lg navbar-dark ">
             <div class="container-fluid" style="border-bottom: .25px solid rgba(230, 230, 230, 0.3)">
@@ -1109,25 +1187,28 @@ body, .card, .footer, .header, .text {
                         <hr>
 
 
-                                    
+
                         <li class="nav-item">
                             @if (!Auth::user())
-                            <a class="navbar-brand d-block d-lg-none responsive-link nav-link hover-line" href="{{ route('ego.login') }}"
-                                style="font-size: 14px; display: flex; align-items: center;">
-                                <img class="responsive-img" src="{{ asset('ego/white_account.svg') }}" alt="Account"
-                                    style="height: 14px; width: 14px; margin-right: 5px; marign-top:-10px" />ACCOUNT
-                            </a>
+                                <a class="navbar-brand d-block d-lg-none responsive-link nav-link hover-line"
+                                    href="{{ route('ego.login') }}"
+                                    style="font-size: 14px; display: flex; align-items: center;">
+                                    <img class="responsive-img" src="{{ asset('ego/white_account.svg') }}"
+                                        alt="Account"
+                                        style="height: 14px; width: 14px; margin-right: 5px; marign-top:-10px" />ACCOUNT
+                                </a>
                             @else
-                            <a class="navbar-brand d-block d-lg-none responsive-link nav-link hover-line" href="{{ route('user.home') }}"
-                                style="display: flex; align-items: center; font-size: 14px;">
-                                <img class="responsive-img" src="{{ asset('ego/white_account.svg') }}" alt="Account"
-                                    style="height: 14px; width: 14px; margin-right: 5px;" />
-                                {{ Auth::user()->fullname }}
-                            </a>
+                                <a class="navbar-brand d-block d-lg-none responsive-link nav-link hover-line"
+                                    href="{{ route('user.home') }}"
+                                    style="display: flex; align-items: center; font-size: 14px;">
+                                    <img class="responsive-img" src="{{ asset('ego/white_account.svg') }}"
+                                        alt="Account" style="height: 14px; width: 14px; margin-right: 5px;" />
+                                    {{ Auth::user()->fullname }}
+                                </a>
                             @endif
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link hover-line" href="{{ route('ego.index') }}">{{$homeMenu}}</a>
+                            <a class="nav-link hover-line" href="{{ route('ego.index') }}">{{ $homeMenu }}</a>
                         </li>
                         <style>
                             @media (max-width: 768px) {
@@ -1140,7 +1221,7 @@ body, .card, .footer, .header, .text {
                             }
                         </style>
 
-                        {{-- sm  devise -----------------------------------------------------------------------------------------------------------------}}
+                        {{-- sm  devise --------------------------------------------------------------------------------------------------------------- --}}
                         <style>
                             /* General styles for dropdown */
                             .mega-menu {
@@ -1249,38 +1330,44 @@ body, .card, .footer, .header, .text {
                         </style>
                         <li class="nav-item custom-dropdown">
                         <li class="dropdown">
-                            <a href="#" class="dropbtn nav-link hover-link d-block d-lg-none" onclick="toggleMenu('services', event)">
-                                {{$collectionMenu}}
+                            <a href="#" class="dropbtn nav-link hover-link d-block d-lg-none"
+                                onclick="toggleMenu('services', event)">
+                                {{ $collectionMenu }}
                                 <span class="toggle">+</span>
                             </a>
                             <div class="mega-menu" id="services">
                                 @foreach ($collectionSets as $collectionSet)
-                                <div class="mega-column">
-                                    <div class="section">
-                                        <h3 class="flex-container">
-                                            <a style="font-size: 13px" class="d-block mb-2 text-dark hover-link text-nowrap"
-                                                href="{{route('collectionSet.single.collection',$collectionSet->id)}}"
-                                                onclick="toggleSubmenu(event, 'web-dev-{{ $loop->index }}', this);"
-                                                style="font-size: 14px; font-weight: 600;">
-                                                {{ @$collectionSet->category->name ?? 'No Category' }}
-                                                {{ @$collectionSet->tone->name ? '-' . $collectionSet->tone->name : '' }}
-                                                {{ @$collectionSet->duration ? '-' . $collectionSet->duration->months .$collectionSet->duration->is_month ? ' months': 'days' : '' }}
-                                            </a>
-                                            <span class="toggle" onclick="toggleSection('web-dev-{{ $loop->index }}', this)">+</span>
-                                        </h3>
-                                    </div>
-                                    <ul class="sub-menu" id="web-dev-{{ $loop->index }}">
-                                        <a href="{{route('collectionSet.single.collection',$collectionSet->id)}}" style="float: right"><u>See Collection</u></a>
+                                    <div class="mega-column">
+                                        <div class="section">
+                                            <h3 class="flex-container">
+                                                <a style="font-size: 13px"
+                                                    class="d-block mb-2 text-dark hover-link text-nowrap"
+                                                    href="{{ route('collectionSet.single.collection', $collectionSet->id) }}"
+                                                    onclick="toggleSubmenu(event, 'web-dev-{{ $loop->index }}', this);"
+                                                    style="font-size: 14px; font-weight: 600;">
+                                                    {{ @$collectionSet->category->name ?? 'No Category' }}
+                                                    {{ @$collectionSet->tone->name ? '-' . $collectionSet->tone->name : '' }}
+                                                    {{ @$collectionSet->duration ? ('-' . $collectionSet->duration->months . $collectionSet->duration->is_month ? ' months' : 'days') : '' }}
+                                                </a>
+                                                <span class="toggle"
+                                                    onclick="toggleSection('web-dev-{{ $loop->index }}', this)">+</span>
+                                            </h3>
+                                        </div>
+                                        <ul class="sub-menu" id="web-dev-{{ $loop->index }}">
+                                            <a href="{{ route('collectionSet.single.collection', $collectionSet->id) }}"
+                                                style="float: right"><u>See Collection</u></a>
 
-                                        @foreach ($collectionSet->products as $product)
-                                        <li>
-                                            <a style="font-size: 13px" class="custom-dropdown-item text-nowrap mt-2" href="{{ route('addToCart.index', $product->id) }}">
-                                                {{ $product->name }}
-                                            </a>
-                                        </li>
-                                        @endforeach
-                                    </ul>
-                                </div>
+                                            @foreach ($collectionSet->products as $product)
+                                                <li>
+                                                    <a style="font-size: 13px"
+                                                        class="custom-dropdown-item text-nowrap mt-2"
+                                                        href="{{ route('addToCart.index', $product->id) }}">
+                                                        {{ $product->name }}
+                                                    </a>
+                                                </li>
+                                            @endforeach
+                                        </ul>
+                                    </div>
                                 @endforeach
                             </div>
                         </li>
@@ -1289,19 +1376,21 @@ body, .card, .footer, .header, .text {
                         {{-- Color section --}}
                         <li class="nav-item custom-dropdown">
                         <li class="dropdown">
-                            <a href="#" class="dropbtn nav-link hover-link d-block d-lg-none" onclick="toggleMenu('colorsDropdown', event)">
-                                {{$colorMenu}}
+                            <a href="#" class="dropbtn nav-link hover-link d-block d-lg-none"
+                                onclick="toggleMenu('colorsDropdown', event)">
+                                {{ $colorMenu }}
                                 <span class="toggle">+</span>
                             </a>
                             <div class="mega-menu" id="colorsDropdown" style="display: none;">
                                 <div class="d-flex justify-content-center align-items-center">
                                     <div class="row mt-3">
                                         @foreach ($colors as $color)
-                                        <div class="col-md-2 mb-3 position-relative">
-                                            <a href="{{ route('color.single.color', $color->id) }}" target="_blank">
-                                                {{ $color->name }}
-                                            </a>
-                                        </div>
+                                            <div class="col-md-2 mb-3 position-relative">
+                                                <a href="{{ route('color.single.color', $color->id) }}"
+                                                    target="_blank">
+                                                    {{ $color->name }}
+                                                </a>
+                                            </div>
                                         @endforeach
                                     </div>
                                 </div>
@@ -1312,19 +1401,27 @@ body, .card, .footer, .header, .text {
                         {{-- Duration section --}}
                         <li class="nav-item custom-dropdown">
                         <li class="dropdown">
-                            <a href="#" class="dropbtn nav-link hover-link d-block d-lg-none" onclick="toggleMenu('durationDropdown', event)">
-                                {{$durationMenu}}
+                            <a href="#" class="dropbtn nav-link hover-link d-block d-lg-none"
+                                onclick="toggleMenu('durationDropdown', event)">
+                                {{ $durationMenu }}
                                 <span class="toggle">+</span>
                             </a>
                             <div class="mega-menu" id="durationDropdown" style="display: none;">
                                 <div class="d-flex justify-content-center align-items-center">
                                     <div class="row mt-3">
                                         @foreach ($durations as $duration)
-                                        <div class="col-md-2 mb-3 position-relative">
-                                            <a href="{{ route('duration.single.duration', $duration->id) }}" class="duration-link">
-                                                <span class="duration-text">{{ $duration->name }} - {{ $duration->months }} @if(@$duration->is_month == '1')MONTHS @else Days @endif</span>
-                                            </a>
-                                        </div>
+                                            <div class="col-md-2 mb-3 position-relative">
+                                                <a href="{{ route('duration.single.duration', $duration->id) }}"
+                                                    class="duration-link">
+                                                    <span class="duration-text">{{ $duration->name }} -
+                                                        {{ $duration->months }} @if (@$duration->is_month == '1')
+                                                            MONTHS
+                                                        @else
+                                                            Days
+                                                        @endif
+                                                    </span>
+                                                </a>
+                                            </div>
                                         @endforeach
                                     </div>
                                 </div>
@@ -1374,35 +1471,35 @@ body, .card, .footer, .header, .text {
 
 
 
-                        {{-- ----------------------------------------------lg devise ----------------------------------------------------------}}
+                        {{-- ----------------------------------------------lg devise -------------------------------------------------------- --}}
                         <li class="nav-item">
-                            <a class="nav-link hover-line collection" href="{{ route('ego.pages.collection.lense') }}">
-                                {{$collectionMenu}}
+                            <a class="nav-link hover-line collection"
+                                href="{{ route('ego.pages.collection.lense') }}">
+                                {{ $collectionMenu }}
                             </a>
                             <div class="mega-box">
                                 <div class="content">
                                     <div class="row">
                                         @foreach ($collectionSets as $collectionSet)
-                                        <div class="col-12 col-md-3 mb-3">
-                                            <a class="d-block mb-2 text-dark hover-link"
-                                                href="{{route('collectionSet.single.collection',$collectionSet->id)}}"
-                                                style="font-size: 16px; font-weight: 600;">
-                                                {{ @$collectionSet->category->name ?? 'No Category' }}
-                                                {{ @$collectionSet->tone->name ? '-' . $collectionSet->tone->name : '' }}
-                                                {{ @$collectionSet->duration ? '-' . $collectionSet->duration->months . ' months' : '' }}
-                                            </a>
-                                            <ul class="mega-links text-black">
-                                                @foreach ($collectionSet->products as $product)
-                                                <li>
-                                                    <a href="{{ route('addToCart.index', $product->id) }}"
-                                                        class="text-black"
-                                                        style="font-size: 12px;">
-                                                        {{ $product->name }}
-                                                    </a>
-                                                </li>
-                                                @endforeach
-                                            </ul>
-                                        </div>
+                                            <div class="col-12 col-md-3 mb-3">
+                                                <a class="d-block mb-2  hover-link"
+                                                    href="{{ route('collectionSet.single.collection', $collectionSet->id) }}"
+                                                    style="font-size: 16px; font-weight: 600;">
+                                                    {{ @$collectionSet->category->name ?? 'No Category' }}
+                                                    {{ @$collectionSet->tone->name ? '-' . $collectionSet->tone->name : '' }}
+                                                    {{ @$collectionSet->duration ? '-' . $collectionSet->duration->months . ' months' : '' }}
+                                                </a>
+                                                <ul class="mega-links ">
+                                                    @foreach ($collectionSet->products as $product)
+                                                        <li>
+                                                            <a href="{{ route('addToCart.index', $product->id) }}"
+                                                           style="font-size: 12px;">
+                                                                {{ $product->name }}
+                                                            </a>
+                                                        </li>
+                                                    @endforeach
+                                                </ul>
+                                            </div>
                                         @endforeach
                                     </div>
                                 </div>
@@ -1410,19 +1507,19 @@ body, .card, .footer, .header, .text {
                         </li>
                         <li class="nav-item">
                             <a class="nav-link hover-line colors"
-                                href="{{ route('ego.pages.color.lense') }}">{{$colorMenu}}</a>
+                                href="{{ route('ego.pages.color.lense') }}">{{ $colorMenu }}</a>
                             <div class="mega-box">
                                 <div class="d-flex justify-content-center align-items-center">
                                     <div class="row text-center mt-3">
                                         @foreach ($colors as $color)
-                                        <div class="col-md-2 mb-3 position-relative">
-                                            <a href="{{ route('color.single.color', $color->id) }}"
-                                                target="_blank">
-                                                <img class="card-img-top" style="width: 100%;"
-                                                    src="{{ asset($color->image_path) }}" alt="Card image cap">
-                                                <div class="image-text">{{ $color->name }}</div>
-                                            </a>
-                                        </div>
+                                            <div class="col-md-2 mb-3 position-relative">
+                                                <a href="{{ route('color.single.color', $color->id) }}"
+                                                    target="_blank">
+                                                    <img class="card-img-top" style="width: 100%;"
+                                                        src="{{ asset($color->image_path) }}" alt="Card image cap">
+                                                    <div class="image-text">{{ $color->name }}</div>
+                                                </a>
+                                            </div>
                                         @endforeach
                                     </div>
                                 </div>
@@ -1431,16 +1528,23 @@ body, .card, .footer, .header, .text {
 
                         <li class="nav-item">
                             <a class="nav-link hover-line durations-none"
-                                href="{{ route('ego.pages.duration.lense') }} ">{{$durationMenu}}</a>
+                                href="{{ route('ego.pages.duration.lense') }} ">{{ $durationMenu }}</a>
                             <div class="mega-box">
                                 <div class="content">
                                     <div class="row">
                                         <ul class="mega-links text-black">
                                             @foreach ($durations as $duration)
-                                            <a href="{{ route('duration.single.duration', $duration->id) }}" class="duration-link">
-                                                <span class="duration-text">{{ $duration->name }} - {{ $duration->months }}  @if(@$duration->is_month == '1')MONTHS @else Days @endif</span>
-                                            </a>
-                                            <br />
+                                                <a href="{{ route('duration.single.duration', $duration->id) }}"
+                                                    class="duration-link">
+                                                    <span class="duration-text">{{ $duration->name }} -
+                                                        {{ $duration->months }} @if (@$duration->is_month == '1')
+                                                            MONTHS
+                                                        @else
+                                                            Days
+                                                        @endif
+                                                    </span>
+                                                </a>
+                                                <br />
                                             @endforeach
                                         </ul>
                                     </div>
@@ -1452,24 +1556,24 @@ body, .card, .footer, .header, .text {
 
                         <li class="nav-item">
                             <a class="nav-link hover-line"
-                                href="{{ route('ego.pages.accessories') }}">{{$accessoryMenu}}</a>
+                                href="{{ route('ego.pages.accessories') }}">{{ $accessoryMenu }}</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link hover-line"
-                                href="{{ route('ego.pages.shop.instagram') }}">{{$instaMenu}}</a>
+                                href="{{ route('ego.pages.shop.instagram') }}">{{ $instaMenu }}</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link hover-line"
-                                href="{{ route('ego.pages.all.lenses') }}">{{$allLenseMenu}}</a>
+                                href="{{ route('ego.pages.all.lenses') }}">{{ $allLenseMenu }}</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link hover-line"
-                                href="{{ route('ego.pages.about.lense') }}">{{$aboutMenu}}</a>
+                                href="{{ route('ego.pages.about.lense') }}">{{ $aboutMenu }}</a>
                         </li>
                         <hr>
                         <li class="nav-item">
-                            <a class="navbar-brand d-block d-lg-none mb-5 nav-link hover-line" href="#" id="language-selector"
-                                style="font-size: 14px; color: black">
+                            <a class="navbar-brand d-block d-lg-none mb-5 nav-link hover-line" href="#"
+                                id="language-selector" style="font-size: 14px; color: black">
                                 <i class="fas fa-globe"></i> <span id="language-text">Select Language</span>
                             </a>
                         </li>
@@ -1713,7 +1817,7 @@ body, .card, .footer, .header, .text {
             }
             // Redirect to the new URL
             window.location.href = '{{ url('
-            lang ') }}/' + selectedLanguage;
+                                    lang ') }}/' + selectedLanguage;
         });
     });
 </script>

@@ -25,11 +25,11 @@ $discoverBtn = TranslationHelper::translateText('Discover the Collection', $pref
 </p>
 
     @foreach ($colors as $color)
-    <div class="row align-items-center" style="background: #f5f5f5;">
-        <div class="col-md-7">
+    <div class="row align-items-center colorMode">
+        <div class="col-md-7 colorMode">
             <img src="{{ asset($color->image_path) }}" style="width: 100%;" class="img-fluid" alt="Timeless Collection">
         </div>
-        <div class="col-md-5">
+        <div class="col-md-5 colorMode">
             <div class="p-5 mt-2">
                 <h1>{{ $color->name }}</h1>
                 {!! $color->color_intro !!}

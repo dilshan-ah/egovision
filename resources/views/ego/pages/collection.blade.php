@@ -24,15 +24,15 @@ $discoverBtn = TranslationHelper::translateText('Discover the Collection', $pref
     <p class="text-center">{{$collectionPageDesc}}</p>
 </div>
 <br>
-<div class="container">
+<div class="container collectionMode">
     @foreach($collectionSets as $collectionSet)
-    <div class="row align-items-center" style="background: #f5f5f5;">
-        <div class="col-md-6">
+    <div class="row align-items-center">
+        <div class="col-md-6 collectionMode">
             <a href="{{ route('collectionSet.single.collection', $collectionSet->id) }}">
                 <img src="{{asset($collectionSet->image_path)}}" class="img-fluid" alt="Timeless Collection">
             </a>
         </div>
-        <div class="col-md-6">
+        <div class="col-md-6 collectionMode">
             <div class="p-5 mt-2">
                 <h1>{{$collectionSet->category->name}}</h1>
                 <h4>

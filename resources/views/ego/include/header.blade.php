@@ -708,9 +708,9 @@ $aboutMenu = TranslationHelper::translateText('ABOUT US', $preferredLanguage);
 @endphp
 <header>
     <!-- Header content including Navbars -->
-    <div class="header-content" style="margin-top: 15px; padding-top: 15px">
+    <div class="header-content second_header_background " style="margin-top: 15px; padding-top: 15px">
         <!-- Top Navbar -->
-        <nav class="navbar navbar-expand-lg navbar-light;">
+        <nav class="navbar navbar-expand-lg navbar-light; container">
             <div class="container-fluid" style="padding: 5px">
                 <!-- Left side: Toggle button -->
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown"
@@ -756,30 +756,12 @@ $aboutMenu = TranslationHelper::translateText('ABOUT US', $preferredLanguage);
                 <!-- Middle: Logo -->
                 <div class="navbar-brand-container-logo ">
                     <a class="navbar-brand-logo" href="{{ route('ego.index') }}">
-                        <img src="{{ asset('ego/ego_logo_black.png') }}" alt="Logo" />
+                        <img id="logo-mode" src="{{ asset('ego/ego_logo_black.png') }}" alt="Logo" />
                     </a>
                 </div>
                 <!-- Right side: Account link -->
                 <div class="d-flex">
-                    @if (!Auth::user())
-                    <a class="navbar-brand d-none d-md-block" href="{{ route('ego.login') }}"
-                        style="font-size: 14px; color: black; display: flex; align-items: center;">
-                        <img src="{{ asset('ego/black_account.svg') }}" alt="Account"
-                            style="height: 14px; width: 14px; margin-right: 5px;" />
-                    </a>
-                    @else
-                    <a class="navbar-brand d-none d-md-block" href="{{ route('user.home') }}"
-                        style="display: flex; align-items: center; font-size: 14px; color: black;">
-                        <img src="{{ asset('ego/black_account.svg') }}" alt="Account"
-                            style="height: 14px; width: 14px; margin-right: 5px;" />
-                        {{ Auth::user()->fullname }}
-                    </a>
-                    @endif
-                    <a class="navbar-brand mx-2 d-none d-lg-flex" href="#" id="search-icon"
-                        style="align-items: center; font-size: 14px;">
-                        <img src="{{ asset('ego/search-icon_black.svg') }}" alt="Search"
-                            style="height: 14px; width: 14px; margin-right: 5px;" />
-                    </a>
+                    
 
                     <div id="search-popup" class="search-popup">
                         <div class="search-popup-content">
@@ -1648,4 +1630,22 @@ $aboutMenu = TranslationHelper::translateText('ABOUT US', $preferredLanguage);
             document.getElementById("search-popup").style.display = "none";
         }
     });
+</script>
+
+<script>
+    const toggleSwitch = document.querySelector('.custom-checkbox');
+    
+    if (localStorage.getItem('darkMode') === 'enabled') {
+            const logo = document.getElementById('logo-mode');
+            logo.src = "{{ asset('ego/ego_main_log.png') }}";
+        }
+
+        toggleSwitch.addEventListener('change', () => {
+            if (toggleSwitch.checked) {
+                logo.src = "{{ asset('ego/ego_main_log.png') }}";
+                
+            } else {
+                logo.src = "{{ asset('ego/ego_log_black.png') }}";
+            }
+        });
 </script>
