@@ -1118,7 +1118,7 @@ $aboutMenu = TranslationHelper::translateText('ABOUT US', $preferredLanguage);
                                                 @foreach ($collectionSet->products as $product)
                                                 <li>
                                                     <a href="{{ route('addToCart.index', $product->id) }}"
-                                                        class="text-black"
+                                                        
                                                         style="font-size: 12px;">
                                                         {{ $product->name }}
                                                     </a>

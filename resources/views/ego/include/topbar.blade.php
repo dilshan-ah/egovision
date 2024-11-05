@@ -4,7 +4,6 @@ body {
     background-color: white; /* Light mode background */
     color: black; /* Light mode text color */
 }
-
 /* Navbar Styles */
 .navbar {
     background-color: white; /* Light mode navbar background */
@@ -65,8 +64,6 @@ textarea:focus {
     background-color: black; /* Dark mode background */
     color: #d8dbe0; /* Dark mode text color */
 }
-
-
 .dark-mode .duationMode {
     color: white; /* Dark mode text color */
     background-color: black; /* Dark mode background */
@@ -75,9 +72,7 @@ textarea:focus {
 .dark-mode .abouMode {
     color: white; /* Dark mode text color */
     background-color: black; /* Dark mode background */
-
 }
-
 .dark-mode .mega-box {
     background-color: black; /* Dark mode navbar background */
     color:white;
@@ -86,10 +81,6 @@ textarea:focus {
 .dark-mode .navbar a {
     color: white; 
 }
-
-
-
-
 .dark-mode .card {
     background-color: #444; /* Dark mode card background */
     border: 1px solid #555; /* Dark mode card border */
@@ -119,7 +110,6 @@ textarea:focus {
     color: #d8dbe0; /* Dark mode input text color */
     border: 1px solid #555; /* Dark mode input border */
 }
-
 .dark-mode input[type="text"]:focus,
 .dark-mode input[type="email"]:focus,
 .dark-mode input[type="password"]:focus,
@@ -127,13 +117,7 @@ textarea:focus {
 .dark-mode textarea:focus {
     border-color: #007bff; /* Dark mode focus border color */
 }
-
 /* Additional Text Styles */
-
-
-
-
-
 .dark-mode h1, 
 .dark-mode h2, 
 .dark-mode h3, 
@@ -155,134 +139,153 @@ textarea:focus {
 {
     color: white; 
 }
+/* Toggle Button Styles */
+.custom-toggle-container {
+    display: flex;
+    align-items: center;
+    gap: 10px; /* Space between toggle and mode text */
+}
 
+.custom-toggle-button {
+    position: relative;
+    width: 40px;  /* Width of the toggle switch */
+    height: 20px; /* Height of the toggle switch */
+    cursor: pointer; /* Change cursor to pointer on hover */
+}
 
-        /* Toggle Button Styles */
-        .custom-toggle-container {
-            display: flex;
-            align-items: center;
-            gap: 10px; /* Space between toggle and mode text */
-        }
+.custom-switch-label {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: 10px; /* Rounded corners */
+    background-color: #ccc; /* Light background */
+    transition: background-color 0.3s ease, box-shadow 0.3s ease; /* Smooth transition */
+}
 
-        .custom-toggle-button {
-            position: relative;
-            width: 40px;  /* Width of the toggle switch */
-            height: 20px; /* Height of the toggle switch */
-            cursor: pointer; /* Change cursor to pointer on hover */
-        }
+.custom-switch-label:hover {
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); /* Shadow effect on hover */
+}
 
-        .custom-switch-label {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            border-radius: 10px; /* Rounded corners */
-            background-color: #ccc; /* Light background */
-            transition: background-color 0.3s ease, box-shadow 0.3s ease; /* Smooth transition for background and shadow */
-        }
+.custom-slider {
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 16px;
+    height: 16px;
+    background-color: white;
+    border-radius: 50%; /* Rounded slider */
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
 
-        .custom-switch-label:hover {
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); /* Shadow effect on hover */
-        }
+.custom-checkbox {
+    display: none; /* Hide the default checkbox */
+}
 
-        .custom-slider {
-            position: absolute;
-            top: 2px; /* Adjust top position */
-            left: 2px; /* Adjust left position */
-            width: 16px; /* Width of the slider */
-            height: 16px; /* Height of the slider */
-            background-color: white; /* White slider */
-            border-radius: 50%; /* Fully rounded slider */
-            transition: transform 0.3s ease, box-shadow 0.3s ease; /* Smooth transition for slider movement and shadow */
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Add shadow for depth */
-        }
+.custom-checkbox:checked ~ .custom-switch-label {
+    background-color: #4caf50; /* Green background when toggled */
+}
 
-        .custom-checkbox {
-            display: none;
-        }
+.custom-checkbox:checked ~ .custom-slider {
+    transform: translateX(20px); /* Slide right when toggled */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+}
 
-        .custom-checkbox:checked ~ .custom-switch-label {
-            background-color: #4caf50; /* Green background when toggled */
-        }
-        .custom-checkbox:checked ~ .custom-slider {
-            transform: translateX(20px); /* Move the slider to the right */
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5); /* Shadow effect when toggled */
-        }
+.custom-toggle-container i {
+    font-size: 14px;
+    color: #fff;
+}
 
-        /* Fade in and out animation for text */
-        @keyframes fade-in {
-            from {
-                opacity: 0;
-                transform: translateY(-20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
+.custom-mode-text {
+    color: white;
+    margin-left: 10px; /* Adjust for alignment */
+    font-size: 12px;
+}
 
-        @keyframes fade-out {
-            from {
-                opacity: 1;
-                transform: translateY(0);
-            }
-            to {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-        }
+/* Dark Mode Footer Styles */
+.dark-mode .footer {
+    background-color: #1a1a1a;
+    color: #d8dbe0;
+}
 
-        .custom-typewriter-container {
-            display: flex;
-            align-items: center;
-        }
+@media (max-width: 991px) {
+    .custom-typewriter-container {
+        display: none; /* Hide link on mobile devices */
+    }
+}
 
-        .custom-typewriter-text {
-            font-size: 14px;
-            color: white;
-            margin: 0 20px;
-            white-space: nowrap;
-            overflow: hidden; /* Ensure text does not overflow */
-            display: inline-block; /* Use inline-block to control spacing */
-        }
+.theme-toggle-container {
+    display: flex;
+    align-items: center;
+}
 
-        .custom-mode-text {
-            color: white;
-            margin-left: 10px; /* Adjusted for better alignment */
-            font-size: 12px;
-        }
+.theme-toggle {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
 
-        .custom-icon-link {
-            color: white;
-            text-decoration: none;
-            transition: color 0.3s ease;
-        }
+.custom-checkbox {
+    display: none; /* Hide the checkbox */
+}
 
+.icon-text {
+    display: flex;
+    align-items: center;
+    margin-left: 8px;
+}
 
-        /* Dark Mode Footer Styles */
-        .dark-mode .footer {
-            background-color: #1a1a1a;
-            color: #d8dbe0;
-        }
+.theme-icon {
+    font-size: 24px; /* Adjust icon size */
+    display: none; /* Initially hide both icons */
+}
 
-        @media (max-width: 991px) {
-            .custom-typewriter-container {
-                display: none; /* Hide the link on mobile devices */
-            }
-        }
-    </style>
+.light-icon {
+    display: block; /* Show the light icon by default */
+}
 
-    <div style="background-color: black;">
+.theme-text {
+    margin-left: 4px; /* Space between icon and text */
+}
+
+/* Dark mode styles */
+.dark-mode .light-icon {
+    display: none; /* Hide light icon in dark mode */
+}
+
+.dark-mode .dark-icon {
+    display: block; /* Show dark icon in dark mode */
+}
+
+.dark-mode .theme-text {
+    display: none; /* Hide light text in dark mode */
+}
+
+.dark-mode .theme-text#modeTextDark {
+    display: inline; /* Show dark text in dark mode */
+}
+</style>
+
+    <div style="">
         <div class="container d-flex justify-content-between align-items-center p-1">
-            <!-- Toggle Button with Mode Text -->
-            <div class="custom-toggle-container">
-                <div class="custom-toggle-button">
-                    <label class="custom-switch-label">
-                        <input type="checkbox" class="custom-checkbox">
-                        <span class="custom-slider"></span>
-                    </label>
-                </div>
-                <span class="custom-mode-text" id="modeText">Light</span> <!-- Text for mode -->
-            </div>
+        <div class="theme-toggle-container">
+    <label class="theme-toggle">
+        <input type="checkbox" class="custom-checkbox">
+        <div class="icon-text">
+            <i class="fas fa-sun theme-icon light-icon" id="lightIcon"></i>
+            <span class="theme-text" id="modeText">Light</span>
+        </div>
+        <div class="icon-text">
+            <i class="fas fa-moon theme-icon dark-icon" id="darkIcon"></i>
+            <span class="theme-text" id="modeTextDark">Dark</span>
+        </div>
+    </label>
+</div>
+
+
 
             <!-- Typewriter Text -->
             <div class="custom-typewriter-container" style="height:30px">
@@ -307,32 +310,50 @@ textarea:focus {
 
 
     <script>
-        // Dark mode toggle functionality with saved state
-        const toggleSwitch = document.querySelector('.custom-checkbox');
-        const modeText = document.getElementById('modeText');
-        const logo = document.getElementById('logo-mode');
-        console.log(logo);
-        
-        // Initialize dark mode based on local storage
-        if (localStorage.getItem('darkMode') === 'enabled') {
-            document.documentElement.classList.add('dark-mode');
-            toggleSwitch.checked = true;
-            modeText.textContent = 'Dark'; // Set text to 'Dark' when dark mode is enabled
-        }
 
-        toggleSwitch.addEventListener('change', () => {
-            if (toggleSwitch.checked) {
-                document.documentElement.classList.add('dark-mode');
-                localStorage.setItem('darkMode', 'enabled');
-                modeText.textContent = 'Dark';
-                logo.src = "{{ asset('ego/ego_main_log.png') }}";
-                
-            } else {
-                document.documentElement.classList.remove('dark-mode');
-                localStorage.setItem('darkMode', 'disabled');
-                modeText.textContent = 'Light'; // Set text to 'Light'
-            }
-        });
+
+// Dark mode toggle functionality with saved state
+const toggleSwitch = document.querySelector('.custom-checkbox');
+const lightIcon = document.getElementById('lightIcon');
+const darkIcon = document.getElementById('darkIcon');
+const modeText = document.getElementById('modeText');
+const modeTextDark = document.getElementById('modeTextDark');
+
+// Initialize dark mode based on local storage
+if (localStorage.getItem('darkMode') === 'enabled') {
+    document.documentElement.classList.add('dark-mode');
+    toggleSwitch.checked = true;
+    modeText.style.display = 'none';
+    modeTextDark.style.display = 'inline'; // Show dark mode text
+    darkIcon.style.display = 'block';
+} else {
+    lightIcon.style.display = 'block';
+}
+
+// Event listener for toggle switch
+toggleSwitch.addEventListener('change', () => {
+    if (toggleSwitch.checked) {
+        document.documentElement.classList.add('dark-mode');
+        localStorage.setItem('darkMode', 'enabled');
+        modeText.style.display = 'none';
+        modeTextDark.style.display = 'inline'; // Show dark mode text
+        darkIcon.style.display = 'block';
+        lightIcon.style.display = 'none';
+    } else {
+        document.documentElement.classList.remove('dark-mode');
+        localStorage.setItem('darkMode', 'disabled');
+        modeText.style.display = 'inline'; // Show light mode text
+        modeTextDark.style.display = 'none'; // Hide dark mode text
+        darkIcon.style.display = 'none';
+        lightIcon.style.display = 'block';
+    }
+});
+
+
+
+
+
+
 
         // Display text with fade in/out effect
         const texts = [
