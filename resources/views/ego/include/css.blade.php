@@ -160,6 +160,7 @@ body {
         left: 0;
         right: 0;
         z-index: 10;
+        margin-top:30px !important;
     }
 
     .carousel-caption {

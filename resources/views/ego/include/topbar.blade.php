@@ -5,7 +5,7 @@ body {
     color: black; /* Light mode text color */
 }
 
-/* Navbar Styles */
+/* Navbar Styles---- */
 .navbar {
     background-color: white; /* Light mode navbar background */
     color: black; /* Light mode navbar text color */
@@ -102,7 +102,7 @@ textarea:focus {
 
 .dark-mode .second_header_background {
     background-color:#d8dbe0; /* Dark mode footer background */
-    top:20px;
+    top:4px;
 }
 
 .dark-mode .add-to-cart-button {

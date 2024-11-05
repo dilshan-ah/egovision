@@ -916,7 +916,7 @@
                                     <div class="search-container">
                                     <input 
                                 placeholder="" 
-                                style="background-color: transparent; border: none; border-bottom: 0.5px solid white; outline: none;border-radious:0px; box-shadow: none;" 
+                                style="background-color: transparent; outline: none;border-radious:0px; box-shadow: none;" 
                                 class="form-control text-white" 
                                 type="search" 
                                 aria-label="Search">
