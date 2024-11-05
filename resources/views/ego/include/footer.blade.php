@@ -168,7 +168,6 @@ $terms = TranslationHelper::translateText('Terms and Conditions', $preferredLang
 $policy = TranslationHelper::translateText('Privacy Policy', $preferredLanguage);
 $cookieP = TranslationHelper::translateText('Cookie Policy', $preferredLanguage);
 $cookieS = TranslationHelper::translateText('Cookie Settings', $preferredLanguage);
-$counterF = TranslationHelper::translateText('Counterfeit Education', $preferredLanguage);
 $store = TranslationHelper::translateText('Store Locator', $preferredLanguage);
 
 
@@ -248,7 +247,6 @@ $acceptPay = TranslationHelper::translateText('Accepted Payment Methods', $prefe
                                 <a href="{{ route('policy.pages', ['id' => 42, 'slug' => 'policy_pages']) }}" style="text-decoration: none;">{{$policy}}</a><br>
                                 <a href="{{ route('policy.pages', ['id' => 43, 'slug' => 'terms_and_conditions']) }}#cookie" style="text-decoration: none;">{{$cookieP}}</a><br>
                                 <a href="#" style="text-decoration: none;">{{$cookieS}}</a><br>
-                                <a href="#" style="text-decoration: none;">{{$counterF}}</a><br>
                                 <a href="#" style="text-decoration: none;">{{$store}}</a>
                             </div>
                         </div>
@@ -266,7 +264,7 @@ $acceptPay = TranslationHelper::translateText('Accepted Payment Methods', $prefe
                                 <a href="{{ route('policy.pages', ['id' => 46, 'slug' => 'shipping-and-delivery']) }}" style="text-decoration: none;">{{$shippingDel}}</a><br>
                                 <a href="{{ route('policy.pages', ['id' => 47, 'slug' => 'deletion-policy']) }}" style="text-decoration: none;">{{$deletionPolicy}}</a><br>
                                 <a href="{{ route('policy.pages', ['id' => 45, 'slug' => 'returns-exchanges-refund-policy']) }}" style="text-decoration: none;">{{$return}}</a><br>
-                                <a href="#" style="text-decoration: none;">{{$contactPromo}}</a>
+                                <a href="{{route('contact')}}" style="text-decoration: none;">{{$contactPromo}}</a>
                             </div>
                         </div>
                     </div>
