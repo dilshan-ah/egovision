@@ -266,7 +266,7 @@ $acceptPay = TranslationHelper::translateText('Accepted Payment Methods', $prefe
                                 <a href="{{ route('policy.pages', ['id' => 46, 'slug' => 'shipping-and-delivery']) }}" style="text-decoration: none;">{{$shippingDel}}</a><br>
                                 <a href="{{ route('policy.pages', ['id' => 47, 'slug' => 'deletion-policy']) }}" style="text-decoration: none;">{{$deletionPolicy}}</a><br>
                                 <a href="{{ route('policy.pages', ['id' => 45, 'slug' => 'returns-exchanges-refund-policy']) }}" style="text-decoration: none;">{{$return}}</a><br>
-                                <a href="#" style="text-decoration: none;">{{$contactPromo}}</a>
+                                <a href="{{route('contact')}}" style="text-decoration: none;">{{$contactPromo}}</a>
                             </div>
                         </div>
                     </div>

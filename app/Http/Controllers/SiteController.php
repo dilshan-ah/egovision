@@ -101,43 +101,35 @@ class SiteController extends Controller
     {
         $this->validate($request, [
             'name' => 'required',
-            'email' => 'required',
-            'subject' => 'required|string|max:255',
+            'email' => 'required|email',
+            'subject' => 'string|max:255',
             'message' => 'required',
         ]);
+    
+        // Define the user as an array with an email key
+        $user = [
+            'id' => 1,
+            'email' => 'dilshanahmed2025@gmail.com'
+        ];
 
-        $request->session()->regenerateToken();
-
-        $random = getNumber();
-
-        $ticket = new SupportTicket();
-        $ticket->user_id = auth()->id() ?? 0;
-        $ticket->name = $request->name;
-        $ticket->email = $request->email;
-        $ticket->priority = Status::PRIORITY_MEDIUM;
-
-
-        $ticket->ticket = $random;
-        $ticket->subject = $request->subject;
-        $ticket->last_reply = Carbon::now();
-        $ticket->status = Status::TICKET_OPEN;
-        $ticket->save();
-
-        $adminNotification = new AdminNotification();
-        $adminNotification->user_id = auth()->user() ? auth()->user()->id : 0;
-        $adminNotification->title = 'A new support ticket has opened ';
-        $adminNotification->click_url = urlPath('admin.ticket.view', $ticket->id);
-        $adminNotification->save();
-
-        $message = new SupportMessage();
-        $message->support_ticket_id = $ticket->id;
-        $message->message = $request->message;
-        $message->save();
-
-        $notify[] = ['success', 'Ticket created successfully!'];
-
-        return to_route('ticket.view', [$ticket->ticket])->withNotify($notify);
+        try {
+            sendMessage($user, 'Send_Message', [
+                'name' => $request->name,
+                'email' => $request->email,
+                'subject' => $request->subject,
+                'message' => $request->message,
+            ], ['email'], true, 'dilshanahmed2025@gmail.com');
+    
+            $notify[] = ['success', 'Message sent successfully.'];
+        } catch (\Throwable $th) {
+            Log::info($th);
+            $notify[] = ['error', 'Something went wrong!'];
+        }
+    
+        
+        return redirect()->back()->with('success', 'Message sent successfully!')->withNotify($notify);
     }
+    
 
     public function egoIndex()
     {
@@ -451,12 +443,26 @@ class SiteController extends Controller
     public function search(Request $request)
     {
         $query = $request->input('query');
-        $pageTitle = "Search result for " . $query;
+        $preferredLanguage = session('preferredLanguage');
+    
+        $queryTitle = $query;
+        if ($preferredLanguage != 'en') {
+            $queryTitle = TranslationHelper::translateText($query, 'en');
+        }
 
-        $products = Product::where('name', 'LIKE', '%' . $query . '%')->get();
-
+        // Page title translation
+        $pageTitle = TranslationHelper::translateText("Search result for " . $query, $preferredLanguage);
+    
+        // Fetch products matching the query
+        $products = Product::where('name', 'LIKE', '%' . $queryTitle . '%')->get();
+    
+        // Translate each product's name to the preferred language
+        foreach ($products as $product) {
+            $product->name = TranslationHelper::translateText($product->name, $preferredLanguage);
+        }
+    
         return view('ego.pages.search', compact('products', 'query', 'pageTitle'));
-    }
+    }    
 
     public function myOrders()
     {
