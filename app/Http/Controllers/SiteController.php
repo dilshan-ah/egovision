@@ -109,7 +109,7 @@ class SiteController extends Controller
         // Define the user as an array with an email key
         $user = [
             'id' => 1,
-            'email' => 'dilshanahmed2025@gmail.com'
+            'email' => 'customer.service@fg-bd.com'
         ];
 
         try {
@@ -118,7 +118,7 @@ class SiteController extends Controller
                 'email' => $request->email,
                 'subject' => $request->subject,
                 'message' => $request->message,
-            ], ['email'], true, 'dilshanahmed2025@gmail.com');
+            ], ['email'], true, 'customer.service@fg-bd.com');
     
             $notify[] = ['success', 'Message sent successfully.'];
         } catch (\Throwable $th) {
