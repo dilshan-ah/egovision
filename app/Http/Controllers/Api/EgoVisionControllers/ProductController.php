@@ -124,9 +124,10 @@ class ProductController extends Controller
             $product = Product::with(['images:id,product_id,image_path', 'color', 'diameter', 'lensDesign', 'baseCurve', 'material', 'tone', 'duration'])
                 ->findOrFail($id);
 
+            $allowed_tags = '<br><p><strong><b><em><i><u><small><big><h1><h2><h3><h4><h5><h6><ul><ol><li><a><sub><sup>';
             // Remove HTML tags from 'product_intro' and 'description'
-            $product->product_intro = strip_tags($product->product_intro);
-            $product->description = strip_tags($product->description);
+            $product->product_intro = strip_tags($product->product_intro, $allowed_tags);
+            $product->description = strip_tags($product->description, $allowed_tags);
 
             // Format the main image path
             $product->image_path = $product->image_path ? 'https://egovision.shop/' . $product->image_path : null;
@@ -150,13 +151,13 @@ class ProductController extends Controller
 
             if ($product->color) {
                 $relatedProducts = Product::with('color')
-                ->whereHas('color', function ($query) use ($product) {
-                    $query->where('id', $product->color->id);
-                })->where('id','!=',$product->id)->select('id','name','no_power_price','image_path')
-                ->take(6)
-                ->get();
+                    ->whereHas('color', function ($query) use ($product) {
+                        $query->where('id', $product->color->id);
+                    })->where('id', '!=', $product->id)->select('id', 'name', 'no_power_price', 'image_path')
+                    ->take(6)
+                    ->get();
             }
-            
+
 
             unset($product->color);
             unset($product->diameter);
