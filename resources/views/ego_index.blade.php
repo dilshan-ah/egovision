@@ -218,7 +218,7 @@ $trustpilotText = TranslationHelper::translateText('Trustpilot', $preferredLangu
             <h3 class="text-center">
                 {{$welcomeText}}
             </h3>
-            <p class="text-justify">
+            <p style="text-align: justify;">
                 {{$aboutText}}
             </p>
 

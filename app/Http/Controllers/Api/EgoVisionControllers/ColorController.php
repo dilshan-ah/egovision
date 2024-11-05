@@ -46,13 +46,14 @@ class ColorController extends Controller
     {
         $colors = Color::all();
     
-        // Format the colors with the correct URL prefix for image_path
+        
         $formattedColors = $colors->map(function ($color) {
+            $allowed_tags = '<br><p><strong><b><em><i><u><small><big><h1><h2><h3><h4><h5><h6><ul><ol><li><a><sub><sup>';
             return [
                 'id' => $color->id,
                 'name' => $color->name,
                 'image_path' => $color->image_path ? 'https://egovision.shop/' . $color->image_path : null,
-                'color_intro' => strip_tags($color->color_intro)
+                'color_intro' => strip_tags($color->color_intro, $allowed_tags)
             ];
         });
     

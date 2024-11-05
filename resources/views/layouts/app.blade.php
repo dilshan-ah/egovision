@@ -53,9 +53,9 @@
         <br>
         <style>
             .dashboard .nav-link {
-                font-size: 0.9rem;
-                font-weight: 400;
-                color: #555;
+                font-size: 16px !important;
+                font-weight: 600 !important;
+                color: #000;
                 margin-bottom: 10px;
                 padding-left: 0;
                 padding-top: 10px;
@@ -63,6 +63,20 @@
                 text-decoration: none;
                 position: relative;
                 display: block;
+            }
+
+            .dashboard .nav-link:hover::after{
+                width: 100%;
+                transition: 0.5s;
+            }
+
+            .dashboard .nav-link::after{
+                position: absolute;
+                bottom: 0px;
+                left: 0;
+                height: 2px;
+                width: 0px;
+                display: block !important
             }
         </style>
 

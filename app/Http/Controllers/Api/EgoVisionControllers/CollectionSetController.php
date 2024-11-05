@@ -114,11 +114,12 @@ class CollectionSetController extends Controller
             foreach ($collectionSets as $collectionSet) {
 
 
-                // Add formatted collection set to the array
+                $allowed_tags = '<br><p><strong><b><em><i><u><small><big><h1><h2><h3><h4><h5><h6><ul><ol><li><a><sub><sup>';
+
                 $formattedCollectionSets[] = [
                     'id' => $collectionSet->id,
                     'image_path' => 'https://egovision.shop/' . $collectionSet->image_path, // Include image_path from collection set
-                    'description' => strip_tags($collectionSet->description), // Stripped description 
+                    'description' => strip_tags($collectionSet->description, $allowed_tags), // Stripped description 
                     'category_name' => $collectionSet->category->name ?? null,
                     'tone_name' => $collectionSet->tone->name ?? null,
                     'duration_name' => $collectionSet->duration->name ?? null,
