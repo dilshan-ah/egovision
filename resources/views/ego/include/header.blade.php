@@ -1107,14 +1107,14 @@ $aboutMenu = TranslationHelper::translateText('ABOUT US', $preferredLanguage);
                                     <div class="row">
                                         @foreach ($collectionSets as $collectionSet)
                                         <div class="col-12 col-md-3 mb-3">
-                                            <a class="d-block mb-2 text-dark hover-link"
+                                            <a class="d-block mb-2  hover-link"
                                                 href="{{route('collectionSet.single.collection',$collectionSet->id)}}"
                                                 style="font-size: 16px; font-weight: 600;">
                                                 {{ @$collectionSet->category->name ?? 'No Category' }}
                                                 {{ @$collectionSet->tone->name ? '-' . $collectionSet->tone->name : '' }}
                                                 {{ @$collectionSet->duration ? '-' . $collectionSet->duration->months . ' months' : '' }}
                                             </a>
-                                            <ul class="mega-links text-black">
+                                            <ul class="mega-links">
                                                 @foreach ($collectionSet->products as $product)
                                                 <li>
                                                     <a href="{{ route('addToCart.index', $product->id) }}"
