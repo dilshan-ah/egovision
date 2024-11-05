@@ -173,10 +173,10 @@ textarea:focus {
 
         .custom-switch-label {
             position: absolute;
-            width: 100%;
+            width: 133%;
             height: 100%;
             border-radius: 10px; /* Rounded corners */
-            background-color: #ccc; /* Light background */
+            background-color: white; /* Light background */
             transition: background-color 0.3s ease, box-shadow 0.3s ease; /* Smooth transition for background and shadow */
         }
 
@@ -184,85 +184,108 @@ textarea:focus {
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); /* Shadow effect on hover */
         }
 
+
+
+
         .custom-slider {
-            position: absolute;
-            top: 2px; /* Adjust top position */
-            left: 2px; /* Adjust left position */
-            width: 16px; /* Width of the slider */
-            height: 16px; /* Height of the slider */
-            background-color: white; /* White slider */
-            border-radius: 50%; /* Fully rounded slider */
-            transition: transform 0.3s ease, box-shadow 0.3s ease; /* Smooth transition for slider movement and shadow */
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Add shadow for depth */
-        }
+    position: absolute;
+    top: 3.5px; /* Adjust top position */
+    left: 2px; /* Adjust left position */
+    width: 24px; /* Width of the eye shape */
+    height: 12px; /* Height of the eye shape */
+    border-radius: 50px; /* Rounded ends for the eye shape */
+    background: linear-gradient(135deg, #ff66b2, #ffccff); /* Gradient background for a pink color scheme */
+    transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease; /* Smooth transition for movement, shadow, and background color */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3), 0 0 15px rgba(255, 102, 178, 0.5); /* Enhanced shadow for depth */
+}
 
-        .custom-checkbox {
-            display: none;
-        }
+/* Add an inner circle to represent the iris/pupil */
+.custom-slider::before {
+    content: "";
+    position: absolute;
+    top: 50%; /* Center vertically */
+    left: 50%; /* Center horizontally */
+    width: 8px; /* Width of the iris/pupil */
+    height: 8px; /* Height of the iris/pupil */
+    border-radius: 50%; /* Fully rounded iris/pupil */
+    background-color: #000; /* Black color for the pupil */
+    transform: translate(-50%, -50%); /* Center the pupil */
+}
 
-        .custom-checkbox:checked ~ .custom-switch-label {
-            background-color: #4caf50; /* Green background when toggled */
-        }
-        .custom-checkbox:checked ~ .custom-slider {
-            transform: translateX(20px); /* Move the slider to the right */
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5); /* Shadow effect when toggled */
-        }
+/* Add a hover effect for more interactivity */
+.custom-slider:hover {
+    transform: scale(1.1); /* Slightly increase size on hover */
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.4), 0 0 20px rgba(255, 102, 178, 0.6); /* Increase shadow intensity on hover */
+    background-color: rgba(255, 102, 178, 0.8); /* Change background color slightly on hover */
+}
 
-        /* Fade in and out animation for text */
-        @keyframes fade-in {
-            from {
-                opacity: 0;
-                transform: translateY(-20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
+.custom-checkbox {
+    display: none;
+}
 
-        @keyframes fade-out {
-            from {
-                opacity: 1;
-                transform: translateY(0);
-            }
-            to {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-        }
+.custom-checkbox:checked ~ .custom-switch-label {
+    background-color: #4caf50; /* Green background when toggled */
+}
 
-        .custom-typewriter-container {
-            display: flex;
-            align-items: center;
-        }
+.custom-checkbox:checked ~ .custom-slider {
+    transform: translateX(21px); /* Move the slider to the right */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5); /* Shadow effect when toggled */
+}
 
-        .custom-typewriter-text {
-            font-size: 14px;
-            color: white;
-            margin: 0 20px;
-            white-space: nowrap;
-            overflow: hidden; /* Ensure text does not overflow */
-            display: inline-block; /* Use inline-block to control spacing */
-        }
+/* Fade in and out animation for text */
+@keyframes fade-in {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
 
-        .custom-mode-text {
-            color: white;
-            margin-left: 10px; /* Adjusted for better alignment */
-            font-size: 12px;
-        }
+@keyframes fade-out {
+    from {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    to {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+}
 
-        .custom-icon-link {
-            color: white;
-            text-decoration: none;
-            transition: color 0.3s ease;
-        }
+.custom-typewriter-container {
+    display: flex;
+    align-items: center;
+}
 
+.custom-typewriter-text {
+    font-size: 14px;
+    color: #fff; /* White color for the text */
+    margin: 0 20px;
+    white-space: nowrap;
+    overflow: hidden; /* Ensure text does not overflow */
+    display: inline-block; /* Use inline-block to control spacing */
+}
 
-        /* Dark Mode Footer Styles */
-        .dark-mode .footer {
-            background-color: #1a1a1a;
-            color: #d8dbe0;
-        }
+.custom-mode-text {
+    color: white;
+    margin-left: 10px; /* Adjusted for better alignment */
+    font-size: 12px;
+}
+
+.custom-icon-link {
+    color: white;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+/* Dark Mode Footer Styles */
+.dark-mode .footer {
+    background-color: #1a1a1a;
+    color: #d8dbe0;
+}
 
         @media (max-width: 991px) {
             .custom-typewriter-container {

@@ -112,6 +112,13 @@
     .navbar {
         background: transparent !important;
     }
+    .nav-link {
+        position: relative;
+        padding-bottom: 5px;
+        color: white;
+        font-size: 15px;
+        margin: 0 18px;
+    }
 
     .navbar-dark .navbar-nav .nav-link {
         color: Black;

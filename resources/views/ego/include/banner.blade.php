@@ -751,7 +751,7 @@
         /* Search input styling */
         .form-control {
             width: 100%;
-            padding: 4px; /* Adjust padding */
+            padding: 10px; /* Adjust padding */
             font-size: 14px; /* Font size */
             border: 2px solid #000; /* Black border */
             outline: none; /* No outline on focus */
