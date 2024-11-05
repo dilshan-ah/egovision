@@ -86,6 +86,18 @@ textarea:focus {
 .dark-mode .navbar a {
     color: white; 
 }
+.dark-mode .accordion-button {
+    color: white; 
+}
+.dark-mode .accordion-item{
+    color: white; 
+}
+.dark-mode .accordion-button:not(.collapsed){
+    color: white; 
+}
+.dark-mode .footer a{
+    color: white; 
+}
 
 
 

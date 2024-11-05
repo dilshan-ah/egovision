@@ -84,6 +84,23 @@ $hyperopia = TranslationHelper::translateText('Hyperopia', $preferredLanguage);
             @endforeach
         </div>
     </div>
+
+    <style>
+        .main-image-container {
+    overflow: hidden;
+    position: relative;
+}
+
+.main-image-container .main-image {
+    transition: transform 0.3s ease; /* Smooth transition */
+    cursor: zoom-in;
+}
+
+.main-image-container:hover .main-image {
+    transform: scale(1.5); /* Adjust scale as needed */
+}
+
+    </style>
     <!-- Middle Column - Vertical Images -->
     <div class="col-md-5">
         <div class="main-image-container">
@@ -91,6 +108,8 @@ $hyperopia = TranslationHelper::translateText('Hyperopia', $preferredLanguage);
                 alt="Main Display" />
         </div>
     </div>
+
+
     <!-- Right Column - Add to Cart Section -->
     <div class="col-md-5 right-column p-5">
         <div class="add-to-cart-section">
@@ -788,4 +807,22 @@ $hyperopia = TranslationHelper::translateText('Hyperopia', $preferredLanguage);
         }
     };
 </script>
+
+
+<script>
+const mainImageContainer = document.querySelector('.main-image-container');
+const mainImage = document.querySelector('.main-image');
+
+mainImageContainer.addEventListener('mousemove', (e) => {
+    const rect = mainImageContainer.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    mainImage.style.transformOrigin = `${x}px ${y}px`;
+    mainImage.style.transform = 'scale(1.8)'; // Zoom in
+});
+
+mainImageContainer.addEventListener('mouseleave', () => {
+    mainImage.style.transform = 'scale(1)'; // Reset zoom when mouse leaves
+});
+    </script>
 @endpush
