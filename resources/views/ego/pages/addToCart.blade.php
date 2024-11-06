@@ -480,10 +480,111 @@ $relatedProduct = TranslationHelper::translateText('Related Products', $preferre
 <!-- <div class="overlay-sidebar" style="z-index: 1;" id="overlay-sidebar"></div> -->
 @endsection
 @push('script')
+
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+
+<!-- Quantity update js -->
+<script>
+    const productPrice = {{ $product->price ?? 0 }};
+    const productNoPowerPrice = {{ $product->no_power_price ?? 0 }};
+    let globalTotalPrice = productNoPowerPrice;
+    const addToCartButton = document.getElementById("total-price");
+    const addBtn = document.getElementById('add-to-cart');
+    let quantity = 1;
+
+    function selectTab(tabId) {
+        document.getElementById(tabId).checked = true;
+        if (tabId === 'tab1-radio') {
+            updateSimpleTotalPrice();
+            quantity = 1;
+            document.getElementById("quantity").textContent = quantity;
+        } else {
+            addToCartButton.textContent = productPrice.toFixed(2);
+            globalTotalPrice = productPrice;
+            quantity = 0;
+            document.getElementById("quantity").textContent = quantity;
+        }
+        updateAddToCartButton();
+    }
+
+    function updateSimpleTotalPrice() {
+        globalTotalPrice = (quantity * productNoPowerPrice).toFixed(2);
+        addToCartButton.textContent = globalTotalPrice;
+        updateAddToCartButton();
+    }
+
+    function updateAddToCartButton() {
+        addToCartButton.textContent = parseFloat(globalTotalPrice).toFixed(2);
+        addBtn.disabled = globalTotalPrice === 0;
+    }
+
+    document.getElementById("increment").addEventListener("click", () => {
+        quantity++;
+        document.getElementById("quantity").textContent = quantity;
+        updateSimpleTotalPrice();
+    });
+
+    document.getElementById("decrement").addEventListener("click", () => {
+        if (quantity > 1) {
+            quantity--;
+            document.getElementById("quantity").textContent = quantity;
+            updateSimpleTotalPrice();
+        }
+    });
+
+    document.addEventListener("DOMContentLoaded", function() {
+        updateSimpleTotalPrice();
+
+        document.querySelectorAll(".toggle-btn").forEach((button) => {
+            button.addEventListener("click", calculateGlobalTotalPrice);
+        });
+
+        attachQuantityListeners();
+    });
+
+    function attachQuantityListeners() {
+        document.querySelectorAll(".increase-btn, .increase-btn-two").forEach((button) => {
+            button.addEventListener("click", function() {
+                const quantityClass = button.classList.contains('increase-btn') ? '.quantity-btn' : '.quantity-btn-two';
+                const quantityElement = this.parentElement.querySelector(quantityClass);
+                let currentQuantity = parseInt(quantityElement.textContent) || 1;
+                quantityElement.textContent = ++currentQuantity;
+                updateDisplayedTotal(this, quantityClass);
+            });
+        });
+
+        document.querySelectorAll(".decrease-btn, .decrease-btn-two").forEach((button) => {
+            button.addEventListener("click", function() {
+                const quantityClass = button.classList.contains('decrease-btn') ? '.quantity-btn' : '.quantity-btn-two';
+                const quantityElement = this.parentElement.querySelector(quantityClass);
+                let currentQuantity = parseInt(quantityElement.textContent) || 1;
+                if (currentQuantity > 1) quantityElement.textContent = --currentQuantity;
+                updateDisplayedTotal(this, quantityClass);
+            });
+        });
+    }
+
+    function updateDisplayedTotal(button, quantityClass) {
+        const quantityElement = button.parentElement.querySelector(quantityClass);
+        const currentQuantity = parseInt(quantityElement.textContent) || 1;
+        const totalPriceElement = button.closest('.adjustment-btns').querySelector('.total-price-section');
+        const calculatedTotal = (currentQuantity * productPrice).toFixed(2);
+        totalPriceElement.textContent = `Taka: ${calculatedTotal} BDT`;
+        calculateGlobalTotalPrice();
+    }
+
+    function calculateGlobalTotalPrice() {
+        globalTotalPrice = 0;
+        document.querySelectorAll(".total-price-section").forEach((priceElement) => {
+            const totalText = priceElement.textContent.match(/([\d.]+)/);
+            if (totalText) globalTotalPrice += parseFloat(totalText[1]);
+        });
+        updateAddToCartButton();
+    }
+</script>
 
 <script>
     $(document).ready(function() {
@@ -532,149 +633,7 @@ $relatedProduct = TranslationHelper::translateText('Related Products', $preferre
     });
 </script>
 
-<!-- Quantity update js -->
-<script>
-    function selectTab(tabId) {
-        document.getElementById(tabId).checked = true;
-        const totalPriceElement = document.getElementById("total-price");
-        if (tabId == 'tab1-radio') {
-            updateSimpleTotalPrice()
-        } else {
-            totalPriceElement.textContent = productPrice;
-        }
 
-    }
-
-    const productPrice = {
-        {
-            $product - > price ?? 0
-        }
-    };
-    const productNoPowerPrice = {
-        {
-            $product - > no_power_price ?? 0
-        }
-    };
-    let globalTotalPrice = productNoPowerPrice;
-    const addToCartButton = document.getElementById("total-price");
-    const addBtn = document.getElementById('add-to-cart');
-
-
-
-    // Function to update the total price in the "Add to Cart" button
-    function updateAddToCartButton() {
-        addToCartButton.textContent = globalTotalPrice.toFixed(2);
-
-        addBtn.disabled = globalTotalPrice === 0;
-    }
-
-    function updateDisplayedTotal(button, quantityClass) {
-        const quantityElement = button.parentElement.querySelector(quantityClass);
-        const currentQuantityValue = parseInt(quantityElement.textContent) || 0;
-        const totalPriceElement = button.closest('.adjustment-btns').querySelector('.total-price-section');
-        const calculatedTotal = (currentQuantityValue * productPrice).toFixed(2);
-
-        totalPriceElement.textContent = `Taka: ${calculatedTotal} BDT`;
-
-        calculateGlobalTotalPrice();
-    }
-
-    function calculateGlobalTotalPrice() {
-        globalTotalPrice = 0;
-        document.querySelectorAll(".total-price-section").forEach((priceElement) => {
-            const totalText = priceElement.textContent.match(/([\d.]+)/);
-            if (totalText) {
-                globalTotalPrice += parseFloat(totalText[1]);
-            }
-        });
-
-        updateAddToCartButton();
-    }
-
-    // Reset all values (quantities and totals) to 0
-    function resetAllValues() {
-        document.querySelectorAll(".quantity-btn, .quantity-btn-two").forEach((quantityBtn) => {
-            quantityBtn.textContent = 0; // Reset quantity display to 0
-        });
-
-        document.querySelectorAll(".total-price-section").forEach((priceElement) => {
-            priceElement.textContent = `Taka: 0.00 BDT`; // Reset price display
-        });
-
-        globalTotalPrice = 0;
-        updateAddToCartButton();
-    }
-
-    function attachQuantityListeners() {
-        document.querySelectorAll(".increase-btn, .increase-btn-two").forEach((increaseButton) => {
-            increaseButton.addEventListener("click", function() {
-                const quantityClass = increaseButton.classList.contains('increase-btn') ? '.quantity-btn' : '.quantity-btn-two';
-                const quantityElement = this.parentElement.querySelector(quantityClass);
-                let currentQuantityValue = parseInt(quantityElement.textContent) || 1; // Handle NaN
-                currentQuantityValue += 1;
-                quantityElement.textContent = currentQuantityValue;
-                updateDisplayedTotal(this, quantityClass);
-            });
-        });
-
-        document.querySelectorAll(".decrease-btn, .decrease-btn-two").forEach((decreaseButton) => {
-            decreaseButton.addEventListener("click", function() {
-                const quantityClass = decreaseButton.classList.contains('decrease-btn') ? '.quantity-btn' : '.quantity-btn-two';
-                const quantityElement = this.parentElement.querySelector(quantityClass);
-                let currentQuantityValue = parseInt(quantityElement.textContent) || 0; // Handle NaN
-                if (currentQuantityValue > 1) {
-                    currentQuantityValue -= 1;
-                    quantityElement.textContent = currentQuantityValue;
-                    updateDisplayedTotal(this, quantityClass);
-                }
-            });
-        });
-    }
-
-    document.querySelectorAll(".toggle-btn").forEach((button) => {
-        calculateGlobalTotalPrice();
-    });
-
-    document.addEventListener("DOMContentLoaded", function() {
-
-        const quantityElement = document.querySelector('.quantity-btn');
-        const initialQuantity = parseInt(quantityElement.textContent) || 0; // Handle NaN
-        const initialTotal = (initialQuantity * productPrice).toFixed(2);
-
-        calculateGlobalTotalPrice();
-
-        attachQuantityListeners();
-    });
-
-
-    let quantity = 1;
-    let totalPriceElement = document.getElementById("total-price");
-
-    function updateSimpleTotalPrice() {
-        const total = (quantity * productNoPowerPrice).toFixed(2);
-        globalTotalPrice = parseFloat(total);
-        totalPriceElement.textContent = total;
-
-        updateAddToCartButton();
-    }
-
-    document.getElementById("increment").addEventListener("click", () => {
-        quantity++;
-        document.getElementById("quantity").textContent = quantity;
-        updateSimpleTotalPrice();
-    });
-
-    document.getElementById("decrement").addEventListener("click", () => {
-        if (quantity > 1) {
-            quantity--;
-            document.getElementById("quantity").textContent = quantity;
-            updateSimpleTotalPrice();
-        }
-    });
-    document.addEventListener("DOMContentLoaded", function() {
-        updateSimpleTotalPrice();
-    });
-</script>
 
 
 <script>

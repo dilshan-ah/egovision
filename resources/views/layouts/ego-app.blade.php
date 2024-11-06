@@ -62,8 +62,9 @@
     </main>
     @include('ego.include.footer')
     @include('ego.include.chatbot')
-    @include('ego.include.js')
+    
     @stack('script')
+    @include('ego.include.js')
 </body>
 
 </html>
