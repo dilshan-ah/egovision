@@ -412,7 +412,6 @@
         padding: 10px 20px;
         background-color: black;
         color: white;
-        border: none;
         text-align: center;
         text-decoration: none;
         display: inline-block;
@@ -1115,57 +1114,47 @@
                                                                     </h5>
                                                                 </div>
 
-                                                                <!-- Price and Quantity Section -->
-                                                                <div
-                                                                    style="margin-top: 10px; display: flex; align-items: center; justify-content: space-between;">
-                                                                    <!-- Quantity Selector -->
-                                                                    <div class="quantity-selector"
-                                                                        style="display: inline-flex; align-items: center; border: 1px solid black; padding: 1px; font-size: 12px;">
-                                                                        <button class="quantity-btn decreaseQuantity"
-                                                                            data-cart-id="{{ $cart->id }}"
-                                                                            style="padding: 4px 8px; background-color: transparent; border: none; cursor: pointer; font-size: 14px; font-weight: 600; color: black;">-</button>
-                                                                        <span class="quantity-number"
-                                                                            id="quantityValue{{ $cart->id }}"
-                                                                            style="padding: 4px 8px; font-size: 12px; color: black;">{{ $cart->pair }}</span>
-                                                                        <button class="quantity-btn increaseQuantity"
-                                                                            data-cart-id="{{ $cart->id }}"
-                                                                            style="padding: 4px 8px; background-color: transparent; border: none; cursor: pointer; font-size: 14px; font-weight: 600; color: black;">+</button>
-                                                                    </div>
-                                                                    <!-- Price -->
-                                                                    <span
-                                                                        style="font-size: 14px; font-weight: 600; margin-left: 10px;">{{ $cart->power_status == 'no_power' ? $cart->product->no_power_price : $cart->product->price }}
-                                                                        BDT</span>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    @endforeach
-                                                    <div class="buttons d-flex justify-content-between my-3" style="margin-top: 25px;">
-                                                        <a href="{{ route('addToCart.checkout') }}" class="add-to-cart-button"
-                                                            style="width: 45%;">Checkout</a>
-                                                    </div>
-                                                    <div class="cart-subtotal my-4"
-                                                        style="border-top: 1px solid #e0e0e0; padding-top: 20px; text-align: center;">
-                                                        <h4 style="font-size: 18px; font-weight: 600;">
-                                                            CART SUBTOTAL: <span
-                                                                id="cartSubtotal">{{ $carts->sum(function ($cart) {
-                                                                    return $cart->pair * $cart->product->price;
-                                                                }) }}</span>
-                                                            BDT
-                                                        </h4>
-                                                    </div>
-                                                @else
-                                                    <h4 style="font-size: 16px; font-weight: 600;">You have no items in your shopping cart.
-                                                    </h4>
-                                                @endif
-                                                <div class="footer-text mt-5 text-center" style="color: white;">
-                                                    <p style="margin-bottom: 5px; font-size: 14px; font-weight: 600;">FREE SAMPLES</p>
-                                                    <p style="font-size: 13px; margin-bottom: 5px;">Go to your SHOPPING BAG to pick your
-                                                        FREE samples.</p>
-                                                    <p style="font-size: 13px;">You can select up to 4 with your order!</p>
-                                                </div>
-                                            </div>
+                                    <!-- Price and Quantity Section -->
+                                    <div
+                                        style="margin-top: 10px; display: flex; align-items: center; justify-content: space-between;">
+                                        <!-- Quantity Selector -->
+                                        <div class="quantity-selector"
+                                            style="display: inline-flex; align-items: center; border: 1px solid black; padding: 1px; font-size: 12px;">
+                                            <button class="quantity-btn decreaseQuantity"
+                                                data-cart-id="{{ $cart->id }}"
+                                                style="padding: 4px 8px; background-color: transparent; border: none; cursor: pointer; font-size: 14px; font-weight: 600; color: black;">-</button>
+                                            <span class="quantity-number"
+                                                id="quantityValue{{ $cart->id }}"
+                                                style="padding: 4px 8px; font-size: 12px; color: black;">{{ $cart->pair }}</span>
+                                            <button class="quantity-btn increaseQuantity"
+                                                data-cart-id="{{ $cart->id }}"
+                                                style="padding: 4px 8px; background-color: transparent; border: none; cursor: pointer; font-size: 14px; font-weight: 600; color: black;">+</button>
                                         </div>
+                                        <!-- Price -->
+                                        <span
+                                            style="font-size: 14px; font-weight: 600; margin-left: 10px;">{{ $cart->power_status == 'no_power' ? $cart->product->no_power_price : $cart->product->price }}
+                                            BDT</span>
                                     </div>
+                                </div>
+                            </div>
+                            @endforeach
+                            <div class="buttons d-flex justify-content-between my-3" style="margin-top: 25px;">
+                                <a href="{{route('addToCart.checkout')}}" class="add-to-cart-button" style="width: 45%;">Checkout</a>
+                            </div>
+                            <div class="cart-subtotal my-4"
+                                style="border-top: 1px solid #e0e0e0; padding-top: 20px; text-align: center;">
+                                <h4 style="font-size: 18px; font-weight: 600;">
+                                    CART SUBTOTAL: <span id="cartSubtotal">{{ $carts->sum(function ($cart) {
+                                        return $cart->pair * $cart->product->price;
+                                    }) }}</span> BDT
+                                </h4>
+                            </div>
+                            @else
+                            <h4 style="font-size: 16px; font-weight: 600;">You have no items in your shopping cart.</h4>
+                            @endif
+                        </div>
+                    </div>
+                </div>
 
                                 </div>
                             </nav>

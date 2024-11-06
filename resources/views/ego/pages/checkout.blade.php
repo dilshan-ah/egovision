@@ -120,9 +120,9 @@
 
                 <div class="card p-4">
                     <h2>Shipping Methods</h2>
-                    @foreach($shippingMethods as $shippingMethod)
+                    @foreach($shippingMethods as $index => $shippingMethod)
                     <div class="form-check d-flex align-items-center gap-4 py-3 mt-3 border-top border-bottom">
-                        <input class="form-check-input" type="radio" name="delivery" value="{{@$shippingMethod->fee}}" id="flexRadioDefault{{@$shippingMethod->fee}}" required>
+                        <input class="form-check-input" type="radio" name="delivery" value="{{@$shippingMethod->fee}}" id="flexRadioDefault{{@$shippingMethod->fee}}" required @if($index == 0) checked @endif>
                         <label class="form-check-label" for="flexRadioDefault{{@$shippingMethod->fee}}">
                             {{$shippingMethod->title}} <span style="font-size: 18px">({{$shippingMethod->fee}} BDT)</span>
                         </label>
@@ -259,7 +259,7 @@
                     </div>
                     <div class="d-flex justify-content-between">
                         <h4>Delivery Free</h4>
-                        <b id="deliveryFee">60 BDT</b>
+                        <b id="deliveryFee">100 BDT</b>
                     </div>
                     <div class="d-flex justify-content-between">
                         <h4>Tax</h4>
@@ -268,7 +268,7 @@
                     <div class="d-flex justify-content-between">
                         <h4>Total</h4>
                         <b id="total">
-                            {{
+                            <!-- {{
                                 $carts->sum(function($cart) {
                                     $price = $cart->power_status == 'no_power' ? $cart->product->no_power_price : $cart->product->price;
                                     return $price * $cart->pair;
@@ -280,7 +280,8 @@
                                     $price = $cart->power_status == 'no_power' ? $cart->product->no_power_price : $cart->product->price;
                                     return $price * $cart->pair;
                                 }) + $taxprice
-                            }} BDT
+                            }} BDT -->
+                             {{$total + 100}} BDT
                         </b>
 
                     </div>

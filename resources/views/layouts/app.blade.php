@@ -17,17 +17,30 @@
     @stack('style')
     @include('ego.include.css')
     <style>
-        .card{
+        .card {
             box-shadow: unset;
         }
 
-        .card:hover{
+        .card:hover {
             box-shadow: unset;
         }
     </style>
 </head>
 
 <body>
+    @php
+    use App\Helpers\TranslationHelper;
+    $preferredLanguage = session('preferredLanguage');
+    $account = TranslationHelper::translateText('My account', $preferredLanguage);
+    $order = TranslationHelper::translateText('My Orders', $preferredLanguage);
+    $wishlist = TranslationHelper::translateText('Wishlist', $preferredLanguage);
+    $ticket = TranslationHelper::translateText('My Tickets', $preferredLanguage);
+    $upload = TranslationHelper::translateText('Upload Prescription', $preferredLanguage);
+    $account = TranslationHelper::translateText('Account Information', $preferredLanguage);
+    $subs = TranslationHelper::translateText('Newsletter Subscriptions', $preferredLanguage);
+    $return = TranslationHelper::translateText('Returned Products', $preferredLanguage);
+    $logout = TranslationHelper::translateText('Logout', $preferredLanguage);
+    @endphp
     <div id="app">
         @include('ego.include.header')
         <br>
@@ -40,9 +53,9 @@
         <br>
         <style>
             .dashboard .nav-link {
-                font-size: 0.9rem;
-                font-weight: 400;
-                color: #555;
+                font-size: 16px !important;
+                font-weight: 600 !important;
+                color: #000;
                 margin-bottom: 10px;
                 padding-left: 0;
                 padding-top: 10px;
@@ -52,28 +65,41 @@
                 display: block;
             }
 
+            .dashboard .nav-link:hover::after{
+                width: 100%;
+                transition: 0.5s;
+            }
+
+            .dashboard .nav-link::after{
+                position: absolute;
+                bottom: 0px;
+                left: 0;
+                height: 2px;
+                width: 0px;
+                display: block !important
+            }
         </style>
 
-        <div class="container-fluid dashboard">
+        <div class="container dashboard">
             <div class="row">
                 <!-- Sidebar -->
                 <nav class="col-md-4 col-lg-3 d-md-block accountbar">
                     <div class="position-sticky">
                         <ul class="nav flex-column ">
                             <li class="nav-item">
-                                <a class="nav-link" href="{{route('user.home')}}"> MY ACCOUNT </a>
+                                <a class="nav-link text-uppercase" href="{{route('user.home')}}"> {{$account}} </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="{{route('ego.orders')}}">My Orders</a>
+                                <a class="nav-link text-uppercase" href="{{route('ego.orders')}}">{{$order}}</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="{{route('ego.wishlist')}}">Wishlist</a>
+                                <a class="nav-link text-uppercase" href="{{route('ego.wishlist')}}">{{$wishlist}}</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="{{ route('ticket.index') }}">My Tickets</a>
+                                <a class="nav-link text-uppercase" href="{{ route('ticket.index') }}">{{$ticket}}</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="{{route('user.upload.prescription')}}">Upload Prescription</a>
+                                <a class="nav-link text-uppercase" href="{{route('user.upload.prescription')}}">{{$upload}}</a>
                             </li>
                             <!-- <li class="nav-item">
                                 <a class="nav-link" href="#">Compare Products</a>
@@ -82,21 +108,21 @@
                                 <a class="nav-link" href="#">Address Book</a>
                             </li> -->
                             <li class="nav-item">
-                                <a class="nav-link" href="{{ route('user.profile.setting') }}">Account Information</a>
+                                <a class="nav-link text-uppercase" href="{{ route('user.profile.setting') }}">{{$account}}</a>
                             </li>
                             <!-- <li class="nav-item">
                                 <a class="nav-link" href="#">Privacy Settings</a>
                             </li> -->
-                            
+
                             <li class="nav-item">
-                                <a class="nav-link" href="{{route('ego.newsLetter')}}">Newsletter Subscriptions</a>
+                                <a class="nav-link text-uppercase" href="{{route('ego.newsLetter')}}">{{$subs}}</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="{{route('return.show')}}">Returned Products</a>
+                                <a class="nav-link text-uppercase" href="{{route('return.show')}}">{{$return}}</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="#" onclick="event.preventDefault();
-                                                     document.getElementById('logout-form').submit();">Logout</a>
+                                <a class="nav-link text-uppercase" href="#" onclick="event.preventDefault();
+                                                     document.getElementById('logout-form').submit();">{{$logout}}</a>
                             </li>
                             <form id="logout-form" action="{{ route('user.logout') }}" method="get" class="d-none">
                                 @csrf

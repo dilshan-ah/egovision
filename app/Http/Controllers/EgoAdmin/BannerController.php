@@ -29,10 +29,13 @@ class BannerController extends Controller
     {
         // dd($request->all());
         $request->validate([
-            'banner_image' => 'required',
+            'banner_image' => 'required|image|mimes:jpeg,png,jpg,gif|max:1024',
             'product_id' => 'required',
         ], [
             'banner_image.required' => 'Banner is required',
+            'banner_image.image' => 'The file must be an image',
+            'banner_image.mimes' => 'The image must be a file of type: jpeg, png, jpg, gif',
+            'banner_image.max' => 'The image must not be larger than 2MB',
             'product_id.required' => 'Select a product to link with the banner'
         ]);
 
@@ -74,6 +77,14 @@ class BannerController extends Controller
 
     public function update(string $id, Request $request)
     {
+        $request->validate([
+            'banner_image' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
+        ], [
+            'banner_image.image' => 'The file must be an image',
+            'banner_image.mimes' => 'The image must be a file of type: jpeg, png, jpg, gif',
+            'banner_image.max' => 'The image must not be larger than 2MB'
+        ]);
+        
         try {
             $banner = Banner::findOrFail($id);
 

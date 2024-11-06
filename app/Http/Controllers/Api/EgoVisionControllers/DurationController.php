@@ -50,11 +50,12 @@ class DurationController extends Controller
         $durations = Duration::select('id','name','months','image_path','description')->get();
         
         $formattedDurations = $durations->map(function ($duration) {
+            $allowed_tags = '<br><p><strong><b><em><i><u><small><big><h1><h2><h3><h4><h5><h6><ul><ol><li><a><sub><sup>';
             return [
                 'id' => $duration->id,
                 'name' => $duration->name,
                 'image_path' => $duration->image_path ? 'https://egovision.shop/' . $duration->image_path : null,
-                'description' => strip_tags($duration->description)
+                'description' => strip_tags($duration->description, $allowed_tags)
             ];
         });
     

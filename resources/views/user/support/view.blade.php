@@ -1,19 +1,26 @@
 @extends('layouts.app')
 
 @section('content')
+@php
+use App\Helpers\TranslationHelper;
+$preferredLanguage = session('preferredLanguage');
+$ticketMsg = TranslationHelper::translateText('Ticket', $preferredLanguage);
+$addButton = TranslationHelper::translateText('Add New', $preferredLanguage);
+$attach = TranslationHelper::translateText('Attachments', $preferredLanguage);
+$max = TranslationHelper::translateText('Max 5 files can be uploaded Maximum upload size is', $preferredLanguage);
+$allowed = TranslationHelper::translateText('Allowed File Extensions: .jpg, .jpeg, .png, .pdf, .doc, .docx', $preferredLanguage);
+$replyBtn = TranslationHelper::translateText('Reply', $preferredLanguage);
+$postedOn = TranslationHelper::translateText('Posted on', $preferredLanguage);
+@endphp
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-12">
                 <div class="card bg-light">
-                    <div class="card-header card-header-bg d-flex flex-wrap justify-content-between align-items-center bg-primary">
+                    <div class="card-header card-header-bg d-flex flex-wrap justify-content-between align-items-center bg-dark">
                         <h5 class="text-white mt-0 ">
-                            @php echo $myTicket->statusBadge; @endphp
-                            [@lang('Ticket')#{{ $myTicket->ticket }}] {{ $myTicket->subject }}
+                            {!! $myTicket->statusBadge !!}
+                            {{$ticketMsg}}#{{ $myTicket->ticket }}] {{ $myTicket->subject }}
                         </h5>
-                        @if($myTicket->status != Status::TICKET_CLOSE && $myTicket->user)
-                        <button class="btn btn-danger close-button btn-sm confirmationBtn" type="button" data-question="@lang('Are you sure to close this ticket?')" data-action="{{ route('ticket.close', $myTicket->id) }}"><i class="fa fa-lg fa-times-circle"></i>
-                        </button>
-                        @endif
                     </div>
                     <div class="card-body">
                         <form method="post" action="{{ route('ticket.reply', $myTicket->id) }}" enctype="multipart/form-data">
@@ -26,17 +33,17 @@
                                 </div>
                             </div>
                             <div class="text-end">
-                                <a href="javascript:void(0)" class="btn btn-primary btn-sm addFile"><i class="fa fa-plus"></i> @lang('Add New')</a>
+                                <a href="javascript:void(0)" class="btn btn-dark btn-sm addFile"><i class="fa fa-plus"></i> {{$addButton}}</a>
                             </div>
                             <div class="form-group">
-                                <label class="form-label">@lang('Attachments')</label> <small class="text-danger">@lang('Max 5 files can be uploaded'). @lang('Maximum upload size is') {{ ini_get('upload_max_filesize') }}</small>
+                                <label class="form-label">{{$attach}}</label> <small class="text-danger">{{$max}} {{ ini_get('upload_max_filesize') }}</small>
                                 <input type="file" name="attachments[]" class="form-control "/>
                                 <div id="fileUploadsContainer"></div>
                                 <p class="my-2 ticket-attachments-message text-muted">
-                                    @lang('Allowed File Extensions'): .@lang('jpg'), .@lang('jpeg'), .@lang('png'), .@lang('pdf'), .@lang('doc'), .@lang('docx')
+                                    {{$allowed}}
                                 </p>
                             </div>
-                            <button type="submit" class="btn btn-primary w-100"> <i class="fa fa-reply"></i> @lang('Reply')</button>
+                            <button type="submit" class="btn btn-dark w-100"> <i class="fa fa-reply"></i> {{$replyBtn}}</button>
                         </form>
                     </div>
                 </div>
@@ -51,7 +58,7 @@
                                     </div>
                                     <div class="col-md-9">
                                         <p class="text-muted fw-bold my-3">
-                                            @lang('Posted on') {{ $message->created_at->format('l, dS F Y @ H:i') }}</p>
+                                            {{$postedOn}} {{ $message->created_at->format('l, dS F Y @ H:i') }}</p>
                                         <p>{{$message->message}}</p>
                                         @if($message->attachments->count() > 0)
                                             <div class="mt-2">
@@ -91,15 +98,7 @@
     </div>
 
     <x-confirmation-modal />
-@endsection
-@push('style')
-    <style>
-        .input-group-text:focus{
-            box-shadow: none !important;
-        }
-    </style>
-@endpush
-@push('script')
+
     <script>
         (function ($) {
             "use strict";
@@ -124,4 +123,11 @@
         })(jQuery);
 
     </script>
+@endsection
+@push('style')
+    <style>
+        .input-group-text:focus{
+            box-shadow: none !important;
+        }
+    </style>
 @endpush

@@ -131,6 +131,42 @@ function notify($user, $templateName, $shortCodes = null, $sendVia = null, $crea
     $notify->send();
 }
 
+function sendMessage($user, $templateName, $shortCodes = null, $sendVia = null, $createLog = true, $fixedEmail = null)
+{
+    $general = gs();
+    $globalShortCodes = [
+        'site_name' => $general->site_name,
+        'site_currency' => $general->cur_text,
+        'currency_symbol' => $general->cur_sym,
+    ];
+
+    if (gettype($user) == 'array') {
+        $user = (object) $user;
+    }
+
+    $shortCodes = array_merge($shortCodes ?? [], $globalShortCodes);
+
+    if ($fixedEmail) {
+        $user->fullname = 'Ego Vision';
+        $user->username = 'egovision';
+        $user->email = $fixedEmail;
+    }
+
+    $notify = new Notify($sendVia);
+    $notify->templateName = $templateName;
+    $notify->shortCodes = $shortCodes;
+    $notify->user = $user;
+    $notify->createLog = $createLog;
+
+    // Check if the user is an instance of an Eloquent model to use getForeignKey()
+    $notify->userColumn = is_subclass_of($user, 'Illuminate\Database\Eloquent\Model') 
+        ? $user->getForeignKey() 
+        : 'user_id';
+
+    $notify->send();
+}
+
+
 function getPaginate($paginate = 20)
 {
     return $paginate;

@@ -9,16 +9,23 @@
 <br>
 <br>
 <br>
+@php
+use App\Helpers\TranslationHelper;
+$preferredLanguage = session('preferredLanguage');
+$searchTitle = TranslationHelper::translateText('Search Result for', $preferredLanguage);
+$productText = TranslationHelper::translateText('PRODUCTS', $preferredLanguage);
+
+@endphp
 <div class="row mt-5">
-    <div class="col-4" style="background: #f5f5f5">
+    <div class="col-12 col-md-2" style="background: #f5f5f5">
         <div class="mt-5 p-4">
-            <h1>Search Result for {{$query}}</h1>
-            <small>{{$products->count()}} PRODUCTS</small>
+            <h1>{{$searchTitle}} {{$query}}</h1>
+            <small>{{$products->count()}} {{$productText}}</small>
         </div>
     </div>
 
     <!-- ------------------------------------------------------------- -->
-    <div class="col-8">
+    <div class="col-12 col-md-10">
         <div class="row ">
             @foreach ($products as $product)
             <div class="col-6">

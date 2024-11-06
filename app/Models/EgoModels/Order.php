@@ -27,6 +27,7 @@ class Order extends Model
         'email',
         'phone',
         'status',
+        'payment_status',
         'address_one',
         'address_two',
         'city',

@@ -179,10 +179,10 @@ class CartController extends Controller
         try {
             $cartItems = Cart::where('user_id', $id)
                 ->with(['product' => function ($query) {
-                    $query->select('id', 'name', 'price', 'image_path');
+                    $query->select('id', 'name', 'price', 'no_power_price', 'image_path');
                 }])
-                ->get(['id', 'product_id', 'power', 'pair']);
-
+                ->get(['id', 'product_id', 'power', 'pair', 'power_status']); // Include power_status
+    
             if ($cartItems->isEmpty()) {
                 return response()->json([
                     'success' => false,
@@ -192,24 +192,39 @@ class CartController extends Controller
                     'cartItems' => []
                 ], 404);
             }
-
+    
+            $formattedItems = $cartItems->map(function ($item) {
+                return [
+                    'id' => $item->id,
+                    'product_id' => $item->product_id,
+                    'power' => $item->power,
+                    'pair' => $item->pair,
+                    'power_status' => $item->power_status, // Ensure power_status is included
+                    'product' => [
+                        'id' => $item->product->id,
+                        'name' => $item->product->name,
+                        'price' => $item->power_status == 'no_power' ? $item->product->no_power_price : $item->product->price,
+                        'image_path' => $item->product->image_path,
+                    ]
+                ];
+            });
+    
             $cartCount = $cartItems->sum('pair');
             $cartTotal = $cartItems->sum(function ($cart) {
-                return $cart->product->price * $cart->pair;
+                return $cart->power_status == 'no_power' ? $cart->product->no_power_price * $cart->pair : $cart->product->price * $cart->pair;
             });
-
+    
             return response()->json([
                 'success' => true,
                 'message' => 'Cart items retrieved successfully.',
                 'cartCount' => $cartCount,
                 'cartTotal' => $cartTotal,
-                'cartItems' => $cartItems
-            ], 200); // OK
-
+                'cartItems' => $formattedItems
+            ], 200);
+    
         } catch (\Exception $e) {
             Log::error('Error retrieving cart list: ' . $e->getMessage());
-
-            // Structure the error response
+    
             return response()->json([
                 'success' => false,
                 'message' => 'Unable to retrieve cart items.',
@@ -217,6 +232,7 @@ class CartController extends Controller
             ], 500);
         }
     }
+    
 
     public function updateCartQuantity(Request $request)
     {

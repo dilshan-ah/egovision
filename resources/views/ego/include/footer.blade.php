@@ -168,7 +168,6 @@ $terms = TranslationHelper::translateText('Terms and Conditions', $preferredLang
 $policy = TranslationHelper::translateText('Privacy Policy', $preferredLanguage);
 $cookieP = TranslationHelper::translateText('Cookie Policy', $preferredLanguage);
 $cookieS = TranslationHelper::translateText('Cookie Settings', $preferredLanguage);
-$counterF = TranslationHelper::translateText('Counterfeit Education', $preferredLanguage);
 $store = TranslationHelper::translateText('Store Locator', $preferredLanguage);
 
 
@@ -192,7 +191,7 @@ $acceptPay = TranslationHelper::translateText('Accepted Payment Methods', $prefe
 @endphp
 <footer class="footer mt-5">
     <div class="mt-2"></div>
-    <div class="container">
+    <div class="container d-block">
         <div class="row">
             <!-- Left Side -->
             <div class="col-md-4">
@@ -218,7 +217,7 @@ $acceptPay = TranslationHelper::translateText('Accepted Payment Methods', $prefe
             </div>
             <!-- Middle Side -->
             <div class="col-md-4">
-                <div class="dropdown mt-2">
+                <div class="dropdown mt-2 d-flex justify-content-center">
                     <form id="lang-form" style="width: max-content" action="{{route('change.lang')}}" method="post">
                         @csrf
                         <select onchange="document.getElementById('lang-form').submit();" name="code" style="width: 100%; background-color: transparent !important; border: 0; padding: 0 20px">
@@ -245,9 +244,8 @@ $acceptPay = TranslationHelper::translateText('Accepted Payment Methods', $prefe
                             <div class="accordion-body">
                                 <a href="{{ route('policy.pages', ['id' => 43, 'slug' => 'terms_and_conditions']) }}" style="text-decoration: none;">{{$terms}}</a><br>
                                 <a href="{{ route('policy.pages', ['id' => 42, 'slug' => 'policy_pages']) }}" style="text-decoration: none;">{{$policy}}</a><br>
-                                <a href="#" style="text-decoration: none;">{{$cookieP}}</a><br>
+                                <a href="{{ route('policy.pages', ['id' => 43, 'slug' => 'terms_and_conditions']) }}#cookie" style="text-decoration: none;">{{$cookieP}}</a><br>
                                 <a href="#" style="text-decoration: none;">{{$cookieS}}</a><br>
-                                <a href="#" style="text-decoration: none;">{{$counterF}}</a><br>
                                 <a href="#" style="text-decoration: none;">{{$store}}</a>
                             </div>
                         </div>
@@ -265,7 +263,7 @@ $acceptPay = TranslationHelper::translateText('Accepted Payment Methods', $prefe
                                 <a href="{{ route('policy.pages', ['id' => 46, 'slug' => 'shipping-and-delivery']) }}" style="text-decoration: none;">{{$shippingDel}}</a><br>
                                 <a href="{{ route('policy.pages', ['id' => 47, 'slug' => 'deletion-policy']) }}" style="text-decoration: none;">{{$deletionPolicy}}</a><br>
                                 <a href="{{ route('policy.pages', ['id' => 45, 'slug' => 'returns-exchanges-refund-policy']) }}" style="text-decoration: none;">{{$return}}</a><br>
-                                <a href="#" style="text-decoration: none;">{{$contactPromo}}</a>
+                                <a href="{{route('contact')}}" style="text-decoration: none;">{{$contactPromo}}</a>
                             </div>
                         </div>
                     </div>
@@ -287,7 +285,7 @@ $acceptPay = TranslationHelper::translateText('Accepted Payment Methods', $prefe
                 </div>
             </div>
         </div>
-        <div class="container text-center">
+        <div class="container d-block text-center">
             <div class="row">
                 <div class="col-md-12">
                     <h5 class="followUs">{{$followUs}}</h5>

@@ -27,9 +27,11 @@ $discoverBtn = TranslationHelper::translateText('Discover the Collection', $pref
     </p>
 
     @foreach($durations as $duration)
-    <div class="row align-items-center ">
+    <div class="row align-items-center" style="background: #f5f5f5;">
         <div class="col-md-6 duationMode">
-            <img src="{{asset($duration->image_path)}}" style="width: 100%;" class="img-fluid" alt="Timeless Collection">
+            <a href="{{route('duration.single.duration',$duration->id)}}">
+                <img src="{{asset($duration->image_path)}}" style="width: 100%;" class="img-fluid" alt="Timeless Collection">
+            </a>
         </div>
         <div class="col-md-6 duationMode">
             <div class="p-5 mt-2">

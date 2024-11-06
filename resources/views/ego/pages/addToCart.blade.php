@@ -58,7 +58,7 @@ $moreInfo = TranslationHelper::translateText('More Information', $preferredLangu
 $powerRange = TranslationHelper::translateText('Power Range', $preferredLanguage);
 $lensParam = TranslationHelper::translateText('Lens Parameters', $preferredLanguage);
 
-$pack = TranslationHelper::translateText('Pack Content	', $preferredLanguage);
+$pack = TranslationHelper::translateText('Pack Content ', $preferredLanguage);
 $diameter = TranslationHelper::translateText('Diameter', $preferredLanguage);
 $base = TranslationHelper::translateText('Base curve', $preferredLanguage);
 $material = TranslationHelper::translateText('Material', $preferredLanguage);
@@ -70,9 +70,10 @@ $step = TranslationHelper::translateText('Steps', $preferredLanguage);
 $plano = TranslationHelper::translateText('Plano', $preferredLanguage);
 $myopia = TranslationHelper::translateText('Myopia', $preferredLanguage);
 $hyperopia = TranslationHelper::translateText('Hyperopia', $preferredLanguage);
+$relatedProduct = TranslationHelper::translateText('Related Products', $preferredLanguage);
 @endphp
 <div class="row" style="margin-top:150px">
-    <div class="col-md-2">
+    <div class="col-md-1">
         <div class="vertical-slider" style="cursor: pointer; padding: 10px;">
             <div class="d-flex justify-content-end">
                 <img src="{{ asset($product->image_path) }}" class="img-fluid imageAlbum" style="margin-bottom: 10px; margin-left: 0; margin-right: 0">
@@ -102,7 +103,7 @@ $hyperopia = TranslationHelper::translateText('Hyperopia', $preferredLanguage);
 
     </style>
     <!-- Middle Column - Vertical Images -->
-    <div class="col-md-5">
+    <div class="col-md-6">
         <div class="main-image-container">
             <img id="mainImage" src="{{ asset($product->image_path) }}" class="main-image img-fluid w-100"
                 alt="Main Display" />
@@ -111,7 +112,7 @@ $hyperopia = TranslationHelper::translateText('Hyperopia', $preferredLanguage);
 
 
     <!-- Right Column - Add to Cart Section -->
-    <div class="col-md-5 right-column p-5">
+    <div class="col-md-5 right-column py-5">
         <div class="add-to-cart-section">
             <h1>
                 <span>{{ $product->name }}</span>
@@ -247,7 +248,6 @@ $hyperopia = TranslationHelper::translateText('Hyperopia', $preferredLanguage);
         <div
             style="
                 width: 100%;
-                max-width: 600px;
                 margin: 50px auto;
                 border-top: 1px solid #ddd;
                 border-bottom: 1px solid #ddd;
@@ -338,7 +338,7 @@ $hyperopia = TranslationHelper::translateText('Hyperopia', $preferredLanguage);
                                 <td>{{@$product->diameter->name}}</td>
                             </tr>
                             <tr>
-                                <td class="table-secondary">{{$diameter}}</td>
+                                <td class="table-secondary">{{$base}}</td>
                                 <td>{{@$product->baseCurve->name}}</td>
                             </tr>
                             <tr>
@@ -406,7 +406,7 @@ $hyperopia = TranslationHelper::translateText('Hyperopia', $preferredLanguage);
                     <span class="custom-closebtn" style="font-size: 24px; cursor: pointer;">&times;</span>
                 </div>
                 <div class="custom-accordion">
-                    
+
                     <table class="table mt-4">
                         <tbody>
                             <tr class="table-dark">
@@ -425,7 +425,7 @@ $hyperopia = TranslationHelper::translateText('Hyperopia', $preferredLanguage);
                                 <td>in 0.25 {{$step}}</td>
                             </tr>
                             <tr>
-                                <td>-6.50 to -8.00</td>
+                                <td>-6.50 to -10.00</td>
                                 <td>in 0.50 {{$step}}</td>
                             </tr>
                             <tr class="table-secondary">
@@ -434,7 +434,7 @@ $hyperopia = TranslationHelper::translateText('Hyperopia', $preferredLanguage);
                                 <td>in 0.25 {{$step}}</td>
                             </tr>
                             <tr class="table-secondary">
-                                <td>+6.50 to +8.00</td>
+                                <td>+6.50 to +10.00</td>
                                 <td>in 0.50 {{$step}}</td>
                             </tr>
                         </tbody>
@@ -460,16 +460,150 @@ $hyperopia = TranslationHelper::translateText('Hyperopia', $preferredLanguage);
         </div>
     </div>
 </div>
+<div class="mt-5 container-fluid">
+    <div class="row">
+    <div class="col-1"></div>
+        <div class="col-11">
+            <h1>
+                <span>{{$relatedProduct}}</span>
+            </h1>
+        </div>
+        <div class="col-1"></div>
+        <div class="col-10">
+            <div class="product-slider d-flex flex-nowrap overflow-hidden ">
+                @foreach($relatedProducts as $relatedProduct)
+                <div class="card-product-slider mx-2 mb-5">
+
+                    <div class="card-product-slider-img-wrapper ">
+                        <img src="{{asset($relatedProduct->image_path)}}" style="width: 100%; height: auto" class="card-product-slider-img-top" alt="...">
+                        <a href="{{ route('addToCart.index', $relatedProduct->id) }}" class="stretched-link"></a>
+                        <div class="card-product-slider-icons">
+                            <i class="fas fa-heart"></i>
+                            <i class="fas fa-share"></i>
+                        </div>
+                    </div>
+                    <div class="card-product-slider-body">
+                        <h5 class="card-product-slider-title">{{ $relatedProduct->name }}</h5>
+                        <small class="price">{{ $relatedProduct->price }} BDT</small>
+                    </div>
+                </div>
+                @endforeach
+            </div>
+        </div>
+        <div class="col-1"></div>
+    </div>
+</div>
 <div class="lightbox" id="lightbox">
     <img src="" alt="Lightbox Image" id="lightbox-img" />
 </div>
 <!-- <div class="overlay-sidebar" style="z-index: 1;" id="overlay-sidebar"></div> -->
 @endsection
 @push('script')
+
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+
+<!-- Quantity update js -->
+<script>
+    const productPrice = {{ $product->price ?? 0 }};
+    const productNoPowerPrice = {{ $product->no_power_price ?? 0 }};
+    let globalTotalPrice = productNoPowerPrice;
+    const addToCartButton = document.getElementById("total-price");
+    const addBtn = document.getElementById('add-to-cart');
+    let quantity = 1;
+
+    function selectTab(tabId) {
+        document.getElementById(tabId).checked = true;
+        if (tabId === 'tab1-radio') {
+            updateSimpleTotalPrice();
+            quantity = 1;
+            document.getElementById("quantity").textContent = quantity;
+        } else {
+            addToCartButton.textContent = productPrice.toFixed(2);
+            globalTotalPrice = productPrice;
+            quantity = 0;
+            document.getElementById("quantity").textContent = quantity;
+        }
+        updateAddToCartButton();
+    }
+
+    function updateSimpleTotalPrice() {
+        globalTotalPrice = (quantity * productNoPowerPrice).toFixed(2);
+        addToCartButton.textContent = globalTotalPrice;
+        updateAddToCartButton();
+    }
+
+    function updateAddToCartButton() {
+        addToCartButton.textContent = parseFloat(globalTotalPrice).toFixed(2);
+        addBtn.disabled = globalTotalPrice === 0;
+    }
+
+    document.getElementById("increment").addEventListener("click", () => {
+        quantity++;
+        document.getElementById("quantity").textContent = quantity;
+        updateSimpleTotalPrice();
+    });
+
+    document.getElementById("decrement").addEventListener("click", () => {
+        if (quantity > 1) {
+            quantity--;
+            document.getElementById("quantity").textContent = quantity;
+            updateSimpleTotalPrice();
+        }
+    });
+
+    document.addEventListener("DOMContentLoaded", function() {
+        updateSimpleTotalPrice();
+
+        document.querySelectorAll(".toggle-btn").forEach((button) => {
+            button.addEventListener("click", calculateGlobalTotalPrice);
+        });
+
+        attachQuantityListeners();
+    });
+
+    function attachQuantityListeners() {
+        document.querySelectorAll(".increase-btn, .increase-btn-two").forEach((button) => {
+            button.addEventListener("click", function() {
+                const quantityClass = button.classList.contains('increase-btn') ? '.quantity-btn' : '.quantity-btn-two';
+                const quantityElement = this.parentElement.querySelector(quantityClass);
+                let currentQuantity = parseInt(quantityElement.textContent) || 1;
+                quantityElement.textContent = ++currentQuantity;
+                updateDisplayedTotal(this, quantityClass);
+            });
+        });
+
+        document.querySelectorAll(".decrease-btn, .decrease-btn-two").forEach((button) => {
+            button.addEventListener("click", function() {
+                const quantityClass = button.classList.contains('decrease-btn') ? '.quantity-btn' : '.quantity-btn-two';
+                const quantityElement = this.parentElement.querySelector(quantityClass);
+                let currentQuantity = parseInt(quantityElement.textContent) || 1;
+                if (currentQuantity > 1) quantityElement.textContent = --currentQuantity;
+                updateDisplayedTotal(this, quantityClass);
+            });
+        });
+    }
+
+    function updateDisplayedTotal(button, quantityClass) {
+        const quantityElement = button.parentElement.querySelector(quantityClass);
+        const currentQuantity = parseInt(quantityElement.textContent) || 1;
+        const totalPriceElement = button.closest('.adjustment-btns').querySelector('.total-price-section');
+        const calculatedTotal = (currentQuantity * productPrice).toFixed(2);
+        totalPriceElement.textContent = `Taka: ${calculatedTotal} BDT`;
+        calculateGlobalTotalPrice();
+    }
+
+    function calculateGlobalTotalPrice() {
+        globalTotalPrice = 0;
+        document.querySelectorAll(".total-price-section").forEach((priceElement) => {
+            const totalText = priceElement.textContent.match(/([\d.]+)/);
+            if (totalText) globalTotalPrice += parseFloat(totalText[1]);
+        });
+        updateAddToCartButton();
+    }
+</script>
 
 <script>
     $(document).ready(function() {
@@ -518,141 +652,7 @@ $hyperopia = TranslationHelper::translateText('Hyperopia', $preferredLanguage);
     });
 </script>
 
-<!-- Quantity update js -->
-<script>
-    function selectTab(tabId) {
-        document.getElementById(tabId).checked = true;
-        const totalPriceElement = document.getElementById("total-price");
-        if (tabId == 'tab1-radio') {
-            updateSimpleTotalPrice()
-        } else {
-            totalPriceElement.textContent = productPrice;
-        }
 
-    }
-
-    const productPrice = {{$product->price ?? 0}};
-    const productNoPowerPrice = {{ $product->no_power_price ?? 0 }};
-    let globalTotalPrice = productNoPowerPrice;
-    const addToCartButton = document.getElementById("total-price");
-    const addBtn = document.getElementById('add-to-cart');
-
-
-
-    // Function to update the total price in the "Add to Cart" button
-    function updateAddToCartButton() {
-        addToCartButton.textContent = globalTotalPrice.toFixed(2);
-
-        addBtn.disabled = globalTotalPrice === 0;
-    }
-
-    function updateDisplayedTotal(button, quantityClass) {
-        const quantityElement = button.parentElement.querySelector(quantityClass);
-        const currentQuantityValue = parseInt(quantityElement.textContent) || 0;
-        const totalPriceElement = button.closest('.adjustment-btns').querySelector('.total-price-section');
-        const calculatedTotal = (currentQuantityValue * productPrice).toFixed(2);
-
-        totalPriceElement.textContent = `Taka: ${calculatedTotal} BDT`;
-
-        calculateGlobalTotalPrice();
-    }
-
-    function calculateGlobalTotalPrice() {
-        globalTotalPrice = 0;
-        document.querySelectorAll(".total-price-section").forEach((priceElement) => {
-            const totalText = priceElement.textContent.match(/([\d.]+)/);
-            if (totalText) {
-                globalTotalPrice += parseFloat(totalText[1]);
-            }
-        });
-
-        updateAddToCartButton();
-    }
-
-    // Reset all values (quantities and totals) to 0
-    function resetAllValues() {
-        document.querySelectorAll(".quantity-btn, .quantity-btn-two").forEach((quantityBtn) => {
-            quantityBtn.textContent = 0; // Reset quantity display to 0
-        });
-
-        document.querySelectorAll(".total-price-section").forEach((priceElement) => {
-            priceElement.textContent = `Taka: 0.00 BDT`; // Reset price display
-        });
-
-        globalTotalPrice = 0;
-        updateAddToCartButton();
-    }
-
-    function attachQuantityListeners() {
-        document.querySelectorAll(".increase-btn, .increase-btn-two").forEach((increaseButton) => {
-            increaseButton.addEventListener("click", function() {
-                const quantityClass = increaseButton.classList.contains('increase-btn') ? '.quantity-btn' : '.quantity-btn-two';
-                const quantityElement = this.parentElement.querySelector(quantityClass);
-                let currentQuantityValue = parseInt(quantityElement.textContent) || 1; // Handle NaN
-                currentQuantityValue += 1;
-                quantityElement.textContent = currentQuantityValue;
-                updateDisplayedTotal(this, quantityClass);
-            });
-        });
-
-        document.querySelectorAll(".decrease-btn, .decrease-btn-two").forEach((decreaseButton) => {
-            decreaseButton.addEventListener("click", function() {
-                const quantityClass = decreaseButton.classList.contains('decrease-btn') ? '.quantity-btn' : '.quantity-btn-two';
-                const quantityElement = this.parentElement.querySelector(quantityClass);
-                let currentQuantityValue = parseInt(quantityElement.textContent) || 0; // Handle NaN
-                if (currentQuantityValue > 1) {
-                    currentQuantityValue -= 1;
-                    quantityElement.textContent = currentQuantityValue;
-                    updateDisplayedTotal(this, quantityClass);
-                }
-            });
-        });
-    }
-
-    document.querySelectorAll(".toggle-btn").forEach((button) => {
-        calculateGlobalTotalPrice();
-    });
-
-    document.addEventListener("DOMContentLoaded", function() {
-
-        const quantityElement = document.querySelector('.quantity-btn');
-        const initialQuantity = parseInt(quantityElement.textContent) || 0; // Handle NaN
-        const initialTotal = (initialQuantity * productPrice).toFixed(2);
-
-        calculateGlobalTotalPrice();
-
-        attachQuantityListeners();
-    });
-
-
-    let quantity = 1;
-    let totalPriceElement = document.getElementById("total-price");
-
-    function updateSimpleTotalPrice() {
-        const total = (quantity * productNoPowerPrice).toFixed(2);
-        globalTotalPrice = parseFloat(total);
-        totalPriceElement.textContent = total;
-
-        updateAddToCartButton();
-    }
-
-    document.getElementById("increment").addEventListener("click", () => {
-        quantity++;
-        document.getElementById("quantity").textContent = quantity;
-        updateSimpleTotalPrice();
-    });
-
-    document.getElementById("decrement").addEventListener("click", () => {
-        if (quantity > 1) {
-            quantity--;
-            document.getElementById("quantity").textContent = quantity;
-            updateSimpleTotalPrice();
-        }
-    });
-    document.addEventListener("DOMContentLoaded", function() {
-        updateSimpleTotalPrice();
-    });
-</script>
 
 
 <script>

@@ -101,7 +101,7 @@ Discover the eyes looks with our vibrant shades and see how the lenses could app
                                                 </div>
                                             </div>
                                         </div>
-                                        <p>{{$data->post()['caption']}}</p>
+                                        <p>{{@$data->post()['caption']}}</p>
                                     </div>
                                 </div>
                             </div>

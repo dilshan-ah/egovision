@@ -22,12 +22,14 @@ $discoverBtn = TranslationHelper::translateText('Discover the Collection', $pref
     <a href="{{ route('ego.index') }}">{{$homeUrl}}</a>
     <h1 class="text-center" style="font-size: 5rem">{{$colorPageTitle}}</h1>
     <p class="text-center">{{$colorPageDesc}}
-</p>
+    </p>
 
     @foreach ($colors as $color)
-    <div class="row align-items-center colorMode">
+    <div class="row align-items-center" style="background: #f5f5f5;">
         <div class="col-md-7 colorMode">
-            <img src="{{ asset($color->image_path) }}" style="width: 100%;" class="img-fluid" alt="Timeless Collection">
+            <a href="{{route('color.single.color',$color->id)}}">
+                <img src="{{ asset($color->image_path) }}" style="width: 100%;" class="img-fluid" alt="Timeless Collection">
+            </a>
         </div>
         <div class="col-md-5 colorMode">
             <div class="p-5 mt-2">

@@ -10,8 +10,8 @@
             slidesToScroll: 3,
             centerMode: true,
             centerPadding: '0',
-            autoplay: true, 
-            autoplaySpeed: 2000, 
+            autoplay: true,
+            autoplaySpeed: 2000,
             responsive: [{
                 breakpoint: 768,
                 settings: {
@@ -80,23 +80,23 @@
         });
     });
 
-    document.addEventListener('DOMContentLoaded', function() {
-        const decreaseButton = document.getElementById('decrease');
-        const increaseButton = document.getElementById('increase');
-        const numberDisplay = document.getElementById('number');
+    // document.addEventListener('DOMContentLoaded', function() {
+    //     const decreaseButton = document.getElementById('decrease');
+    //     const increaseButton = document.getElementById('increase');
+    //     const numberDisplay = document.getElementById('number');
 
-        let count = 0;
+    //     let count = 0;
 
-        decreaseButton.addEventListener('click', function() {
-            count--;
-            numberDisplay.textContent = count;
-        });
+    //     decreaseButton.addEventListener('click', function() {
+    //         count--;
+    //         numberDisplay.textContent = count;
+    //     });
 
-        increaseButton.addEventListener('click', function() {
-            count++;
-            numberDisplay.textContent = count;
-        });
-    });
+    //     increaseButton.addEventListener('click', function() {
+    //         count++;
+    //         numberDisplay.textContent = count;
+    //     });
+    // });
 </script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
@@ -108,6 +108,8 @@
             infinite: true,
             slidesToShow: 4,
             slidesToScroll: 1,
+            autoplay: true,
+            autoplaySpeed: 1700,
             responsive: [{
                     breakpoint: 1024,
                     settings: {

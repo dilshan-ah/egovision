@@ -101,43 +101,35 @@ class SiteController extends Controller
     {
         $this->validate($request, [
             'name' => 'required',
-            'email' => 'required',
-            'subject' => 'required|string|max:255',
+            'email' => 'required|email',
+            'subject' => 'string|max:255',
             'message' => 'required',
         ]);
+    
+        // Define the user as an array with an email key
+        $user = [
+            'id' => 1,
+            'email' => 'customer.service@fg-bd.com'
+        ];
 
-        $request->session()->regenerateToken();
-
-        $random = getNumber();
-
-        $ticket = new SupportTicket();
-        $ticket->user_id = auth()->id() ?? 0;
-        $ticket->name = $request->name;
-        $ticket->email = $request->email;
-        $ticket->priority = Status::PRIORITY_MEDIUM;
-
-
-        $ticket->ticket = $random;
-        $ticket->subject = $request->subject;
-        $ticket->last_reply = Carbon::now();
-        $ticket->status = Status::TICKET_OPEN;
-        $ticket->save();
-
-        $adminNotification = new AdminNotification();
-        $adminNotification->user_id = auth()->user() ? auth()->user()->id : 0;
-        $adminNotification->title = 'A new support ticket has opened ';
-        $adminNotification->click_url = urlPath('admin.ticket.view', $ticket->id);
-        $adminNotification->save();
-
-        $message = new SupportMessage();
-        $message->support_ticket_id = $ticket->id;
-        $message->message = $request->message;
-        $message->save();
-
-        $notify[] = ['success', 'Ticket created successfully!'];
-
-        return to_route('ticket.view', [$ticket->ticket])->withNotify($notify);
+        try {
+            sendMessage($user, 'Send_Message', [
+                'name' => $request->name,
+                'email' => $request->email,
+                'subject' => $request->subject,
+                'message' => $request->message,
+            ], ['email'], true, 'customer.service@fg-bd.com');
+    
+            $notify[] = ['success', 'Message sent successfully.'];
+        } catch (\Throwable $th) {
+            Log::info($th);
+            $notify[] = ['error', 'Something went wrong!'];
+        }
+    
+        
+        return redirect()->back()->with('success', 'Message sent successfully!')->withNotify($notify);
     }
+    
 
     public function egoIndex()
     {
@@ -188,7 +180,7 @@ class SiteController extends Controller
             $products = $productsQuery->get();
 
             // Attach products as a child object (keep as objects, no conversion to array)
-            $collectionSet->products = $products;
+            $collectionSet->products = $products->take(4);
 
             foreach ($collectionSet->products as $product) {
                 $product->name = TranslationHelper::translateText($product->name, $preferredLanguage);
@@ -434,10 +426,15 @@ class SiteController extends Controller
 
     public function wishlist()
     {
-        $pageTitle = "WishLists";
+        $preferredLanguage = session('preferredLanguage');
+        $pageTitle = TranslationHelper::translateText("WishLists", $preferredLanguage);
         $userId = Auth::id();
         $wishlists = Wishlist::where('user_id', $userId)
             ->get();
+        
+        foreach($wishlists as $wishlist){
+            $wishlist->product->name = TranslationHelper::translateText($wishlist->product->name, $preferredLanguage);
+        }
 
         return view('user.wishlist.wishlist', compact('pageTitle', 'wishlists'));
     }
@@ -446,34 +443,74 @@ class SiteController extends Controller
     public function search(Request $request)
     {
         $query = $request->input('query');
-        $pageTitle = "Search result for " . $query;
+        $preferredLanguage = session('preferredLanguage');
+    
+        $queryTitle = $query;
+        if ($preferredLanguage != 'en') {
+            $queryTitle = TranslationHelper::translateText($query, 'en');
+        }
 
-        $products = Product::where('name', 'LIKE', '%' . $query . '%')->get();
-
+        // Page title translation
+        $pageTitle = TranslationHelper::translateText("Search result for " . $query, $preferredLanguage);
+    
+        // Fetch products matching the query
+        $products = Product::where('name', 'LIKE', '%' . $queryTitle . '%')->get();
+    
+        // Translate each product's name to the preferred language
+        foreach ($products as $product) {
+            $product->name = TranslationHelper::translateText($product->name, $preferredLanguage);
+        }
+    
         return view('ego.pages.search', compact('products', 'query', 'pageTitle'));
-    }
+    }    
 
     public function myOrders()
     {
-        $pageTitle = "My Orders";
+        $preferredLanguage = session('preferredLanguage');
+        $pageTitle = TranslationHelper::translateText("My Orders", $preferredLanguage);
+
         $userId = Auth::id();
         $orders = Order::where('user_id', $userId)->with('orderItems.product')->orderBy('created_at','desc')
             ->get();
+
+        foreach($orders as $order){
+            $order->status = TranslationHelper::translateText($order->status, $preferredLanguage);
+
+            foreach ($order->orderItems as $item) {
+                if ($item->product) {
+                    $item->product->name = TranslationHelper::translateText($item->product->name, $preferredLanguage);
+                }
+            }
+        }
 
         return view('user.order.index', compact('pageTitle', 'orders'));
     }
 
     public function singleOrder(string $id)
     {
+        $preferredLanguage = session('preferredLanguage');
         $pageTitle = 'Order Details | Order';
         $order = Order::where('id', $id)->with('orderItems.product', 'user')->first();
+
+        $order->user->firstname = TranslationHelper::translateText($order->user->firstname, $preferredLanguage);
+        $order->user->lastname = TranslationHelper::translateText($order->user->lastname, $preferredLanguage);
+
+        $order->name = TranslationHelper::translateText($order->name, $preferredLanguage);
+        $order->address_one = TranslationHelper::translateText($order->address_one, $preferredLanguage);
+        $order->address_two = TranslationHelper::translateText($order->address_two, $preferredLanguage);
+        $order->company = TranslationHelper::translateText($order->company, $preferredLanguage);
+        $order->city = TranslationHelper::translateText($order->city, $preferredLanguage);
+        $order->zip_code = TranslationHelper::translateText($order->zip_code, $preferredLanguage);
+        $order->state = TranslationHelper::translateText($order->state, $preferredLanguage);
+        $order->country = TranslationHelper::translateText($order->country, $preferredLanguage);
 
         return view('user.order.view', compact('order', 'pageTitle'));
     }
 
     public function newsLetter()
     {
-        $pageTitle = 'Newsletter Subscription';
+        $preferredLanguage = session('preferredLanguage');
+        $pageTitle = TranslationHelper::translateText("Newsletter Subscription", $preferredLanguage);
         $subscribed = Subscriber::where('email', Auth::user()->email)->first();
         return view('user.news_letter', compact('pageTitle', 'subscribed'));
     }
