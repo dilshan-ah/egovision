@@ -111,6 +111,9 @@
         background: white;
         border: none;
     }
+    .filter{
+        background:#f5f5f5;
+    }
 </style>
 <br>
 <br>
@@ -133,7 +136,7 @@ $materialText = TranslationHelper::translateText('Material', $preferredLanguage)
 $lensText = TranslationHelper::translateText('Lens Design', $preferredLanguage);
 @endphp
 <div class="row mt-5">
-    <div class="col-12 col-md-2" style="background: #f5f5f5">
+    <div class="col-12 col-md-2 " >
         <div class="mt-5 p-4">
             <h1>{{$color->name}}</h1>
             <small>{{$products->count()}} {{$productCollectionText}}</small>
