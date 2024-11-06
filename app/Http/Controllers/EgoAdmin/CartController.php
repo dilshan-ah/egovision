@@ -17,7 +17,7 @@ class CartController extends Controller
 
         Log::info($request->all());
         $sessionId = $request->session()->getId();
-        $userId = Auth::user()->id ?? null; // assuming user_id is passed in the request
+        $userId = Auth::user()->id ?? null;
 
         $powerStatus = $request->input('powerType');
         $pairQuantity = '0';
@@ -52,8 +52,6 @@ class CartController extends Controller
             'user_id' => $userId
         ];
 
-        Log::error($cartDataFirst);
-
         // Check for existing cart entry
         $existingCartEntryFirst = Cart::where(function ($query) use ($cartDataFirst) {
             $query->where('product_id', $cartDataFirst['product_id'])
@@ -82,10 +80,6 @@ class CartController extends Controller
                 Cart::create($cartDataSecond);
             }
 
-            if ($product->product_type === 'normal') {
-                $this->addAccessoryToCart($sessionId, $product, $totalBag, $userId);
-            }
-
             $cartCount = Cart::where('session_id', $sessionId)
                 ->orWhere('user_id', $userId)
                 ->sum('pair');
@@ -99,9 +93,10 @@ class CartController extends Controller
 
         try {
             Cart::create($cartDataFirst);
-
+        
             $powerSecond = $request->input('secondEyePower');
-            if ($powerSecond !== '' && $powerSecond !== $cartDataFirst['power']) {
+            // Only add a second cart entry if powerSecond has a valid value
+            if (!empty($powerSecond) && $powerSecond !== $cartDataFirst['power']) {
                 $cartDataSecond = [
                     'session_id' => $sessionId,
                     'product_id' => $request->input('productId'),
@@ -112,15 +107,11 @@ class CartController extends Controller
                 ];
                 Cart::create($cartDataSecond);
             }
-
-            if ($product->product_type === 'normal') {
-                $this->addAccessoryToCart($sessionId, $product, $totalBag, $userId);
-            }
-
+        
             $cartCount = Cart::where('session_id', $sessionId)
                 ->orWhere('user_id', $userId)
                 ->sum('pair');
-
+        
             return response()->json([
                 'success' => true,
                 'message' => 'Product added to cart.',
@@ -132,39 +123,7 @@ class CartController extends Controller
                 'error' => 'Unable to add to cart.'
             ], 500);
         }
-    }
-
-    protected function addAccessoryToCart($sessionId, $product, $totalBag, $userId)
-    {
-        $accessory = Product::where('product_type', 'accessories')
-            ->where('is_default_bag', 1)
-            ->first();
-
-        if ($accessory) {
-            $accessoryCartData = [
-                'session_id' => $sessionId,
-                'product_id' => $accessory->id,
-                'power_status' => 'no_power',
-                'power' => null,
-                'pair' => $totalBag,
-                'user_id' => $userId
-            ];
-
-            $existingAccessoryEntry = Cart::where(function ($query) use ($accessoryCartData) {
-                $query->where('product_id', $accessoryCartData['product_id'])
-                    ->where('user_id', $accessoryCartData['user_id']);
-            })->orWhere(function ($query) use ($accessoryCartData, $sessionId) {
-                $query->where('product_id', $accessoryCartData['product_id'])
-                    ->where('session_id', $sessionId);
-            })->first();
-
-            if ($existingAccessoryEntry) {
-                $existingAccessoryEntry->pair += $totalBag;
-                $existingAccessoryEntry->save();
-            } else {
-                Cart::create($accessoryCartData);
-            }
-        }
+        
     }
 
 
