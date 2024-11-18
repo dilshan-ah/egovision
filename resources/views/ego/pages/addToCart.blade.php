@@ -6,26 +6,22 @@
 <style>
     .imageAlbum {
         margin-bottom: 10px;
-        /* Default spacing */
+        
     }
 
     .vertical-slider {
         padding: 10px;
-        /* Default padding */
+       
     }
 
     /* Mobile Styles */
     @media (max-width: 768px) {
-
-        /* Adjust the max-width as needed */
         .imageAlbum {
             margin-bottom: 5px;
-            /* Reduce spacing for mobile */
         }
 
         .vertical-slider {
             padding: 5px;
-            /* Reduce padding for mobile */
         }
     }
 
@@ -39,7 +35,24 @@
         box-sizing: border-box;
         margin-top: 10px;
     }
+    .main-image-container {
+        overflow: hidden;
+        position: relative;
+        cursor: zoom-in;
+    }
+    .main-image-container .main-image {
+        transition: transform 0.3s ease;
+        cursor: zoom-in;
+        max-width: 100%;
+        max-height: 100%;
+        transform: scale(1); 
+        transform-origin: center center; 
+    }
+    .main-image-container.zoomed .main-image {
+        cursor: zoom-out; 
+    }
 </style>
+
 <br>
 @php
 use App\Helpers\TranslationHelper;
@@ -85,33 +98,12 @@ $relatedProduct = TranslationHelper::translateText('Related Products', $preferre
             @endforeach
         </div>
     </div>
-
-    <style>
-        .main-image-container {
-    overflow: hidden;
-    position: relative;
-}
-
-.main-image-container .main-image {
-    transition: transform 0.3s ease; /* Smooth transition */
-    cursor: zoom-in;
-}
-
-.main-image-container:hover .main-image {
-    transform: scale(1.5); /* Adjust scale as needed */
-}
-
-    </style>
-    <!-- Middle Column - Vertical Images -->
     <div class="col-md-6">
         <div class="main-image-container">
             <img id="mainImage" src="{{ asset($product->image_path) }}" class="main-image img-fluid w-100"
                 alt="Main Display" />
         </div>
     </div>
-
-
-    <!-- Right Column - Add to Cart Section -->
     <div class="col-md-5 right-column py-5">
         <div class="add-to-cart-section">
             <h1>
@@ -293,7 +285,6 @@ $relatedProduct = TranslationHelper::translateText('Related Products', $preferre
                         {!! $product->description !!}
                     </div>
                 </div>
-
                 <div
                     style="
                     width: 30px;
@@ -441,8 +432,6 @@ $relatedProduct = TranslationHelper::translateText('Related Products', $preferre
                     </table>
                 </div>
             </div>
-
-            <!-- Lens Parameters Sidebar -->
             <div class="custom-sidebar">
                 <div class="sidebar-header"
                     style="border-bottom: 1px solid #e0e0e0; display: flex; justify-content: space-between; align-items: center; padding: 10px;">
@@ -496,7 +485,6 @@ $relatedProduct = TranslationHelper::translateText('Related Products', $preferre
 <div class="lightbox" id="lightbox">
     <img src="" alt="Lightbox Image" id="lightbox-img" />
 </div>
-<!-- <div class="overlay-sidebar" style="z-index: 1;" id="overlay-sidebar"></div> -->
 @endsection
 @push('script')
 
@@ -504,8 +492,6 @@ $relatedProduct = TranslationHelper::translateText('Related Products', $preferre
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
-
-<!-- Quantity update js -->
 <script>
     const productPrice = {{ $product->price ?? 0 }};
     const productNoPowerPrice = {{ $product->no_power_price ?? 0 }};
@@ -615,7 +601,6 @@ $relatedProduct = TranslationHelper::translateText('Related Products', $preferre
 </script>
 
 <script>
-    // Function to handle selector change and button visibility
     function handlePowerSelectChange(select) {
         const selectedValue = select.value;
         const powerValueSpan = select.parentElement.nextElementSibling.querySelector(".power-value");
@@ -624,15 +609,12 @@ $relatedProduct = TranslationHelper::translateText('Related Products', $preferre
         const adjustmentBtns = select.parentElement.nextElementSibling.querySelector(".adjustment-btns");
         adjustmentBtns.style.display = "block";
     }
-
-    // Add event listeners for power selectors
     document.querySelectorAll(".power-select").forEach((select) => {
         select.addEventListener("change", function() {
             handlePowerSelectChange(this);
         });
     });
 
-    // Toggle content visibility
     document.querySelectorAll(".toggle-btn").forEach((button) => {
         button.addEventListener("click", function() {
             const target = document.querySelector(this.getAttribute("data-target"));
@@ -640,77 +622,149 @@ $relatedProduct = TranslationHelper::translateText('Related Products', $preferre
             const closedContent = target.querySelector(".closed-content");
 
             if (closedContent.style.display === "none" || closedContent.style.display === "") {
-                closedContent.style.display = "block"; // Show the closed content
+                closedContent.style.display = "block";
                 this.querySelector("i").classList.remove("fa-toggle-off");
                 this.querySelector("i").classList.add("fa-toggle-on");
             } else {
-                closedContent.style.display = "none"; // Hide the closed content
+                closedContent.style.display = "none"; 
                 this.querySelector("i").classList.remove("fa-toggle-on");
                 this.querySelector("i").classList.add("fa-toggle-off");
             }
         });
     });
 </script>
-
-
-
-
 <script>
-    $(document).ready(function() {
-        // Initialize vertical slider
-        $(".vertical-slider").slick({
-            slidesToShow: 5,
-            slidesToScroll: 3,
-            vertical: true,
-            verticalSwiping: true,
-            arrows: false,
-            responsive: [{
-                breakpoint: 768,
-                settings: {
-                    vertical: false,
-                    verticalSwiping: false,
-                },
-            }, ],
-        });
-        $(".vertical-slider img").click(function() {
-            var imgSrc = $(this).attr("data-src");
-            $(".main-image").attr("src", imgSrc);
-        });
-
-        // Show lightbox on main image click
-        $(".main-image").click(function() {
-            var imgSrc = $(this).attr("src");
-            $("#lightbox-img").attr("src", imgSrc);
-            $("#lightbox").addClass("active");
-        });
-
-        // Hide lightbox on click
-        $("#lightbox").click(function() {
-            $(this).removeClass("active");
-        });
+  $(document).ready(function() {
+    let isZoomed = false; 
+    let isDragging = false; 
+    let offsetX, offsetY;
+    $(".vertical-slider").slick({
+        slidesToShow: 5,
+        slidesToScroll: 3,
+        vertical: true,
+        verticalSwiping: true,
+        arrows: false,
+        responsive: [{
+            breakpoint: 768,
+            settings: {
+                vertical: false,
+                verticalSwiping: false,
+            },
+        }],
     });
 
-    document.querySelectorAll(".tab").forEach((tab) => {
-        tab.addEventListener("click", () => {
-            document
-                .querySelectorAll(".tab")
-                .forEach((t) => t.classList.remove("selected"));
-            tab.classList.add("selected");
+    $(".vertical-slider img").click(function() {
+        var imgSrc = $(this).attr("data-src");
+        $(".main-image").attr("src", imgSrc);
+    });
+    $(".main-image").click(function() {
+        var imgSrc = $(this).attr("src");
+        $("#lightbox-img").attr("src", imgSrc);
+        $("#lightbox").addClass("active");
 
-            // Hide all sections initially
-            document.getElementById("pair-state").style.display = "none";
-            document.getElementById("with-power-state").style.display = "none";
+        $(".main-image-container").addClass("zoomed");
+        isZoomed = true;
+    });
+    $("#lightbox").click(function() {
+        $(this).removeClass("active");
+        $(".main-image-container").removeClass("zoomed"); 
+        isZoomed = false; 
+    });
+    $(".main-image-container").on("wheel", ".main-image", function(event) {
+        if (isZoomed) {
+            event.preventDefault();
 
-            // Check which tab is selected and show respective section
-            if (tab.id === "tab1") {
-                document.getElementById("pair-state").style.display = "block";
-            } else if (tab.id === "tab2") {
-                document.getElementById("with-power-state").style.display = "block";
+            var scale = parseFloat($(this).css("transform").split(",")[0].split("(")[1]) || 1;
+            var zoomAmount = 0.1;
+            if (event.originalEvent.deltaY < 0) {
+                scale += zoomAmount;
+            } else {
+                scale -= zoomAmount;
             }
-        });
-    });
-</script>
+            if (scale < 1) scale = 1; 
+            if (scale > 5) scale = 5; 
 
+            $(this).css("transform", "scale(" + scale + ")");
+        }
+    });
+
+    $("#lightbox-img").on("wheel", function(event) {
+        if (isZoomed) {
+            event.preventDefault();
+
+            var scale = parseFloat($(this).css("transform").split(",")[0].split("(")[1]) || 1;
+            var zoomAmount = 0.1;
+            if (event.originalEvent.deltaY < 0) {
+                scale += zoomAmount;
+            } else {
+                scale -= zoomAmount;
+            }
+            if (scale < 1) scale = 1; 
+            if (scale > 5) scale = 5; 
+            $(this).css("transform", "scale(" + scale + ")");
+        } else {
+            return;
+        }
+    });
+    $(".main-image-container").on("mousedown", ".main-image", function(event) {
+        if ($(this).css("transform") !== "matrix(1, 0, 0, 1, 0, 0)") {
+            isDragging = true;
+            offsetX = event.clientX - $(this).offset().left;
+            offsetY = event.clientY - $(this).offset().top;
+
+            $(this).css("cursor", "grabbing");
+        }
+    });
+
+    $(document).on("mousemove", function(event) {
+        if (isDragging) {
+            var left = event.clientX - offsetX;
+            var top = event.clientY - offsetY;
+
+            $(".main-image").css({
+                left: left + "px",
+                top: top + "px",
+            });
+        }
+    });
+
+    $(document).on("mouseup", function() {
+        if (isDragging) {
+            isDragging = false;
+            $(".main-image").css("cursor", "grab");
+        }
+    });
+    $("#lightbox-img").on("mousedown", function(event) {
+        if ($(this).css("transform") !== "matrix(1, 0, 0, 1, 0, 0)") {
+            isDragging = true;
+            offsetX = event.clientX - $(this).offset().left;
+            offsetY = event.clientY - $(this).offset().top;
+
+            $(this).css("cursor", "grabbing");
+        }
+    });
+
+    $(document).on("mousemove", function(event) {
+        if (isDragging) {
+            var left = event.clientX - offsetX;
+            var top = event.clientY - offsetY;
+
+            $("#lightbox-img").css({
+                left: left + "px",
+                top: top + "px",
+            });
+        }
+    });
+
+    $(document).on("mouseup", function() {
+        if (isDragging) {
+            isDragging = false;
+            $("#lightbox-img").css("cursor", "grab");
+        }
+    });
+});
+
+</script>
 <script>
     const openSidebarBtns = document.querySelectorAll('.open-custom-sidebar');
     const closeSidebarBtns = document.querySelectorAll('.custom-closebtn');
@@ -807,8 +861,6 @@ $relatedProduct = TranslationHelper::translateText('Related Products', $preferre
         }
     };
 </script>
-
-
 <script>
 const mainImageContainer = document.querySelector('.main-image-container');
 const mainImage = document.querySelector('.main-image');
@@ -820,9 +872,8 @@ mainImageContainer.addEventListener('mousemove', (e) => {
     mainImage.style.transformOrigin = `${x}px ${y}px`;
     mainImage.style.transform = 'scale(1.8)'; // Zoom in
 });
-
 mainImageContainer.addEventListener('mouseleave', () => {
-    mainImage.style.transform = 'scale(1)'; // Reset zoom when mouse leaves
+    mainImage.style.transform = 'scale(1)';
 });
     </script>
 @endpush
